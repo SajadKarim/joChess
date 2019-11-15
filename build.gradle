@@ -1,0 +1,29 @@
+plugins {
+	id 'java'
+	id 'eclipse'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+	compile group: 'org.jdesktop', name: 'appframework', version: '1.0+'
+	compile group: 'org.jdesktop', name: 'swing-worker', version: '1.1+'
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
+} 
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'jchess.JChessApp'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
