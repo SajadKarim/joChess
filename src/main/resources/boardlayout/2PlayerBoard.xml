@@ -1,0 +1,86 @@
+<!-- 
+  This file defines layout of 2 Player chess-board game, rules, and pieces' positions for players.
+-->
+<Board Name="3PChessBoard" Image="" Width="" Height="">
+  <ColourScheme>
+    <Family Name="White" Color="White" />
+    <Family Name="Black" Color="Black" />
+  </ColourScheme>
+  <Positions>
+    <Position File="a" Rank="1" Family="Black">
+      <Directions>
+        <Directions Type="EDGE" Name="E1">
+          <Position></Position>
+        </Directions>
+        <Directions Type="DIAGONAL" Name="D1"></Directions>
+        <Directions Type="EDGE" Name="E2" ></Directions>
+        <Directions Type="DIAGONAL" Name="D2" ></Directions>
+        <Directions Type="EDGE" Name="E3" ></Directions>
+        <Directions Type="DIAGONAL" Name="D3" ></Directions>
+        <Directions Type="EDGE" Name="E4" ></Directions>
+        <Directions Type="DIAGONAL" Name="D4" ></Directions>
+      </Directions>
+      <Connections>
+        <!-- Not necessary if direction are defined in order - to override self connected links-->
+        <Connection P1="E1" P2="D1" />
+        <Connection P1="D1" P2="E2" />
+        <Connection P1="E2" P2="D2" />
+        <Connection P1="D2" P2="E3" />
+        <Connection P1="E3" P2="D3" />
+        <Connection P1="D3" P2="E4" />
+        <Connection P1="E4" P2="D4" />
+        <Connection P1="D4" P2="E1" />
+      </Connections>
+      <Coordinates>
+        <Quard>
+          <Point x="" y=""/>
+          <Point x="" y=""/>
+          <Point x="" y=""/>
+          <Point x="" y=""/>
+        </Quard>
+      </Coordinates>
+    </Position>
+    <Position File="" Rank="" Family=""></Position>
+    <Position File="" Rank="" Family=""></Position>
+    <Position File="" Rank="" Family=""></Position>
+    <Position File="" Rank="" Family=""></Position>
+    <Position File="" Rank="" Family=""></Position>
+    <Position File="" Rank="" Family=""></Position>
+  </Positions>
+  <Rules>
+    <Rule Name="Move_Towards_Edges" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
+    <Rule Name="Move_Towards_Edges" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" File="IGNORE" Rank="IGNORE" Family="IGNORE">
+      <Rules>
+        <Rule></Rule>
+      </Rules>
+    </Rule>
+  </Rules>
+  <Pieces>
+    <Piece Name="King" Image=".jpg">
+      <AllowedMoves>
+        <Rule>Move_Upwards_*</Rule>
+        <Rule>Move_Upwards_*</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="Queen" Image="">
+      <Moves>
+        <Move Name="Move_Upwards_*" />
+        <Move Name="Move_Downwards_*" />
+      </Moves>
+    </Piece>
+  </Pieces>
+  <Players>
+    <Player Id="P1" Name="">
+      <Pieces>
+        <Piece Name="" Position="" />
+        <Piece Name="" Position="" />
+        <Piece Name="" Position="" />
+        <Piece Name="" Position="" />
+        <Piece Name="" Position="" />
+        <Piece Name="" Position="" />
+      </Pieces>
+    </Player>
+    <Player Id="P2" Name=""></Player>
+    <Player Id="P3" Name=""></Player>
+  </Players>
+</Board>
