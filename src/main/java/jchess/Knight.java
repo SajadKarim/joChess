@@ -21,6 +21,7 @@
 package jchess;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -54,6 +55,31 @@ public class Knight extends Piece
             image = imageWhite;
         }
         orgImage = image;
+    }
+
+    void populateRules() {
+        List<IRule> _rules1 = new ArrayList<IRule>();
+        _rules1.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, false, null));
+        _rules1.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.FORWARD, RANK.SAME, false, null));
+        
+        IRule rule1 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.FORWARD, RANK.FORWARD, true, _rules1);
+        		 	
+        List<IRule> _rules2 = new ArrayList<IRule>();
+        _rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, false, null));
+        _rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.BACKWARD, RANK.SAME, false, null));
+        
+        IRule rule2 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.BACKWARD, RANK.FORWARD, true, _rules2);
+        
+        List<IRule> _rules3 = new ArrayList<IRule>();
+        _rules3.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.BACKWARD, false, null));
+        _rules3.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.BACKWARD, RANK.SAME, false, null));
+        
+        IRule rule3 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.BACKWARD, RANK.BACKWARD, true, _rules3);
+        
+        m_lstRules.add(rule1);
+        m_lstRules.add(rule2);
+        m_lstRules.add(rule3);
+
     }
 
     /**

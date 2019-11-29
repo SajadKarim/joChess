@@ -26,6 +26,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -47,6 +48,16 @@ public abstract class Piece
     public Image image;
     public static short value = 0;
 
+    public List<IRule> m_lstRules = null;
+
+    public ArrayList getPossibleMoves() {
+    	return null;
+    }
+
+    void populateRules() {
+
+    }
+
     Piece(Chessboard chessboard, Player player)
     {
         this.chessboard = chessboard;
@@ -60,6 +71,10 @@ public abstract class Piece
             image = imageWhite;
         }
         this.name = this.getClass().getSimpleName();
+
+        m_lstRules = new ArrayList<IRule>();
+
+        populateRules();
 
     }
     /* Method to draw piece on chessboard
@@ -78,6 +93,43 @@ public abstract class Piece
             int y = (this.square.pozY * height) + topLeft.y;
             float addX = (height - image.getWidth(null)) / 2;
             float addY = (height - image.getHeight(null)) / 2;
+            if (image != null && g != null)
+            {
+                Image tempImage = orgImage;
+                BufferedImage resized = new BufferedImage(height, height, BufferedImage.TYPE_INT_ARGB_PRE);
+                Graphics2D imageGr = (Graphics2D) resized.createGraphics();
+                imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                imageGr.drawImage(tempImage, 0, 0, height, height, null);
+                imageGr.dispose();
+                image = resized.getScaledInstance(height, height, 0);
+                g2d.drawImage(image, x, y, null);
+            }
+            else
+            {
+                System.out.println("image is null!");
+            }
+
+        }
+        catch (java.lang.NullPointerException exc)
+        {
+            System.out.println("Something wrong when painting piece: " + exc.getMessage());
+        }
+    }
+
+    final void draw(Graphics g, IPosition oPosition)
+    {
+        try
+        {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            Point topLeft = this.chessboard.getTopLeftPoint();
+            int height = this.chessboard.get_square_height();
+            int x = oPosition.getShape().getTopLeftX();
+            int y = oPosition.getShape().getTopLeftY();
+            //int x = (this.square.pozX * height) + topLeft.x;
+            //int y = (this.square.pozY * height) + topLeft.y;            
+            //float addX = (height - image.getWidth(null)) / 2;
+            //float addY = (height - image.getHeight(null)) / 2;
             if (image != null && g != null)
             {
                 Image tempImage = orgImage;

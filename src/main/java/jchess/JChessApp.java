@@ -15,14 +15,8 @@
 
 package jchess;
 
-import javax.swing.SwingUtilities;
-
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
-
-import jchess.view.viewTemp;
-import jchess.model.modelTemp;
-import jchess.presenter.presenterTemp;
 
 /**
  * The main class of the application.
@@ -35,19 +29,8 @@ public class JChessApp extends SingleFrameApplication {
     @Override protected void startup() {
         jcv = new JChessView(this);
         show(jcv);
-    	
-    	//final viewTemp view = new viewTemp();
-        //final modelTemp model = new modelTemp();
-        //new presenterTemp(view, model);
-
     }
 
-    public JChessApp() {
-    	final viewTemp view = new viewTemp();
-        final modelTemp model = new modelTemp();
-        new presenterTemp(view, model);
-    }
-    
     /**
      * This method is to initialize the specified window by injecting resources.
      * Windows shown in our application come fully initialized from the GUI
@@ -68,13 +51,6 @@ public class JChessApp extends SingleFrameApplication {
      * Main method launching the application.
      */
     public static void main(String[] args) {
-    	/*SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	new JChessApp();
-            }
-        });
-    	*/
-        launch(JChessApp.class, args);    	
+        launch(JChessApp.class, args);
     }
 }

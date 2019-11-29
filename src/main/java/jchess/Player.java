@@ -21,6 +21,7 @@
 package jchess;
 
 import java.io.Serializable;
+import java.util.Hashtable;
 
 
 /**
@@ -30,7 +31,8 @@ public class Player implements Serializable
 {
 
     String name;
-
+    IBoardMapping m_oBoardMapping = null;
+    
     enum colors
     {
 
@@ -48,6 +50,7 @@ public class Player implements Serializable
 
     public Player()
     {
+        populateCustomBoardMapping();
     }
 
     public Player(String name, String color)
@@ -55,8 +58,36 @@ public class Player implements Serializable
         this.name = name;
         this.color = colors.valueOf(color);
         this.goDown = false;
+        
+        populateCustomBoardMapping();
     }
 
+    public void populateCustomBoardMapping() {
+    	m_oBoardMapping = new BoardMapping();
+    	
+    	if( color == colors.white)
+    		return;
+    	
+    	m_oBoardMapping.addMapping('a', 'h');
+    	m_oBoardMapping.addMapping('b', 'g');
+    	m_oBoardMapping.addMapping('c', 'f');
+    	m_oBoardMapping.addMapping('d', 'e');
+    	m_oBoardMapping.addMapping('e', 'd');
+    	m_oBoardMapping.addMapping('f', 'c');
+    	m_oBoardMapping.addMapping('g', 'b');
+    	m_oBoardMapping.addMapping('h', 'a');
+
+    	m_oBoardMapping.addMapping('1', '8');
+    	m_oBoardMapping.addMapping('2', '7');
+    	m_oBoardMapping.addMapping('3', '6');
+    	m_oBoardMapping.addMapping('4', '5');
+    	m_oBoardMapping.addMapping('5', '4');
+    	m_oBoardMapping.addMapping('6', '3');
+    	m_oBoardMapping.addMapping('7', '2');
+    	m_oBoardMapping.addMapping('8', '1');
+    }
+
+    
     /** Method setting the players name
      *  @param name name of player
      */

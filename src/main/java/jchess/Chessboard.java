@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JPanel;
 import jchess.Moves.castling;
+import java.util.List;
 
 /** Class to represent chessboard. Chessboard is made from squares.
  * It is setting the squers of chessboard and sets the pieces(pawns)
@@ -77,24 +78,32 @@ public class Chessboard extends JPanel
     public Pawn twoSquareMovedPawn2 = null;
     private Moves moves_history;
 
+    private List<IPosition> m_lstPosition;
+    
     /** Chessboard class constructor
      * @param settings reference to Settings class object for this chessboard
      * @param moves_history reference to Moves class object for this chessboard 
      */
     public Chessboard(Settings settings, Moves moves_history)
     {
+    	PopulatePositions();
         this.settings = settings;
         this.activeSquare = null;
         this.square_height = img_height / 8;//we need to devide to know height of field
         this.squares = new Square[8][8];//initalization of 8x8 chessboard
         this.active_x_square = 0;
         this.active_y_square = 0;
+        
+        int file = 97;        
         for (int i = 0; i < 8; i++)
         {//create object for each square
             for (int y = 0; y < 8; y++)
             {
-                this.squares[i][y] = new Square(i, y, null);
+            	char cfile = (char)file;
+            	IPosition oPosition = getPosition("" + cfile + (8 - y));
+                this.squares[i][y] = new Square(i, y, null, oPosition);
             }
+            file++;
         }//--endOf--create object for each square
         this.moves_history = moves_history;
         this.setDoubleBuffered(true);
@@ -102,6 +111,585 @@ public class Chessboard extends JPanel
     }/*--endOf-Chessboard--*/
 
 
+    public IPosition getPosition(String stName) {
+    	Iterator<IPosition> it = m_lstPosition.iterator();
+    	while( it.hasNext()) {
+    		IPosition oPosition = it.next();
+    		if( oPosition.getName().equals(stName))
+    			return oPosition;
+    	}
+
+    	return null;
+    }
+    
+    private void PopulatePositions() {
+    	m_lstPosition = new ArrayList<IPosition>();
+    	
+    	m_lstPosition.add( new Position("a1", new Quadrilateral(60*0 ,60*8 ,60*1 , 60*8 , 60*1 , 60*7 , 60*0 , 60*7 )));
+    	m_lstPosition.add( new Position("a2", new Quadrilateral(60*0 ,60*7 ,60*1 , 60*7 , 60*1 , 60*6 , 60*0 , 60*6 )));
+    	m_lstPosition.add( new Position("a3", new Quadrilateral(60*0 ,60*6 ,60*1 , 60*6 , 60*1 , 60*5 , 60*0 , 60*5 )));
+    	m_lstPosition.add( new Position("a4", new Quadrilateral(60*0 ,60*5 ,60*1 , 60*5 , 60*1 , 60*4 , 60*0 , 60*4 )));
+    	m_lstPosition.add( new Position("a5", new Quadrilateral(60*0 ,60*4 ,60*1 , 60*4 , 60*1 , 60*3 , 60*0 , 60*3 )));
+    	m_lstPosition.add( new Position("a6", new Quadrilateral(60*0 ,60*3 ,60*1 , 60*3 , 60*1 , 60*2 , 60*0 , 60*2 )));
+    	m_lstPosition.add( new Position("a7", new Quadrilateral(60*0 ,60*2 ,60*1 , 60*2 , 60*1 , 60*1 , 60*0 , 60*1 )));
+    	m_lstPosition.add( new Position("a8", new Quadrilateral(60*0 ,60*1 ,60*1 , 60*1 , 60*1 , 60*0 , 60*0 , 60*0 )));
+
+    	m_lstPosition.add( new Position("b1", new Quadrilateral(60*1 ,60*8 ,60*2 , 60*8 , 60*2 , 60*7 , 60*1 , 60*7 )));
+    	m_lstPosition.add( new Position("b2", new Quadrilateral(60*1 ,60*7 ,60*2 , 60*7 , 60*2 , 60*6 , 60*1 , 60*6 )));
+    	m_lstPosition.add( new Position("b3", new Quadrilateral(60*1 ,60*6 ,60*2 , 60*6 , 60*2 , 60*5 , 60*1 , 60*5 )));
+    	m_lstPosition.add( new Position("b4", new Quadrilateral(60*1 ,60*5 ,60*2 , 60*5 , 60*2 , 60*4 , 60*1 , 60*4 )));
+    	m_lstPosition.add( new Position("b5", new Quadrilateral(60*1 ,60*4 ,60*2 , 60*4 , 60*2 , 60*3 , 60*1 , 60*3 )));
+    	m_lstPosition.add( new Position("b6", new Quadrilateral(60*1 ,60*3 ,60*2 , 60*3 , 60*2 , 60*2 , 60*1 , 60*2 )));
+    	m_lstPosition.add( new Position("b7", new Quadrilateral(60*1 ,60*2 ,60*2 , 60*2 , 60*2 , 60*1 , 60*1 , 60*1 )));
+    	m_lstPosition.add( new Position("b8", new Quadrilateral(60*1 ,60*1 ,60*2 , 60*1 , 60*2 , 60*0 , 60*1 , 60*0 )));
+
+    	m_lstPosition.add( new Position("c1", new Quadrilateral(60*2 ,60*8 ,60*3 , 60*8 , 60*3 , 60*7 , 60*2 , 60*7 )));
+    	m_lstPosition.add( new Position("c2", new Quadrilateral(60*2 ,60*7 ,60*3 , 60*7 , 60*3 , 60*6 , 60*2 , 60*6 )));
+    	m_lstPosition.add( new Position("c3", new Quadrilateral(60*2 ,60*6 ,60*3 , 60*6 , 60*3 , 60*5 , 60*2 , 60*5 )));
+    	m_lstPosition.add( new Position("c4", new Quadrilateral(60*2 ,60*5 ,60*3 , 60*5 , 60*3 , 60*4 , 60*2 , 60*4 )));
+    	m_lstPosition.add( new Position("c5", new Quadrilateral(60*2 ,60*4 ,60*3 , 60*4 , 60*3 , 60*3 , 60*2 , 60*3 )));
+    	m_lstPosition.add( new Position("c6", new Quadrilateral(60*2 ,60*3 ,60*3 , 60*3 , 60*3 , 60*2 , 60*2 , 60*2 )));
+    	m_lstPosition.add( new Position("c7", new Quadrilateral(60*2 ,60*2 ,60*3 , 60*2 , 60*3 , 60*1 , 60*2 , 60*1 )));
+    	m_lstPosition.add( new Position("c8", new Quadrilateral(60*2 ,60*1 ,60*3 , 60*1 , 60*3 , 60*0 , 60*2 , 60*0 )));
+
+    	m_lstPosition.add( new Position("d1", new Quadrilateral(60*3 ,60*8 ,60*4 , 60*8 , 60*4 , 60*7 , 60*3 , 60*7 )));
+    	m_lstPosition.add( new Position("d2", new Quadrilateral(60*3 ,60*7 ,60*4 , 60*7 , 60*4 , 60*6 , 60*3 , 60*6 )));
+    	m_lstPosition.add( new Position("d3", new Quadrilateral(60*3 ,60*6 ,60*4 , 60*6 , 60*4 , 60*5 , 60*3 , 60*5 )));
+    	m_lstPosition.add( new Position("d4", new Quadrilateral(60*3 ,60*5 ,60*4 , 60*5 , 60*4 , 60*4 , 60*3 , 60*4 )));
+    	m_lstPosition.add( new Position("d5", new Quadrilateral(60*3 ,60*4 ,60*4 , 60*4 , 60*4 , 60*3 , 60*3 , 60*3 )));
+    	m_lstPosition.add( new Position("d6", new Quadrilateral(60*3 ,60*3 ,60*4 , 60*3 , 60*4 , 60*2 , 60*3 , 60*2 )));
+    	m_lstPosition.add( new Position("d7", new Quadrilateral(60*3 ,60*2 ,60*4 , 60*2 , 60*4 , 60*1 , 60*3 , 60*1 )));
+    	m_lstPosition.add( new Position("d8", new Quadrilateral(60*3 ,60*1 ,60*4 , 60*1 , 60*4 , 60*0 , 60*3 , 60*0 )));
+
+    	m_lstPosition.add( new Position("e1", new Quadrilateral(60*4 ,60*8 ,60*5 , 60*8 , 60*5 , 60*7 , 60*4 , 60*7 )));
+    	m_lstPosition.add( new Position("e2", new Quadrilateral(60*4 ,60*7 ,60*5 , 60*7 , 60*5 , 60*6 , 60*4 , 60*6 )));
+    	m_lstPosition.add( new Position("e3", new Quadrilateral(60*4 ,60*6 ,60*5 , 60*6 , 60*5 , 60*5 , 60*4 , 60*5 )));
+    	m_lstPosition.add( new Position("e4", new Quadrilateral(60*4 ,60*5 ,60*5 , 60*5 , 60*5 , 60*4 , 60*4 , 60*4 )));
+    	m_lstPosition.add( new Position("e5", new Quadrilateral(60*4 ,60*4 ,60*5 , 60*4 , 60*5 , 60*3 , 60*4 , 60*3 )));
+    	m_lstPosition.add( new Position("e6", new Quadrilateral(60*4 ,60*3 ,60*5 , 60*3 , 60*5 , 60*2 , 60*4 , 60*2 )));
+    	m_lstPosition.add( new Position("e7", new Quadrilateral(60*4 ,60*2 ,60*5 , 60*2 , 60*5 , 60*1 , 60*4 , 60*1 )));
+    	m_lstPosition.add( new Position("e8", new Quadrilateral(60*4 ,60*1 ,60*5 , 60*1 , 60*5 , 60*0 , 60*4 , 60*0 )));
+
+    	m_lstPosition.add( new Position("f1", new Quadrilateral(60*5 ,60*8 ,60*6 , 60*8 , 60*6 , 60*7 , 60*5 , 60*7 )));
+    	m_lstPosition.add( new Position("f2", new Quadrilateral(60*5 ,60*7 ,60*6 , 60*7 , 60*6 , 60*6 , 60*5 , 60*6 )));
+    	m_lstPosition.add( new Position("f3", new Quadrilateral(60*5 ,60*6 ,60*6 , 60*6 , 60*6 , 60*5 , 60*5 , 60*5 )));
+    	m_lstPosition.add( new Position("f4", new Quadrilateral(60*5 ,60*5 ,60*6 , 60*5 , 60*6 , 60*4 , 60*5 , 60*4 )));
+    	m_lstPosition.add( new Position("f5", new Quadrilateral(60*5 ,60*4 ,60*6 , 60*4 , 60*6 , 60*3 , 60*5 , 60*3 )));
+    	m_lstPosition.add( new Position("f6", new Quadrilateral(60*5 ,60*3 ,60*6 , 60*3 , 60*6 , 60*2 , 60*5 , 60*2 )));
+    	m_lstPosition.add( new Position("f7", new Quadrilateral(60*5 ,60*2 ,60*6 , 60*2 , 60*6 , 60*1 , 60*5 , 60*1 )));
+    	m_lstPosition.add( new Position("f8", new Quadrilateral(60*5 ,60*1 ,60*6 , 60*1 , 60*6 , 60*0 , 60*5 , 60*0 )));
+
+    	m_lstPosition.add( new Position("g1", new Quadrilateral(60*6 ,60*8 ,60*7 , 60*8 , 60*7 , 60*7 , 60*6 , 60*7 )));
+    	m_lstPosition.add( new Position("g2", new Quadrilateral(60*6 ,60*7 ,60*7 , 60*7 , 60*7 , 60*6 , 60*6 , 60*6 )));
+    	m_lstPosition.add( new Position("g3", new Quadrilateral(60*6 ,60*6 ,60*7 , 60*6 , 60*7 , 60*5 , 60*6 , 60*5 )));
+    	m_lstPosition.add( new Position("g4", new Quadrilateral(60*6 ,60*5 ,60*7 , 60*5 , 60*7 , 60*4 , 60*6 , 60*4 )));
+    	m_lstPosition.add( new Position("g5", new Quadrilateral(60*6 ,60*4 ,60*7 , 60*4 , 60*7 , 60*3 , 60*6 , 60*3 )));
+    	m_lstPosition.add( new Position("g6", new Quadrilateral(60*6 ,60*3 ,60*7 , 60*3 , 60*7 , 60*2 , 60*6 , 60*2 )));
+    	m_lstPosition.add( new Position("g7", new Quadrilateral(60*6 ,60*2 ,60*7 , 60*2 , 60*7 , 60*1 , 60*6 , 60*1 )));
+    	m_lstPosition.add( new Position("g8", new Quadrilateral(60*6 ,60*1 ,60*7 , 60*1 , 60*7 , 60*0 , 60*6 , 60*0 )));
+    	
+    	m_lstPosition.add( new Position("h1", new Quadrilateral(60*7 ,60*8 ,60*8 , 60*8 , 60*8 , 60*7 , 60*7 , 60*7 )));
+    	m_lstPosition.add( new Position("h2", new Quadrilateral(60*7 ,60*7 ,60*8 , 60*7 , 60*8 , 60*6 , 60*7 , 60*6 )));
+    	m_lstPosition.add( new Position("h3", new Quadrilateral(60*7 ,60*6 ,60*8 , 60*6 , 60*8 , 60*5 , 60*7 , 60*5 )));
+    	m_lstPosition.add( new Position("h4", new Quadrilateral(60*7 ,60*5 ,60*8 , 60*5 , 60*8 , 60*4 , 60*7 , 60*4 )));
+    	m_lstPosition.add( new Position("h5", new Quadrilateral(60*7 ,60*4 ,60*8 , 60*4 , 60*8 , 60*3 , 60*7 , 60*3 )));
+    	m_lstPosition.add( new Position("h6", new Quadrilateral(60*7 ,60*3 ,60*8 , 60*3 , 60*8 , 60*2 , 60*7 , 60*2 )));
+    	m_lstPosition.add( new Position("h7", new Quadrilateral(60*7 ,60*2 ,60*8 , 60*2 , 60*8 , 60*1 , 60*7 , 60*1 )));
+    	m_lstPosition.add( new Position("h8", new Quadrilateral(60*7 ,60*1 ,60*8 , 60*1 , 60*8 , 60*0 , 60*7 , 60*0 )));
+
+    	getPosition("a1").AddEdge(getPosition("a2"));
+    	getPosition("a1").AddEdge(getPosition("b1"));
+    	getPosition("a1").AddVertex(getPosition("b2"));
+
+    	getPosition("a2").AddEdge(getPosition("a1"));
+    	getPosition("a2").AddEdge(getPosition("b2"));
+    	getPosition("a2").AddEdge(getPosition("a3"));
+    	getPosition("a2").AddVertex(getPosition("b1"));
+    	getPosition("a2").AddVertex(getPosition("b3"));
+
+    	getPosition("a3").AddEdge(getPosition("a2"));
+    	getPosition("a3").AddEdge(getPosition("b3"));
+    	getPosition("a3").AddEdge(getPosition("a4"));
+    	getPosition("a3").AddVertex(getPosition("b2"));
+    	getPosition("a3").AddVertex(getPosition("b5"));
+    	
+    	getPosition("a4").AddEdge(getPosition("a3"));
+    	getPosition("a4").AddEdge(getPosition("b4"));
+    	getPosition("a4").AddEdge(getPosition("a5"));
+    	getPosition("a4").AddVertex(getPosition("b3"));
+    	getPosition("a4").AddVertex(getPosition("b5"));
+    	
+    	getPosition("a5").AddEdge(getPosition("a4"));
+    	getPosition("a5").AddEdge(getPosition("b5"));
+    	getPosition("a5").AddEdge(getPosition("a6"));
+    	getPosition("a5").AddVertex(getPosition("b4"));
+    	getPosition("a5").AddVertex(getPosition("b5"));
+
+    	getPosition("a6").AddEdge(getPosition("a5"));
+    	getPosition("a6").AddEdge(getPosition("b6"));
+    	getPosition("a6").AddEdge(getPosition("a7"));
+    	getPosition("a6").AddVertex(getPosition("b5"));
+    	getPosition("a6").AddVertex(getPosition("b7"));
+
+    	getPosition("a7").AddEdge(getPosition("a6"));
+    	getPosition("a7").AddEdge(getPosition("b7"));
+    	getPosition("a7").AddEdge(getPosition("a8"));
+    	getPosition("a7").AddVertex(getPosition("b6"));
+    	getPosition("a7").AddVertex(getPosition("b8"));
+
+    	getPosition("a8").AddEdge(getPosition("a7"));
+    	getPosition("a8").AddEdge(getPosition("b8"));
+    	getPosition("a8").AddVertex(getPosition("b7"));
+
+
+    	// File b
+    	getPosition("b1").AddEdge(getPosition("a1"));
+    	getPosition("b1").AddEdge(getPosition("b2"));
+    	getPosition("b1").AddEdge(getPosition("c1"));
+    	getPosition("b1").AddVertex(getPosition("a2"));
+    	getPosition("b1").AddVertex(getPosition("c2"));
+
+    	getPosition("b2").AddEdge(getPosition("a2"));
+    	getPosition("b2").AddEdge(getPosition("b1"));
+    	getPosition("b2").AddEdge(getPosition("c2"));
+    	getPosition("b2").AddEdge(getPosition("b3"));
+    	getPosition("b2").AddVertex(getPosition("a1"));
+    	getPosition("b2").AddVertex(getPosition("c1"));
+    	getPosition("b2").AddVertex(getPosition("a3"));
+    	getPosition("b2").AddVertex(getPosition("c3"));
+
+    	getPosition("b3").AddEdge(getPosition("a3"));
+    	getPosition("b3").AddEdge(getPosition("b2"));
+    	getPosition("b3").AddEdge(getPosition("c3"));
+    	getPosition("b3").AddEdge(getPosition("b4"));
+    	getPosition("b3").AddVertex(getPosition("a2"));
+    	getPosition("b3").AddVertex(getPosition("c2"));
+    	getPosition("b3").AddVertex(getPosition("a4"));
+    	getPosition("b3").AddVertex(getPosition("c4"));
+    	
+    	getPosition("b4").AddEdge(getPosition("a4"));
+    	getPosition("b4").AddEdge(getPosition("b3"));
+    	getPosition("b4").AddEdge(getPosition("c4"));
+    	getPosition("b4").AddEdge(getPosition("b5"));
+    	getPosition("b4").AddVertex(getPosition("a3"));
+    	getPosition("b4").AddVertex(getPosition("c3"));
+    	getPosition("b4").AddVertex(getPosition("a5"));
+    	getPosition("b4").AddVertex(getPosition("c5"));
+
+    	getPosition("b5").AddEdge(getPosition("a5"));
+    	getPosition("b5").AddEdge(getPosition("b4"));
+    	getPosition("b5").AddEdge(getPosition("c5"));
+    	getPosition("b5").AddEdge(getPosition("b6"));
+    	getPosition("b5").AddVertex(getPosition("a4"));
+    	getPosition("b5").AddVertex(getPosition("c4"));
+    	getPosition("b5").AddVertex(getPosition("a6"));
+    	getPosition("b5").AddVertex(getPosition("c6"));
+
+    	getPosition("b6").AddEdge(getPosition("a6"));
+    	getPosition("b6").AddEdge(getPosition("b5"));
+    	getPosition("b6").AddEdge(getPosition("c6"));
+    	getPosition("b6").AddEdge(getPosition("b7"));
+    	getPosition("b6").AddVertex(getPosition("a5"));
+    	getPosition("b6").AddVertex(getPosition("c5"));
+    	getPosition("b6").AddVertex(getPosition("a7"));
+    	getPosition("b6").AddVertex(getPosition("c7"));
+
+    	getPosition("b7").AddEdge(getPosition("a7"));
+    	getPosition("b7").AddEdge(getPosition("b6"));
+    	getPosition("b7").AddEdge(getPosition("c7"));
+    	getPosition("b7").AddEdge(getPosition("b8"));
+    	getPosition("b7").AddVertex(getPosition("a6"));
+    	getPosition("b7").AddVertex(getPosition("c6"));
+    	getPosition("b7").AddVertex(getPosition("a8"));
+    	getPosition("b7").AddVertex(getPosition("c8"));
+
+    	getPosition("b8").AddEdge(getPosition("a8"));
+    	getPosition("b8").AddEdge(getPosition("b7"));
+    	getPosition("b8").AddEdge(getPosition("c8"));
+    	getPosition("b8").AddVertex(getPosition("a7"));
+    	getPosition("b8").AddVertex(getPosition("c7"));
+    	
+    	// c
+    	getPosition("c1").AddEdge(getPosition("b1"));
+    	getPosition("c1").AddEdge(getPosition("c2"));
+    	getPosition("c1").AddEdge(getPosition("d1"));
+    	getPosition("c1").AddVertex(getPosition("b2"));
+    	getPosition("c1").AddVertex(getPosition("d2"));
+
+    	getPosition("c2").AddEdge(getPosition("b2"));
+    	getPosition("c2").AddEdge(getPosition("c1"));
+    	getPosition("c2").AddEdge(getPosition("d2"));
+    	getPosition("c2").AddEdge(getPosition("c3"));
+    	getPosition("c2").AddVertex(getPosition("b1"));
+    	getPosition("c2").AddVertex(getPosition("d1"));
+    	getPosition("c2").AddVertex(getPosition("b3"));
+    	getPosition("c2").AddVertex(getPosition("d3"));
+
+    	getPosition("c3").AddEdge(getPosition("b3"));
+    	getPosition("c3").AddEdge(getPosition("c2"));
+    	getPosition("c3").AddEdge(getPosition("d3"));
+    	getPosition("c3").AddEdge(getPosition("c4"));
+    	getPosition("c3").AddVertex(getPosition("b2"));
+    	getPosition("c3").AddVertex(getPosition("d2"));
+    	getPosition("c3").AddVertex(getPosition("b4"));
+    	getPosition("c3").AddVertex(getPosition("d4"));
+    	
+    	getPosition("c4").AddEdge(getPosition("b4"));
+    	getPosition("c4").AddEdge(getPosition("c3"));
+    	getPosition("c4").AddEdge(getPosition("d4"));
+    	getPosition("c4").AddEdge(getPosition("c5"));
+    	getPosition("c4").AddVertex(getPosition("b3"));
+    	getPosition("c4").AddVertex(getPosition("d3"));
+    	getPosition("c4").AddVertex(getPosition("b5"));
+    	getPosition("c4").AddVertex(getPosition("d5"));
+
+    	getPosition("c5").AddEdge(getPosition("b5"));
+    	getPosition("c5").AddEdge(getPosition("c4"));
+    	getPosition("c5").AddEdge(getPosition("d5"));
+    	getPosition("c5").AddEdge(getPosition("c6"));
+    	getPosition("c5").AddVertex(getPosition("b4"));
+    	getPosition("c5").AddVertex(getPosition("d4"));
+    	getPosition("c5").AddVertex(getPosition("b6"));
+    	getPosition("c5").AddVertex(getPosition("d6"));
+
+    	getPosition("c6").AddEdge(getPosition("b6"));
+    	getPosition("c6").AddEdge(getPosition("c5"));
+    	getPosition("c6").AddEdge(getPosition("d6"));
+    	getPosition("c6").AddEdge(getPosition("c7"));
+    	getPosition("c6").AddVertex(getPosition("b5"));
+    	getPosition("c6").AddVertex(getPosition("d5"));
+    	getPosition("c6").AddVertex(getPosition("b7"));
+    	getPosition("c6").AddVertex(getPosition("d7"));
+
+    	getPosition("c7").AddEdge(getPosition("b7"));
+    	getPosition("c7").AddEdge(getPosition("c6"));
+    	getPosition("c7").AddEdge(getPosition("d7"));
+    	getPosition("c7").AddEdge(getPosition("c8"));
+    	getPosition("c7").AddVertex(getPosition("b6"));
+    	getPosition("c7").AddVertex(getPosition("d6"));
+    	getPosition("c7").AddVertex(getPosition("b8"));
+    	getPosition("c7").AddVertex(getPosition("d8"));
+
+    	getPosition("c8").AddEdge(getPosition("b8"));
+    	getPosition("c8").AddEdge(getPosition("c7"));
+    	getPosition("c8").AddEdge(getPosition("b8"));
+    	getPosition("c8").AddVertex(getPosition("b7"));
+    	getPosition("c8").AddVertex(getPosition("d7"));
+    	
+    	// d
+    	getPosition("d1").AddEdge(getPosition("c1"));
+    	getPosition("d1").AddEdge(getPosition("d2"));
+    	getPosition("d1").AddEdge(getPosition("e1"));
+    	getPosition("d1").AddVertex(getPosition("c2"));
+    	getPosition("d1").AddVertex(getPosition("e2"));
+
+    	getPosition("d2").AddEdge(getPosition("c2"));
+    	getPosition("d2").AddEdge(getPosition("d1"));
+    	getPosition("d2").AddEdge(getPosition("e2"));
+    	getPosition("d2").AddEdge(getPosition("d3"));
+    	getPosition("d2").AddVertex(getPosition("c1"));
+    	getPosition("d2").AddVertex(getPosition("e1"));
+    	getPosition("d2").AddVertex(getPosition("c3"));
+    	getPosition("d2").AddVertex(getPosition("e3"));
+
+    	getPosition("d3").AddEdge(getPosition("c3"));
+    	getPosition("d3").AddEdge(getPosition("d2"));
+    	getPosition("d3").AddEdge(getPosition("e3"));
+    	getPosition("d3").AddEdge(getPosition("d4"));
+    	getPosition("d3").AddVertex(getPosition("c2"));
+    	getPosition("d3").AddVertex(getPosition("e2"));
+    	getPosition("d3").AddVertex(getPosition("c4"));
+    	getPosition("d3").AddVertex(getPosition("e4"));
+    	
+    	getPosition("d4").AddEdge(getPosition("c4"));
+    	getPosition("d4").AddEdge(getPosition("d3"));
+    	getPosition("d4").AddEdge(getPosition("e4"));
+    	getPosition("d4").AddEdge(getPosition("d5"));
+    	getPosition("d4").AddVertex(getPosition("c3"));
+    	getPosition("d4").AddVertex(getPosition("e3"));
+    	getPosition("d4").AddVertex(getPosition("c5"));
+    	getPosition("d4").AddVertex(getPosition("e5"));
+
+    	getPosition("d5").AddEdge(getPosition("c5"));
+    	getPosition("d5").AddEdge(getPosition("d4"));
+    	getPosition("d5").AddEdge(getPosition("e5"));
+    	getPosition("d5").AddEdge(getPosition("d6"));
+    	getPosition("d5").AddVertex(getPosition("c4"));
+    	getPosition("d5").AddVertex(getPosition("e4"));
+    	getPosition("d5").AddVertex(getPosition("c6"));
+    	getPosition("d5").AddVertex(getPosition("e6"));
+
+    	getPosition("d6").AddEdge(getPosition("c6"));
+    	getPosition("d6").AddEdge(getPosition("d5"));
+    	getPosition("d6").AddEdge(getPosition("e6"));
+    	getPosition("d6").AddEdge(getPosition("d7"));
+    	getPosition("d6").AddVertex(getPosition("c5"));
+    	getPosition("d6").AddVertex(getPosition("e5"));
+    	getPosition("d6").AddVertex(getPosition("c7"));
+    	getPosition("d6").AddVertex(getPosition("e7"));
+
+    	getPosition("d7").AddEdge(getPosition("c7"));
+    	getPosition("d7").AddEdge(getPosition("d6"));
+    	getPosition("d7").AddEdge(getPosition("e7"));
+    	getPosition("d7").AddEdge(getPosition("d8"));
+    	getPosition("d7").AddVertex(getPosition("c6"));
+    	getPosition("d7").AddVertex(getPosition("e6"));
+    	getPosition("d7").AddVertex(getPosition("c8"));
+    	getPosition("d7").AddVertex(getPosition("e8"));
+
+    	getPosition("d8").AddEdge(getPosition("c8"));
+    	getPosition("d8").AddEdge(getPosition("d7"));
+    	getPosition("d8").AddEdge(getPosition("c8"));
+    	getPosition("d8").AddVertex(getPosition("c7"));
+    	getPosition("d8").AddVertex(getPosition("e7"));
+
+    	// e
+    	getPosition("e1").AddEdge(getPosition("d1"));
+    	getPosition("e1").AddEdge(getPosition("e2"));
+    	getPosition("e1").AddEdge(getPosition("f1"));
+    	getPosition("e1").AddVertex(getPosition("d2"));
+    	getPosition("e1").AddVertex(getPosition("f2"));
+
+    	getPosition("e2").AddEdge(getPosition("d2"));
+    	getPosition("e2").AddEdge(getPosition("e1"));
+    	getPosition("e2").AddEdge(getPosition("f2"));
+    	getPosition("e2").AddEdge(getPosition("e3"));
+    	getPosition("e2").AddVertex(getPosition("d1"));
+    	getPosition("e2").AddVertex(getPosition("f1"));
+    	getPosition("e2").AddVertex(getPosition("d3"));
+    	getPosition("e2").AddVertex(getPosition("f3"));
+
+    	getPosition("e3").AddEdge(getPosition("d3"));
+    	getPosition("e3").AddEdge(getPosition("e2"));
+    	getPosition("e3").AddEdge(getPosition("f3"));
+    	getPosition("e3").AddEdge(getPosition("e4"));
+    	getPosition("e3").AddVertex(getPosition("d2"));
+    	getPosition("e3").AddVertex(getPosition("f2"));
+    	getPosition("e3").AddVertex(getPosition("d4"));
+    	getPosition("e3").AddVertex(getPosition("f4"));
+    	
+    	getPosition("e4").AddEdge(getPosition("d4"));
+    	getPosition("e4").AddEdge(getPosition("e3"));
+    	getPosition("e4").AddEdge(getPosition("f4"));
+    	getPosition("e4").AddEdge(getPosition("e5"));
+    	getPosition("e4").AddVertex(getPosition("d3"));
+    	getPosition("e4").AddVertex(getPosition("f3"));
+    	getPosition("e4").AddVertex(getPosition("d5"));
+    	getPosition("e4").AddVertex(getPosition("f5"));
+
+    	getPosition("e5").AddEdge(getPosition("d5"));
+    	getPosition("e5").AddEdge(getPosition("e4"));
+    	getPosition("e5").AddEdge(getPosition("f5"));
+    	getPosition("e5").AddEdge(getPosition("e6"));
+    	getPosition("e5").AddVertex(getPosition("d4"));
+    	getPosition("e5").AddVertex(getPosition("f4"));
+    	getPosition("e5").AddVertex(getPosition("d6"));
+    	getPosition("e5").AddVertex(getPosition("f6"));
+
+    	getPosition("e6").AddEdge(getPosition("d6"));
+    	getPosition("e6").AddEdge(getPosition("e5"));
+    	getPosition("e6").AddEdge(getPosition("f6"));
+    	getPosition("e6").AddEdge(getPosition("e7"));
+    	getPosition("e6").AddVertex(getPosition("d5"));
+    	getPosition("e6").AddVertex(getPosition("f5"));
+    	getPosition("e6").AddVertex(getPosition("d7"));
+    	getPosition("e6").AddVertex(getPosition("f7"));
+
+    	getPosition("e7").AddEdge(getPosition("d7"));
+    	getPosition("e7").AddEdge(getPosition("e6"));
+    	getPosition("e7").AddEdge(getPosition("f7"));
+    	getPosition("e7").AddEdge(getPosition("e8"));
+    	getPosition("e7").AddVertex(getPosition("d6"));
+    	getPosition("e7").AddVertex(getPosition("f6"));
+    	getPosition("e7").AddVertex(getPosition("d8"));
+    	getPosition("e7").AddVertex(getPosition("f8"));
+
+    	getPosition("e8").AddEdge(getPosition("d8"));
+    	getPosition("e8").AddEdge(getPosition("e7"));
+    	getPosition("e8").AddEdge(getPosition("d8"));
+    	getPosition("e8").AddVertex(getPosition("d7"));
+    	getPosition("e8").AddVertex(getPosition("f7"));
+
+    	// f
+    	getPosition("f1").AddEdge(getPosition("e1"));
+    	getPosition("f1").AddEdge(getPosition("f2"));
+    	getPosition("f1").AddEdge(getPosition("g1"));
+    	getPosition("f1").AddVertex(getPosition("e2"));
+    	getPosition("f1").AddVertex(getPosition("g2"));
+
+    	getPosition("f2").AddEdge(getPosition("e2"));
+    	getPosition("f2").AddEdge(getPosition("f1"));
+    	getPosition("f2").AddEdge(getPosition("g2"));
+    	getPosition("f2").AddEdge(getPosition("f3"));
+    	getPosition("f2").AddVertex(getPosition("e1"));
+    	getPosition("f2").AddVertex(getPosition("g1"));
+    	getPosition("f2").AddVertex(getPosition("e3"));
+    	getPosition("f2").AddVertex(getPosition("g3"));
+
+    	getPosition("f3").AddEdge(getPosition("e3"));
+    	getPosition("f3").AddEdge(getPosition("f2"));
+    	getPosition("f3").AddEdge(getPosition("g3"));
+    	getPosition("f3").AddEdge(getPosition("f4"));
+    	getPosition("f3").AddVertex(getPosition("e2"));
+    	getPosition("f3").AddVertex(getPosition("g2"));
+    	getPosition("f3").AddVertex(getPosition("e4"));
+    	getPosition("f3").AddVertex(getPosition("g4"));
+    	
+    	getPosition("f4").AddEdge(getPosition("e4"));
+    	getPosition("f4").AddEdge(getPosition("f3"));
+    	getPosition("f4").AddEdge(getPosition("g4"));
+    	getPosition("f4").AddEdge(getPosition("f5"));
+    	getPosition("f4").AddVertex(getPosition("e3"));
+    	getPosition("f4").AddVertex(getPosition("g3"));
+    	getPosition("f4").AddVertex(getPosition("e5"));
+    	getPosition("f4").AddVertex(getPosition("g5"));
+
+    	getPosition("f5").AddEdge(getPosition("e5"));
+    	getPosition("f5").AddEdge(getPosition("f4"));
+    	getPosition("f5").AddEdge(getPosition("g5"));
+    	getPosition("f5").AddEdge(getPosition("f6"));
+    	getPosition("f5").AddVertex(getPosition("e4"));
+    	getPosition("f5").AddVertex(getPosition("g4"));
+    	getPosition("f5").AddVertex(getPosition("e6"));
+    	getPosition("f5").AddVertex(getPosition("g6"));
+
+    	getPosition("f6").AddEdge(getPosition("e6"));
+    	getPosition("f6").AddEdge(getPosition("f5"));
+    	getPosition("f6").AddEdge(getPosition("g6"));
+    	getPosition("f6").AddEdge(getPosition("f7"));
+    	getPosition("f6").AddVertex(getPosition("e5"));
+    	getPosition("f6").AddVertex(getPosition("g5"));
+    	getPosition("f6").AddVertex(getPosition("e7"));
+    	getPosition("f6").AddVertex(getPosition("g7"));
+
+    	getPosition("f7").AddEdge(getPosition("e7"));
+    	getPosition("f7").AddEdge(getPosition("f6"));
+    	getPosition("f7").AddEdge(getPosition("g7"));
+    	getPosition("f7").AddEdge(getPosition("f8"));
+    	getPosition("f7").AddVertex(getPosition("e6"));
+    	getPosition("f7").AddVertex(getPosition("g6"));
+    	getPosition("f7").AddVertex(getPosition("e8"));
+    	getPosition("f7").AddVertex(getPosition("g8"));
+
+    	getPosition("f8").AddEdge(getPosition("e8"));
+    	getPosition("f8").AddEdge(getPosition("f7"));
+    	getPosition("f8").AddEdge(getPosition("g8"));
+    	getPosition("f8").AddVertex(getPosition("e7"));
+    	getPosition("f8").AddVertex(getPosition("g7"));
+
+    	// g
+    	getPosition("g1").AddEdge(getPosition("f1"));
+    	getPosition("g1").AddEdge(getPosition("g2"));
+    	getPosition("g1").AddEdge(getPosition("h1"));
+    	getPosition("g1").AddVertex(getPosition("f2"));
+    	getPosition("g1").AddVertex(getPosition("h2"));
+
+    	getPosition("g2").AddEdge(getPosition("f2"));
+    	getPosition("g2").AddEdge(getPosition("g1"));
+    	getPosition("g2").AddEdge(getPosition("h2"));
+    	getPosition("g2").AddEdge(getPosition("g3"));
+    	getPosition("g2").AddVertex(getPosition("f1"));
+    	getPosition("g2").AddVertex(getPosition("h1"));
+    	getPosition("g2").AddVertex(getPosition("f3"));
+    	getPosition("g2").AddVertex(getPosition("h3"));
+
+    	getPosition("g3").AddEdge(getPosition("f3"));
+    	getPosition("g3").AddEdge(getPosition("g2"));
+    	getPosition("g3").AddEdge(getPosition("h3"));
+    	getPosition("g3").AddEdge(getPosition("g4"));
+    	getPosition("g3").AddVertex(getPosition("f2"));
+    	getPosition("g3").AddVertex(getPosition("h2"));
+    	getPosition("g3").AddVertex(getPosition("f4"));
+    	getPosition("g3").AddVertex(getPosition("h4"));
+    	
+    	getPosition("g4").AddEdge(getPosition("f4"));
+    	getPosition("g4").AddEdge(getPosition("g3"));
+    	getPosition("g4").AddEdge(getPosition("h4"));
+    	getPosition("g4").AddEdge(getPosition("g5"));
+    	getPosition("g4").AddVertex(getPosition("f3"));
+    	getPosition("g4").AddVertex(getPosition("h3"));
+    	getPosition("g4").AddVertex(getPosition("f5"));
+    	getPosition("g4").AddVertex(getPosition("h5"));
+
+    	getPosition("g5").AddEdge(getPosition("f5"));
+    	getPosition("g5").AddEdge(getPosition("g4"));
+    	getPosition("g5").AddEdge(getPosition("h5"));
+    	getPosition("g5").AddEdge(getPosition("g6"));
+    	getPosition("g5").AddVertex(getPosition("f4"));
+    	getPosition("g5").AddVertex(getPosition("h4"));
+    	getPosition("g5").AddVertex(getPosition("f6"));
+    	getPosition("g5").AddVertex(getPosition("h6"));
+
+    	getPosition("g6").AddEdge(getPosition("f6"));
+    	getPosition("g6").AddEdge(getPosition("g5"));
+    	getPosition("g6").AddEdge(getPosition("h6"));
+    	getPosition("g6").AddEdge(getPosition("g7"));
+    	getPosition("g6").AddVertex(getPosition("f5"));
+    	getPosition("g6").AddVertex(getPosition("h5"));
+    	getPosition("g6").AddVertex(getPosition("f7"));
+    	getPosition("g6").AddVertex(getPosition("h7"));
+
+    	getPosition("g7").AddEdge(getPosition("f7"));
+    	getPosition("g7").AddEdge(getPosition("g6"));
+    	getPosition("g7").AddEdge(getPosition("h7"));
+    	getPosition("g7").AddEdge(getPosition("g8"));
+    	getPosition("g7").AddVertex(getPosition("f6"));
+    	getPosition("g7").AddVertex(getPosition("h6"));
+    	getPosition("g7").AddVertex(getPosition("f8"));
+    	getPosition("g7").AddVertex(getPosition("h8"));
+
+    	getPosition("g8").AddEdge(getPosition("f8"));
+    	getPosition("g8").AddEdge(getPosition("g7"));
+    	getPosition("g8").AddEdge(getPosition("h8"));
+    	getPosition("g8").AddVertex(getPosition("f7"));
+    	getPosition("g8").AddVertex(getPosition("h7"));
+
+    	// h
+    	getPosition("h1").AddEdge(getPosition("g1"));
+    	getPosition("h1").AddEdge(getPosition("h2"));
+    	getPosition("h1").AddVertex(getPosition("g2"));
+
+    	getPosition("h2").AddEdge(getPosition("g2"));
+    	getPosition("h2").AddEdge(getPosition("h1"));
+    	getPosition("h2").AddEdge(getPosition("h3"));
+    	getPosition("h2").AddVertex(getPosition("g1"));
+    	getPosition("h2").AddVertex(getPosition("g3"));
+
+    	getPosition("h3").AddEdge(getPosition("g3"));
+    	getPosition("h3").AddEdge(getPosition("h2"));
+    	getPosition("h3").AddEdge(getPosition("h4"));
+    	getPosition("h3").AddVertex(getPosition("g2"));
+    	getPosition("h3").AddVertex(getPosition("g4"));
+    	
+    	getPosition("h4").AddEdge(getPosition("g4"));
+    	getPosition("h4").AddEdge(getPosition("h3"));
+    	getPosition("h4").AddEdge(getPosition("h5"));
+    	getPosition("h4").AddVertex(getPosition("g3"));
+    	getPosition("h4").AddVertex(getPosition("g5"));
+
+    	getPosition("h5").AddEdge(getPosition("g5"));
+    	getPosition("h5").AddEdge(getPosition("h4"));
+    	getPosition("h5").AddEdge(getPosition("h6"));
+    	getPosition("h5").AddVertex(getPosition("g4"));
+    	getPosition("h5").AddVertex(getPosition("g6"));
+
+    	getPosition("h6").AddEdge(getPosition("g6"));
+    	getPosition("h6").AddEdge(getPosition("h5"));
+    	getPosition("h6").AddEdge(getPosition("h7"));
+    	getPosition("h6").AddVertex(getPosition("g5"));
+    	getPosition("h6").AddVertex(getPosition("g7"));
+
+    	getPosition("h7").AddEdge(getPosition("g7"));
+    	getPosition("h7").AddEdge(getPosition("h6"));
+    	getPosition("h7").AddEdge(getPosition("h8"));
+    	getPosition("h7").AddVertex(getPosition("g6"));
+    	getPosition("h7").AddVertex(getPosition("g8"));
+
+    	getPosition("h8").AddEdge(getPosition("g8"));
+    	getPosition("h8").AddEdge(getPosition("h7"));
+    	getPosition("h8").AddVertex(getPosition("g7"));
+}
+    
     /** Method setPieces on begin of new game or loaded game
      * @param places string with pieces to set on chessboard
      * @param plWhite reference to white player
@@ -388,6 +976,9 @@ public class Chessboard extends JPanel
         end.piece = begin.piece;//for ending square set piece from beginin square
         begin.piece = null;//make null piece for begining square
 
+        begin.m_oPosition.setPiece(null);
+        end.m_oPosition.setPiece(begin.piece);
+        
         if (end.piece.name.equals("King"))
         {
             if (!((King) end.piece).wasMotion)
@@ -518,9 +1109,29 @@ public class Chessboard extends JPanel
         {
             this.moves_history.addMove(tempBegin, tempEnd, false, wasCastling, wasEnPassant, promotedPiece);
         }
+        
+        
+        reattachPositions();
     }/*endOf-move()-*/
 
 
+    public void reattachPositions() {
+    	int file = 97;        
+        for (int i = 0; i < 8; i++)
+        {//create object for each square
+            for (int y = 0; y < 8; y++)
+            {
+            	char cfile = (char)file;
+            	IPosition oPosition = getPosition("" + cfile + (8 - y));
+            	((Position)oPosition).m_oPiece  = null;
+            	this.squares[i][y].m_oPosition = oPosition;
+                ((Position)oPosition).m_oPiece = this.squares[i][y].piece;
+            }
+            file++;
+        }//--endOf--create object for each square
+        
+    }
+    
     public boolean redo()
     {
         return redo(true);
@@ -694,6 +1305,53 @@ public class Chessboard extends JPanel
     }
 
     @Override
+    /*public void paintComponent(Graphics g)
+    {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Point topLeftPoint = this.getTopLeftPoint();
+        if (this.settings.renderLabels)
+        {
+            if(topLeftPoint.x <= 0 && topLeftPoint.y <= 0) //if renderLabels and (0,0), than draw it! (for first run)
+            {
+                this.drawLabels();
+            }
+            g2d.drawImage(this.upDownLabel, 0, 0, null);
+            g2d.drawImage(this.upDownLabel, 0, Chessboard.image.getHeight(null) + topLeftPoint.y, null);
+            g2d.drawImage(this.LeftRightLabel, 0, 0, null);
+            g2d.drawImage(this.LeftRightLabel, Chessboard.image.getHeight(null) + topLeftPoint.x, 0, null);
+        }
+        g2d.drawImage(image, topLeftPoint.x, topLeftPoint.y, null);//draw an Image of chessboard
+        for (int i = 0; i < 8; i++) //drawPiecesOnSquares
+        {
+            for (int y = 0; y < 8; y++)
+            {
+                if (this.squares[i][y].piece != null)
+                {
+                    this.squares[i][y].piece.draw(g, this.squares[i][y].m_oPosition);//draw image of Piece
+                }
+            }
+        }//--endOf--drawPiecesOnSquares
+        if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
+        {
+            g2d.drawImage(sel_square, 
+                            ((this.active_x_square - 1) * (int) square_height) + topLeftPoint.x,
+                            ((this.active_y_square - 1) * (int) square_height) + topLeftPoint.y, null);//draw image of selected square
+            Square tmpSquare = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)];
+            if (tmpSquare.piece != null)
+            {
+                this.moves = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece.allMoves();
+            }
+
+            for (Iterator it = moves.iterator(); moves != null && it.hasNext();)
+            {
+                Square sq = (Square) it.next();
+                g2d.drawImage(able_square, 
+                        (sq.pozX * (int) square_height) + topLeftPoint.x,
+                        (sq.pozY * (int) square_height) + topLeftPoint.y, null);
+            }
+        }
+    }*//*--endOf-paint--*/
     public void paintComponent(Graphics g)
     {
         Graphics2D g2d = (Graphics2D) g;
@@ -717,28 +1375,40 @@ public class Chessboard extends JPanel
             {
                 if (this.squares[i][y].piece != null)
                 {
-                    this.squares[i][y].piece.draw(g);//draw image of Piece
+                    this.squares[i][y].piece.draw(g, this.squares[i][y].m_oPosition);//draw image of Piece
                 }
             }
         }//--endOf--drawPiecesOnSquares
         if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
         {
             g2d.drawImage(sel_square, 
-                            ((this.active_x_square - 1) * (int) square_height) + topLeftPoint.x,
-                            ((this.active_y_square - 1) * (int) square_height) + topLeftPoint.y, null);//draw image of selected square
+                            this.activeSquare.m_oPosition.getShape().getTopLeftX(),
+                            this.activeSquare.m_oPosition.getShape().getTopLeftY(), null);//draw image of selected square
             Square tmpSquare = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)];
             if (tmpSquare.piece != null)
             {
-                this.moves = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece.allMoves();
+            	ArrayList temp = RuleEngine.getTryFindPossibleMove(  this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece, this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].m_oPosition );
+            	//ArrayList temp = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece.getPossibleMoves();
+            	
+                for (Iterator it = temp.iterator(); temp != null && it.hasNext();)
+                {
+                	Position sq = (Position) it.next();
+                    g2d.drawImage(able_square, 
+                    		sq.getShape().getTopLeftX(),
+                    		sq.getShape().getTopLeftY(), null);
+                }
+
+                
+                //this.moves = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece.allMoves();
             }
 
-            for (Iterator it = moves.iterator(); moves != null && it.hasNext();)
+            /*for (Iterator it = moves.iterator(); moves != null && it.hasNext();)
             {
                 Square sq = (Square) it.next();
                 g2d.drawImage(able_square, 
-                        (sq.pozX * (int) square_height) + topLeftPoint.x,
-                        (sq.pozY * (int) square_height) + topLeftPoint.y, null);
-            }
+                		sq.m_oPosition.getShape().getTopLeftX(),
+                		sq.m_oPosition.getShape().getTopLeftY(), null);
+            }*/
         }
     }/*--endOf-paint--*/
 

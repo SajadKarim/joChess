@@ -21,8 +21,10 @@
 package jchess;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.List;
 
 /**
  * Class to represent a pawn piece
@@ -68,16 +70,23 @@ public class Pawn extends Piece
     boolean down;
     protected static final Image imageWhite = GUI.loadImage("Pawn-W.png");
     protected static final Image imageBlack = GUI.loadImage("Pawn-B.png");
-    public static short value = 1;
-
+    public static short value = 1;    
+    
     Pawn(Chessboard chessboard, Player player)
     {
         super(chessboard, player);
         //this.setImages("Pawn-W.png", "Pawn-B.png");
         this.symbol = "";
         this.setImage();
+        
     }
 
+    void populateRules() {
+        //m_lstRules.add( new Rule(RULE_TYPE.MOVE_IFF_CAPTURE_POSSIBLE, DIRECTION.VERTEX, 2000, FAMILY.ANY, FILE.FORWARD, RANK.FORWARD, true, null));
+        m_lstRules.add( new Rule(RULE_TYPE.MOVE, DIRECTION.EDGE, 2000, FAMILY.DIFFERENT, FILE.SAME, RANK.FORWARD, false, null));
+        //m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200, FAMILY.ANY, FILE.BACKWARD, RANK.FORWARD, true, null));
+    }
+    
     @Override
     void setImage()
     {

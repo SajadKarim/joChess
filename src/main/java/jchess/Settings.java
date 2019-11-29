@@ -53,7 +53,7 @@ public class Settings implements Serializable
         local, network
     }
     public gameTypes gameType;
-    public boolean renderLabels = true;
+    public boolean renderLabels = false;
 
     public Settings()
     {

@@ -564,8 +564,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener
 
     public void componentResized(ComponentEvent e)
     {
-        int height = this.getHeight() >= this.getWidth() ? this.getWidth() : this.getHeight();
-        int chess_height = (int)Math.round( (height * 0.8)/8 )*8;
+        //int height = this.getHeight() >= this.getWidth() ? this.getWidth() : this.getHeight();
+        //int chess_height = (int)Math.round( (height * 0.8)/8 )*8;
+        int chess_height = this.chessboard.getHeight();
+        
         this.chessboard.resizeChessboard((int)chess_height);
         chess_height = this.chessboard.getHeight();
         this.moves.getScrollPane().setLocation(new Point(chess_height + 5, 100));

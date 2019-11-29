@@ -101,7 +101,7 @@ public class GUI
     {
         Properties defConfFile = new Properties();
         Properties confFile = new Properties();
-        File outFile = new File(GUI.getJarPath() + File.separator + "config.txt");
+        File outFile = new File(GUI.getJarPath() + File.separator+"jchess"+File.separator + "config.txt");
         try
         {
             defConfFile.load(GUI.class.getResourceAsStream("config.txt"));
@@ -121,13 +121,13 @@ public class GUI
             {
             }
         }
-        try
-        {   
-            confFile.load(new FileInputStream("config.txt"));
-        }
-        catch (java.io.IOException exc)
-        {
-        }
-        return confFile;
+        //try
+        //{   
+        //    confFile.load(new FileInputStream("config.txt"));
+       // }
+        //catch (java.io.IOException exc)
+        //{
+        //}
+        return defConfFile;
     }
 }
