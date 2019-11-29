@@ -33,12 +33,12 @@ public class JChessApp extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        //jcv = new JChessView(this);
-        //show(jcv);
+        jcv = new JChessView(this);
+        show(jcv);
     	
-    	final viewTemp view = new viewTemp();
-        final modelTemp model = new modelTemp();
-        new presenterTemp(view, model);
+    	//final viewTemp view = new viewTemp();
+        //final modelTemp model = new modelTemp();
+        //new presenterTemp(view, model);
 
     }
 
