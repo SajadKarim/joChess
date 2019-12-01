@@ -21,11 +21,13 @@
 package jchess;
 
 import java.util.ArrayList;
+
 import java.util.Iterator;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
-
+import jchess.common.*;
+import jchess.common.enumerator.*;
 /**
  * Class to represent a pawn piece
  * Pawn can move only forvard and can beat only across
@@ -72,7 +74,7 @@ public class Pawn extends Piece
     protected static final Image imageBlack = GUI.loadImage("Pawn-B.png");
     public static short value = 1;    
     
-    Pawn(Chessboard chessboard, Player player)
+    public Pawn(Chessboard chessboard, Player player)
     {
         super(chessboard, player);
         //this.setImages("Pawn-W.png", "Pawn-B.png");
@@ -83,9 +85,14 @@ public class Pawn extends Piece
 
     void populateRules() {
         //m_lstRules.add( new Rule(RULE_TYPE.MOVE_IFF_CAPTURE_POSSIBLE, DIRECTION.VERTEX, 2000, FAMILY.ANY, FILE.FORWARD, RANK.FORWARD, true, null));
-        m_lstRules.add( new Rule(RULE_TYPE.MOVE, DIRECTION.EDGE, 2000, FAMILY.DIFFERENT, FILE.SAME, RANK.FORWARD, false, null));
-        //m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200, FAMILY.ANY, FILE.BACKWARD, RANK.FORWARD, true, null));
-    }
+        //m_lstRules.add( new Rule(RULE_TYPE.MOVE, DIRECTION.EDGE, 2000, FAMILY.DIFFERENT, FILE.SAME, RANK.FORWARD, false, null));
+        //m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200000, FAMILY.SAME, FILE.FORWARD, RANK.FORWARD, true, null));
+        //m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200000, FAMILY.SAME, FILE.BACKWARD, RANK.FORWARD, true, null));
+
+        m_lstRules.add(new RuleAgent( new Rule(RuleType.MOVE_AND_CAPTURE, Direction.VERTEX, Manoeuvre.BLINKER, 1000, Family.SAME, File.IGNORE, Rank.IGNORE, true, null)));
+        m_lstRules.add(new RuleAgent( new Rule(RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.BLINKER, 3000, Family.IGNORE, File.IGNORE, Rank.IGNORE, true, null)));
+       // m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200000, FAMILY.SAME, FILE.BACKWARD, RANK.BACKWARD, true, null));
+}
     
     @Override
     void setImage()
@@ -108,6 +115,7 @@ public class Pawn extends Piece
     @Override
     public ArrayList allMoves()
     {
+    	/*sk
         //System.out.println(this.player.goDown);//4test
         ArrayList list = new ArrayList();
         Square sq;
@@ -285,7 +293,7 @@ public class Pawn extends Piece
             }
         }
 
-        return list;
+        return list;*/return null;
     }
 
     void promote(Piece newPiece)

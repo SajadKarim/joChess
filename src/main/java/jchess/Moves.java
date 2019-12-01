@@ -19,6 +19,7 @@
  * Damian Marciniak
  */
 package jchess;
+import jchess.common.*;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -170,7 +171,7 @@ public class Moves extends AbstractTableModel
     }
 
     public void addMove(Square begin, Square end, boolean registerInHistory, castling castlingMove, boolean wasEnPassant, Piece promotedPiece)
-    {
+    {}/*
         boolean wasCastling = castlingMove != castling.none;
         String locMove = new String(begin.piece.symbol);
         
@@ -244,7 +245,7 @@ public class Moves extends AbstractTableModel
             this.moveBackStack.add(new Move(new Square(begin), new Square(end), begin.piece, end.piece, castlingMove, wasEnPassant, promotedPiece));
         }
     }
-
+*/
     public void clearMoveForwardStack()
     {
         this.moveForwardStack.clear();
@@ -564,7 +565,7 @@ public class Moves extends AbstractTableModel
                 {
                     for(int j=0; j<squares[i].length && !pieceFound; j++)
                     {
-                        if(squares[i][j].piece == null || this.game.getActivePlayer().color != squares[i][j].piece.player.color)
+                        if(squares[i][j].piece == null || this.game.getActivePlayer().color != squares[i][j].piece.getPlayer().color)
                         {
                             continue;
                         }
@@ -574,8 +575,10 @@ public class Moves extends AbstractTableModel
                             Square currSquare = (Square)square;
                             if(currSquare.pozX == xTo && currSquare.pozY == yTo)
                             {
-                                xFrom = squares[i][j].piece.square.pozX;
-                                yFrom = squares[i][j].piece.square.pozY;
+                                xFrom = 0;
+                                yFrom = 0;
+                                //xFrom = squares[i][j].piece.square.pozX;
+                                //yFrom = squares[i][j].piece.square.pozY;
                                 pieceFound = true;
                             }
                         }

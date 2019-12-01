@@ -3,16 +3,21 @@ package jchess;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.*;
+import jchess.common.*;
+import jchess.common.enumerator.*;
 public class RuleEngine {
-	public static ArrayList getTryFindPossibleMove( Piece oPiece, IPosition oPosition) {		
+	public static ArrayList<PositionAgent> getTryFindPossibleMove( PieceAgent oPiece, PositionAgent oPosition) {		
     	ArrayList lstPosition = new ArrayList();
     	
-    	for( IRule rule : oPiece.m_lstRules) {
+    	for( RuleAgent rule : oPiece.getAllRuleAgents()) {
     		
     		rule.reset();
     		
-    		RULE_TYPE enRuleType = ((Rule)rule).m_enRuleType;
+    		tryFindPossibleMoves(new BoardMapping(), lstPosition, (RuleAgent)rule, oPosition);
+			
+    		/*RULE_TYPE enRuleType = ((Rule)rule).m_enRuleType;
     		switch( enRuleType) {
     		case MOVE:
     		case MOVE_TRANSIENT:	
@@ -28,96 +33,90 @@ public class RuleEngine {
     			break;
     		default:
     			break;
-    		}
+    		}*/
     	}
     	
     	return lstPosition;
     }
 
-	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position) {		
+	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, RuleAgent rule, PositionAgent position) {		
 		if ( rule == null)
 			return;
 
-		List<IPosition> positions = null;
-    	Iterator<IPosition> it = null;
+		Map<String, Path> positions = position.getAllPaths();
+		Iterator<Map.Entry<String, Path>> it = null;
 
-		DIRECTION enDirection = rule.m_enDirection;
+		Direction enDirection = rule.getDirection();
 		switch( enDirection) {
-		case EDGE:
-			positions = position.getEdges();
-	    	it = positions.iterator();
-	    	while( it.hasNext()) {
-	    		Position nextPosition = (Position)it.next();
-				tryFindPossibleMoves(oBoardMapping, lstPosition, rule, position, nextPosition);
-	    	}
+		case EDGE: 
+		{			
+			it = positions.entrySet().iterator(); 
+	        while( it.hasNext()) {
+	        	
+	        	Map.Entry<String, Path> entry = it.next();
+	        	if( ((Path)entry.getValue()).getDirection() != Direction.EDGE)
+	        		continue;
+	    		
+	    		Iterator<Position> it2 = entry.getValue().getAllPositions().iterator();
+	        	while( it2.hasNext()) {
+
+	        		Position __ = it2.next();
+	        		
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new RuleAgent(rule), position, boardManager.getInstance().getPosition(__.getName()));
+	        	}
+	        	
+	        	}
+		}
 
 			break;
 		case VERTEX:
-			positions = position.getVertexes();
-	    	it = positions.iterator();
-	    	while( it.hasNext()) {
-	    		Position nextPosition = (Position)it.next();
-				tryFindPossibleMoves(oBoardMapping, lstPosition, rule, position, nextPosition);
+		{			
+			it = positions.entrySet().iterator(); 
+	        while( it.hasNext()) {
+	        	
+	        	Map.Entry<String, Path> entry = it.next();
+	        	if( ((Path)entry.getValue()).getDirection()!= Direction.VERTEX)
+	        		continue;
+	
+	    		Iterator<Position> it2 = entry.getValue().getAllPositions().iterator();
+	        	while( it2.hasNext()) {
+
+	        		Position __ = it2.next();
+	        		
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new RuleAgent(rule), position, boardManager.getInstance().getPosition(__.getName()));
+	        	}
+	        	
+	        
+
+	    		/*Iterator<PositionAgent> it2 = entry.getValue().getAllPositions().iterator();
+	        	while( it2.hasNext()) {
+
+
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new RuleAgent(rule), position, (it2.next()));
+	        	}*/
+
+//	        	tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule((Rule)rule), position, (Position)(((Path)entry.getValue()).m_oPosition));
 	    	}
+		}
 			break;
 		default:
 			break;
 		}
+		
+		rule.makeRuleDead();
+		
 	}
 
-	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position, Position nextPosition) {		
-		FAMILY enFamily = rule.m_enFamily;
-		switch( enFamily) {
-		case DIFFERENT:
-		case ANY:
-			break;
-		default:
+	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, RuleAgent rule, PositionAgent position, PositionAgent nextPosition) {		
+		
+		if( nextPosition == null) {
+			rule.makeRuleDead();
 			return;
 		}
 		
-		int nFileSource = oBoardMapping.getMapping(position.getFile() );
-		int nFileDestination = oBoardMapping.getMapping(nextPosition.getFile() );
+		if( !validateMove(oBoardMapping, rule, position, nextPosition))
+			return;
 		
-		FILE enFile = rule.m_enFile;
-		switch( enFile) {
-		case SAME:
-			if( nFileSource != nFileDestination)
-				return;
-			break;
-		case FORWARD:
-			if( nFileDestination <= nFileSource)
-				return;
-			break;
-		case BACKWARD:
-			if( nFileDestination >= nFileSource)
-				return;
-			break;
-		default:
-			break;
-		}
-
-		int nRankSource = oBoardMapping.getMapping(position.getRank() );
-		int nRankDestination = oBoardMapping.getMapping(nextPosition.getRank() );
-
-	
-		RANK enRank = rule.m_enRank;
-		switch( enRank) {
-		case SAME:
-			if( nRankSource != nRankDestination)
-				return;
-			break;
-		case FORWARD:
-			if( nRankDestination <= nRankSource)
-				return;
-			break;
-		case BACKWARD:
-			if( nRankDestination >= nRankSource)
-				return;
-			break;
-		default:
-			break;
-		}
-
 		AtomicReference<Boolean> bIsValidMode = new AtomicReference<Boolean>(false);
 		AtomicReference<Boolean> bCanContinue = new AtomicReference<Boolean>(false);
 		
@@ -128,23 +127,162 @@ public class RuleEngine {
 		if( bIsValidMode.get())
 			lstPosition.add(nextPosition);
 		
-		if( !bCanContinue.get())
-			return;
-		
-		/*if( nextPosition.getPiece() != null) {
-			if( rule.canCapture())
-				lstPosition.add(nextPosition);
-				
+		if( !bCanContinue.get()) {
+			rule.makeRuleDead();
 			return;
 		}
 		
-		if( rule.canMove())
-			lstPosition.add(nextPosition);
-		*/
+		RuleAgent newrule = null;
+		if ( (newrule = rule.getNextRule()) == null)
+			return;
+			
+		switch( newrule.getManoeuvreStrategy()) {
+		case BLINKER:
+			tryFindPossibleMovesUsingBlinkers(oBoardMapping, lstPosition, newrule, position, nextPosition);
+			break;
+		case FILE_AND_RANK:
+			tryFindPossibleMoves(oBoardMapping, lstPosition, newrule, nextPosition);
+			break;
+		default:
+			break;
+		}
+		
+    	rule.makeRuleDead();
+}
+/*
+	public static void tryFindPossibleMovesByFileAndRank(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position, Position nextPosition) {		
+		
+		if( nextPosition == null) {
+			rule.makeRuleDead();
+			return;
+		}
+
+		if( !validateMove(oBoardMapping, rule, position, nextPosition))
+			return;
+		
+		
+				
 		IRule newrule = null;
 		while( (newrule = rule.getNextRule()) != null)
 			tryFindPossibleMoves(oBoardMapping, lstPosition, (Rule)newrule, nextPosition);
+    	
+    	rule.makeRuleDead();
+}
+*/
+	public static void tryFindPossibleMovesUsingBlinkers(IBoardMapping oBoardMapping, ArrayList lstPosition, RuleAgent rule, PositionAgent oldposition, PositionAgent newPosition) {		
+		
+		if( newPosition == null) {
+			rule.makeRuleDead();
+			return;
+		}
+				
+		List<PositionAgent> pos = newPosition.tryGetOppositePath(oldposition);
+		if( pos == null) {
+			rule.makeRuleDead();
+			return;
+		}
 
+		/*if( !validateMove(oBoardMapping, rule, oldposition, newPosition))
+		return;
+	
+	AtomicReference<Boolean> bIsValidMode = new AtomicReference<Boolean>(false);
+	AtomicReference<Boolean> bCanContinue = new AtomicReference<Boolean>(false);
+	
+	//Boolean bIsValidMode = false, bCanContinue = false;
+	
+	rule.isValidMove( newPosition, bIsValidMode, bCanContinue);
+		
+	if( bIsValidMode.get())
+		lstPosition.add(newPosition);
+	
+	if( !bCanContinue.get()) {
+		rule.makeRuleDead();
+		return;
+	}
+	*/
+
+		Iterator<PositionAgent> it = pos.iterator();
+    	while( it.hasNext()) {
+
+    		RuleAgent _rule = new RuleAgent((RuleAgent)rule);
+    		
+    		RuleAgent newrule = null;
+    		PositionAgent _abc =  it.next();
+    		//while( (newrule = _rule.getNextRule()) != null)
+    			tryFindPossibleMoves(oBoardMapping, lstPosition, (RuleAgent)_rule, newPosition, _abc);
+    		
+    		((RuleAgent)_rule).makeRuleDead();
+    	}
+    	
+    	rule.makeRuleDead();
 }
 
+	public static Boolean validateMove(IBoardMapping oBoardMapping, RuleAgent rule, PositionAgent position, PositionAgent nextPosition) {		
+		
+		String stCategorySource = position.getCategory().toUpperCase();
+		String stCategoryDestination = nextPosition.getCategory().toUpperCase();
+
+		Family enFamily = rule.getFamily();
+		switch( enFamily) {
+		case DIFFERENT:
+			if( stCategorySource.equals(stCategoryDestination))
+				return false;
+			break;
+		case SAME:
+			if( !stCategorySource.equals(stCategoryDestination))
+				return false;
+			break;
+		case IGNORE:
+			break;
+		default:
+			return false;
+		}
+		
+		int nFileSource = oBoardMapping.getMapping(position.getFile() );
+		int nFileDestination = oBoardMapping.getMapping(nextPosition.getFile() );
+		
+		File enFile = rule.getFile();
+		switch( enFile) {
+		case SAME:
+			if( nFileSource != nFileDestination)
+				return false;
+			break;
+		case FORWARD:
+			if( nFileDestination <= nFileSource)
+				return false;
+			break;
+		case BACKWARD:
+			if( nFileDestination >= nFileSource)
+				return false;
+			break;
+		case IGNORE:
+		default:
+			break;
+		}
+
+		int nRankSource = oBoardMapping.getMapping(position.getRank() );
+		int nRankDestination = oBoardMapping.getMapping(nextPosition.getRank() );
+
+	
+		Rank enRank = rule.getRank();
+		switch( enRank) {
+		case SAME:
+			if( nRankSource != nRankDestination)
+				return false;
+			break;
+		case FORWARD:
+			if( nRankDestination <= nRankSource)
+				return false;
+			break;
+		case BACKWARD:
+			if( nRankDestination >= nRankSource)
+				return false;
+			break;
+		case IGNORE:
+		default:
+			break;
+		}
+	
+		return true;
+	}
 }

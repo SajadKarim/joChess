@@ -21,7 +21,6 @@
 package jchess;
 
 import java.awt.*;
-import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
@@ -30,7 +29,11 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import jchess.Moves.castling;
 import java.util.List;
+import java.util.Map;
 
+import jchess.common.enumerator.*;
+import jchess.view.BoardView;
+import jchess.common.*;
 /** Class to represent chessboard. Chessboard is made from squares.
  * It is setting the squers of chessboard and sets the pieces(pawns)
  * witch the owner is current player on it.
@@ -38,6 +41,8 @@ import java.util.List;
 public class Chessboard extends JPanel
 {
 
+	private BoardView m_oBoardView = null;
+	
     public static final int top = 0;
     public static final int bottom = 7;
     public Square squares[][];//squares of chessboard
@@ -57,8 +62,8 @@ public class Chessboard extends JPanel
     //public Graphics graph;
     public static final int img_x = 5;//image x position (used in JChessView class!)
     public static final int img_y = img_x;//image y position (used in JChessView class!)
-    public static final int img_widht = 480;//image width
-    public static final int img_height = img_widht;//image height
+    public static final int img_widht = 808;//image width
+    public static final int img_height = 700;//image height
     private ArrayList moves;
     private Settings settings;
     public King kingWhite;
@@ -78,15 +83,14 @@ public class Chessboard extends JPanel
     public Pawn twoSquareMovedPawn2 = null;
     private Moves moves_history;
 
-    private List<IPosition> m_lstPosition;
-    
     /** Chessboard class constructor
      * @param settings reference to Settings class object for this chessboard
      * @param moves_history reference to Moves class object for this chessboard 
      */
     public Chessboard(Settings settings, Moves moves_history)
     {
-    	PopulatePositions();
+    	m_oBoardView = new BoardView(this.getGraphics(), this.topLeft);
+    	m_oBoardView.setBoard(boardManager.getInstance().getBoard());
         this.settings = settings;
         this.activeSquare = null;
         this.square_height = img_height / 8;//we need to devide to know height of field
@@ -100,8 +104,8 @@ public class Chessboard extends JPanel
             for (int y = 0; y < 8; y++)
             {
             	char cfile = (char)file;
-            	IPosition oPosition = getPosition("" + cfile + (8 - y));
-                this.squares[i][y] = new Square(i, y, null, oPosition);
+            	IPosition oPosition = boardManager.getInstance().getPosition("" + cfile + (8 - y));
+                this.squares[i][y] = new Square(i, y, null, null);
             }
             file++;
         }//--endOf--create object for each square
@@ -110,585 +114,7 @@ public class Chessboard extends JPanel
         this.drawLabels((int) this.square_height);
     }/*--endOf-Chessboard--*/
 
-
-    public IPosition getPosition(String stName) {
-    	Iterator<IPosition> it = m_lstPosition.iterator();
-    	while( it.hasNext()) {
-    		IPosition oPosition = it.next();
-    		if( oPosition.getName().equals(stName))
-    			return oPosition;
-    	}
-
-    	return null;
-    }
-    
-    private void PopulatePositions() {
-    	m_lstPosition = new ArrayList<IPosition>();
-    	
-    	m_lstPosition.add( new Position("a1", new Quadrilateral(60*0 ,60*8 ,60*1 , 60*8 , 60*1 , 60*7 , 60*0 , 60*7 )));
-    	m_lstPosition.add( new Position("a2", new Quadrilateral(60*0 ,60*7 ,60*1 , 60*7 , 60*1 , 60*6 , 60*0 , 60*6 )));
-    	m_lstPosition.add( new Position("a3", new Quadrilateral(60*0 ,60*6 ,60*1 , 60*6 , 60*1 , 60*5 , 60*0 , 60*5 )));
-    	m_lstPosition.add( new Position("a4", new Quadrilateral(60*0 ,60*5 ,60*1 , 60*5 , 60*1 , 60*4 , 60*0 , 60*4 )));
-    	m_lstPosition.add( new Position("a5", new Quadrilateral(60*0 ,60*4 ,60*1 , 60*4 , 60*1 , 60*3 , 60*0 , 60*3 )));
-    	m_lstPosition.add( new Position("a6", new Quadrilateral(60*0 ,60*3 ,60*1 , 60*3 , 60*1 , 60*2 , 60*0 , 60*2 )));
-    	m_lstPosition.add( new Position("a7", new Quadrilateral(60*0 ,60*2 ,60*1 , 60*2 , 60*1 , 60*1 , 60*0 , 60*1 )));
-    	m_lstPosition.add( new Position("a8", new Quadrilateral(60*0 ,60*1 ,60*1 , 60*1 , 60*1 , 60*0 , 60*0 , 60*0 )));
-
-    	m_lstPosition.add( new Position("b1", new Quadrilateral(60*1 ,60*8 ,60*2 , 60*8 , 60*2 , 60*7 , 60*1 , 60*7 )));
-    	m_lstPosition.add( new Position("b2", new Quadrilateral(60*1 ,60*7 ,60*2 , 60*7 , 60*2 , 60*6 , 60*1 , 60*6 )));
-    	m_lstPosition.add( new Position("b3", new Quadrilateral(60*1 ,60*6 ,60*2 , 60*6 , 60*2 , 60*5 , 60*1 , 60*5 )));
-    	m_lstPosition.add( new Position("b4", new Quadrilateral(60*1 ,60*5 ,60*2 , 60*5 , 60*2 , 60*4 , 60*1 , 60*4 )));
-    	m_lstPosition.add( new Position("b5", new Quadrilateral(60*1 ,60*4 ,60*2 , 60*4 , 60*2 , 60*3 , 60*1 , 60*3 )));
-    	m_lstPosition.add( new Position("b6", new Quadrilateral(60*1 ,60*3 ,60*2 , 60*3 , 60*2 , 60*2 , 60*1 , 60*2 )));
-    	m_lstPosition.add( new Position("b7", new Quadrilateral(60*1 ,60*2 ,60*2 , 60*2 , 60*2 , 60*1 , 60*1 , 60*1 )));
-    	m_lstPosition.add( new Position("b8", new Quadrilateral(60*1 ,60*1 ,60*2 , 60*1 , 60*2 , 60*0 , 60*1 , 60*0 )));
-
-    	m_lstPosition.add( new Position("c1", new Quadrilateral(60*2 ,60*8 ,60*3 , 60*8 , 60*3 , 60*7 , 60*2 , 60*7 )));
-    	m_lstPosition.add( new Position("c2", new Quadrilateral(60*2 ,60*7 ,60*3 , 60*7 , 60*3 , 60*6 , 60*2 , 60*6 )));
-    	m_lstPosition.add( new Position("c3", new Quadrilateral(60*2 ,60*6 ,60*3 , 60*6 , 60*3 , 60*5 , 60*2 , 60*5 )));
-    	m_lstPosition.add( new Position("c4", new Quadrilateral(60*2 ,60*5 ,60*3 , 60*5 , 60*3 , 60*4 , 60*2 , 60*4 )));
-    	m_lstPosition.add( new Position("c5", new Quadrilateral(60*2 ,60*4 ,60*3 , 60*4 , 60*3 , 60*3 , 60*2 , 60*3 )));
-    	m_lstPosition.add( new Position("c6", new Quadrilateral(60*2 ,60*3 ,60*3 , 60*3 , 60*3 , 60*2 , 60*2 , 60*2 )));
-    	m_lstPosition.add( new Position("c7", new Quadrilateral(60*2 ,60*2 ,60*3 , 60*2 , 60*3 , 60*1 , 60*2 , 60*1 )));
-    	m_lstPosition.add( new Position("c8", new Quadrilateral(60*2 ,60*1 ,60*3 , 60*1 , 60*3 , 60*0 , 60*2 , 60*0 )));
-
-    	m_lstPosition.add( new Position("d1", new Quadrilateral(60*3 ,60*8 ,60*4 , 60*8 , 60*4 , 60*7 , 60*3 , 60*7 )));
-    	m_lstPosition.add( new Position("d2", new Quadrilateral(60*3 ,60*7 ,60*4 , 60*7 , 60*4 , 60*6 , 60*3 , 60*6 )));
-    	m_lstPosition.add( new Position("d3", new Quadrilateral(60*3 ,60*6 ,60*4 , 60*6 , 60*4 , 60*5 , 60*3 , 60*5 )));
-    	m_lstPosition.add( new Position("d4", new Quadrilateral(60*3 ,60*5 ,60*4 , 60*5 , 60*4 , 60*4 , 60*3 , 60*4 )));
-    	m_lstPosition.add( new Position("d5", new Quadrilateral(60*3 ,60*4 ,60*4 , 60*4 , 60*4 , 60*3 , 60*3 , 60*3 )));
-    	m_lstPosition.add( new Position("d6", new Quadrilateral(60*3 ,60*3 ,60*4 , 60*3 , 60*4 , 60*2 , 60*3 , 60*2 )));
-    	m_lstPosition.add( new Position("d7", new Quadrilateral(60*3 ,60*2 ,60*4 , 60*2 , 60*4 , 60*1 , 60*3 , 60*1 )));
-    	m_lstPosition.add( new Position("d8", new Quadrilateral(60*3 ,60*1 ,60*4 , 60*1 , 60*4 , 60*0 , 60*3 , 60*0 )));
-
-    	m_lstPosition.add( new Position("e1", new Quadrilateral(60*4 ,60*8 ,60*5 , 60*8 , 60*5 , 60*7 , 60*4 , 60*7 )));
-    	m_lstPosition.add( new Position("e2", new Quadrilateral(60*4 ,60*7 ,60*5 , 60*7 , 60*5 , 60*6 , 60*4 , 60*6 )));
-    	m_lstPosition.add( new Position("e3", new Quadrilateral(60*4 ,60*6 ,60*5 , 60*6 , 60*5 , 60*5 , 60*4 , 60*5 )));
-    	m_lstPosition.add( new Position("e4", new Quadrilateral(60*4 ,60*5 ,60*5 , 60*5 , 60*5 , 60*4 , 60*4 , 60*4 )));
-    	m_lstPosition.add( new Position("e5", new Quadrilateral(60*4 ,60*4 ,60*5 , 60*4 , 60*5 , 60*3 , 60*4 , 60*3 )));
-    	m_lstPosition.add( new Position("e6", new Quadrilateral(60*4 ,60*3 ,60*5 , 60*3 , 60*5 , 60*2 , 60*4 , 60*2 )));
-    	m_lstPosition.add( new Position("e7", new Quadrilateral(60*4 ,60*2 ,60*5 , 60*2 , 60*5 , 60*1 , 60*4 , 60*1 )));
-    	m_lstPosition.add( new Position("e8", new Quadrilateral(60*4 ,60*1 ,60*5 , 60*1 , 60*5 , 60*0 , 60*4 , 60*0 )));
-
-    	m_lstPosition.add( new Position("f1", new Quadrilateral(60*5 ,60*8 ,60*6 , 60*8 , 60*6 , 60*7 , 60*5 , 60*7 )));
-    	m_lstPosition.add( new Position("f2", new Quadrilateral(60*5 ,60*7 ,60*6 , 60*7 , 60*6 , 60*6 , 60*5 , 60*6 )));
-    	m_lstPosition.add( new Position("f3", new Quadrilateral(60*5 ,60*6 ,60*6 , 60*6 , 60*6 , 60*5 , 60*5 , 60*5 )));
-    	m_lstPosition.add( new Position("f4", new Quadrilateral(60*5 ,60*5 ,60*6 , 60*5 , 60*6 , 60*4 , 60*5 , 60*4 )));
-    	m_lstPosition.add( new Position("f5", new Quadrilateral(60*5 ,60*4 ,60*6 , 60*4 , 60*6 , 60*3 , 60*5 , 60*3 )));
-    	m_lstPosition.add( new Position("f6", new Quadrilateral(60*5 ,60*3 ,60*6 , 60*3 , 60*6 , 60*2 , 60*5 , 60*2 )));
-    	m_lstPosition.add( new Position("f7", new Quadrilateral(60*5 ,60*2 ,60*6 , 60*2 , 60*6 , 60*1 , 60*5 , 60*1 )));
-    	m_lstPosition.add( new Position("f8", new Quadrilateral(60*5 ,60*1 ,60*6 , 60*1 , 60*6 , 60*0 , 60*5 , 60*0 )));
-
-    	m_lstPosition.add( new Position("g1", new Quadrilateral(60*6 ,60*8 ,60*7 , 60*8 , 60*7 , 60*7 , 60*6 , 60*7 )));
-    	m_lstPosition.add( new Position("g2", new Quadrilateral(60*6 ,60*7 ,60*7 , 60*7 , 60*7 , 60*6 , 60*6 , 60*6 )));
-    	m_lstPosition.add( new Position("g3", new Quadrilateral(60*6 ,60*6 ,60*7 , 60*6 , 60*7 , 60*5 , 60*6 , 60*5 )));
-    	m_lstPosition.add( new Position("g4", new Quadrilateral(60*6 ,60*5 ,60*7 , 60*5 , 60*7 , 60*4 , 60*6 , 60*4 )));
-    	m_lstPosition.add( new Position("g5", new Quadrilateral(60*6 ,60*4 ,60*7 , 60*4 , 60*7 , 60*3 , 60*6 , 60*3 )));
-    	m_lstPosition.add( new Position("g6", new Quadrilateral(60*6 ,60*3 ,60*7 , 60*3 , 60*7 , 60*2 , 60*6 , 60*2 )));
-    	m_lstPosition.add( new Position("g7", new Quadrilateral(60*6 ,60*2 ,60*7 , 60*2 , 60*7 , 60*1 , 60*6 , 60*1 )));
-    	m_lstPosition.add( new Position("g8", new Quadrilateral(60*6 ,60*1 ,60*7 , 60*1 , 60*7 , 60*0 , 60*6 , 60*0 )));
-    	
-    	m_lstPosition.add( new Position("h1", new Quadrilateral(60*7 ,60*8 ,60*8 , 60*8 , 60*8 , 60*7 , 60*7 , 60*7 )));
-    	m_lstPosition.add( new Position("h2", new Quadrilateral(60*7 ,60*7 ,60*8 , 60*7 , 60*8 , 60*6 , 60*7 , 60*6 )));
-    	m_lstPosition.add( new Position("h3", new Quadrilateral(60*7 ,60*6 ,60*8 , 60*6 , 60*8 , 60*5 , 60*7 , 60*5 )));
-    	m_lstPosition.add( new Position("h4", new Quadrilateral(60*7 ,60*5 ,60*8 , 60*5 , 60*8 , 60*4 , 60*7 , 60*4 )));
-    	m_lstPosition.add( new Position("h5", new Quadrilateral(60*7 ,60*4 ,60*8 , 60*4 , 60*8 , 60*3 , 60*7 , 60*3 )));
-    	m_lstPosition.add( new Position("h6", new Quadrilateral(60*7 ,60*3 ,60*8 , 60*3 , 60*8 , 60*2 , 60*7 , 60*2 )));
-    	m_lstPosition.add( new Position("h7", new Quadrilateral(60*7 ,60*2 ,60*8 , 60*2 , 60*8 , 60*1 , 60*7 , 60*1 )));
-    	m_lstPosition.add( new Position("h8", new Quadrilateral(60*7 ,60*1 ,60*8 , 60*1 , 60*8 , 60*0 , 60*7 , 60*0 )));
-
-    	getPosition("a1").AddEdge(getPosition("a2"));
-    	getPosition("a1").AddEdge(getPosition("b1"));
-    	getPosition("a1").AddVertex(getPosition("b2"));
-
-    	getPosition("a2").AddEdge(getPosition("a1"));
-    	getPosition("a2").AddEdge(getPosition("b2"));
-    	getPosition("a2").AddEdge(getPosition("a3"));
-    	getPosition("a2").AddVertex(getPosition("b1"));
-    	getPosition("a2").AddVertex(getPosition("b3"));
-
-    	getPosition("a3").AddEdge(getPosition("a2"));
-    	getPosition("a3").AddEdge(getPosition("b3"));
-    	getPosition("a3").AddEdge(getPosition("a4"));
-    	getPosition("a3").AddVertex(getPosition("b2"));
-    	getPosition("a3").AddVertex(getPosition("b5"));
-    	
-    	getPosition("a4").AddEdge(getPosition("a3"));
-    	getPosition("a4").AddEdge(getPosition("b4"));
-    	getPosition("a4").AddEdge(getPosition("a5"));
-    	getPosition("a4").AddVertex(getPosition("b3"));
-    	getPosition("a4").AddVertex(getPosition("b5"));
-    	
-    	getPosition("a5").AddEdge(getPosition("a4"));
-    	getPosition("a5").AddEdge(getPosition("b5"));
-    	getPosition("a5").AddEdge(getPosition("a6"));
-    	getPosition("a5").AddVertex(getPosition("b4"));
-    	getPosition("a5").AddVertex(getPosition("b5"));
-
-    	getPosition("a6").AddEdge(getPosition("a5"));
-    	getPosition("a6").AddEdge(getPosition("b6"));
-    	getPosition("a6").AddEdge(getPosition("a7"));
-    	getPosition("a6").AddVertex(getPosition("b5"));
-    	getPosition("a6").AddVertex(getPosition("b7"));
-
-    	getPosition("a7").AddEdge(getPosition("a6"));
-    	getPosition("a7").AddEdge(getPosition("b7"));
-    	getPosition("a7").AddEdge(getPosition("a8"));
-    	getPosition("a7").AddVertex(getPosition("b6"));
-    	getPosition("a7").AddVertex(getPosition("b8"));
-
-    	getPosition("a8").AddEdge(getPosition("a7"));
-    	getPosition("a8").AddEdge(getPosition("b8"));
-    	getPosition("a8").AddVertex(getPosition("b7"));
-
-
-    	// File b
-    	getPosition("b1").AddEdge(getPosition("a1"));
-    	getPosition("b1").AddEdge(getPosition("b2"));
-    	getPosition("b1").AddEdge(getPosition("c1"));
-    	getPosition("b1").AddVertex(getPosition("a2"));
-    	getPosition("b1").AddVertex(getPosition("c2"));
-
-    	getPosition("b2").AddEdge(getPosition("a2"));
-    	getPosition("b2").AddEdge(getPosition("b1"));
-    	getPosition("b2").AddEdge(getPosition("c2"));
-    	getPosition("b2").AddEdge(getPosition("b3"));
-    	getPosition("b2").AddVertex(getPosition("a1"));
-    	getPosition("b2").AddVertex(getPosition("c1"));
-    	getPosition("b2").AddVertex(getPosition("a3"));
-    	getPosition("b2").AddVertex(getPosition("c3"));
-
-    	getPosition("b3").AddEdge(getPosition("a3"));
-    	getPosition("b3").AddEdge(getPosition("b2"));
-    	getPosition("b3").AddEdge(getPosition("c3"));
-    	getPosition("b3").AddEdge(getPosition("b4"));
-    	getPosition("b3").AddVertex(getPosition("a2"));
-    	getPosition("b3").AddVertex(getPosition("c2"));
-    	getPosition("b3").AddVertex(getPosition("a4"));
-    	getPosition("b3").AddVertex(getPosition("c4"));
-    	
-    	getPosition("b4").AddEdge(getPosition("a4"));
-    	getPosition("b4").AddEdge(getPosition("b3"));
-    	getPosition("b4").AddEdge(getPosition("c4"));
-    	getPosition("b4").AddEdge(getPosition("b5"));
-    	getPosition("b4").AddVertex(getPosition("a3"));
-    	getPosition("b4").AddVertex(getPosition("c3"));
-    	getPosition("b4").AddVertex(getPosition("a5"));
-    	getPosition("b4").AddVertex(getPosition("c5"));
-
-    	getPosition("b5").AddEdge(getPosition("a5"));
-    	getPosition("b5").AddEdge(getPosition("b4"));
-    	getPosition("b5").AddEdge(getPosition("c5"));
-    	getPosition("b5").AddEdge(getPosition("b6"));
-    	getPosition("b5").AddVertex(getPosition("a4"));
-    	getPosition("b5").AddVertex(getPosition("c4"));
-    	getPosition("b5").AddVertex(getPosition("a6"));
-    	getPosition("b5").AddVertex(getPosition("c6"));
-
-    	getPosition("b6").AddEdge(getPosition("a6"));
-    	getPosition("b6").AddEdge(getPosition("b5"));
-    	getPosition("b6").AddEdge(getPosition("c6"));
-    	getPosition("b6").AddEdge(getPosition("b7"));
-    	getPosition("b6").AddVertex(getPosition("a5"));
-    	getPosition("b6").AddVertex(getPosition("c5"));
-    	getPosition("b6").AddVertex(getPosition("a7"));
-    	getPosition("b6").AddVertex(getPosition("c7"));
-
-    	getPosition("b7").AddEdge(getPosition("a7"));
-    	getPosition("b7").AddEdge(getPosition("b6"));
-    	getPosition("b7").AddEdge(getPosition("c7"));
-    	getPosition("b7").AddEdge(getPosition("b8"));
-    	getPosition("b7").AddVertex(getPosition("a6"));
-    	getPosition("b7").AddVertex(getPosition("c6"));
-    	getPosition("b7").AddVertex(getPosition("a8"));
-    	getPosition("b7").AddVertex(getPosition("c8"));
-
-    	getPosition("b8").AddEdge(getPosition("a8"));
-    	getPosition("b8").AddEdge(getPosition("b7"));
-    	getPosition("b8").AddEdge(getPosition("c8"));
-    	getPosition("b8").AddVertex(getPosition("a7"));
-    	getPosition("b8").AddVertex(getPosition("c7"));
-    	
-    	// c
-    	getPosition("c1").AddEdge(getPosition("b1"));
-    	getPosition("c1").AddEdge(getPosition("c2"));
-    	getPosition("c1").AddEdge(getPosition("d1"));
-    	getPosition("c1").AddVertex(getPosition("b2"));
-    	getPosition("c1").AddVertex(getPosition("d2"));
-
-    	getPosition("c2").AddEdge(getPosition("b2"));
-    	getPosition("c2").AddEdge(getPosition("c1"));
-    	getPosition("c2").AddEdge(getPosition("d2"));
-    	getPosition("c2").AddEdge(getPosition("c3"));
-    	getPosition("c2").AddVertex(getPosition("b1"));
-    	getPosition("c2").AddVertex(getPosition("d1"));
-    	getPosition("c2").AddVertex(getPosition("b3"));
-    	getPosition("c2").AddVertex(getPosition("d3"));
-
-    	getPosition("c3").AddEdge(getPosition("b3"));
-    	getPosition("c3").AddEdge(getPosition("c2"));
-    	getPosition("c3").AddEdge(getPosition("d3"));
-    	getPosition("c3").AddEdge(getPosition("c4"));
-    	getPosition("c3").AddVertex(getPosition("b2"));
-    	getPosition("c3").AddVertex(getPosition("d2"));
-    	getPosition("c3").AddVertex(getPosition("b4"));
-    	getPosition("c3").AddVertex(getPosition("d4"));
-    	
-    	getPosition("c4").AddEdge(getPosition("b4"));
-    	getPosition("c4").AddEdge(getPosition("c3"));
-    	getPosition("c4").AddEdge(getPosition("d4"));
-    	getPosition("c4").AddEdge(getPosition("c5"));
-    	getPosition("c4").AddVertex(getPosition("b3"));
-    	getPosition("c4").AddVertex(getPosition("d3"));
-    	getPosition("c4").AddVertex(getPosition("b5"));
-    	getPosition("c4").AddVertex(getPosition("d5"));
-
-    	getPosition("c5").AddEdge(getPosition("b5"));
-    	getPosition("c5").AddEdge(getPosition("c4"));
-    	getPosition("c5").AddEdge(getPosition("d5"));
-    	getPosition("c5").AddEdge(getPosition("c6"));
-    	getPosition("c5").AddVertex(getPosition("b4"));
-    	getPosition("c5").AddVertex(getPosition("d4"));
-    	getPosition("c5").AddVertex(getPosition("b6"));
-    	getPosition("c5").AddVertex(getPosition("d6"));
-
-    	getPosition("c6").AddEdge(getPosition("b6"));
-    	getPosition("c6").AddEdge(getPosition("c5"));
-    	getPosition("c6").AddEdge(getPosition("d6"));
-    	getPosition("c6").AddEdge(getPosition("c7"));
-    	getPosition("c6").AddVertex(getPosition("b5"));
-    	getPosition("c6").AddVertex(getPosition("d5"));
-    	getPosition("c6").AddVertex(getPosition("b7"));
-    	getPosition("c6").AddVertex(getPosition("d7"));
-
-    	getPosition("c7").AddEdge(getPosition("b7"));
-    	getPosition("c7").AddEdge(getPosition("c6"));
-    	getPosition("c7").AddEdge(getPosition("d7"));
-    	getPosition("c7").AddEdge(getPosition("c8"));
-    	getPosition("c7").AddVertex(getPosition("b6"));
-    	getPosition("c7").AddVertex(getPosition("d6"));
-    	getPosition("c7").AddVertex(getPosition("b8"));
-    	getPosition("c7").AddVertex(getPosition("d8"));
-
-    	getPosition("c8").AddEdge(getPosition("b8"));
-    	getPosition("c8").AddEdge(getPosition("c7"));
-    	getPosition("c8").AddEdge(getPosition("b8"));
-    	getPosition("c8").AddVertex(getPosition("b7"));
-    	getPosition("c8").AddVertex(getPosition("d7"));
-    	
-    	// d
-    	getPosition("d1").AddEdge(getPosition("c1"));
-    	getPosition("d1").AddEdge(getPosition("d2"));
-    	getPosition("d1").AddEdge(getPosition("e1"));
-    	getPosition("d1").AddVertex(getPosition("c2"));
-    	getPosition("d1").AddVertex(getPosition("e2"));
-
-    	getPosition("d2").AddEdge(getPosition("c2"));
-    	getPosition("d2").AddEdge(getPosition("d1"));
-    	getPosition("d2").AddEdge(getPosition("e2"));
-    	getPosition("d2").AddEdge(getPosition("d3"));
-    	getPosition("d2").AddVertex(getPosition("c1"));
-    	getPosition("d2").AddVertex(getPosition("e1"));
-    	getPosition("d2").AddVertex(getPosition("c3"));
-    	getPosition("d2").AddVertex(getPosition("e3"));
-
-    	getPosition("d3").AddEdge(getPosition("c3"));
-    	getPosition("d3").AddEdge(getPosition("d2"));
-    	getPosition("d3").AddEdge(getPosition("e3"));
-    	getPosition("d3").AddEdge(getPosition("d4"));
-    	getPosition("d3").AddVertex(getPosition("c2"));
-    	getPosition("d3").AddVertex(getPosition("e2"));
-    	getPosition("d3").AddVertex(getPosition("c4"));
-    	getPosition("d3").AddVertex(getPosition("e4"));
-    	
-    	getPosition("d4").AddEdge(getPosition("c4"));
-    	getPosition("d4").AddEdge(getPosition("d3"));
-    	getPosition("d4").AddEdge(getPosition("e4"));
-    	getPosition("d4").AddEdge(getPosition("d5"));
-    	getPosition("d4").AddVertex(getPosition("c3"));
-    	getPosition("d4").AddVertex(getPosition("e3"));
-    	getPosition("d4").AddVertex(getPosition("c5"));
-    	getPosition("d4").AddVertex(getPosition("e5"));
-
-    	getPosition("d5").AddEdge(getPosition("c5"));
-    	getPosition("d5").AddEdge(getPosition("d4"));
-    	getPosition("d5").AddEdge(getPosition("e5"));
-    	getPosition("d5").AddEdge(getPosition("d6"));
-    	getPosition("d5").AddVertex(getPosition("c4"));
-    	getPosition("d5").AddVertex(getPosition("e4"));
-    	getPosition("d5").AddVertex(getPosition("c6"));
-    	getPosition("d5").AddVertex(getPosition("e6"));
-
-    	getPosition("d6").AddEdge(getPosition("c6"));
-    	getPosition("d6").AddEdge(getPosition("d5"));
-    	getPosition("d6").AddEdge(getPosition("e6"));
-    	getPosition("d6").AddEdge(getPosition("d7"));
-    	getPosition("d6").AddVertex(getPosition("c5"));
-    	getPosition("d6").AddVertex(getPosition("e5"));
-    	getPosition("d6").AddVertex(getPosition("c7"));
-    	getPosition("d6").AddVertex(getPosition("e7"));
-
-    	getPosition("d7").AddEdge(getPosition("c7"));
-    	getPosition("d7").AddEdge(getPosition("d6"));
-    	getPosition("d7").AddEdge(getPosition("e7"));
-    	getPosition("d7").AddEdge(getPosition("d8"));
-    	getPosition("d7").AddVertex(getPosition("c6"));
-    	getPosition("d7").AddVertex(getPosition("e6"));
-    	getPosition("d7").AddVertex(getPosition("c8"));
-    	getPosition("d7").AddVertex(getPosition("e8"));
-
-    	getPosition("d8").AddEdge(getPosition("c8"));
-    	getPosition("d8").AddEdge(getPosition("d7"));
-    	getPosition("d8").AddEdge(getPosition("c8"));
-    	getPosition("d8").AddVertex(getPosition("c7"));
-    	getPosition("d8").AddVertex(getPosition("e7"));
-
-    	// e
-    	getPosition("e1").AddEdge(getPosition("d1"));
-    	getPosition("e1").AddEdge(getPosition("e2"));
-    	getPosition("e1").AddEdge(getPosition("f1"));
-    	getPosition("e1").AddVertex(getPosition("d2"));
-    	getPosition("e1").AddVertex(getPosition("f2"));
-
-    	getPosition("e2").AddEdge(getPosition("d2"));
-    	getPosition("e2").AddEdge(getPosition("e1"));
-    	getPosition("e2").AddEdge(getPosition("f2"));
-    	getPosition("e2").AddEdge(getPosition("e3"));
-    	getPosition("e2").AddVertex(getPosition("d1"));
-    	getPosition("e2").AddVertex(getPosition("f1"));
-    	getPosition("e2").AddVertex(getPosition("d3"));
-    	getPosition("e2").AddVertex(getPosition("f3"));
-
-    	getPosition("e3").AddEdge(getPosition("d3"));
-    	getPosition("e3").AddEdge(getPosition("e2"));
-    	getPosition("e3").AddEdge(getPosition("f3"));
-    	getPosition("e3").AddEdge(getPosition("e4"));
-    	getPosition("e3").AddVertex(getPosition("d2"));
-    	getPosition("e3").AddVertex(getPosition("f2"));
-    	getPosition("e3").AddVertex(getPosition("d4"));
-    	getPosition("e3").AddVertex(getPosition("f4"));
-    	
-    	getPosition("e4").AddEdge(getPosition("d4"));
-    	getPosition("e4").AddEdge(getPosition("e3"));
-    	getPosition("e4").AddEdge(getPosition("f4"));
-    	getPosition("e4").AddEdge(getPosition("e5"));
-    	getPosition("e4").AddVertex(getPosition("d3"));
-    	getPosition("e4").AddVertex(getPosition("f3"));
-    	getPosition("e4").AddVertex(getPosition("d5"));
-    	getPosition("e4").AddVertex(getPosition("f5"));
-
-    	getPosition("e5").AddEdge(getPosition("d5"));
-    	getPosition("e5").AddEdge(getPosition("e4"));
-    	getPosition("e5").AddEdge(getPosition("f5"));
-    	getPosition("e5").AddEdge(getPosition("e6"));
-    	getPosition("e5").AddVertex(getPosition("d4"));
-    	getPosition("e5").AddVertex(getPosition("f4"));
-    	getPosition("e5").AddVertex(getPosition("d6"));
-    	getPosition("e5").AddVertex(getPosition("f6"));
-
-    	getPosition("e6").AddEdge(getPosition("d6"));
-    	getPosition("e6").AddEdge(getPosition("e5"));
-    	getPosition("e6").AddEdge(getPosition("f6"));
-    	getPosition("e6").AddEdge(getPosition("e7"));
-    	getPosition("e6").AddVertex(getPosition("d5"));
-    	getPosition("e6").AddVertex(getPosition("f5"));
-    	getPosition("e6").AddVertex(getPosition("d7"));
-    	getPosition("e6").AddVertex(getPosition("f7"));
-
-    	getPosition("e7").AddEdge(getPosition("d7"));
-    	getPosition("e7").AddEdge(getPosition("e6"));
-    	getPosition("e7").AddEdge(getPosition("f7"));
-    	getPosition("e7").AddEdge(getPosition("e8"));
-    	getPosition("e7").AddVertex(getPosition("d6"));
-    	getPosition("e7").AddVertex(getPosition("f6"));
-    	getPosition("e7").AddVertex(getPosition("d8"));
-    	getPosition("e7").AddVertex(getPosition("f8"));
-
-    	getPosition("e8").AddEdge(getPosition("d8"));
-    	getPosition("e8").AddEdge(getPosition("e7"));
-    	getPosition("e8").AddEdge(getPosition("d8"));
-    	getPosition("e8").AddVertex(getPosition("d7"));
-    	getPosition("e8").AddVertex(getPosition("f7"));
-
-    	// f
-    	getPosition("f1").AddEdge(getPosition("e1"));
-    	getPosition("f1").AddEdge(getPosition("f2"));
-    	getPosition("f1").AddEdge(getPosition("g1"));
-    	getPosition("f1").AddVertex(getPosition("e2"));
-    	getPosition("f1").AddVertex(getPosition("g2"));
-
-    	getPosition("f2").AddEdge(getPosition("e2"));
-    	getPosition("f2").AddEdge(getPosition("f1"));
-    	getPosition("f2").AddEdge(getPosition("g2"));
-    	getPosition("f2").AddEdge(getPosition("f3"));
-    	getPosition("f2").AddVertex(getPosition("e1"));
-    	getPosition("f2").AddVertex(getPosition("g1"));
-    	getPosition("f2").AddVertex(getPosition("e3"));
-    	getPosition("f2").AddVertex(getPosition("g3"));
-
-    	getPosition("f3").AddEdge(getPosition("e3"));
-    	getPosition("f3").AddEdge(getPosition("f2"));
-    	getPosition("f3").AddEdge(getPosition("g3"));
-    	getPosition("f3").AddEdge(getPosition("f4"));
-    	getPosition("f3").AddVertex(getPosition("e2"));
-    	getPosition("f3").AddVertex(getPosition("g2"));
-    	getPosition("f3").AddVertex(getPosition("e4"));
-    	getPosition("f3").AddVertex(getPosition("g4"));
-    	
-    	getPosition("f4").AddEdge(getPosition("e4"));
-    	getPosition("f4").AddEdge(getPosition("f3"));
-    	getPosition("f4").AddEdge(getPosition("g4"));
-    	getPosition("f4").AddEdge(getPosition("f5"));
-    	getPosition("f4").AddVertex(getPosition("e3"));
-    	getPosition("f4").AddVertex(getPosition("g3"));
-    	getPosition("f4").AddVertex(getPosition("e5"));
-    	getPosition("f4").AddVertex(getPosition("g5"));
-
-    	getPosition("f5").AddEdge(getPosition("e5"));
-    	getPosition("f5").AddEdge(getPosition("f4"));
-    	getPosition("f5").AddEdge(getPosition("g5"));
-    	getPosition("f5").AddEdge(getPosition("f6"));
-    	getPosition("f5").AddVertex(getPosition("e4"));
-    	getPosition("f5").AddVertex(getPosition("g4"));
-    	getPosition("f5").AddVertex(getPosition("e6"));
-    	getPosition("f5").AddVertex(getPosition("g6"));
-
-    	getPosition("f6").AddEdge(getPosition("e6"));
-    	getPosition("f6").AddEdge(getPosition("f5"));
-    	getPosition("f6").AddEdge(getPosition("g6"));
-    	getPosition("f6").AddEdge(getPosition("f7"));
-    	getPosition("f6").AddVertex(getPosition("e5"));
-    	getPosition("f6").AddVertex(getPosition("g5"));
-    	getPosition("f6").AddVertex(getPosition("e7"));
-    	getPosition("f6").AddVertex(getPosition("g7"));
-
-    	getPosition("f7").AddEdge(getPosition("e7"));
-    	getPosition("f7").AddEdge(getPosition("f6"));
-    	getPosition("f7").AddEdge(getPosition("g7"));
-    	getPosition("f7").AddEdge(getPosition("f8"));
-    	getPosition("f7").AddVertex(getPosition("e6"));
-    	getPosition("f7").AddVertex(getPosition("g6"));
-    	getPosition("f7").AddVertex(getPosition("e8"));
-    	getPosition("f7").AddVertex(getPosition("g8"));
-
-    	getPosition("f8").AddEdge(getPosition("e8"));
-    	getPosition("f8").AddEdge(getPosition("f7"));
-    	getPosition("f8").AddEdge(getPosition("g8"));
-    	getPosition("f8").AddVertex(getPosition("e7"));
-    	getPosition("f8").AddVertex(getPosition("g7"));
-
-    	// g
-    	getPosition("g1").AddEdge(getPosition("f1"));
-    	getPosition("g1").AddEdge(getPosition("g2"));
-    	getPosition("g1").AddEdge(getPosition("h1"));
-    	getPosition("g1").AddVertex(getPosition("f2"));
-    	getPosition("g1").AddVertex(getPosition("h2"));
-
-    	getPosition("g2").AddEdge(getPosition("f2"));
-    	getPosition("g2").AddEdge(getPosition("g1"));
-    	getPosition("g2").AddEdge(getPosition("h2"));
-    	getPosition("g2").AddEdge(getPosition("g3"));
-    	getPosition("g2").AddVertex(getPosition("f1"));
-    	getPosition("g2").AddVertex(getPosition("h1"));
-    	getPosition("g2").AddVertex(getPosition("f3"));
-    	getPosition("g2").AddVertex(getPosition("h3"));
-
-    	getPosition("g3").AddEdge(getPosition("f3"));
-    	getPosition("g3").AddEdge(getPosition("g2"));
-    	getPosition("g3").AddEdge(getPosition("h3"));
-    	getPosition("g3").AddEdge(getPosition("g4"));
-    	getPosition("g3").AddVertex(getPosition("f2"));
-    	getPosition("g3").AddVertex(getPosition("h2"));
-    	getPosition("g3").AddVertex(getPosition("f4"));
-    	getPosition("g3").AddVertex(getPosition("h4"));
-    	
-    	getPosition("g4").AddEdge(getPosition("f4"));
-    	getPosition("g4").AddEdge(getPosition("g3"));
-    	getPosition("g4").AddEdge(getPosition("h4"));
-    	getPosition("g4").AddEdge(getPosition("g5"));
-    	getPosition("g4").AddVertex(getPosition("f3"));
-    	getPosition("g4").AddVertex(getPosition("h3"));
-    	getPosition("g4").AddVertex(getPosition("f5"));
-    	getPosition("g4").AddVertex(getPosition("h5"));
-
-    	getPosition("g5").AddEdge(getPosition("f5"));
-    	getPosition("g5").AddEdge(getPosition("g4"));
-    	getPosition("g5").AddEdge(getPosition("h5"));
-    	getPosition("g5").AddEdge(getPosition("g6"));
-    	getPosition("g5").AddVertex(getPosition("f4"));
-    	getPosition("g5").AddVertex(getPosition("h4"));
-    	getPosition("g5").AddVertex(getPosition("f6"));
-    	getPosition("g5").AddVertex(getPosition("h6"));
-
-    	getPosition("g6").AddEdge(getPosition("f6"));
-    	getPosition("g6").AddEdge(getPosition("g5"));
-    	getPosition("g6").AddEdge(getPosition("h6"));
-    	getPosition("g6").AddEdge(getPosition("g7"));
-    	getPosition("g6").AddVertex(getPosition("f5"));
-    	getPosition("g6").AddVertex(getPosition("h5"));
-    	getPosition("g6").AddVertex(getPosition("f7"));
-    	getPosition("g6").AddVertex(getPosition("h7"));
-
-    	getPosition("g7").AddEdge(getPosition("f7"));
-    	getPosition("g7").AddEdge(getPosition("g6"));
-    	getPosition("g7").AddEdge(getPosition("h7"));
-    	getPosition("g7").AddEdge(getPosition("g8"));
-    	getPosition("g7").AddVertex(getPosition("f6"));
-    	getPosition("g7").AddVertex(getPosition("h6"));
-    	getPosition("g7").AddVertex(getPosition("f8"));
-    	getPosition("g7").AddVertex(getPosition("h8"));
-
-    	getPosition("g8").AddEdge(getPosition("f8"));
-    	getPosition("g8").AddEdge(getPosition("g7"));
-    	getPosition("g8").AddEdge(getPosition("h8"));
-    	getPosition("g8").AddVertex(getPosition("f7"));
-    	getPosition("g8").AddVertex(getPosition("h7"));
-
-    	// h
-    	getPosition("h1").AddEdge(getPosition("g1"));
-    	getPosition("h1").AddEdge(getPosition("h2"));
-    	getPosition("h1").AddVertex(getPosition("g2"));
-
-    	getPosition("h2").AddEdge(getPosition("g2"));
-    	getPosition("h2").AddEdge(getPosition("h1"));
-    	getPosition("h2").AddEdge(getPosition("h3"));
-    	getPosition("h2").AddVertex(getPosition("g1"));
-    	getPosition("h2").AddVertex(getPosition("g3"));
-
-    	getPosition("h3").AddEdge(getPosition("g3"));
-    	getPosition("h3").AddEdge(getPosition("h2"));
-    	getPosition("h3").AddEdge(getPosition("h4"));
-    	getPosition("h3").AddVertex(getPosition("g2"));
-    	getPosition("h3").AddVertex(getPosition("g4"));
-    	
-    	getPosition("h4").AddEdge(getPosition("g4"));
-    	getPosition("h4").AddEdge(getPosition("h3"));
-    	getPosition("h4").AddEdge(getPosition("h5"));
-    	getPosition("h4").AddVertex(getPosition("g3"));
-    	getPosition("h4").AddVertex(getPosition("g5"));
-
-    	getPosition("h5").AddEdge(getPosition("g5"));
-    	getPosition("h5").AddEdge(getPosition("h4"));
-    	getPosition("h5").AddEdge(getPosition("h6"));
-    	getPosition("h5").AddVertex(getPosition("g4"));
-    	getPosition("h5").AddVertex(getPosition("g6"));
-
-    	getPosition("h6").AddEdge(getPosition("g6"));
-    	getPosition("h6").AddEdge(getPosition("h5"));
-    	getPosition("h6").AddEdge(getPosition("h7"));
-    	getPosition("h6").AddVertex(getPosition("g5"));
-    	getPosition("h6").AddVertex(getPosition("g7"));
-
-    	getPosition("h7").AddEdge(getPosition("g7"));
-    	getPosition("h7").AddEdge(getPosition("h6"));
-    	getPosition("h7").AddEdge(getPosition("h8"));
-    	getPosition("h7").AddVertex(getPosition("g6"));
-    	getPosition("h7").AddVertex(getPosition("g8"));
-
-    	getPosition("h8").AddEdge(getPosition("g8"));
-    	getPosition("h8").AddEdge(getPosition("h7"));
-    	getPosition("h8").AddVertex(getPosition("g7"));
-}
+  /*  
     
     /** Method setPieces on begin of new game or loaded game
      * @param places string with pieces to set on chessboard
@@ -698,7 +124,52 @@ public class Chessboard extends JPanel
     public void setPieces(String places, Player plWhite, Player plBlack)
     {
 
-        if (places.equals("")) //if newGame
+        /*Iterator<IPosition> itt = m_lstPosition.iterator();
+    	while( itt.hasNext()) {
+    		IPosition oPosition = itt.next();
+    		oPosition.setPiece(new Rook(this, plWhite));
+    	}*/
+
+        /*boardManager.getInstance().getPosition("a1").setPiece(new Rook(this, plWhite));
+        boardManager.getInstance().getPosition("h1").setPiece(new Rook(this, plWhite));
+        boardManager.getInstance().getPosition("b1").setPiece(new Knight(this, plWhite));
+        boardManager.getInstance().getPosition("g1").setPiece(new Knight(this, plWhite));
+        boardManager.getInstance().getPosition("c1").setPiece(new Bishop(this, plWhite));
+        boardManager.getInstance().getPosition("f1").setPiece(new Bishop(this, plWhite));
+        boardManager.getInstance().getPosition("d1").setPiece(new Queen(this, plWhite));
+        boardManager.getInstance().getPosition("e1").setPiece(new King(this, plWhite));
+
+        boardManager.getInstance().getPosition("a2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("b2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("c2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("d2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("e2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("f2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("g2").setPiece(new Pawn(this, plWhite));
+        boardManager.getInstance().getPosition("h2").setPiece(new Pawn(this, plWhite));
+
+        boardManager.getInstance().getPosition("a8").setPiece(new Rook(this, plBlack));
+        boardManager.getInstance().getPosition("l8").setPiece(new Rook(this, plBlack));
+        boardManager.getInstance().getPosition("b8").setPiece(new Knight(this, plBlack));
+        boardManager.getInstance().getPosition("k8").setPiece(new Knight(this, plBlack));
+        boardManager.getInstance().getPosition("c8").setPiece(new Bishop(this, plBlack));
+        boardManager.getInstance().getPosition("j8").setPiece(new Bishop(this, plBlack));
+        boardManager.getInstance().getPosition("d8").setPiece(new Queen(this, plBlack));
+        boardManager.getInstance().getPosition("i8").setPiece(new King(this, plBlack));
+
+        boardManager.getInstance().getPosition("a7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("b7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("c7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("d7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("i7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("j7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("k7").setPiece(new Pawn(this, plBlack));
+        boardManager.getInstance().getPosition("l7").setPiece(new Pawn(this, plBlack));
+        
+
+        boardManager.getInstance().getPosition("e9").setPiece(new Knight(this, plWhite));
+*/
+        /*if (places.equals("")) //if newGame
         {
             if (this.settings.upsideDown)
             {
@@ -713,7 +184,7 @@ public class Chessboard extends JPanel
         else //if loadedGame
         {
             return;
-        }
+        }*/
     }/*--endOf-setPieces--*/
 
 
@@ -745,7 +216,7 @@ public class Chessboard extends JPanel
      * */
     private void setFigures4NewGame(int i, Player player, boolean upsideDown)
     {
-
+/*
         if (i != 0 && i != 7)
         {
             System.out.println("error setting figures like rook etc.");
@@ -762,6 +233,8 @@ public class Chessboard extends JPanel
         this.squares[6][i].setPiece(new Knight(this, player));
         this.squares[2][i].setPiece(new Bishop(this, player));
         this.squares[5][i].setPiece(new Bishop(this, player));
+        
+                
         if (upsideDown)
         {
             this.squares[4][i].setPiece(new Queen(this, player));
@@ -786,6 +259,8 @@ public class Chessboard extends JPanel
                 this.squares[4][i].setPiece(kingBlack = new King(this, player));
             }
         }
+        
+  */      
     }
 
     /**  method set Pawns in row
@@ -794,7 +269,7 @@ public class Chessboard extends JPanel
      * */
     private void setPawns4NewGame(int i, Player player)
     {
-        if (i != 1 && i != 6)
+    /*    if (i != 1 && i != 6)
         {
             System.out.println("error setting pawns etc.");
             return;
@@ -802,7 +277,7 @@ public class Chessboard extends JPanel
         for (int x = 0; x < 8; x++)
         {
             this.squares[x][i].setPiece(new Pawn(this, player));
-        }
+        }*/
     }
 
     /** method to get reference to square from given x and y integeres
@@ -812,6 +287,27 @@ public class Chessboard extends JPanel
      */
     public Square getSquare(int x, int y)
     { 
+    	for (Map.Entry<String, PositionAgent> entry : boardManager.getInstance().getAllPositions().entrySet()) {
+    		if( ((IPolygon) entry.getValue().getShape()).getPolygon().contains(new Point(x, y)))
+    		{
+    			Square sq = new Square(x, y, (PieceAgent)entry.getValue().getPiece(), entry.getValue());
+    			return sq;
+    		}
+    	}
+    	
+        /*Iterator<PositionAgent> itt = boardManager.getInstance().getAllPositions().iterator();
+    	while( itt.hasNext()) {
+    		PositionAgent oPosition = itt.next();
+    		if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y)))
+    		{
+    			Square sq = new Square(x, y, (PieceAgent)oPosition.getPiece(), oPosition);
+    			return sq;
+    		}
+    	}
+*/
+
+    	return null;
+    	/*
         if ((x > this.get_height()) || (y > this.get_widht())) //test if click is out of chessboard
         {
             System.out.println("click out of chessboard.");
@@ -845,7 +341,7 @@ public class Chessboard extends JPanel
             System.out.println("!!Array out of bounds when getting Square with Chessboard.getSquare(int,int) : " + exc);
             return null;
         }
-        return this.squares[(int) square_x - 1][(int) square_y - 1];
+        return this.squares[(int) square_x - 1][(int) square_y - 1];*/
     }
 
     /** Method selecting piece in chessboard
@@ -949,7 +445,8 @@ public class Chessboard extends JPanel
      * */
     public void move(Square begin, Square end, boolean refresh, boolean clearForwardHistory)
     {
-
+    }
+/*
         castling wasCastling = Moves.castling.none;
         Piece promotedPiece = null;
         boolean wasEnPassant = false;
@@ -1122,10 +619,10 @@ public class Chessboard extends JPanel
             for (int y = 0; y < 8; y++)
             {
             	char cfile = (char)file;
-            	IPosition oPosition = getPosition("" + cfile + (8 - y));
-            	((Position)oPosition).m_oPiece  = null;
-            	this.squares[i][y].m_oPosition = oPosition;
-                ((Position)oPosition).m_oPiece = this.squares[i][y].piece;
+            	PositionAgent oPositionAgent = boardManager.getInstance().getPosition("" + cfile + (8 - y));
+            	oPositionAgent.setPiece( null);
+            	this.squares[i][y].m_oPosition = oPositionAgent;
+                oPositionAgent.setPiece(this.squares[i][y].piece);
             }
             file++;
         }//--endOf--create object for each square
@@ -1139,7 +636,8 @@ public class Chessboard extends JPanel
 
     public boolean redo(boolean refresh)
     {
-        if ( this.settings.gameType == Settings.gameTypes.local ) //redo only for local game
+    	return false;}
+/*        if ( this.settings.gameType == Settings.gameTypes.local ) //redo only for local game
         {
             Move first = this.moves_history.redo();
 
@@ -1167,15 +665,15 @@ public class Chessboard extends JPanel
         }
         return false;
     }
-
+*/
     public boolean undo()
     {
         return undo(true);
     }
 
     public synchronized boolean undo(boolean refresh) //undo last move
-    {
-        Move last = this.moves_history.undo();
+    {return false;}
+/*        Move last = this.moves_history.undo();
 
 
         if (last != null && last.getFrom() != null)
@@ -1354,7 +852,17 @@ public class Chessboard extends JPanel
     }*//*--endOf-paint--*/
     public void paintComponent(Graphics g)
     {
-        Graphics2D g2d = (Graphics2D) g;
+    	m_oBoardView.drawBoard(g);
+    	m_oBoardView.drawPieces(g, boardManager.getInstance().getAllPositions());
+
+    	if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
+    	{        
+    	ArrayList<PositionAgent> temp = RuleEngine.getTryFindPossibleMove(  this.activeSquare.piece, this.activeSquare.m_oPosition );
+
+    	m_oBoardView.paintComponent(g, this.activeSquare.m_oPosition, temp);
+    }
+    
+        /*Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         Point topLeftPoint = this.getTopLeftPoint();
         if (this.settings.renderLabels)
@@ -1369,7 +877,8 @@ public class Chessboard extends JPanel
             g2d.drawImage(this.LeftRightLabel, Chessboard.image.getHeight(null) + topLeftPoint.x, 0, null);
         }
         g2d.drawImage(image, topLeftPoint.x, topLeftPoint.y, null);//draw an Image of chessboard
-        for (int i = 0; i < 8; i++) //drawPiecesOnSquares
+        
+        /*for (int i = 0; i < 8; i++) //drawPiecesOnSquares
         {
             for (int y = 0; y < 8; y++)
             {
@@ -1378,24 +887,68 @@ public class Chessboard extends JPanel
                     this.squares[i][y].piece.draw(g, this.squares[i][y].m_oPosition);//draw image of Piece
                 }
             }
-        }//--endOf--drawPiecesOnSquares
+        }*///--endOf--drawPiecesOnSquares
+        
+        /*Iterator<PositionAgent> itt = boardManager.getInstance().getAllPositions().iterator();
+    	while( itt.hasNext()) {
+    		PositionAgent oPosition = itt.next();
+    		if( oPosition.getPiece() != null)
+    			((PieceAgent)oPosition.getPiece()).draw(g, oPosition);//draw image of Piece;
+    	}
+
+    	
         if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
         {
-            g2d.drawImage(sel_square, 
-                            this.activeSquare.m_oPosition.getShape().getTopLeftX(),
-                            this.activeSquare.m_oPosition.getShape().getTopLeftY(), null);//draw image of selected square
-            Square tmpSquare = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)];
-            if (tmpSquare.piece != null)
+        	Polygon p = ((IPolygon)this.activeSquare.m_oPosition.getShape()).getPolygon();
+        	
+            Image tempImage = sel_square;
+            BufferedImage resized = new BufferedImage((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+            Graphics2D imageGr = (Graphics2D) resized.createGraphics();
+            imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            imageGr.drawImage(tempImage, 0, 0, (int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), null);
+            imageGr.dispose();
+            Image image__ = resized.getScaledInstance((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), 0);
+            //g2d.drawImage(image, x, y, null);
+            
+        	g.setClip(p);
+        	//g.setColor(Color.cyan);
+        	//g.fillPolygon(p);
+        	g.drawImage(image__, (int)p.getBounds2D().getMinX(), (int)p.getBounds2D().getMinY(), null);
+
+        	
+            //g2d.drawImage(sel_square, 
+             //               this.activeSquare.m_oPosition.getShape().getTopLeftX(),
+             //               this.activeSquare.m_oPosition.getShape().getTopLeftY(), null);//draw image of selected square
+            //Square tmpSquare = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)];
+            //if (tmpSquare.piece != null)
             {
-            	ArrayList temp = RuleEngine.getTryFindPossibleMove(  this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece, this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].m_oPosition );
+            	ArrayList<PositionAgent> temp = RuleEngine.getTryFindPossibleMove(  this.activeSquare.piece, this.activeSquare.m_oPosition );
             	//ArrayList temp = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece.getPossibleMoves();
             	
                 for (Iterator it = temp.iterator(); temp != null && it.hasNext();)
                 {
-                	Position sq = (Position) it.next();
-                    g2d.drawImage(able_square, 
-                    		sq.getShape().getTopLeftX(),
-                    		sq.getShape().getTopLeftY(), null);
+                	PositionAgent sq = (PositionAgent) it.next();
+                	
+                	Polygon p2 = ((IPolygon)sq.getShape()).getPolygon();
+                	
+                    Image tempImage2 = able_square;
+                    BufferedImage resized2 = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB_PRE);
+                    Graphics2D imageGr2 = (Graphics2D) resized2.createGraphics();
+                    imageGr2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    imageGr2.drawImage(tempImage2, 0, 0, 10, 10, null);
+                    imageGr2.dispose();
+                    Image image__2 = resized2.getScaledInstance(20,20, 0);
+                    //g2d.drawImage(image, x, y, null);
+                    
+                	g.setClip(p2);
+                	//g.setColor(Color.cyan);
+                	//g.fillPolygon(p);
+                	g.drawImage(able_square, (int)p2.getBounds2D().getCenterX()-30, (int)p2.getBounds2D().getCenterY()-30, null);
+
+                	
+                    //g2d.drawImage(able_square, 
+                    //		sq.getShape().getTopLeftX(),
+                    //		sq.getShape().getTopLeftY(), null);
                 }
 
                 
@@ -1409,25 +962,25 @@ public class Chessboard extends JPanel
                 		sq.m_oPosition.getShape().getTopLeftX(),
                 		sq.m_oPosition.getShape().getTopLeftY(), null);
             }*/
-        }
+        //}
     }/*--endOf-paint--*/
 
 
-    public void resizeChessboard(int height)
+    public void resizeChessboard()
     {
-        BufferedImage resized = new BufferedImage(height, height, BufferedImage.TYPE_INT_ARGB_PRE);
+        /*BufferedImage resized = new BufferedImage(img_widht, img_height, BufferedImage.TYPE_INT_ARGB_PRE);
         Graphics g = resized.createGraphics();
-        g.drawImage(Chessboard.orgImage, 0, 0, height, height, null);
+        g.drawImage(Chessboard.orgImage, 0, 0, img_widht, img_height, null);
         g.dispose();
-        Chessboard.image = resized.getScaledInstance(height, height, 0);
-        this.square_height = (float) (height / 8);
+        Chessboard.image = resized.getScaledInstance(img_widht, img_height, 0);
+        *//*this.square_height = (float) (height / 8);
         if (this.settings.renderLabels)
         {
             height += 2 * (this.upDownLabel.getHeight(null));
-        }
-        this.setSize(height, height);
+        }*/
+        //this.setSize(img_widht, img_height);
 
-        resized = new BufferedImage((int) square_height, (int) square_height, BufferedImage.TYPE_INT_ARGB_PRE);
+        /*resized = new BufferedImage((int) square_height, (int) square_height, BufferedImage.TYPE_INT_ARGB_PRE);
         g = resized.createGraphics();
         g.drawImage(Chessboard.org_able_square, 0, 0, (int) square_height, (int) square_height, null);
         g.dispose();
@@ -1438,7 +991,7 @@ public class Chessboard extends JPanel
         g.drawImage(Chessboard.org_sel_square, 0, 0, (int) square_height, (int) square_height, null);
         g.dispose();
         Chessboard.sel_square = resized.getScaledInstance((int) square_height, (int) square_height, 0);
-        this.drawLabels();
+        this.drawLabels();*/
     }
 
     protected void drawLabels()

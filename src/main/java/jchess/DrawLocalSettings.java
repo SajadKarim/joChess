@@ -27,6 +27,8 @@ import java.awt.event.TextEvent;
 import java.awt.*;
 import javax.swing.text.BadLocationException;
 
+import jchess.common.Player;
+
 /**
  * Class responsible for drawing the fold with local game settings
  */
@@ -138,8 +140,8 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             }
             Game newGUI = JChessApp.jcv.addNewTab(this.firstName.getText() + " vs " + this.secondName.getText());
             Settings sett = newGUI.settings;//sett local settings variable
-            Player pl1 = sett.playerWhite;//set local player variable
-            Player pl2 = sett.playerBlack;//set local player variable
+            Player pl1 = boardManager.getInstance().getPlayer1();//set local player variable
+            Player pl2 = boardManager.getInstance().getPlayer2();//set local player variable
             sett.gameMode = Settings.gameModes.newGame;
             //if(this.firstName.getText().length() >9 ) this.firstName.setText(this.firstName.getText(0,8));
             if (this.color.getActionCommand().equals("biały")) //if first player is white

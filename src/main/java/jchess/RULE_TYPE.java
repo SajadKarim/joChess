@@ -1,8 +1,0 @@
-package jchess;
-
-public enum RULE_TYPE {
-	MOVE,
-	MOVE_AND_CAPTURE,
-	MOVE_IFF_CAPTURE_POSSIBLE,
-	MOVE_TRANSIENT
-}

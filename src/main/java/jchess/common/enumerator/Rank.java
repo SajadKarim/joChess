@@ -7,6 +7,9 @@ package jchess.common.enumerator;
  */
 
 public enum Rank{
-	
+	SAME,
+	FORWARD,
+	BACKWARD,
+	IGNORE
 }
 

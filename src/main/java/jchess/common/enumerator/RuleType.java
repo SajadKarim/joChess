@@ -7,6 +7,9 @@ package jchess.common.enumerator;
  */
 
 public enum RuleType{
-	
+	MOVE,
+	MOVE_AND_CAPTURE,
+	MOVE_IFF_CAPTURE_POSSIBLE,
+	MOVE_TRANSIENT	
 }
 

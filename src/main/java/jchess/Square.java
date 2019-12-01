@@ -19,7 +19,7 @@
  * Damian Marciniak
  */
 package jchess;
-
+import jchess.common.*;
 /**
  * Class to represent a chessboard square
  */
@@ -28,10 +28,10 @@ public class Square
 
     int pozX; // 0-7, becouse 8 squares for row/column
     int pozY; // 0-7, becouse 8 squares for row/column
-    public Piece piece = null;//object Piece on square (and extending Piecie)
-    public IPosition m_oPosition = null;
+    public PieceAgent piece = null;//object Piece on square (and extending Piecie)
+    public PositionAgent m_oPosition = null;
     
-    Square(int pozX, int pozY, Piece piece, IPosition oPosition)
+    Square(int pozX, int pozY, PieceAgent piece, PositionAgent oPosition)
     {
         this.pozX = pozX;
         this.pozY = pozY;
@@ -52,10 +52,10 @@ public class Square
         return new Square(square);
     }
 
-    void setPiece(Piece piece)
+    void setPiece(PieceAgent piece)
     {
     	this.m_oPosition.setPiece(piece);
-        this.piece = piece;
-        this.piece.square = this;
+        this.piece = null;
+        //this.piece.square = this;
     }
 }

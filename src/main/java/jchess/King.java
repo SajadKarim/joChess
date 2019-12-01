@@ -19,6 +19,7 @@
  * Damian Marciniak
  */
 package jchess;
+import jchess.common.*;
 
 /**
  * Class to represent a chess pawn king. King is the most important
@@ -49,7 +50,7 @@ public class King extends Piece
     private static final Image imageWhite = GUI.loadImage("King-W.png");
     private static final Image imageBlack = GUI.loadImage("King-B.png");
 
-    King(Chessboard chessboard, Player player)
+    public King(Chessboard chessboard, Player player)
     {
         super(chessboard, player);
         //this.setImages("King-W.png", "King-B.png");
@@ -78,8 +79,8 @@ public class King extends Piece
      */
     @Override
     public ArrayList allMoves()
-    {
-        ArrayList list = new ArrayList();
+    { return null;}
+/*        ArrayList list = new ArrayList();
         Square sq;
         Square sq1;
         for (int i = this.square.pozX - 1; i <= this.square.pozX + 1; i++)
@@ -172,9 +173,12 @@ public class King extends Piece
      */
     public int isCheckmatedOrStalemated()
     {
+    	return 1;
+    }
+    /*
         /*
          *returns: 0-nothing, 1-checkmate, 2-stalemate
-         */
+         
         if (this.allMoves().size() == 0)
         {
             for (int i = 0; i < 8; ++i)
@@ -182,7 +186,7 @@ public class King extends Piece
                 for (int j = 0; j < 8; ++j)
                 {
                     if (chessboard.squares[i][j].piece != null
-                            && chessboard.squares[i][j].piece.player == this.player
+                            && chessboard.squares[i][j].piece.getPlayer() == this.player
                             && chessboard.squares[i][j].piece.allMoves().size() != 0)
                     {
                         return 0;
@@ -204,14 +208,14 @@ public class King extends Piece
             return 0;
         }
     }
-
+*/
     /** Method to check is the king is checked by an opponent
      * @param s Squere where is a king
      * @return bool true if king is save, else returns false
      */
     private boolean isSafe(Square s) //A bit confusing code.
-    {
-        // Rook & Queen
+    { return false;}
+/*        // Rook & Queen
         for (int i = s.pozY + 1; i <= 7; ++i) //up
         {
             if (this.chessboard.squares[s.pozX][i].piece == null || this.chessboard.squares[s.pozX][i].piece == this) //if on this sqhuare isn't piece
@@ -645,6 +649,8 @@ public class King extends Piece
      */
     public boolean willBeSafeWhenMoveOtherPiece(Square sqIsHere, Square sqWillBeThere) //long name ;)
     {
+    	return false;}
+    /*
         Piece tmp = sqWillBeThere.piece;
         sqWillBeThere.piece = sqIsHere.piece; // move without redraw
         sqIsHere.piece = null;
@@ -655,5 +661,5 @@ public class King extends Piece
         sqWillBeThere.piece = tmp;
 
         return ret;
-    }
+    }*/
 }

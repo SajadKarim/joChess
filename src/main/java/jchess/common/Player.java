@@ -18,10 +18,12 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess;
+package jchess.common;
 
 import java.io.Serializable;
 import java.util.Hashtable;
+
+import jchess.*;
 
 
 /**
@@ -30,15 +32,15 @@ import java.util.Hashtable;
 public class Player implements Serializable
 {
 
-    String name;
-    IBoardMapping m_oBoardMapping = null;
+	public String name;
+	public IBoardMapping m_oBoardMapping = null;
     
-    enum colors
+    public enum colors
     {
 
         white, black
     }
-    colors color;
+    public colors color;
 
     public enum playerTypes
     {
@@ -46,7 +48,7 @@ public class Player implements Serializable
         localUser, networkUser, computer
     }
     public playerTypes playerType;
-    boolean goDown;
+    public boolean goDown;
 
     public Player()
     {
@@ -99,7 +101,7 @@ public class Player implements Serializable
     /** Method getting the players name
      *  @return name of player
      */
-    String getName()
+    public String getName()
     {
         return this.name;
     }

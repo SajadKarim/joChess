@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Graphics;
 import java.awt.Image;
-
+import jchess.common.enumerator.*;
+import jchess.common.*;
 /**
  * Class to represent a chess pawn knight
  */
@@ -35,7 +36,7 @@ public class Knight extends Piece
     protected static final Image imageWhite = GUI.loadImage("Knight-W.png");
     protected static final Image imageBlack = GUI.loadImage("Knight-B.png");
 
-    Knight(Chessboard chessboard, Player player)
+    public Knight(Chessboard chessboard, Player player)
     {
         super(chessboard, player);//call initializer of super type: Piece
         //this.setImages("Knight-W.png", "Knight-B.png");
@@ -58,27 +59,34 @@ public class Knight extends Piece
     }
 
     void populateRules() {
-        List<IRule> _rules1 = new ArrayList<IRule>();
-        _rules1.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, false, null));
-        _rules1.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.FORWARD, RANK.SAME, false, null));
+        List<Rule> _rules1 = new ArrayList<Rule>();
+        _rules1.add(new Rule(RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.FILE_AND_RANK, 1, Family.IGNORE, File.SAME, Rank.FORWARD, false, null));
+        _rules1.add(new Rule(RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.FILE_AND_RANK, 1, Family.IGNORE, File.FORWARD, Rank.SAME, false, null));
         
-        IRule rule1 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.FORWARD, RANK.FORWARD, true, _rules1);
+        Rule rule1 = new Rule(RuleType.MOVE_TRANSIENT, Direction.VERTEX, Manoeuvre.BLINKER, 1, Family.SAME, File.IGNORE, Rank.IGNORE, true, _rules1);
         		 	
-        List<IRule> _rules2 = new ArrayList<IRule>();
-        _rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, false, null));
-        _rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.BACKWARD, RANK.SAME, false, null));
+        List<Rule> _rules2 = new ArrayList<Rule>();
+        //_rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, false, null));
+        //_rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.BACKWARD, RANK.SAME, false, null));
         
-        IRule rule2 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.BACKWARD, RANK.FORWARD, true, _rules2);
+       //IRule rule2 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.BACKWARD, RANK.FORWARD, true, _rules2);
         
-        List<IRule> _rules3 = new ArrayList<IRule>();
-        _rules3.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.BACKWARD, false, null));
-        _rules3.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.BACKWARD, RANK.SAME, false, null));
+        List<Rule> _rules3 = new ArrayList<Rule>();
+        //_rules3.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.BACKWARD, false, null));
+        //_rules3.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.BACKWARD, RANK.SAME, false, null));
         
-        IRule rule3 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.BACKWARD, RANK.BACKWARD, true, _rules3);
+        //IRule rule3 = new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, 1, FAMILY.ANY, FILE.BACKWARD, RANK.BACKWARD, true, _rules3);
         
-        m_lstRules.add(rule1);
-        m_lstRules.add(rule2);
-        m_lstRules.add(rule3);
+        m_lstRules.add(new RuleAgent(rule1));
+       // m_lstRules.add(rule2);
+       // m_lstRules.add(rule3);
+
+        //List<IRule> _rules = new ArrayList<IRule>();
+        //_rules.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, MANOEUVRE.FILE_AND_RANK, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, true, null));
+        //_rules.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, MANOEUVRE.FILE_AND_RANK, 1, FAMILY.ANY, FILE.FORWARD, RANK.SAME, true, null));
+
+        //m_lstRules.add( new Rule(RULE_TYPE.MOVE_TRANSIENT, DIRECTION.VERTEX, MANOEUVRE.BLINKER, 1, FAMILY.SAME, FILE.IGNORE, RANK.IGNORE, true, _rules));
+        //m_lstRules.add( );
 
     }
 

@@ -7,6 +7,9 @@ package jchess.common.enumerator;
  */
 
 public enum Family{
-	
+	SAME,
+	DIFFERENT,
+	PROVIDED,
+	IGNORE
 }
 
