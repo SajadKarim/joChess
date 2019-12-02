@@ -21,8 +21,11 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 import jchess.view.viewTemp;
+import jchess.common.BoardAgent;
 import jchess.model.modelTemp;
 import jchess.presenter.presenterTemp;
+import jchess.service.STORAGE_TYPE;
+import jchess.service.StorageService;
 
 /**
  * The main class of the application.
@@ -33,7 +36,9 @@ public class JChessApp extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        jcv = new JChessView(this);
+
+    	
+    	jcv = new JChessView(this);
         show(jcv);
     	
     	//final viewTemp view = new viewTemp();

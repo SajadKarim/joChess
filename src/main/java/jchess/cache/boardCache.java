@@ -22,13 +22,17 @@ import jchess.common.Position;
 import jchess.common.PositionAgent;
 import jchess.common.Quadrilateral;
 import jchess.common.enumerator.Direction;
+import jchess.service.STORAGE_TYPE;
+import jchess.service.StorageService;
 
 public class boardCache
 {
 	BoardAgent m_oBard;
 	
     public boardCache() { 
-    	m_oBard = new BoardAgent(new Board("","","","",808,700));
+    	StorageService o = StorageService.create(STORAGE_TYPE.FBDB);
+
+    	m_oBard = new BoardAgent(o.getBoard());
     }
         
     public PositionAgent getPosition(String stName) {

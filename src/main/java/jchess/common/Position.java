@@ -19,6 +19,10 @@ public class Position implements IPosition {
 	private IShape m_oShape;
 	private Map<String, Path> m_mpPath;
 	
+	public Position( ) {		
+		m_mpPath = new HashMap<String, Path>();
+	}
+	
 	public Position( char chFile, int nRank, IShape oShape, String stCategory) {
 		m_nFile = (int)chFile;
 		m_nRank = nRank;
@@ -40,11 +44,19 @@ public class Position implements IPosition {
 	public int getFile() {
 		return m_nFile;
 	}
-	
+
+	public void setFile(int nFile) {
+		m_nFile = nFile;
+	}
+
 	public int getRank() {
 		return m_nRank;
 	}
 	
+	public void setRank(int nRank) {
+		m_nRank = nRank;
+	}
+
 	public String getName() {
 		return "" + (char)m_nFile + "" + m_nRank;
 	}
@@ -53,8 +65,16 @@ public class Position implements IPosition {
 		return m_stCategory;
 	}
 
+	public void setCategory(String  stCategory) {
+		m_stCategory = stCategory;
+	}
+
 	public IShape getShape() {
 		return m_oShape;
+	}
+
+	public void setShape(IShape oShape) {
+		m_oShape = oShape;
 	}
 
 	public Path getPath(String stName) {

@@ -20,6 +20,15 @@ public class Board implements IBoard {
     private Map<String, Piece> m_mpPieces;
     private Map<String, Map<String, String>> m_mpMapping;
     
+    public Board() {
+    	m_mpPosition = new HashMap<String, Position>();
+
+    	m_mpPlayers = new HashMap<String, Player>();
+    	
+    	m_mpPieces = new HashMap<String, Piece>();
+
+    	m_mpMapping = new HashMap<String, Map<String, String>>();    	
+    }
     
 	public Board(String stName, String stBoardImagePath, String stActiveCellImagePath, String stMarkedCellImagePath, int nWidth, int nHeight) {
 		m_nWidth = nWidth;
@@ -43,7 +52,7 @@ public class Board implements IBoard {
 		m_stActiveCellImagePath = "sel_square.png";
 		m_stMarkedCellImagePath = "able_square.png";
 		
-		populatePositions();
+		//populatePositions();
 		populatePlayers();
 		populatePieces();
 		populateMappings();
@@ -63,6 +72,10 @@ public class Board implements IBoard {
 
 	public String getMarkedCellImagePath() {
 		return m_stMarkedCellImagePath;
+	}
+	
+	public void addPosition(Position oPosition) {
+		m_mpPosition.put(oPosition.getName(), oPosition);
 	}
 	
 	public Position getPosition(String stName) {
@@ -519,7 +532,25 @@ public class Board implements IBoard {
         m_mpPosition.get("a8").addPathConnection("D1", "E2");
 */
         // File b
-        m_mpPosition.get("b1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a1")));
+        m_mpPosition.get("b1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a1")));	//a1
+        m_mpPosition.get("b1").addPath(new Path("D1", Direction.VERTEX, null));	//a0
+        m_mpPosition.get("b1").addPath(new Path("E2", Direction.EDGE, null));	//b0
+        m_mpPosition.get("b1").addPath(new Path("D2", Direction.VERTEX, null));	//c0
+        m_mpPosition.get("b1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c1")));
+        m_mpPosition.get("b1").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c2")));
+        m_mpPosition.get("b1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b2")));
+        m_mpPosition.get("b1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a2")));	//a2        
+        m_mpPosition.get("b1").addPathConnection("E1", "D1");
+        m_mpPosition.get("b1").addPathConnection("D1", "E2");
+        m_mpPosition.get("b1").addPathConnection("E2", "D2");
+        m_mpPosition.get("b1").addPathConnection("D2", "E3");
+        m_mpPosition.get("b1").addPathConnection("E3", "D3");
+        m_mpPosition.get("b1").addPathConnection("D3", "E4");
+        m_mpPosition.get("b1").addPathConnection("E4", "D4");
+        m_mpPosition.get("b1").addPathConnection("D4", "E1");
+
+        
+        /*m_mpPosition.get("b1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a1")));
         m_mpPosition.get("b1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b2")));
         m_mpPosition.get("b1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c1")));
         m_mpPosition.get("b1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a2")));
@@ -528,8 +559,26 @@ public class Board implements IBoard {
         m_mpPosition.get("b1").addPathConnection("D1", "E2");
         m_mpPosition.get("b1").addPathConnection("E2", "D2");
         m_mpPosition.get("b1").addPathConnection("D2", "E3");
+*/
+        m_mpPosition.get("b2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a2")));	//a2
+        m_mpPosition.get("b2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a1")));	//a1
+        m_mpPosition.get("b2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b1")));	//b1
+        m_mpPosition.get("b2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c1")));	//c1
+        m_mpPosition.get("b2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c2")));
+        m_mpPosition.get("b2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c3")));
+        m_mpPosition.get("b2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b3")));
+        m_mpPosition.get("b2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a3")));	        
+        m_mpPosition.get("b2").addPathConnection("E1", "D1");
+        m_mpPosition.get("b2").addPathConnection("D1", "E2");
+        m_mpPosition.get("b2").addPathConnection("E2", "D2");
+        m_mpPosition.get("b2").addPathConnection("D2", "E3");
+        m_mpPosition.get("b2").addPathConnection("E3", "D3");
+        m_mpPosition.get("b2").addPathConnection("D3", "E4");
+        m_mpPosition.get("b2").addPathConnection("E4", "D4");
+        m_mpPosition.get("b2").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("b2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a2")));
+        
+        /*m_mpPosition.get("b2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a2")));
         m_mpPosition.get("b2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b1")));
         m_mpPosition.get("b2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c2")));
         m_mpPosition.get("b2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b3")));
@@ -545,9 +594,26 @@ public class Board implements IBoard {
         m_mpPosition.get("b2").addPathConnection("D2", "E2");
         m_mpPosition.get("b2").addPathConnection("E2", "D1");
         m_mpPosition.get("b2").addPathConnection("D1", "E1");
+*/
 
+        m_mpPosition.get("b3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a3")));	
+        m_mpPosition.get("b3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a2")));	
+        m_mpPosition.get("b3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b2")));	
+        m_mpPosition.get("b3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c2")));	
+        m_mpPosition.get("b3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c3")));
+        m_mpPosition.get("b3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c4")));
+        m_mpPosition.get("b3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b4")));
+        m_mpPosition.get("b3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a4")));	        
+        m_mpPosition.get("b3").addPathConnection("E1", "D1");
+        m_mpPosition.get("b3").addPathConnection("D1", "E2");
+        m_mpPosition.get("b3").addPathConnection("E2", "D2");
+        m_mpPosition.get("b3").addPathConnection("D2", "E3");
+        m_mpPosition.get("b3").addPathConnection("E3", "D3");
+        m_mpPosition.get("b3").addPathConnection("D3", "E4");
+        m_mpPosition.get("b3").addPathConnection("E4", "D4");
+        m_mpPosition.get("b3").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("b3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a3")));
+        /*m_mpPosition.get("b3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a3")));
         m_mpPosition.get("b3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b2")));
         m_mpPosition.get("b3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c3")));
         m_mpPosition.get("b3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b4")));
@@ -563,8 +629,26 @@ public class Board implements IBoard {
         m_mpPosition.get("b3").addPathConnection("D2", "E2");
         m_mpPosition.get("b3").addPathConnection("E2", "D1");
         m_mpPosition.get("b3").addPathConnection("D1", "E1");
+*/
+        
+        m_mpPosition.get("b4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a4")));	
+        m_mpPosition.get("b4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a3")));	
+        m_mpPosition.get("b4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b3")));	
+        m_mpPosition.get("b4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c3")));	
+        m_mpPosition.get("b4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c4")));
+        m_mpPosition.get("b4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c5")));
+        m_mpPosition.get("b4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b5")));
+        m_mpPosition.get("b4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a5")));	        
+        m_mpPosition.get("b4").addPathConnection("E1", "D1");
+        m_mpPosition.get("b4").addPathConnection("D1", "E2");
+        m_mpPosition.get("b4").addPathConnection("E2", "D2");
+        m_mpPosition.get("b4").addPathConnection("D2", "E3");
+        m_mpPosition.get("b4").addPathConnection("E3", "D3");
+        m_mpPosition.get("b4").addPathConnection("D3", "E4");
+        m_mpPosition.get("b4").addPathConnection("E4", "D4");
+        m_mpPosition.get("b4").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("b4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a4")));
+        /*m_mpPosition.get("b4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a4")));
         m_mpPosition.get("b4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b3")));
         m_mpPosition.get("b4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c4")));
         m_mpPosition.get("b4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b5")));
@@ -580,8 +664,26 @@ public class Board implements IBoard {
         m_mpPosition.get("b4").addPathConnection("D2", "E2");
         m_mpPosition.get("b4").addPathConnection("E2", "D1");
         m_mpPosition.get("b4").addPathConnection("D1", "E1");
+*/
+        
+        m_mpPosition.get("b5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a5")));	
+        m_mpPosition.get("b5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a4")));	
+        m_mpPosition.get("b5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b4")));	
+        m_mpPosition.get("b5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c4")));	
+        m_mpPosition.get("b5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c5")));
+        m_mpPosition.get("b5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c6")));
+        m_mpPosition.get("b5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b6")));
+        m_mpPosition.get("b5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a6")));	        
+        m_mpPosition.get("b5").addPathConnection("E1", "D1");
+        m_mpPosition.get("b5").addPathConnection("D1", "E2");
+        m_mpPosition.get("b5").addPathConnection("E2", "D2");
+        m_mpPosition.get("b5").addPathConnection("D2", "E3");
+        m_mpPosition.get("b5").addPathConnection("E3", "D3");
+        m_mpPosition.get("b5").addPathConnection("D3", "E4");
+        m_mpPosition.get("b5").addPathConnection("E4", "D4");
+        m_mpPosition.get("b5").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("b5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a5")));
+/*        m_mpPosition.get("b5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a5")));
         m_mpPosition.get("b5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b4")));
         m_mpPosition.get("b5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c5")));
         m_mpPosition.get("b5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b6")));
@@ -597,8 +699,26 @@ public class Board implements IBoard {
         m_mpPosition.get("b5").addPathConnection("D2", "E2");
         m_mpPosition.get("b5").addPathConnection("E2", "D1");
         m_mpPosition.get("b5").addPathConnection("D1", "E1");
+*/
+        m_mpPosition.get("b6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a6")));	
+        m_mpPosition.get("b6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a5")));	
+        m_mpPosition.get("b6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b5")));	
+        m_mpPosition.get("b6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c5")));	
+        m_mpPosition.get("b6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c6")));
+        m_mpPosition.get("b6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c7")));
+        m_mpPosition.get("b6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b7")));
+        m_mpPosition.get("b6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a7")));	        
+        m_mpPosition.get("b6").addPathConnection("E1", "D1");
+        m_mpPosition.get("b6").addPathConnection("D1", "E2");
+        m_mpPosition.get("b6").addPathConnection("E2", "D2");
+        m_mpPosition.get("b6").addPathConnection("D2", "E3");
+        m_mpPosition.get("b6").addPathConnection("E3", "D3");
+        m_mpPosition.get("b6").addPathConnection("D3", "E4");
+        m_mpPosition.get("b6").addPathConnection("E4", "D4");
+        m_mpPosition.get("b6").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("b6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a6")));
+        
+       /* m_mpPosition.get("b6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a6")));
         m_mpPosition.get("b6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b5")));
         m_mpPosition.get("b6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c6")));
         m_mpPosition.get("b6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b7")));
@@ -614,7 +734,25 @@ public class Board implements IBoard {
         m_mpPosition.get("b6").addPathConnection("D2", "E2");
         m_mpPosition.get("b6").addPathConnection("E2", "D1");
         m_mpPosition.get("b6").addPathConnection("D1", "E1");
-
+*/
+        
+        m_mpPosition.get("b7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a7")));	
+        m_mpPosition.get("b7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a6")));	
+        m_mpPosition.get("b7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b6")));	
+        m_mpPosition.get("b7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c6")));	
+        m_mpPosition.get("b7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c7")));
+        m_mpPosition.get("b7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c8")));
+        m_mpPosition.get("b7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b8")));
+        m_mpPosition.get("b7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("a8")));	        
+        m_mpPosition.get("b7").addPathConnection("E1", "D1");
+        m_mpPosition.get("b7").addPathConnection("D1", "E2");
+        m_mpPosition.get("b7").addPathConnection("E2", "D2");
+        m_mpPosition.get("b7").addPathConnection("D2", "E3");
+        m_mpPosition.get("b7").addPathConnection("E3", "D3");
+        m_mpPosition.get("b7").addPathConnection("D3", "E4");
+        m_mpPosition.get("b7").addPathConnection("E4", "D4");
+        m_mpPosition.get("b7").addPathConnection("D4", "E1");
+/*
         m_mpPosition.get("b7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a7")));
         m_mpPosition.get("b7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b6")));
         m_mpPosition.get("b7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c7")));
@@ -631,1191 +769,1416 @@ public class Board implements IBoard {
         m_mpPosition.get("b7").addPathConnection("D2", "E2");
         m_mpPosition.get("b7").addPathConnection("E2", "D1");
         m_mpPosition.get("b7").addPathConnection("D1", "E1");
-
-        m_mpPosition.get("b8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a8")));
-        m_mpPosition.get("b8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b7")));
+*/
+        
+        m_mpPosition.get("b8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a8")));	
+        m_mpPosition.get("b8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a7")));	
+        m_mpPosition.get("b8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b7")));	
+        m_mpPosition.get("b8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c7")));	
         m_mpPosition.get("b8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c8")));
-        m_mpPosition.get("b8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a7")));
-        m_mpPosition.get("b8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c7")));
+        m_mpPosition.get("b8").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("b8").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("b8").addPath(new Path("D4", Direction.VERTEX, null));	        
         m_mpPosition.get("b8").addPathConnection("E1", "D1");
         m_mpPosition.get("b8").addPathConnection("D1", "E2");
         m_mpPosition.get("b8").addPathConnection("E2", "D2");
         m_mpPosition.get("b8").addPathConnection("D2", "E3");
+        m_mpPosition.get("b8").addPathConnection("E3", "D3");
+        m_mpPosition.get("b8").addPathConnection("D3", "E4");
+        m_mpPosition.get("b8").addPathConnection("E4", "D4");
+        m_mpPosition.get("b8").addPathConnection("D4", "E1");
 
-        // c
-        m_mpPosition.get("c1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b1")));
-        m_mpPosition.get("c1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c2")));
+
+        m_mpPosition.get("c1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b1")));	//b1
+        m_mpPosition.get("c1").addPath(new Path("D1", Direction.VERTEX, null));	//b0
+        m_mpPosition.get("c1").addPath(new Path("E2", Direction.EDGE, null));	//c0
+        m_mpPosition.get("c1").addPath(new Path("D2", Direction.VERTEX, null));	//d0
         m_mpPosition.get("c1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d1")));
-        m_mpPosition.get("c1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b2")));
-        m_mpPosition.get("c1").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d2")));
+        m_mpPosition.get("c1").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d2")));
+        m_mpPosition.get("c1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c2")));
+        m_mpPosition.get("c1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b2")));	//b2        
         m_mpPosition.get("c1").addPathConnection("E1", "D1");
         m_mpPosition.get("c1").addPathConnection("D1", "E2");
         m_mpPosition.get("c1").addPathConnection("E2", "D2");
         m_mpPosition.get("c1").addPathConnection("D2", "E3");
+        m_mpPosition.get("c1").addPathConnection("E3", "D3");
+        m_mpPosition.get("c1").addPathConnection("D3", "E4");
+        m_mpPosition.get("c1").addPathConnection("E4", "D4");
+        m_mpPosition.get("c1").addPathConnection("D4", "E1");
 
         m_mpPosition.get("c2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b2")));
-        m_mpPosition.get("c2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c1")));
+        m_mpPosition.get("c2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b1")));	//b1
+        m_mpPosition.get("c2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c1")));	//c1
+        m_mpPosition.get("c2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d1")));	//d1
         m_mpPosition.get("c2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d2")));
+        m_mpPosition.get("c2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d3")));
         m_mpPosition.get("c2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c3")));
-        m_mpPosition.get("c2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b1")));
-        m_mpPosition.get("c2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d1")));
-        m_mpPosition.get("c2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("b3")));
-        m_mpPosition.get("c2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d3")));
-        m_mpPosition.get("c2").addPathConnection("E1", "D3");
+        m_mpPosition.get("c2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b3")));
+        m_mpPosition.get("c2").addPathConnection("E1", "D1");
+        m_mpPosition.get("c2").addPathConnection("D1", "E2");
+        m_mpPosition.get("c2").addPathConnection("E2", "D2");
+        m_mpPosition.get("c2").addPathConnection("D2", "E3");
+        m_mpPosition.get("c2").addPathConnection("E3", "D3");
         m_mpPosition.get("c2").addPathConnection("D3", "E4");
         m_mpPosition.get("c2").addPathConnection("E4", "D4");
-        m_mpPosition.get("c2").addPathConnection("D4", "E3");
-        m_mpPosition.get("c2").addPathConnection("E3", "D2");
-        m_mpPosition.get("c2").addPathConnection("D2", "E2");
-        m_mpPosition.get("c2").addPathConnection("E2", "D1");
-        m_mpPosition.get("c2").addPathConnection("D1", "E1");
+        m_mpPosition.get("c2").addPathConnection("D4", "E1");
+
 
         m_mpPosition.get("c3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b3")));
-        m_mpPosition.get("c3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c2")));
-        m_mpPosition.get("c3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d3")));
-        m_mpPosition.get("c3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c4")));
         m_mpPosition.get("c3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b2")));
+        m_mpPosition.get("c3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c2")));	
         m_mpPosition.get("c3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d2")));
-        m_mpPosition.get("c3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("b4")));
-        m_mpPosition.get("c3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d4")));
-        m_mpPosition.get("c3").addPathConnection("E1", "D3");
+        m_mpPosition.get("c3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d3")));
+        m_mpPosition.get("c3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d4")));
+        m_mpPosition.get("c3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c4")));
+        m_mpPosition.get("c3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b4")));
+        m_mpPosition.get("c3").addPathConnection("E1", "D1");
+        m_mpPosition.get("c3").addPathConnection("D1", "E2");
+        m_mpPosition.get("c3").addPathConnection("E2", "D2");
+        m_mpPosition.get("c3").addPathConnection("D2", "E3");
+        m_mpPosition.get("c3").addPathConnection("E3", "D3");
         m_mpPosition.get("c3").addPathConnection("D3", "E4");
         m_mpPosition.get("c3").addPathConnection("E4", "D4");
-        m_mpPosition.get("c3").addPathConnection("D4", "E3");
-        m_mpPosition.get("c3").addPathConnection("E3", "D2");
-        m_mpPosition.get("c3").addPathConnection("D2", "E2");
-        m_mpPosition.get("c3").addPathConnection("E2", "D1");
-        m_mpPosition.get("c3").addPathConnection("D1", "E1");
+        m_mpPosition.get("c3").addPathConnection("D4", "E1");
 
         m_mpPosition.get("c4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b4")));
-        m_mpPosition.get("c4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c3")));
-        m_mpPosition.get("c4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d4")));
-        m_mpPosition.get("c4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c5")));
         m_mpPosition.get("c4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b3")));
+        m_mpPosition.get("c4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c3")));
         m_mpPosition.get("c4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d3")));
-        m_mpPosition.get("c4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("b5")));
-        m_mpPosition.get("c4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d5")));
-        m_mpPosition.get("c4").addPathConnection("E1", "D3");
+        m_mpPosition.get("c4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d4")));
+        m_mpPosition.get("c4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d5")));
+        m_mpPosition.get("c4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c5")));
+        m_mpPosition.get("c4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b5")));
+        m_mpPosition.get("c4").addPathConnection("E1", "D1");
+        m_mpPosition.get("c4").addPathConnection("D1", "E2");
+        m_mpPosition.get("c4").addPathConnection("E2", "D2");
+        m_mpPosition.get("c4").addPathConnection("D2", "E3");
+        m_mpPosition.get("c4").addPathConnection("E3", "D3");
         m_mpPosition.get("c4").addPathConnection("D3", "E4");
         m_mpPosition.get("c4").addPathConnection("E4", "D4");
-        m_mpPosition.get("c4").addPathConnection("D4", "E3");
-        m_mpPosition.get("c4").addPathConnection("E3", "D2");
-        m_mpPosition.get("c4").addPathConnection("D2", "E2");
-        m_mpPosition.get("c4").addPathConnection("E2", "D1");
-        m_mpPosition.get("c4").addPathConnection("D1", "E1");
+        m_mpPosition.get("c4").addPathConnection("D4", "E1");
 
         m_mpPosition.get("c5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b5")));
-        m_mpPosition.get("c5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c4")));
-        m_mpPosition.get("c5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d5")));
-        m_mpPosition.get("c5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c6")));
         m_mpPosition.get("c5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b4")));
+        m_mpPosition.get("c5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c4")));
         m_mpPosition.get("c5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d4")));
-        m_mpPosition.get("c5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("b6")));
-        m_mpPosition.get("c5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d6")));
-        m_mpPosition.get("c5").addPathConnection("E1", "D3");
+        m_mpPosition.get("c5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d5")));
+        m_mpPosition.get("c5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d6")));
+        m_mpPosition.get("c5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c6")));
+        m_mpPosition.get("c5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b6")));
+        m_mpPosition.get("c5").addPathConnection("E1", "D1");
+        m_mpPosition.get("c5").addPathConnection("D1", "E2");
+        m_mpPosition.get("c5").addPathConnection("E2", "D2");
+        m_mpPosition.get("c5").addPathConnection("D2", "E3");
+        m_mpPosition.get("c5").addPathConnection("E3", "D3");
         m_mpPosition.get("c5").addPathConnection("D3", "E4");
         m_mpPosition.get("c5").addPathConnection("E4", "D4");
-        m_mpPosition.get("c5").addPathConnection("D4", "E3");
-        m_mpPosition.get("c5").addPathConnection("E3", "D2");
-        m_mpPosition.get("c5").addPathConnection("D2", "E2");
-        m_mpPosition.get("c5").addPathConnection("E2", "D1");
-        m_mpPosition.get("c5").addPathConnection("D1", "E1");
+        m_mpPosition.get("c5").addPathConnection("D4", "E1");
+
 
         m_mpPosition.get("c6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b6")));
-        m_mpPosition.get("c6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c5")));
-        m_mpPosition.get("c6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d6")));
-        m_mpPosition.get("c6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c7")));
         m_mpPosition.get("c6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b5")));
+        m_mpPosition.get("c6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c5")));
         m_mpPosition.get("c6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d5")));
-        m_mpPosition.get("c6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("b7")));
-        m_mpPosition.get("c6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d7")));
-        m_mpPosition.get("c6").addPathConnection("E1", "D3");
+        m_mpPosition.get("c6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d6")));
+        m_mpPosition.get("c6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d7")));
+        m_mpPosition.get("c6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c7")));
+        m_mpPosition.get("c6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b7")));
+        m_mpPosition.get("c6").addPathConnection("E1", "D1");
+        m_mpPosition.get("c6").addPathConnection("D1", "E2");
+        m_mpPosition.get("c6").addPathConnection("E2", "D2");
+        m_mpPosition.get("c6").addPathConnection("D2", "E3");
+        m_mpPosition.get("c6").addPathConnection("E3", "D3");
         m_mpPosition.get("c6").addPathConnection("D3", "E4");
         m_mpPosition.get("c6").addPathConnection("E4", "D4");
-        m_mpPosition.get("c6").addPathConnection("D4", "E3");
-        m_mpPosition.get("c6").addPathConnection("E3", "D2");
-        m_mpPosition.get("c6").addPathConnection("D2", "E2");
-        m_mpPosition.get("c6").addPathConnection("E2", "D1");
-        m_mpPosition.get("c6").addPathConnection("D1", "E1");
+        m_mpPosition.get("c6").addPathConnection("D4", "E1");
 
         m_mpPosition.get("c7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b7")));
-        m_mpPosition.get("c7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c6")));
-        m_mpPosition.get("c7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d7")));
-        m_mpPosition.get("c7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c8")));
         m_mpPosition.get("c7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b6")));
+        m_mpPosition.get("c7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c6")));
         m_mpPosition.get("c7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d6")));
-        m_mpPosition.get("c7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("b8")));
-        m_mpPosition.get("c7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d8")));
-        m_mpPosition.get("c7").addPathConnection("E1", "D3");
+        m_mpPosition.get("c7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d7")));
+        m_mpPosition.get("c7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d8")));
+        m_mpPosition.get("c7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("c8")));
+        m_mpPosition.get("c7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("b8")));
+        m_mpPosition.get("c7").addPathConnection("E1", "D1");
+        m_mpPosition.get("c7").addPathConnection("D1", "E2");
+        m_mpPosition.get("c7").addPathConnection("E2", "D2");
+        m_mpPosition.get("c7").addPathConnection("D2", "E3");
+        m_mpPosition.get("c7").addPathConnection("E3", "D3");
         m_mpPosition.get("c7").addPathConnection("D3", "E4");
         m_mpPosition.get("c7").addPathConnection("E4", "D4");
-        m_mpPosition.get("c7").addPathConnection("D4", "E3");
-        m_mpPosition.get("c7").addPathConnection("E3", "D2");
-        m_mpPosition.get("c7").addPathConnection("D2", "E2");
-        m_mpPosition.get("c7").addPathConnection("E2", "D1");
-        m_mpPosition.get("c7").addPathConnection("D1", "E1");
+        m_mpPosition.get("c7").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("c8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b8")));
-        m_mpPosition.get("c8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c7")));
-        m_mpPosition.get("c8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d8")));
-        m_mpPosition.get("c8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b7")));
-        m_mpPosition.get("c8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d7")));
-        m_mpPosition.get("c8").addPathConnection("E1", "D1");
-        m_mpPosition.get("c8").addPathConnection("D1", "E2");
-        m_mpPosition.get("c8").addPathConnection("E2", "D2");
-        m_mpPosition.get("c8").addPathConnection("D2", "E3");
+        m_mpPosition.get("c7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("b8")));
+        m_mpPosition.get("c7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b7")));
+        m_mpPosition.get("c7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("c7")));
+        m_mpPosition.get("c7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d7")));
+        m_mpPosition.get("c7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d8")));
+        m_mpPosition.get("c7").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("c7").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("c7").addPath(new Path("D4", Direction.VERTEX, null));
+        m_mpPosition.get("c7").addPathConnection("E1", "D1");
+        m_mpPosition.get("c7").addPathConnection("D1", "E2");
+        m_mpPosition.get("c7").addPathConnection("E2", "D2");
+        m_mpPosition.get("c7").addPathConnection("D2", "E3");
+        m_mpPosition.get("c7").addPathConnection("E3", "D3");
+        m_mpPosition.get("c7").addPathConnection("D3", "E4");
+        m_mpPosition.get("c7").addPathConnection("E4", "D4");
+        m_mpPosition.get("c7").addPathConnection("D4", "E1"); 
 
         // d
-        m_mpPosition.get("d1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c1")));
-        m_mpPosition.get("d1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d2")));
+        m_mpPosition.get("d1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c1")));	//c1
+        m_mpPosition.get("d1").addPath(new Path("D1", Direction.VERTEX, null));	//c0
+        m_mpPosition.get("d1").addPath(new Path("E2", Direction.EDGE, null));	//d0
+        m_mpPosition.get("d1").addPath(new Path("D2", Direction.VERTEX, null));	//e0
         m_mpPosition.get("d1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e1")));
-        m_mpPosition.get("d1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c2")));
-        m_mpPosition.get("d1").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e2")));
+        m_mpPosition.get("d1").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e2")));
+        m_mpPosition.get("d1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d2")));
+        m_mpPosition.get("d1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c2")));	//c2        
         m_mpPosition.get("d1").addPathConnection("E1", "D1");
         m_mpPosition.get("d1").addPathConnection("D1", "E2");
         m_mpPosition.get("d1").addPathConnection("E2", "D2");
         m_mpPosition.get("d1").addPathConnection("D2", "E3");
+        m_mpPosition.get("d1").addPathConnection("E3", "D3");
+        m_mpPosition.get("d1").addPathConnection("D3", "E4");
+        m_mpPosition.get("d1").addPathConnection("E4", "D4");
+        m_mpPosition.get("d1").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c2")));
-        m_mpPosition.get("d2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d1")));
+        m_mpPosition.get("d2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c1")));	//c1
+        m_mpPosition.get("d2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d1")));	//d1
+        m_mpPosition.get("d2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e1")));	//e1
         m_mpPosition.get("d2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e2")));
+        m_mpPosition.get("d2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e3")));
         m_mpPosition.get("d2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d3")));
-        m_mpPosition.get("d2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c1")));
-        m_mpPosition.get("d2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e1")));
-        m_mpPosition.get("d2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c3")));
-        m_mpPosition.get("d2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e3")));
+        m_mpPosition.get("d2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c3")));	
         m_mpPosition.get("d2").addPathConnection("E1", "D1");
         m_mpPosition.get("d2").addPathConnection("D1", "E2");
         m_mpPosition.get("d2").addPathConnection("E2", "D2");
         m_mpPosition.get("d2").addPathConnection("D2", "E3");
-        m_mpPosition.get("d2").addPathConnection("E3", "D4");
-        m_mpPosition.get("d2").addPathConnection("D4", "E4");
-        m_mpPosition.get("d2").addPathConnection("E4", "D3");
-        m_mpPosition.get("d2").addPathConnection("D3", "E1");
+        m_mpPosition.get("d2").addPathConnection("E3", "D3");
+        m_mpPosition.get("d2").addPathConnection("D3", "E4");
+        m_mpPosition.get("d2").addPathConnection("E4", "D4");
+        m_mpPosition.get("d2").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c3")));
-        m_mpPosition.get("d3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d2")));
+        m_mpPosition.get("d3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c2")));	
+        m_mpPosition.get("d3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d2")));	
+        m_mpPosition.get("d3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e2")));	
         m_mpPosition.get("d3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e3")));
+        m_mpPosition.get("d3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e4")));
         m_mpPosition.get("d3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d4")));
-        m_mpPosition.get("d3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c2")));
-        m_mpPosition.get("d3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e2")));
-        m_mpPosition.get("d3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c4")));
-        m_mpPosition.get("d3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e4")));
+        m_mpPosition.get("d3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c4")));
         m_mpPosition.get("d3").addPathConnection("E1", "D1");
         m_mpPosition.get("d3").addPathConnection("D1", "E2");
         m_mpPosition.get("d3").addPathConnection("E2", "D2");
         m_mpPosition.get("d3").addPathConnection("D2", "E3");
-        m_mpPosition.get("d3").addPathConnection("E3", "D4");
-        m_mpPosition.get("d3").addPathConnection("D4", "E4");
-        m_mpPosition.get("d3").addPathConnection("E4", "D3");
-        m_mpPosition.get("d3").addPathConnection("D3", "E1");
+        m_mpPosition.get("d3").addPathConnection("E3", "D3");
+        m_mpPosition.get("d3").addPathConnection("D3", "E4");
+        m_mpPosition.get("d3").addPathConnection("E4", "D4");
+        m_mpPosition.get("d3").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c4")));
-        m_mpPosition.get("d4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d3")));
-        m_mpPosition.get("d4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e4")));
-        m_mpPosition.get("d4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d5")));
         m_mpPosition.get("d4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c3")));
+        m_mpPosition.get("d4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d3")));
         m_mpPosition.get("d4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e3")));
-        m_mpPosition.get("d4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c5")));
-        m_mpPosition.get("d4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e9")));
-        //m_mpPosition.get("d4").addPath(new Path("D5", Direction.VERTEX, m_mpPosition.get("i5")));
-        //m_mpPosition.get("d4").addPath(new Path("D6", Direction.VERTEX, m_mpPosition.get("i9")));
-        m_mpPosition.get("d4").getPath("D4").addPosition((m_mpPosition.get("i5")));
-        m_mpPosition.get("d4").getPath("D4").addPosition((m_mpPosition.get("i9")));
+        m_mpPosition.get("d4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e4")));
+        m_mpPosition.get("d4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e9")));
+        m_mpPosition.get("d4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d5")));
+        m_mpPosition.get("d4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c5")));
+        m_mpPosition.get("d4").getPath("D3").addPosition((m_mpPosition.get("i5")));
+        m_mpPosition.get("d4").getPath("D3").addPosition((m_mpPosition.get("i9")));
         m_mpPosition.get("d4").addPathConnection("E1", "D1");
         m_mpPosition.get("d4").addPathConnection("D1", "E2");
         m_mpPosition.get("d4").addPathConnection("E2", "D2");
         m_mpPosition.get("d4").addPathConnection("D2", "E3");
-        m_mpPosition.get("d4").addPathConnection("E3", "D4");
-        m_mpPosition.get("d4").addPathConnection("D4", "E4");
-        //m_mpPosition.get("d4").addPathConnection("D6", "D5");
-        //m_mpPosition.get("d4").addPathConnection("D5", "E4");
-        m_mpPosition.get("d4").addPathConnection("E4", "D3");
-        m_mpPosition.get("d4").addPathConnection("D3", "E1");
+        m_mpPosition.get("d4").addPathConnection("E3", "D3");
+        m_mpPosition.get("d4").addPathConnection("D3", "E4");
+        m_mpPosition.get("d4").addPathConnection("E4", "D4");
+        m_mpPosition.get("d4").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c5")));
-        m_mpPosition.get("d5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d4")));
-        m_mpPosition.get("d5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i5")));
-        m_mpPosition.get("d5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d6")));
         m_mpPosition.get("d5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c4")));
+        m_mpPosition.get("d5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d4")));
         m_mpPosition.get("d5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e4")));
-        m_mpPosition.get("d5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c6")));
-        m_mpPosition.get("d5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i6")));
-        //m_mpPosition.get("d5").addPath(new Path("D5", Direction.VERTEX, m_mpPosition.get("i9")));
-        //m_mpPosition.get("d5").addPath(new Path("D6", Direction.VERTEX, m_mpPosition.get("e9")));
+        m_mpPosition.get("d5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i5")));
+        m_mpPosition.get("d5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i6")));
+        m_mpPosition.get("d5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d6")));
+        m_mpPosition.get("d5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c6")));
         m_mpPosition.get("d5").getPath("D2").addPosition((m_mpPosition.get("i9")));
         m_mpPosition.get("d5").getPath("D2").addPosition((m_mpPosition.get("e9")));
-
         m_mpPosition.get("d5").addPathConnection("E1", "D1");
         m_mpPosition.get("d5").addPathConnection("D1", "E2");
         m_mpPosition.get("d5").addPathConnection("E2", "D2");
         m_mpPosition.get("d5").addPathConnection("D2", "E3");
-        //m_mpPosition.get("d5").addPathConnection("D6", "D5");
-        //m_mpPosition.get("d5").addPathConnection("D5", "E3");
-        m_mpPosition.get("d5").addPathConnection("E3", "D4");
-        m_mpPosition.get("d5").addPathConnection("D4", "E4");
-        m_mpPosition.get("d5").addPathConnection("E4", "D3");
-        m_mpPosition.get("d5").addPathConnection("D3", "E1");
-
+        m_mpPosition.get("d5").addPathConnection("E3", "D3");
+        m_mpPosition.get("d5").addPathConnection("D3", "E4");
+        m_mpPosition.get("d5").addPathConnection("E4", "D4");
+        m_mpPosition.get("d5").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c6")));
-        m_mpPosition.get("d6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d5")));
-        m_mpPosition.get("d6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i6")));
-        m_mpPosition.get("d6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d7")));
         m_mpPosition.get("d6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c5")));
+        m_mpPosition.get("d6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d5")));
         m_mpPosition.get("d6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i5")));
-        m_mpPosition.get("d6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c7")));
-        m_mpPosition.get("d6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i7")));
+        m_mpPosition.get("d6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i6")));
+        m_mpPosition.get("d6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i7")));
+        m_mpPosition.get("d6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d7")));
+        m_mpPosition.get("d6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c7")));
         m_mpPosition.get("d6").addPathConnection("E1", "D1");
         m_mpPosition.get("d6").addPathConnection("D1", "E2");
         m_mpPosition.get("d6").addPathConnection("E2", "D2");
         m_mpPosition.get("d6").addPathConnection("D2", "E3");
-        m_mpPosition.get("d6").addPathConnection("E3", "D4");
-        m_mpPosition.get("d6").addPathConnection("D4", "E4");
-        m_mpPosition.get("d6").addPathConnection("E4", "D3");
-        m_mpPosition.get("d6").addPathConnection("D3", "E1");
+        m_mpPosition.get("d6").addPathConnection("E3", "D3");
+        m_mpPosition.get("d6").addPathConnection("D3", "E4");
+        m_mpPosition.get("d6").addPathConnection("E4", "D4");
+        m_mpPosition.get("d6").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c7")));
-        m_mpPosition.get("d7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d6")));
-        m_mpPosition.get("d7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i7")));
-        m_mpPosition.get("d7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d8")));
         m_mpPosition.get("d7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c6")));
+        m_mpPosition.get("d7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d6")));
         m_mpPosition.get("d7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i6")));
-        m_mpPosition.get("d7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("c8")));
-        m_mpPosition.get("d7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i8")));
+        m_mpPosition.get("d7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i7")));
+        m_mpPosition.get("d7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i8")));
+        m_mpPosition.get("d7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d8")));
+        m_mpPosition.get("d7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c8")));
         m_mpPosition.get("d7").addPathConnection("E1", "D1");
         m_mpPosition.get("d7").addPathConnection("D1", "E2");
         m_mpPosition.get("d7").addPathConnection("E2", "D2");
         m_mpPosition.get("d7").addPathConnection("D2", "E3");
-        m_mpPosition.get("d7").addPathConnection("E3", "D4");
-        m_mpPosition.get("d7").addPathConnection("D4", "E4");
-        m_mpPosition.get("d7").addPathConnection("E4", "D3");
-        m_mpPosition.get("d7").addPathConnection("D3", "E1");
+        m_mpPosition.get("d7").addPathConnection("E3", "D3");
+        m_mpPosition.get("d7").addPathConnection("D3", "E4");
+        m_mpPosition.get("d7").addPathConnection("E4", "D4");
+        m_mpPosition.get("d7").addPathConnection("D4", "E1");
 
         m_mpPosition.get("d8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("c8")));
-        m_mpPosition.get("d8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d7")));
-        m_mpPosition.get("d8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i8")));
         m_mpPosition.get("d8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("c7")));
+        m_mpPosition.get("d8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d7")));
         m_mpPosition.get("d8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i7")));
+        m_mpPosition.get("d8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i8")));
+        m_mpPosition.get("d8").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("d8").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("d8").addPath(new Path("D4", Direction.VERTEX, null));
         m_mpPosition.get("d8").addPathConnection("E1", "D1");
         m_mpPosition.get("d8").addPathConnection("D1", "E2");
         m_mpPosition.get("d8").addPathConnection("E2", "D2");
         m_mpPosition.get("d8").addPathConnection("D2", "E3");
+        m_mpPosition.get("d8").addPathConnection("E3", "D3");
+        m_mpPosition.get("d8").addPathConnection("D3", "E4");
+        m_mpPosition.get("d8").addPathConnection("E4", "D4");
+        m_mpPosition.get("d8").addPathConnection("D4", "E1");
 
-        // e
         m_mpPosition.get("e1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("d1")));
-        m_mpPosition.get("e1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e2")));
+        m_mpPosition.get("e1").addPath(new Path("D1", Direction.VERTEX, null));	//d0
+        m_mpPosition.get("e1").addPath(new Path("E2", Direction.EDGE, null));	//e0
+        m_mpPosition.get("e1").addPath(new Path("D2", Direction.VERTEX, null));	//f0
         m_mpPosition.get("e1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f1")));
-        m_mpPosition.get("e1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("d2")));
-        m_mpPosition.get("e1").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f2")));
+        m_mpPosition.get("e1").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f2")));
+        m_mpPosition.get("e1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e2")));
+        m_mpPosition.get("e1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d2")));
         m_mpPosition.get("e1").addPathConnection("E1", "D1");
         m_mpPosition.get("e1").addPathConnection("D1", "E2");
         m_mpPosition.get("e1").addPathConnection("E2", "D2");
         m_mpPosition.get("e1").addPathConnection("D2", "E3");
+        m_mpPosition.get("e1").addPathConnection("E3", "D3");
+        m_mpPosition.get("e1").addPathConnection("D3", "E4");
+        m_mpPosition.get("e1").addPathConnection("E4", "D4");
+        m_mpPosition.get("e1").addPathConnection("D4", "E1");
 
         m_mpPosition.get("e2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("d2")));
-        m_mpPosition.get("e2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e1")));
-        m_mpPosition.get("e2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f2")));
-        m_mpPosition.get("e2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e3")));
         m_mpPosition.get("e2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("d1")));
+        m_mpPosition.get("e2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e1")));
         m_mpPosition.get("e2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f1")));
-        m_mpPosition.get("e2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d3")));
-        m_mpPosition.get("e2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f3")));
+        m_mpPosition.get("e2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f2")));
+        m_mpPosition.get("e2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f3")));
+        m_mpPosition.get("e2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e3")));
+        m_mpPosition.get("e2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d3")));
         m_mpPosition.get("e2").addPathConnection("E1", "D1");
         m_mpPosition.get("e2").addPathConnection("D1", "E2");
         m_mpPosition.get("e2").addPathConnection("E2", "D2");
         m_mpPosition.get("e2").addPathConnection("D2", "E3");
-        m_mpPosition.get("e2").addPathConnection("E3", "D4");
-        m_mpPosition.get("e2").addPathConnection("D4", "E4");
-        m_mpPosition.get("e2").addPathConnection("E4", "D3");
-        m_mpPosition.get("e2").addPathConnection("D3", "E1");
+        m_mpPosition.get("e2").addPathConnection("E3", "D3");
+        m_mpPosition.get("e2").addPathConnection("D3", "E4");
+        m_mpPosition.get("e2").addPathConnection("E4", "D4");
+        m_mpPosition.get("e2").addPathConnection("D4", "E1");
 
         m_mpPosition.get("e3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("d3")));
-        m_mpPosition.get("e3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e2")));
-        m_mpPosition.get("e3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f3")));
-        m_mpPosition.get("e3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e4")));
         m_mpPosition.get("e3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("d2")));
+        m_mpPosition.get("e3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e2")));
         m_mpPosition.get("e3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f2")));
-        m_mpPosition.get("e3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d4")));
-        m_mpPosition.get("e3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f4")));
+        m_mpPosition.get("e3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f3")));
+        m_mpPosition.get("e3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f4")));
+        m_mpPosition.get("e3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e4")));
+        m_mpPosition.get("e3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d4")));
         m_mpPosition.get("e3").addPathConnection("E1", "D1");
         m_mpPosition.get("e3").addPathConnection("D1", "E2");
         m_mpPosition.get("e3").addPathConnection("E2", "D2");
         m_mpPosition.get("e3").addPathConnection("D2", "E3");
-        m_mpPosition.get("e3").addPathConnection("E3", "D4");
-        m_mpPosition.get("e3").addPathConnection("D4", "E4");
-        m_mpPosition.get("e3").addPathConnection("E4", "D3");
-        m_mpPosition.get("e3").addPathConnection("D3", "E1");
+        m_mpPosition.get("e3").addPathConnection("E3", "D3");
+        m_mpPosition.get("e3").addPathConnection("D3", "E4");
+        m_mpPosition.get("e3").addPathConnection("E4", "D4");
+        m_mpPosition.get("e3").addPathConnection("D4", "E1");
 
         m_mpPosition.get("e4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("d4")));
-        m_mpPosition.get("e4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e3")));
-        m_mpPosition.get("e4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f4")));
-        m_mpPosition.get("e4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e9")));
         m_mpPosition.get("e4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("d3")));
+        m_mpPosition.get("e4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e3")));
         m_mpPosition.get("e4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f3")));
-        m_mpPosition.get("e4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d5")));
-        m_mpPosition.get("e4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f9")));
-        //m_mpPosition.get("e4").addPath(new Path("D5", Direction.VERTEX, m_mpPosition.get("i5")));
-        //m_mpPosition.get("e4").addPath(new Path("D6", Direction.VERTEX, m_mpPosition.get("i9")));
-        m_mpPosition.get("e4").getPath("D3").addPosition((m_mpPosition.get("i5")));
-        m_mpPosition.get("e4").getPath("D3").addPosition((m_mpPosition.get("i9")));
-
+        m_mpPosition.get("e4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f4")));
+        m_mpPosition.get("e4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f9")));
+        m_mpPosition.get("e4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e9")));
+        m_mpPosition.get("e4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i9")));
+        m_mpPosition.get("e4").getPath("D4").addPosition((m_mpPosition.get("i5")));
+        m_mpPosition.get("e4").getPath("D4").addPosition((m_mpPosition.get("d5")));
         m_mpPosition.get("e4").addPathConnection("E1", "D1");
         m_mpPosition.get("e4").addPathConnection("D1", "E2");
         m_mpPosition.get("e4").addPathConnection("E2", "D2");
         m_mpPosition.get("e4").addPathConnection("D2", "E3");
-        m_mpPosition.get("e4").addPathConnection("E3", "D4");
-        m_mpPosition.get("e4").addPathConnection("D4", "E4");
-        m_mpPosition.get("e4").addPathConnection("E4", "D3");
-        //m_mpPosition.get("e4").addPathConnection("D6", "D5");
-        //m_mpPosition.get("e4").addPathConnection("D5", "D3");
-        m_mpPosition.get("e4").addPathConnection("D3", "E1");
+        m_mpPosition.get("e4").addPathConnection("E3", "D3");
+        m_mpPosition.get("e4").addPathConnection("D3", "E4");
+        m_mpPosition.get("e4").addPathConnection("E4", "D4");
+        m_mpPosition.get("e4").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("e9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i9")));
-        m_mpPosition.get("e9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e4")));
-        m_mpPosition.get("e9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f9")));
-        m_mpPosition.get("e9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e10")));
-        m_mpPosition.get("e9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i5")));
-        //m_mpPosition.get("e9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d5")));
-        //m_mpPosition.get("e9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d4")));
-        m_mpPosition.get("e9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f4")));
-        m_mpPosition.get("e9").addPath(new Path("D5", Direction.VERTEX, m_mpPosition.get("f10")));
-        m_mpPosition.get("e9").addPath(new Path("D6", Direction.VERTEX, m_mpPosition.get("i10")));
-        m_mpPosition.get("e9").getPath("D1").addPosition((m_mpPosition.get("d5")));
-        m_mpPosition.get("e9").getPath("D1").addPosition((m_mpPosition.get("d4")));
-
-        m_mpPosition.get("e9").addPathConnection("E2", "D4");
-        m_mpPosition.get("e9").addPathConnection("D4", "E3");
-        m_mpPosition.get("e9").addPathConnection("E3", "D5");
-        m_mpPosition.get("e9").addPathConnection("D5", "E4");
-        m_mpPosition.get("e9").addPathConnection("E4", "D6");
-        m_mpPosition.get("e9").addPathConnection("D6", "E1");
+        m_mpPosition.get("e9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e4")));
+        m_mpPosition.get("e9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f4")));
+        m_mpPosition.get("e9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f9")));
+        m_mpPosition.get("e9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f10")));
+        m_mpPosition.get("e9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e10")));
+        m_mpPosition.get("e9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i10")));
+        m_mpPosition.get("e9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i9")));
+        m_mpPosition.get("e9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i5")));
+        m_mpPosition.get("e9").getPath("D4").addPosition((m_mpPosition.get("d5")));
+        m_mpPosition.get("e9").getPath("D4").addPosition((m_mpPosition.get("d4")));
         m_mpPosition.get("e9").addPathConnection("E1", "D1");
         m_mpPosition.get("e9").addPathConnection("D1", "E2");
-        //m_mpPosition.get("e9").addPathConnection("D2", "D3");
-        //m_mpPosition.get("e9").addPathConnection("D3", "E2");
+        m_mpPosition.get("e9").addPathConnection("E2", "D2");
+        m_mpPosition.get("e9").addPathConnection("D2", "E3");
+        m_mpPosition.get("e9").addPathConnection("E3", "D3");
+        m_mpPosition.get("e9").addPathConnection("D3", "E4");
+        m_mpPosition.get("e9").addPathConnection("E4", "D4");
+        m_mpPosition.get("e9").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("e10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i10")));
-        m_mpPosition.get("e10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e9")));
-        m_mpPosition.get("e10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f10")));
-        m_mpPosition.get("e10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e11")));
+        m_mpPosition.get("e10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e9")));
         m_mpPosition.get("e10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f9")));
-        m_mpPosition.get("e10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i9")));
-        m_mpPosition.get("e10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f11")));
-        m_mpPosition.get("e10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i11")));
-        m_mpPosition.get("e10").addPathConnection("E2", "D1");
-        m_mpPosition.get("e10").addPathConnection("D1", "E3");
+        m_mpPosition.get("e10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f10")));
+        m_mpPosition.get("e10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f11")));
+        m_mpPosition.get("e10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e11")));
+        m_mpPosition.get("e10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i11")));
+        m_mpPosition.get("e10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i10")));
+        m_mpPosition.get("e10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i9")));
+        m_mpPosition.get("e10").addPathConnection("E1", "D1");
+        m_mpPosition.get("e10").addPathConnection("D1", "E2");
+        m_mpPosition.get("e10").addPathConnection("E2", "D2");
+        m_mpPosition.get("e10").addPathConnection("D2", "E3");
         m_mpPosition.get("e10").addPathConnection("E3", "D3");
         m_mpPosition.get("e10").addPathConnection("D3", "E4");
         m_mpPosition.get("e10").addPathConnection("E4", "D4");
         m_mpPosition.get("e10").addPathConnection("D4", "E1");
-        m_mpPosition.get("e10").addPathConnection("E1", "D2");
-        m_mpPosition.get("e10").addPathConnection("D2", "E2");
 
-        m_mpPosition.get("e11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i11")));
-        m_mpPosition.get("e11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e10")));
-        m_mpPosition.get("e11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f11")));
-        m_mpPosition.get("e11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e12")));
+        m_mpPosition.get("e11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e10")));
         m_mpPosition.get("e11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f10")));
-        m_mpPosition.get("e11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i10")));
-        m_mpPosition.get("e11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f12")));
-        m_mpPosition.get("e11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i12")));
-        m_mpPosition.get("e11").addPathConnection("E2", "D1");
-        m_mpPosition.get("e11").addPathConnection("D1", "E3");
+        m_mpPosition.get("e11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f11")));
+        m_mpPosition.get("e11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f12")));
+        m_mpPosition.get("e11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e12")));
+        m_mpPosition.get("e11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i12")));
+        m_mpPosition.get("e11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i11")));
+        m_mpPosition.get("e11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i10")));
+        m_mpPosition.get("e11").addPathConnection("E1", "D1");
+        m_mpPosition.get("e11").addPathConnection("D1", "E2");
+        m_mpPosition.get("e11").addPathConnection("E2", "D2");
+        m_mpPosition.get("e11").addPathConnection("D2", "E3");
         m_mpPosition.get("e11").addPathConnection("E3", "D3");
         m_mpPosition.get("e11").addPathConnection("D3", "E4");
         m_mpPosition.get("e11").addPathConnection("E4", "D4");
         m_mpPosition.get("e11").addPathConnection("D4", "E1");
-        m_mpPosition.get("e11").addPathConnection("E1", "D2");
-        m_mpPosition.get("e11").addPathConnection("D2", "E2");
 
         m_mpPosition.get("e12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e11")));
-        m_mpPosition.get("e12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i12")));
-        m_mpPosition.get("e12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("f12")));
-        m_mpPosition.get("e12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i11")));
-        m_mpPosition.get("e12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("f11")));
-        m_mpPosition.get("e12").addPathConnection("E2", "D1");
+        m_mpPosition.get("e12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f11")));
+        m_mpPosition.get("e12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f12")));
+        m_mpPosition.get("e12").addPath(new Path("D2", Direction.VERTEX, null));
+        m_mpPosition.get("e12").addPath(new Path("E3", Direction.EDGE, null));
+        m_mpPosition.get("e12").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("e12").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i12")));
+        m_mpPosition.get("e12").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("i11")));
+        m_mpPosition.get("e12").addPathConnection("E1", "D1");
         m_mpPosition.get("e12").addPathConnection("D1", "E2");
-        m_mpPosition.get("e12").addPathConnection("E1", "D2");
+        m_mpPosition.get("e12").addPathConnection("E2", "D2");
         m_mpPosition.get("e12").addPathConnection("D2", "E3");
+        m_mpPosition.get("e12").addPathConnection("E3", "D3");
+        m_mpPosition.get("e12").addPathConnection("D3", "E4");
+        m_mpPosition.get("e12").addPathConnection("E4", "D4");
+        m_mpPosition.get("e12").addPathConnection("D4", "E1");
 
-        // f
+
         m_mpPosition.get("f1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e1")));
-        m_mpPosition.get("f1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f2")));
+        m_mpPosition.get("f1").addPath(new Path("D1", Direction.VERTEX, null));	//e0
+        m_mpPosition.get("f1").addPath(new Path("E2", Direction.EDGE, null));	//f0
+        m_mpPosition.get("f1").addPath(new Path("D2", Direction.VERTEX, null));	//g0
         m_mpPosition.get("f1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g1")));
-        m_mpPosition.get("f1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e2")));
-        m_mpPosition.get("f1").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g2")));
+        m_mpPosition.get("f1").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g2")));
+        m_mpPosition.get("f1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f2")));
+        m_mpPosition.get("f1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e2")));
         m_mpPosition.get("f1").addPathConnection("E1", "D1");
         m_mpPosition.get("f1").addPathConnection("D1", "E2");
         m_mpPosition.get("f1").addPathConnection("E2", "D2");
         m_mpPosition.get("f1").addPathConnection("D2", "E3");
+        m_mpPosition.get("f1").addPathConnection("E3", "D3");
+        m_mpPosition.get("f1").addPathConnection("D3", "E4");
+        m_mpPosition.get("f1").addPathConnection("E4", "D4");
+        m_mpPosition.get("f1").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e2")));
-        m_mpPosition.get("f2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f1")));
-        m_mpPosition.get("f2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g2")));
-        m_mpPosition.get("f2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f3")));
         m_mpPosition.get("f2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e1")));
+        m_mpPosition.get("f2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f1")));
         m_mpPosition.get("f2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g1")));
-        m_mpPosition.get("f2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e3")));
-        m_mpPosition.get("f2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g3")));
+        m_mpPosition.get("f2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g2")));
+        m_mpPosition.get("f2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g3")));
+        m_mpPosition.get("f2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f3")));
+        m_mpPosition.get("f2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e3")));
         m_mpPosition.get("f2").addPathConnection("E1", "D1");
         m_mpPosition.get("f2").addPathConnection("D1", "E2");
         m_mpPosition.get("f2").addPathConnection("E2", "D2");
         m_mpPosition.get("f2").addPathConnection("D2", "E3");
-        m_mpPosition.get("f2").addPathConnection("E3", "D4");
-        m_mpPosition.get("f2").addPathConnection("D4", "E4");
-        m_mpPosition.get("f2").addPathConnection("E4", "D3");
-        m_mpPosition.get("f2").addPathConnection("D3", "E1");
-
+        m_mpPosition.get("f2").addPathConnection("E3", "D3");
+        m_mpPosition.get("f2").addPathConnection("D3", "E4");
+        m_mpPosition.get("f2").addPathConnection("E4", "D4");
+        m_mpPosition.get("f2").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e3")));
-        m_mpPosition.get("f3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f2")));
-        m_mpPosition.get("f3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g3")));
-        m_mpPosition.get("f3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f4")));
         m_mpPosition.get("f3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e2")));
+        m_mpPosition.get("f3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f2")));
         m_mpPosition.get("f3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g2")));
-        m_mpPosition.get("f3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e4")));
-        m_mpPosition.get("f3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g4")));
+        m_mpPosition.get("f3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g3")));
+        m_mpPosition.get("f3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g4")));
+        m_mpPosition.get("f3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f4")));
+        m_mpPosition.get("f3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e4")));
         m_mpPosition.get("f3").addPathConnection("E1", "D1");
         m_mpPosition.get("f3").addPathConnection("D1", "E2");
         m_mpPosition.get("f3").addPathConnection("E2", "D2");
         m_mpPosition.get("f3").addPathConnection("D2", "E3");
-        m_mpPosition.get("f3").addPathConnection("E3", "D4");
-        m_mpPosition.get("f3").addPathConnection("D4", "E4");
-        m_mpPosition.get("f3").addPathConnection("E4", "D3");
-        m_mpPosition.get("f3").addPathConnection("D3", "E1");
+        m_mpPosition.get("f3").addPathConnection("E3", "D3");
+        m_mpPosition.get("f3").addPathConnection("D3", "E4");
+        m_mpPosition.get("f3").addPathConnection("E4", "D4");
+        m_mpPosition.get("f3").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e4")));
-        m_mpPosition.get("f4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f3")));
-        m_mpPosition.get("f4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g4")));
-        m_mpPosition.get("f4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f9")));
         m_mpPosition.get("f4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e3")));
+        m_mpPosition.get("f4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f3")));
         m_mpPosition.get("f4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g3")));
-        m_mpPosition.get("f4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e9")));
-        m_mpPosition.get("f4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g9")));
+        m_mpPosition.get("f4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g4")));
+        m_mpPosition.get("f4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g9")));
+        m_mpPosition.get("f4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f9")));
+        m_mpPosition.get("f4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e9")));
         m_mpPosition.get("f4").addPathConnection("E1", "D1");
         m_mpPosition.get("f4").addPathConnection("D1", "E2");
         m_mpPosition.get("f4").addPathConnection("E2", "D2");
         m_mpPosition.get("f4").addPathConnection("D2", "E3");
-        m_mpPosition.get("f4").addPathConnection("E3", "D4");
-        m_mpPosition.get("f4").addPathConnection("D4", "E4");
-        m_mpPosition.get("f4").addPathConnection("E4", "D3");
-        m_mpPosition.get("f4").addPathConnection("D3", "E1");
+        m_mpPosition.get("f4").addPathConnection("E3", "D3");
+        m_mpPosition.get("f4").addPathConnection("D3", "E4");
+        m_mpPosition.get("f4").addPathConnection("E4", "D4");
+        m_mpPosition.get("f4").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e9")));
-        m_mpPosition.get("f9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f4")));
-        m_mpPosition.get("f9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g9")));
-        m_mpPosition.get("f9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f10")));
         m_mpPosition.get("f9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e4")));
+        m_mpPosition.get("f9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f4")));
         m_mpPosition.get("f9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g4")));
-        m_mpPosition.get("f9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e10")));
-        m_mpPosition.get("f9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g10")));
+        m_mpPosition.get("f9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g9")));
+        m_mpPosition.get("f9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g10")));
+        m_mpPosition.get("f9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f10")));
+        m_mpPosition.get("f9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e10")));
         m_mpPosition.get("f9").addPathConnection("E1", "D1");
         m_mpPosition.get("f9").addPathConnection("D1", "E2");
         m_mpPosition.get("f9").addPathConnection("E2", "D2");
         m_mpPosition.get("f9").addPathConnection("D2", "E3");
-        m_mpPosition.get("f9").addPathConnection("E3", "D4");
-        m_mpPosition.get("f9").addPathConnection("D4", "E4");
-        m_mpPosition.get("f9").addPathConnection("E4", "D3");
-        m_mpPosition.get("f9").addPathConnection("D3", "E1");
+        m_mpPosition.get("f9").addPathConnection("E3", "D3");
+        m_mpPosition.get("f9").addPathConnection("D3", "E4");
+        m_mpPosition.get("f9").addPathConnection("E4", "D4");
+        m_mpPosition.get("f9").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e10")));
-        m_mpPosition.get("f10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f9")));
-        m_mpPosition.get("f10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g10")));
-        m_mpPosition.get("f10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f11")));
         m_mpPosition.get("f10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e9")));
+        m_mpPosition.get("f10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f9")));
         m_mpPosition.get("f10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g9")));
-        m_mpPosition.get("f10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e11")));
-        m_mpPosition.get("f10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g11")));
+        m_mpPosition.get("f10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g10")));
+        m_mpPosition.get("f10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g11")));
+        m_mpPosition.get("f10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f11")));
+        m_mpPosition.get("f10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e11")));
         m_mpPosition.get("f10").addPathConnection("E1", "D1");
         m_mpPosition.get("f10").addPathConnection("D1", "E2");
         m_mpPosition.get("f10").addPathConnection("E2", "D2");
         m_mpPosition.get("f10").addPathConnection("D2", "E3");
-        m_mpPosition.get("f10").addPathConnection("E3", "D4");
-        m_mpPosition.get("f10").addPathConnection("D4", "E4");
-        m_mpPosition.get("f10").addPathConnection("E4", "D3");
-        m_mpPosition.get("f10").addPathConnection("D3", "E1");
+        m_mpPosition.get("f10").addPathConnection("E3", "D3");
+        m_mpPosition.get("f10").addPathConnection("D3", "E4");
+        m_mpPosition.get("f10").addPathConnection("E4", "D4");
+        m_mpPosition.get("f10").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e11")));
-        m_mpPosition.get("f11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f10")));
-        m_mpPosition.get("f11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g11")));
-        m_mpPosition.get("f11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f12")));
         m_mpPosition.get("f11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e10")));
+        m_mpPosition.get("f11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f10")));
         m_mpPosition.get("f11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g10")));
-        m_mpPosition.get("f11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e12")));
-        m_mpPosition.get("f11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g12")));
+        m_mpPosition.get("f11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g11")));
+        m_mpPosition.get("f11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("g12")));
+        m_mpPosition.get("f11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("f12")));
+        m_mpPosition.get("f11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e12")));
         m_mpPosition.get("f11").addPathConnection("E1", "D1");
         m_mpPosition.get("f11").addPathConnection("D1", "E2");
         m_mpPosition.get("f11").addPathConnection("E2", "D2");
         m_mpPosition.get("f11").addPathConnection("D2", "E3");
-        m_mpPosition.get("f11").addPathConnection("E3", "D4");
-        m_mpPosition.get("f11").addPathConnection("D4", "E4");
-        m_mpPosition.get("f11").addPathConnection("E4", "D3");
-        m_mpPosition.get("f11").addPathConnection("D3", "E1");
+        m_mpPosition.get("f11").addPathConnection("E3", "D3");
+        m_mpPosition.get("f11").addPathConnection("D3", "E4");
+        m_mpPosition.get("f11").addPathConnection("E4", "D4");
+        m_mpPosition.get("f11").addPathConnection("D4", "E1");
 
         m_mpPosition.get("f12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("e12")));
-        m_mpPosition.get("f12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f11")));
-        m_mpPosition.get("f12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g12")));
         m_mpPosition.get("f12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e11")));
+        m_mpPosition.get("f12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("f11")));
         m_mpPosition.get("f12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g11")));
+        m_mpPosition.get("f12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("g12")));
+        m_mpPosition.get("f12").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("f12").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("f12").addPath(new Path("D4", Direction.VERTEX, null));
         m_mpPosition.get("f12").addPathConnection("E1", "D1");
         m_mpPosition.get("f12").addPathConnection("D1", "E2");
         m_mpPosition.get("f12").addPathConnection("E2", "D2");
         m_mpPosition.get("f12").addPathConnection("D2", "E3");
+        m_mpPosition.get("f12").addPathConnection("E3", "D3");
+        m_mpPosition.get("f12").addPathConnection("D3", "E4");
+        m_mpPosition.get("f12").addPathConnection("E4", "D4");
+        m_mpPosition.get("f12").addPathConnection("D4", "E1");
 
-        // g
         m_mpPosition.get("g1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f1")));
-        m_mpPosition.get("g1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g2")));
+        m_mpPosition.get("g1").addPath(new Path("D1", Direction.VERTEX, null));	//f0
+        m_mpPosition.get("g1").addPath(new Path("E2", Direction.EDGE, null));	//g0
+        m_mpPosition.get("g1").addPath(new Path("D2", Direction.VERTEX, null));	//h0
         m_mpPosition.get("g1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h1")));
-        m_mpPosition.get("g1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f2")));
-        m_mpPosition.get("g1").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h2")));
+        m_mpPosition.get("g1").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h2")));
+        m_mpPosition.get("g1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g2")));
+        m_mpPosition.get("g1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f2")));
         m_mpPosition.get("g1").addPathConnection("E1", "D1");
         m_mpPosition.get("g1").addPathConnection("D1", "E2");
         m_mpPosition.get("g1").addPathConnection("E2", "D2");
         m_mpPosition.get("g1").addPathConnection("D2", "E3");
+        m_mpPosition.get("g1").addPathConnection("E3", "D3");
+        m_mpPosition.get("g1").addPathConnection("D3", "E4");
+        m_mpPosition.get("g1").addPathConnection("E4", "D4");
+        m_mpPosition.get("g1").addPathConnection("D4", "E1");
+
 
         m_mpPosition.get("g2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f2")));
-        m_mpPosition.get("g2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g1")));
+        m_mpPosition.get("g2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f1")));	
+        m_mpPosition.get("g2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g1")));	
+        m_mpPosition.get("g2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h1")));	
         m_mpPosition.get("g2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h2")));
+        m_mpPosition.get("g2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h3")));
         m_mpPosition.get("g2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g3")));
-        m_mpPosition.get("g2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f1")));
-        m_mpPosition.get("g2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h1")));
-        m_mpPosition.get("g2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f3")));
-        m_mpPosition.get("g2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("h3")));
+        m_mpPosition.get("g2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f3")));
         m_mpPosition.get("g2").addPathConnection("E1", "D1");
         m_mpPosition.get("g2").addPathConnection("D1", "E2");
         m_mpPosition.get("g2").addPathConnection("E2", "D2");
         m_mpPosition.get("g2").addPathConnection("D2", "E3");
-        m_mpPosition.get("g2").addPathConnection("E3", "D4");
-        m_mpPosition.get("g2").addPathConnection("D4", "E4");
-        m_mpPosition.get("g2").addPathConnection("E4", "D3");
-        m_mpPosition.get("g2").addPathConnection("D3", "E1");
+        m_mpPosition.get("g2").addPathConnection("E3", "D3");
+        m_mpPosition.get("g2").addPathConnection("D3", "E4");
+        m_mpPosition.get("g2").addPathConnection("E4", "D4");
+        m_mpPosition.get("g2").addPathConnection("D4", "E1");
+
 
         m_mpPosition.get("g3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f3")));
-        m_mpPosition.get("g3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g2")));
-        m_mpPosition.get("g3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h3")));
-        m_mpPosition.get("g3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g4")));
         m_mpPosition.get("g3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f2")));
+        m_mpPosition.get("g3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g2")));
         m_mpPosition.get("g3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h2")));
-        m_mpPosition.get("g3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f4")));
-        m_mpPosition.get("g3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("h4")));
+        m_mpPosition.get("g3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h3")));
+        m_mpPosition.get("g3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h4")));
+        m_mpPosition.get("g3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g4")));
+        m_mpPosition.get("g3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f4")));
         m_mpPosition.get("g3").addPathConnection("E1", "D1");
         m_mpPosition.get("g3").addPathConnection("D1", "E2");
         m_mpPosition.get("g3").addPathConnection("E2", "D2");
         m_mpPosition.get("g3").addPathConnection("D2", "E3");
-        m_mpPosition.get("g3").addPathConnection("E3", "D4");
-        m_mpPosition.get("g3").addPathConnection("D4", "E4");
-        m_mpPosition.get("g3").addPathConnection("E4", "D3");
-        m_mpPosition.get("g3").addPathConnection("D3", "E1");
+        m_mpPosition.get("g3").addPathConnection("E3", "D3");
+        m_mpPosition.get("g3").addPathConnection("D3", "E4");
+        m_mpPosition.get("g3").addPathConnection("E4", "D4");
+        m_mpPosition.get("g3").addPathConnection("D4", "E1");
 
         m_mpPosition.get("g4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f4")));
-        m_mpPosition.get("g4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g3")));
-        m_mpPosition.get("g4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h4")));
-        m_mpPosition.get("g4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g9")));
         m_mpPosition.get("g4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f3")));
+        m_mpPosition.get("g4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g3")));
         m_mpPosition.get("g4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h3")));
-        m_mpPosition.get("g4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f9")));
-        m_mpPosition.get("g4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("h9")));
+        m_mpPosition.get("g4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h4")));
+        m_mpPosition.get("g4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h9")));
+        m_mpPosition.get("g4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g9")));
+        m_mpPosition.get("g4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f9")));
         m_mpPosition.get("g4").addPathConnection("E1", "D1");
         m_mpPosition.get("g4").addPathConnection("D1", "E2");
         m_mpPosition.get("g4").addPathConnection("E2", "D2");
         m_mpPosition.get("g4").addPathConnection("D2", "E3");
-        m_mpPosition.get("g4").addPathConnection("E3", "D4");
-        m_mpPosition.get("g4").addPathConnection("D4", "E4");
-        m_mpPosition.get("g4").addPathConnection("E4", "D3");
-        m_mpPosition.get("g4").addPathConnection("D3", "E1");
+        m_mpPosition.get("g4").addPathConnection("E3", "D3");
+        m_mpPosition.get("g4").addPathConnection("D3", "E4");
+        m_mpPosition.get("g4").addPathConnection("E4", "D4");
+        m_mpPosition.get("g4").addPathConnection("D4", "E1");
 
         m_mpPosition.get("g9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f9")));
-        m_mpPosition.get("g9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g4")));
-        m_mpPosition.get("g9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h9")));
-        m_mpPosition.get("g9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g10")));
         m_mpPosition.get("g9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f4")));
+        m_mpPosition.get("g9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g4")));
         m_mpPosition.get("g9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h4")));
-        m_mpPosition.get("g9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f10")));
-        m_mpPosition.get("g9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("h10")));
+        m_mpPosition.get("g9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h9")));
+        m_mpPosition.get("g9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h10")));
+        m_mpPosition.get("g9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g10")));
+        m_mpPosition.get("g9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f10")));
         m_mpPosition.get("g9").addPathConnection("E1", "D1");
         m_mpPosition.get("g9").addPathConnection("D1", "E2");
         m_mpPosition.get("g9").addPathConnection("E2", "D2");
         m_mpPosition.get("g9").addPathConnection("D2", "E3");
-        m_mpPosition.get("g9").addPathConnection("E3", "D4");
-        m_mpPosition.get("g9").addPathConnection("D4", "E4");
-        m_mpPosition.get("g9").addPathConnection("E4", "D3");
-        m_mpPosition.get("g9").addPathConnection("D3", "E1");
+        m_mpPosition.get("g9").addPathConnection("E3", "D3");
+        m_mpPosition.get("g9").addPathConnection("D3", "E4");
+        m_mpPosition.get("g9").addPathConnection("E4", "D4");
+        m_mpPosition.get("g9").addPathConnection("D4", "E1");
 
         m_mpPosition.get("g10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f10")));
-        m_mpPosition.get("g10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g9")));
-        m_mpPosition.get("g10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h10")));
-        m_mpPosition.get("g10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g11")));
         m_mpPosition.get("g10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f9")));
+        m_mpPosition.get("g10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g9")));
         m_mpPosition.get("g10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h9")));
-        m_mpPosition.get("g10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f11")));
-        m_mpPosition.get("g10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("h11")));
+        m_mpPosition.get("g10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h10")));
+        m_mpPosition.get("g10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h11")));
+        m_mpPosition.get("g10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g11")));
+        m_mpPosition.get("g10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f11")));
         m_mpPosition.get("g10").addPathConnection("E1", "D1");
         m_mpPosition.get("g10").addPathConnection("D1", "E2");
         m_mpPosition.get("g10").addPathConnection("E2", "D2");
         m_mpPosition.get("g10").addPathConnection("D2", "E3");
-        m_mpPosition.get("g10").addPathConnection("E3", "D4");
-        m_mpPosition.get("g10").addPathConnection("D4", "E4");
-        m_mpPosition.get("g10").addPathConnection("E4", "D3");
-        m_mpPosition.get("g10").addPathConnection("D3", "E1");
+        m_mpPosition.get("g10").addPathConnection("E3", "D3");
+        m_mpPosition.get("g10").addPathConnection("D3", "E4");
+        m_mpPosition.get("g10").addPathConnection("E4", "D4");
+        m_mpPosition.get("g10").addPathConnection("D4", "E1");
 
         m_mpPosition.get("g11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f11")));
-        m_mpPosition.get("g11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g10")));
-        m_mpPosition.get("g11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h11")));
-        m_mpPosition.get("g11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g12")));
         m_mpPosition.get("g11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f10")));
+        m_mpPosition.get("g11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g10")));
         m_mpPosition.get("g11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h10")));
-        m_mpPosition.get("g11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("f12")));
-        m_mpPosition.get("g11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("h12")));
+        m_mpPosition.get("g11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h11")));
+        m_mpPosition.get("g11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h12")));
+        m_mpPosition.get("g11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g12")));
+        m_mpPosition.get("g11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f12")));
         m_mpPosition.get("g11").addPathConnection("E1", "D1");
         m_mpPosition.get("g11").addPathConnection("D1", "E2");
         m_mpPosition.get("g11").addPathConnection("E2", "D2");
         m_mpPosition.get("g11").addPathConnection("D2", "E3");
-        m_mpPosition.get("g11").addPathConnection("E3", "D4");
-        m_mpPosition.get("g11").addPathConnection("D4", "E4");
-        m_mpPosition.get("g11").addPathConnection("E4", "D3");
-        m_mpPosition.get("g11").addPathConnection("D3", "E1");
+        m_mpPosition.get("g11").addPathConnection("E3", "D3");
+        m_mpPosition.get("g11").addPathConnection("D3", "E4");
+        m_mpPosition.get("g11").addPathConnection("E4", "D4");
+        m_mpPosition.get("g11").addPathConnection("D4", "E1");
 
         m_mpPosition.get("g12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("f12")));
-        m_mpPosition.get("g12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g11")));
-        m_mpPosition.get("g12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h12")));
         m_mpPosition.get("g12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("f11")));
+        m_mpPosition.get("g12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("g11")));
         m_mpPosition.get("g12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("h11")));
+        m_mpPosition.get("g12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h12")));
+        m_mpPosition.get("g12").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("h13")));
+        m_mpPosition.get("g12").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("g13")));
+        m_mpPosition.get("g12").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("f13")));
         m_mpPosition.get("g12").addPathConnection("E1", "D1");
         m_mpPosition.get("g12").addPathConnection("D1", "E2");
         m_mpPosition.get("g12").addPathConnection("E2", "D2");
         m_mpPosition.get("g12").addPathConnection("D2", "E3");
+        m_mpPosition.get("g12").addPathConnection("E3", "D3");
+        m_mpPosition.get("g12").addPathConnection("D3", "E4");
+        m_mpPosition.get("g12").addPathConnection("E4", "D4");
+        m_mpPosition.get("g12").addPathConnection("D4", "E1");
 
-        // h
         m_mpPosition.get("h1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g1")));
-        m_mpPosition.get("h1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h2")));
-        m_mpPosition.get("h1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g2")));
+        m_mpPosition.get("h1").addPath(new Path("D1", Direction.VERTEX, null));	//g0
+        m_mpPosition.get("h1").addPath(new Path("E2", Direction.EDGE, null));	//h0
+        m_mpPosition.get("h1").addPath(new Path("D2", Direction.VERTEX, null));	//i0
+        m_mpPosition.get("h1").addPath(new Path("E3", Direction.EDGE, null));   // i1
+        m_mpPosition.get("h1").addPath(new Path("D3", Direction.VERTEX, null)); // i2
+        m_mpPosition.get("h1").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h2")));
+        m_mpPosition.get("h1").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g2")));
         m_mpPosition.get("h1").addPathConnection("E1", "D1");
         m_mpPosition.get("h1").addPathConnection("D1", "E2");
+        m_mpPosition.get("h1").addPathConnection("E2", "D2");
+        m_mpPosition.get("h1").addPathConnection("D2", "E3");
+        m_mpPosition.get("h1").addPathConnection("E3", "D3");
+        m_mpPosition.get("h1").addPathConnection("D3", "E4");
+        m_mpPosition.get("h1").addPathConnection("E4", "D4");
+        m_mpPosition.get("h1").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g2")));
-        m_mpPosition.get("h2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h1")));
-        m_mpPosition.get("h2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h3")));
         m_mpPosition.get("h2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g1")));
-        m_mpPosition.get("h2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g3")));
-        m_mpPosition.get("h2").addPathConnection("E2", "D1");
-        m_mpPosition.get("h2").addPathConnection("D1", "E1");
-        m_mpPosition.get("h2").addPathConnection("E1", "D2");
+        m_mpPosition.get("h2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h1")));
+        m_mpPosition.get("h2").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h2").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h2").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h3")));
+        m_mpPosition.get("h2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g3")));
+        m_mpPosition.get("h2").addPathConnection("E1", "D1");
+        m_mpPosition.get("h2").addPathConnection("D1", "E2");
+        m_mpPosition.get("h2").addPathConnection("E2", "D2");
         m_mpPosition.get("h2").addPathConnection("D2", "E3");
+        m_mpPosition.get("h2").addPathConnection("E3", "D3");
+        m_mpPosition.get("h2").addPathConnection("D3", "E4");
+        m_mpPosition.get("h2").addPathConnection("E4", "D4");
+        m_mpPosition.get("h2").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g3")));
-        m_mpPosition.get("h3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h2")));
-        m_mpPosition.get("h3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h4")));
         m_mpPosition.get("h3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g2")));
-        m_mpPosition.get("h3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g4")));
-        m_mpPosition.get("h3").addPathConnection("E2", "D1");
-        m_mpPosition.get("h3").addPathConnection("D1", "E1");
-        m_mpPosition.get("h3").addPathConnection("E1", "D2");
+        m_mpPosition.get("h3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h2")));
+        m_mpPosition.get("h3").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h3").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h3").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h4")));
+        m_mpPosition.get("h3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g4")));
+        m_mpPosition.get("h3").addPathConnection("E1", "D1");
+        m_mpPosition.get("h3").addPathConnection("D1", "E2");
+        m_mpPosition.get("h3").addPathConnection("E2", "D2");
         m_mpPosition.get("h3").addPathConnection("D2", "E3");
+        m_mpPosition.get("h3").addPathConnection("E3", "D3");
+        m_mpPosition.get("h3").addPathConnection("D3", "E4");
+        m_mpPosition.get("h3").addPathConnection("E4", "D4");
+        m_mpPosition.get("h3").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g4")));
-        m_mpPosition.get("h4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h3")));
-        m_mpPosition.get("h4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h9")));
         m_mpPosition.get("h4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g3")));
-        m_mpPosition.get("h4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g9")));
-        m_mpPosition.get("h4").addPathConnection("E2", "D1");
-        m_mpPosition.get("h4").addPathConnection("D1", "E1");
-        m_mpPosition.get("h4").addPathConnection("E1", "D2");
+        m_mpPosition.get("h4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h3")));
+        m_mpPosition.get("h4").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h4").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h4").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h9")));
+        m_mpPosition.get("h4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g9")));
+        m_mpPosition.get("h4").addPathConnection("E1", "D1");
+        m_mpPosition.get("h4").addPathConnection("D1", "E2");
+        m_mpPosition.get("h4").addPathConnection("E2", "D2");
         m_mpPosition.get("h4").addPathConnection("D2", "E3");
+        m_mpPosition.get("h4").addPathConnection("E3", "D3");
+        m_mpPosition.get("h4").addPathConnection("D3", "E4");
+        m_mpPosition.get("h4").addPathConnection("E4", "D4");
+        m_mpPosition.get("h4").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g9")));
-        m_mpPosition.get("h9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h4")));
-        m_mpPosition.get("h9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h10")));
         m_mpPosition.get("h9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g4")));
-        m_mpPosition.get("h9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g10")));
-        m_mpPosition.get("h9").addPathConnection("E2", "D1");
-        m_mpPosition.get("h9").addPathConnection("D1", "E1");
-        m_mpPosition.get("h9").addPathConnection("E1", "D2");
+        m_mpPosition.get("h9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h4")));
+        m_mpPosition.get("h9").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h9").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h9").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h10")));
+        m_mpPosition.get("h9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g10")));
+        m_mpPosition.get("h9").addPathConnection("E1", "D1");
+        m_mpPosition.get("h9").addPathConnection("D1", "E2");
+        m_mpPosition.get("h9").addPathConnection("E2", "D2");
         m_mpPosition.get("h9").addPathConnection("D2", "E3");
+        m_mpPosition.get("h9").addPathConnection("E3", "D3");
+        m_mpPosition.get("h9").addPathConnection("D3", "E4");
+        m_mpPosition.get("h9").addPathConnection("E4", "D4");
+        m_mpPosition.get("h9").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g10")));
-        m_mpPosition.get("h10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h9")));
-        m_mpPosition.get("h10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h11")));
         m_mpPosition.get("h10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g9")));
-        m_mpPosition.get("h10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g11")));
-        m_mpPosition.get("h10").addPathConnection("E2", "D1");
-        m_mpPosition.get("h10").addPathConnection("D1", "E1");
-        m_mpPosition.get("h10").addPathConnection("E1", "D2");
+        m_mpPosition.get("h10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h9")));
+        m_mpPosition.get("h10").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h10").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h10").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h11")));
+        m_mpPosition.get("h10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g11")));
+        m_mpPosition.get("h10").addPathConnection("E1", "D1");
+        m_mpPosition.get("h10").addPathConnection("D1", "E2");
+        m_mpPosition.get("h10").addPathConnection("E2", "D2");
         m_mpPosition.get("h10").addPathConnection("D2", "E3");
+        m_mpPosition.get("h10").addPathConnection("E3", "D3");
+        m_mpPosition.get("h10").addPathConnection("D3", "E4");
+        m_mpPosition.get("h10").addPathConnection("E4", "D4");
+        m_mpPosition.get("h10").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g11")));
-        m_mpPosition.get("h11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h10")));
-        m_mpPosition.get("h11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("h12")));
         m_mpPosition.get("h11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g10")));
-        m_mpPosition.get("h11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("g12")));
-        m_mpPosition.get("h11").addPathConnection("E2", "D1");
-        m_mpPosition.get("h11").addPathConnection("D1", "E1");
-        m_mpPosition.get("h11").addPathConnection("E1", "D2");
+        m_mpPosition.get("h11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h10")));
+        m_mpPosition.get("h11").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h11").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h11").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("h12")));
+        m_mpPosition.get("h11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("g12")));
+        m_mpPosition.get("h11").addPathConnection("E1", "D1");
+        m_mpPosition.get("h11").addPathConnection("D1", "E2");
+        m_mpPosition.get("h11").addPathConnection("E2", "D2");
         m_mpPosition.get("h11").addPathConnection("D2", "E3");
+        m_mpPosition.get("h11").addPathConnection("E3", "D3");
+        m_mpPosition.get("h11").addPathConnection("D3", "E4");
+        m_mpPosition.get("h11").addPathConnection("E4", "D4");
+        m_mpPosition.get("h11").addPathConnection("D4", "E1");
 
         m_mpPosition.get("h12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("g12")));
-        m_mpPosition.get("h12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h11")));
         m_mpPosition.get("h12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("g11")));
+        m_mpPosition.get("h12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("h11")));
+        m_mpPosition.get("h12").addPath(new Path("D2", Direction.VERTEX, null));	//i1
+        m_mpPosition.get("h12").addPath(new Path("E3", Direction.EDGE, null));   // i2
+        m_mpPosition.get("h12").addPath(new Path("D3", Direction.VERTEX, null)); // i3
+        m_mpPosition.get("h12").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("h12").addPath(new Path("D4", Direction.VERTEX, null));
         m_mpPosition.get("h12").addPathConnection("E1", "D1");
         m_mpPosition.get("h12").addPathConnection("D1", "E2");
-        /////////////////
+        m_mpPosition.get("h12").addPathConnection("E2", "D2");
+        m_mpPosition.get("h12").addPathConnection("D2", "E3");
+        m_mpPosition.get("h12").addPathConnection("E3", "D3");
+        m_mpPosition.get("h12").addPathConnection("D3", "E4");
+        m_mpPosition.get("h12").addPathConnection("E4", "D4");
+        m_mpPosition.get("h12").addPathConnection("D4", "E1");
 
-        // i
+        
         m_mpPosition.get("i8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j8")));
-        m_mpPosition.get("i8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("d8")));
-        m_mpPosition.get("i8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i7")));
-        m_mpPosition.get("i8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("d7")));
-        m_mpPosition.get("i8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j7")));
-        m_mpPosition.get("i8").addPathConnection("E1", "D2");
-        m_mpPosition.get("i8").addPathConnection("D2", "E3");
-        m_mpPosition.get("i8").addPathConnection("E3", "D1");
+        m_mpPosition.get("i8").addPath(new Path("D1", Direction.VERTEX, null));	//j9 ++
+        m_mpPosition.get("i8").addPath(new Path("E2", Direction.EDGE, null));	//i9 ++
+        m_mpPosition.get("i8").addPath(new Path("D2", Direction.VERTEX, null));	//d9 ++
+        m_mpPosition.get("i8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d8")));   // d8
+        m_mpPosition.get("i8").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d7"))); // d7
+        m_mpPosition.get("i8").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i7")));
+        m_mpPosition.get("i8").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j7")));
+        m_mpPosition.get("i8").addPathConnection("E1", "D1");
         m_mpPosition.get("i8").addPathConnection("D1", "E2");
+        m_mpPosition.get("i8").addPathConnection("E2", "D2");
+        m_mpPosition.get("i8").addPathConnection("D2", "E3");
+        m_mpPosition.get("i8").addPathConnection("E3", "D3");
+        m_mpPosition.get("i8").addPathConnection("D3", "E4");
+        m_mpPosition.get("i8").addPathConnection("E4", "D4");
+        m_mpPosition.get("i8").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("d7")));
-        m_mpPosition.get("i7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j7")));
-        m_mpPosition.get("i7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i6")));
-        m_mpPosition.get("i7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i8")));
-        m_mpPosition.get("i7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j6")));
-        m_mpPosition.get("i7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j8")));
-        m_mpPosition.get("i7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d6")));
-        m_mpPosition.get("i7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d8")));
-        m_mpPosition.get("i7").addPathConnection("E1", "D3");
-        m_mpPosition.get("i7").addPathConnection("D3", "E3");
-        m_mpPosition.get("i7").addPathConnection("E3", "D1");
+        m_mpPosition.get("i7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j7")));
+        m_mpPosition.get("i7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j8")));	//j8 ++
+        m_mpPosition.get("i7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i8")));	//i8 ++
+        m_mpPosition.get("i7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d8")));	//d8 ++
+        m_mpPosition.get("i7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d7")));   // d8
+        m_mpPosition.get("i7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d6"))); // d7
+        m_mpPosition.get("i7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i6")));
+        m_mpPosition.get("i7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j6")));
+        m_mpPosition.get("i7").addPathConnection("E1", "D1");
         m_mpPosition.get("i7").addPathConnection("D1", "E2");
         m_mpPosition.get("i7").addPathConnection("E2", "D2");
-        m_mpPosition.get("i7").addPathConnection("D2", "E4");
+        m_mpPosition.get("i7").addPathConnection("D2", "E3");
+        m_mpPosition.get("i7").addPathConnection("E3", "D3");
+        m_mpPosition.get("i7").addPathConnection("D3", "E4");
         m_mpPosition.get("i7").addPathConnection("E4", "D4");
         m_mpPosition.get("i7").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("d6")));
-        m_mpPosition.get("i6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j6")));
-        m_mpPosition.get("i6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i5")));
-        m_mpPosition.get("i6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i7")));
-        m_mpPosition.get("i6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j5")));
-        m_mpPosition.get("i6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j7")));
-        m_mpPosition.get("i6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d5")));
-        m_mpPosition.get("i6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d7")));
-        m_mpPosition.get("i6").addPathConnection("E1", "D3");
-        m_mpPosition.get("i6").addPathConnection("D3", "E3");
-        m_mpPosition.get("i6").addPathConnection("E3", "D1");
+        m_mpPosition.get("i6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j6")));
+        m_mpPosition.get("i6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j7")));	//j8 ++
+        m_mpPosition.get("i6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i7")));	//i8 ++
+        m_mpPosition.get("i6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d7")));	//d8 ++
+        m_mpPosition.get("i6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d6")));   // d8
+        m_mpPosition.get("i6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d5"))); // d7
+        m_mpPosition.get("i6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i5")));
+        m_mpPosition.get("i6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j5")));
+        m_mpPosition.get("i6").addPathConnection("E1", "D1");
         m_mpPosition.get("i6").addPathConnection("D1", "E2");
         m_mpPosition.get("i6").addPathConnection("E2", "D2");
-        m_mpPosition.get("i6").addPathConnection("D2", "E4");
+        m_mpPosition.get("i6").addPathConnection("D2", "E3");
+        m_mpPosition.get("i6").addPathConnection("E3", "D3");
+        m_mpPosition.get("i6").addPathConnection("D3", "E4");
         m_mpPosition.get("i6").addPathConnection("E4", "D4");
         m_mpPosition.get("i6").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i6")));
-        m_mpPosition.get("i5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i9")));
-        m_mpPosition.get("i5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j5")));
-        m_mpPosition.get("i5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("d5")));
-        m_mpPosition.get("i5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j6")));
-        m_mpPosition.get("i5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j9")));
-        m_mpPosition.get("i5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d6")));
-        m_mpPosition.get("i5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("d4")));
-        //m_mpPosition.get("i5").addPath(new Path("D5", Direction.VERTEX, m_mpPosition.get("e4")));
-        //m_mpPosition.get("i5").addPath(new Path("D6", Direction.VERTEX, m_mpPosition.get("e9")));
-        m_mpPosition.get("i5").getPath("D4").addPosition((m_mpPosition.get("e4")));
-        m_mpPosition.get("i5").getPath("D4").addPosition((m_mpPosition.get("e9")));
-
-        m_mpPosition.get("i5").addPathConnection("E1", "D3");
-        m_mpPosition.get("i5").addPathConnection("D3", "E4");
-        m_mpPosition.get("i5").addPathConnection("E4", "D4");
-        m_mpPosition.get("i5").addPathConnection("D4", "E2");
-        //m_mpPosition.get("i5").addPathConnection("D5", "D6");
-        //m_mpPosition.get("i5").addPathConnection("D6", "E2");
+        m_mpPosition.get("i5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j5")));
+        m_mpPosition.get("i5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j6")));	//j8 ++
+        m_mpPosition.get("i5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i6")));	//i8 ++
+        m_mpPosition.get("i5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d6")));	//d8 ++
+        m_mpPosition.get("i5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("d5")));   // d8
+        m_mpPosition.get("i5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("d4"))); // d7
+        m_mpPosition.get("i5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e4")));
+        m_mpPosition.get("i5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j9")));
+        m_mpPosition.get("i5").getPath("D3").addPosition((m_mpPosition.get("e9")));
+        m_mpPosition.get("i5").getPath("D3").addPosition((m_mpPosition.get("i9")));
+        m_mpPosition.get("i5").addPathConnection("E1", "D1");
+        m_mpPosition.get("i5").addPathConnection("D1", "E2");
         m_mpPosition.get("i5").addPathConnection("E2", "D2");
         m_mpPosition.get("i5").addPathConnection("D2", "E3");
-        m_mpPosition.get("i5").addPathConnection("E3", "D1");
-        m_mpPosition.get("i5").addPathConnection("D1", "E1");
+        m_mpPosition.get("i5").addPathConnection("E3", "D3");
+        m_mpPosition.get("i5").addPathConnection("D3", "E4");
+        m_mpPosition.get("i5").addPathConnection("E4", "D4");
+        m_mpPosition.get("i5").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i10")));
-        m_mpPosition.get("i9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i5")));
-        m_mpPosition.get("i9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j9")));
-        m_mpPosition.get("i9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e9")));
-        m_mpPosition.get("i9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j10")));
-        m_mpPosition.get("i9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j5")));
-        m_mpPosition.get("i9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e10")));
-        m_mpPosition.get("i9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e4")));
-        //m_mpPosition.get("i9").addPath(new Path("D5", Direction.VERTEX, m_mpPosition.get("d4")));
-        //m_mpPosition.get("i9").addPath(new Path("D6", Direction.VERTEX, m_mpPosition.get("d5")));
-        m_mpPosition.get("i9").getPath("D4").addPosition((m_mpPosition.get("d4")));
-        m_mpPosition.get("i9").getPath("D4").addPosition((m_mpPosition.get("d5")));
-
-        m_mpPosition.get("i9").addPathConnection("E1", "D3");
-        m_mpPosition.get("i9").addPathConnection("D3", "E4");
-        m_mpPosition.get("i9").addPathConnection("E4", "D4");
-        m_mpPosition.get("i9").addPathConnection("D4", "E2");
-        //m_mpPosition.get("i9").addPathConnection("D5", "D6");
-        //m_mpPosition.get("i9").addPathConnection("D6", "E2");
+        m_mpPosition.get("i9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j9")));
+        m_mpPosition.get("i9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j5")));	//j8 ++
+        m_mpPosition.get("i9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i5")));	//i8 ++
+        m_mpPosition.get("i9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("d5")));	//d8 ++
+        m_mpPosition.get("i9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e9")));   // d8
+        m_mpPosition.get("i9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e10"))); // d7
+        m_mpPosition.get("i9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i10")));
+        m_mpPosition.get("i9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j10")));
+        m_mpPosition.get("i9").getPath("D2").addPosition((m_mpPosition.get("d4")));
+        m_mpPosition.get("i9").getPath("D2").addPosition((m_mpPosition.get("e4")));
+        m_mpPosition.get("i9").addPathConnection("E1", "D1");
+        m_mpPosition.get("i9").addPathConnection("D1", "E2");
         m_mpPosition.get("i9").addPathConnection("E2", "D2");
         m_mpPosition.get("i9").addPathConnection("D2", "E3");
-        m_mpPosition.get("i9").addPathConnection("E3", "D1");
-        m_mpPosition.get("i9").addPathConnection("D1", "E1");
+        m_mpPosition.get("i9").addPathConnection("E3", "D3");
+        m_mpPosition.get("i9").addPathConnection("D3", "E4");
+        m_mpPosition.get("i9").addPathConnection("E4", "D4");
+        m_mpPosition.get("i9").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i9")));
-        m_mpPosition.get("i10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i11")));
-        m_mpPosition.get("i10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j10")));
-        m_mpPosition.get("i10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("e10")));
-        m_mpPosition.get("i10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j9")));
-        m_mpPosition.get("i10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e9")));
-        m_mpPosition.get("i10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j11")));
-        m_mpPosition.get("i10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e11")));
+        m_mpPosition.get("i10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j10")));
+        m_mpPosition.get("i10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j9")));	//j8 ++
+        m_mpPosition.get("i10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i9")));	//i8 ++
+        m_mpPosition.get("i10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e9")));	//d8 ++
+        m_mpPosition.get("i10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e10")));   // d8
+        m_mpPosition.get("i10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e11"))); // d7
+        m_mpPosition.get("i10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i11")));
+        m_mpPosition.get("i10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j11")));
         m_mpPosition.get("i10").addPathConnection("E1", "D1");
-        m_mpPosition.get("i10").addPathConnection("D1", "E3");
+        m_mpPosition.get("i10").addPathConnection("D1", "E2");
+        m_mpPosition.get("i10").addPathConnection("E2", "D2");
+        m_mpPosition.get("i10").addPathConnection("D2", "E3");
         m_mpPosition.get("i10").addPathConnection("E3", "D3");
-        m_mpPosition.get("i10").addPathConnection("D3", "E2");
-        m_mpPosition.get("i10").addPathConnection("E2", "D4");
-        m_mpPosition.get("i10").addPathConnection("D4", "E4");
-        m_mpPosition.get("i10").addPathConnection("E4", "D2");
-        m_mpPosition.get("i10").addPathConnection("D2", "E1");
+        m_mpPosition.get("i10").addPathConnection("D3", "E4");
+        m_mpPosition.get("i10").addPathConnection("E4", "D4");
+        m_mpPosition.get("i10").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i10")));
-        m_mpPosition.get("i11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i12")));
-        m_mpPosition.get("i11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e11")));
-        m_mpPosition.get("i11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j11")));
-        m_mpPosition.get("i11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j12")));
-        m_mpPosition.get("i11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j10")));
-        m_mpPosition.get("i11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e12")));
-        m_mpPosition.get("i11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("e10")));
-        m_mpPosition.get("i11").addPathConnection("E1", "D2");
-        m_mpPosition.get("i11").addPathConnection("D2", "E4");
-        m_mpPosition.get("i11").addPathConnection("E4", "D1");
+        m_mpPosition.get("i11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j11")));
+        m_mpPosition.get("i11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j10")));	//j8 ++
+        m_mpPosition.get("i11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i10")));	//i8 ++
+        m_mpPosition.get("i11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e10")));	//d8 ++
+        m_mpPosition.get("i11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e11")));   // d8
+        m_mpPosition.get("i11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("e12"))); // d7
+        m_mpPosition.get("i11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i12")));
+        m_mpPosition.get("i11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("j12")));
+        m_mpPosition.get("i11").addPathConnection("E1", "D1");
         m_mpPosition.get("i11").addPathConnection("D1", "E2");
-        m_mpPosition.get("i11").addPathConnection("E2", "D3");
-        m_mpPosition.get("i11").addPathConnection("D3", "E3");
-        m_mpPosition.get("i11").addPathConnection("E3", "D4");
+        m_mpPosition.get("i11").addPathConnection("E2", "D2");
+        m_mpPosition.get("i11").addPathConnection("D2", "E3");
+        m_mpPosition.get("i11").addPathConnection("E3", "D3");
+        m_mpPosition.get("i11").addPathConnection("D3", "E4");
+        m_mpPosition.get("i11").addPathConnection("E4", "D4");
         m_mpPosition.get("i11").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("i12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("i11")));
-        m_mpPosition.get("i12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("e12")));
-        m_mpPosition.get("i12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j12")));
-        m_mpPosition.get("i12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("e11")));
-        m_mpPosition.get("i12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j11")));
-        m_mpPosition.get("i12").addPathConnection("E3", "D2");
-        m_mpPosition.get("i12").addPathConnection("D2", "E1");
+        m_mpPosition.get("i12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j12")));
+        m_mpPosition.get("i12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j11")));	//j8 ++
+        m_mpPosition.get("i12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i11")));	//i8 ++
+        m_mpPosition.get("i12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("e11")));	//d8 ++
+        m_mpPosition.get("i12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("e12")));   // d8
+        m_mpPosition.get("i12").addPath(new Path("D3", Direction.VERTEX, null)); // d7
+        m_mpPosition.get("i12").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("i12").addPath(new Path("D4", Direction.VERTEX, null));
         m_mpPosition.get("i12").addPathConnection("E1", "D1");
         m_mpPosition.get("i12").addPathConnection("D1", "E2");
+        m_mpPosition.get("i12").addPathConnection("E2", "D2");
+        m_mpPosition.get("i12").addPathConnection("D2", "E3");
+        m_mpPosition.get("i12").addPathConnection("E3", "D3");
+        m_mpPosition.get("i12").addPathConnection("D3", "E4");
+        m_mpPosition.get("i12").addPathConnection("E4", "D4");
+        m_mpPosition.get("i12").addPathConnection("D4", "E1");
 
         // j
-        m_mpPosition.get("j8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j7")));
-        m_mpPosition.get("j8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i8")));
-        m_mpPosition.get("j8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k8")));
-        m_mpPosition.get("j8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i7")));
-        m_mpPosition.get("j8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k7")));
-        m_mpPosition.get("j8").addPathConnection("E3", "D2");
-        m_mpPosition.get("j8").addPathConnection("D2", "E1");
+        m_mpPosition.get("j8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k8")));
+        m_mpPosition.get("j8").addPath(new Path("D1", Direction.VERTEX, null));	//k9 ++
+        m_mpPosition.get("j8").addPath(new Path("E2", Direction.EDGE, null));	//j9 ++
+        m_mpPosition.get("j8").addPath(new Path("D2", Direction.VERTEX, null));	//i9 ++
+        m_mpPosition.get("j8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i8")));   // d8
+        m_mpPosition.get("j8").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i7"))); // d7
+        m_mpPosition.get("j8").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j7")));
+        m_mpPosition.get("j8").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k7")));
         m_mpPosition.get("j8").addPathConnection("E1", "D1");
         m_mpPosition.get("j8").addPathConnection("D1", "E2");
+        m_mpPosition.get("j8").addPathConnection("E2", "D2");
+        m_mpPosition.get("j8").addPathConnection("D2", "E3");
+        m_mpPosition.get("j8").addPathConnection("E3", "D3");
+        m_mpPosition.get("j8").addPathConnection("D3", "E4");
+        m_mpPosition.get("j8").addPathConnection("E4", "D4");
+        m_mpPosition.get("j8").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("j7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j8")));
-        m_mpPosition.get("j7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j6")));
+        m_mpPosition.get("j7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k7")));
+        m_mpPosition.get("j7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k8")));
+        m_mpPosition.get("j7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j8")));
+        m_mpPosition.get("j7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i8")));
         m_mpPosition.get("j7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i7")));
-        m_mpPosition.get("j7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k7")));
-        m_mpPosition.get("j7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i8")));
-        m_mpPosition.get("j7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i6")));
-        m_mpPosition.get("j7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k8")));
+        m_mpPosition.get("j7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i6")));
+        m_mpPosition.get("j7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j6")));
         m_mpPosition.get("j7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k6")));
         m_mpPosition.get("j7").addPathConnection("E1", "D1");
-        m_mpPosition.get("j7").addPathConnection("D1", "E3");
-        m_mpPosition.get("j7").addPathConnection("E3", "D2");
-        m_mpPosition.get("j7").addPathConnection("D2", "E2");
-        m_mpPosition.get("j7").addPathConnection("E2", "D4");
-        m_mpPosition.get("j7").addPathConnection("D4", "E4");
-        m_mpPosition.get("j7").addPathConnection("E4", "D3");
-        m_mpPosition.get("j7").addPathConnection("D3", "E1");
+        m_mpPosition.get("j7").addPathConnection("D1", "E2");
+        m_mpPosition.get("j7").addPathConnection("E2", "D2");
+        m_mpPosition.get("j7").addPathConnection("D2", "E3");
+        m_mpPosition.get("j7").addPathConnection("E3", "D3");
+        m_mpPosition.get("j7").addPathConnection("D3", "E4");
+        m_mpPosition.get("j7").addPathConnection("E4", "D4");
+        m_mpPosition.get("j7").addPathConnection("D4", "E1");
 
-
-        m_mpPosition.get("j6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j5")));
+        m_mpPosition.get("j6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k6")));
+        m_mpPosition.get("j6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k7")));
         m_mpPosition.get("j6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j7")));
-        m_mpPosition.get("j6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i6")));
-        m_mpPosition.get("j6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k6")));
-        m_mpPosition.get("j6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i5")));
         m_mpPosition.get("j6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i7")));
-        m_mpPosition.get("j6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k5")));
-        m_mpPosition.get("j6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k7")));
+        m_mpPosition.get("j6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i6")));
+        m_mpPosition.get("j6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i5")));
+        m_mpPosition.get("j6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j5")));
+        m_mpPosition.get("j6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k5")));
         m_mpPosition.get("j6").addPathConnection("E1", "D1");
-        m_mpPosition.get("j6").addPathConnection("D1", "E3");
-        m_mpPosition.get("j6").addPathConnection("E3", "D2");
-        m_mpPosition.get("j6").addPathConnection("D2", "E2");
-        m_mpPosition.get("j6").addPathConnection("E2", "D4");
-        m_mpPosition.get("j6").addPathConnection("D4", "E4");
-        m_mpPosition.get("j6").addPathConnection("E4", "D3");
-        m_mpPosition.get("j6").addPathConnection("D3", "E1");
+        m_mpPosition.get("j6").addPathConnection("D1", "E2");
+        m_mpPosition.get("j6").addPathConnection("E2", "D2");
+        m_mpPosition.get("j6").addPathConnection("D2", "E3");
+        m_mpPosition.get("j6").addPathConnection("E3", "D3");
+        m_mpPosition.get("j6").addPathConnection("D3", "E4");
+        m_mpPosition.get("j6").addPathConnection("E4", "D4");
+        m_mpPosition.get("j6").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("j5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j9")));
+        m_mpPosition.get("j5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k5")));
+        m_mpPosition.get("j5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k6")));
         m_mpPosition.get("j5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j6")));
-        m_mpPosition.get("j5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k5")));
-        m_mpPosition.get("j5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("i5")));
-        m_mpPosition.get("j5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i6")));
-        m_mpPosition.get("j5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k6")));
+        m_mpPosition.get("j5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i6")));
+        m_mpPosition.get("j5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i5")));
         m_mpPosition.get("j5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i9")));
+        m_mpPosition.get("j5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j9")));
         m_mpPosition.get("j5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k9")));
-        m_mpPosition.get("j5").addPathConnection("E2", "D1");
-        m_mpPosition.get("j5").addPathConnection("D1", "E4");
-        m_mpPosition.get("j5").addPathConnection("E4", "D3");
-        m_mpPosition.get("j5").addPathConnection("D3", "E1");
-        m_mpPosition.get("j5").addPathConnection("E1", "D4");
-        m_mpPosition.get("j5").addPathConnection("D4", "E3");
-        m_mpPosition.get("j5").addPathConnection("E3", "D2");
-        m_mpPosition.get("j5").addPathConnection("D2", "E2");
+        m_mpPosition.get("j5").addPathConnection("E1", "D1");
+        m_mpPosition.get("j5").addPathConnection("D1", "E2");
+        m_mpPosition.get("j5").addPathConnection("E2", "D2");
+        m_mpPosition.get("j5").addPathConnection("D2", "E3");
+        m_mpPosition.get("j5").addPathConnection("E3", "D3");
+        m_mpPosition.get("j5").addPathConnection("D3", "E4");
+        m_mpPosition.get("j5").addPathConnection("E4", "D4");
+        m_mpPosition.get("j5").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("j9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j10")));
+        m_mpPosition.get("j9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k9")));
+        m_mpPosition.get("j9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k5")));
         m_mpPosition.get("j9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j5")));
+        m_mpPosition.get("j9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i5")));
         m_mpPosition.get("j9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i9")));
-        m_mpPosition.get("j9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k9")));
-        m_mpPosition.get("j9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i5")));
-        m_mpPosition.get("j9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i10")));
-        m_mpPosition.get("j9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k5")));
+        m_mpPosition.get("j9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i10")));
+        m_mpPosition.get("j9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j10")));
         m_mpPosition.get("j9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k10")));
-        m_mpPosition.get("j9").addPathConnection("E2", "D1");
-        m_mpPosition.get("j9").addPathConnection("D1", "E3");
-        m_mpPosition.get("j9").addPathConnection("E3", "D2");
-        m_mpPosition.get("j9").addPathConnection("D2", "E1");
-        m_mpPosition.get("j9").addPathConnection("E1", "D4");
-        m_mpPosition.get("j9").addPathConnection("D4", "E4");
-        m_mpPosition.get("j9").addPathConnection("E4", "D3");
-        m_mpPosition.get("j9").addPathConnection("D3", "E2");
+        m_mpPosition.get("j9").addPathConnection("E1", "D1");
+        m_mpPosition.get("j9").addPathConnection("D1", "E2");
+        m_mpPosition.get("j9").addPathConnection("E2", "D2");
+        m_mpPosition.get("j9").addPathConnection("D2", "E3");
+        m_mpPosition.get("j9").addPathConnection("E3", "D3");
+        m_mpPosition.get("j9").addPathConnection("D3", "E4");
+        m_mpPosition.get("j9").addPathConnection("E4", "D4");
+        m_mpPosition.get("j9").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("j10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j9")));
-        m_mpPosition.get("j10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j11")));
+        m_mpPosition.get("j10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k10")));
+        m_mpPosition.get("j10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k9")));
+        m_mpPosition.get("j10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j9")));
+        m_mpPosition.get("j10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i9")));
         m_mpPosition.get("j10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i10")));
-        m_mpPosition.get("j10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k10")));
-        m_mpPosition.get("j10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i9")));
-        m_mpPosition.get("j10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i11")));
-        m_mpPosition.get("j10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k9")));
+        m_mpPosition.get("j10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i11")));
+        m_mpPosition.get("j10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j11")));
         m_mpPosition.get("j10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k11")));
         m_mpPosition.get("j10").addPathConnection("E1", "D1");
-        m_mpPosition.get("j10").addPathConnection("D1", "E3");
-        m_mpPosition.get("j10").addPathConnection("E3", "D2");
-        m_mpPosition.get("j10").addPathConnection("D2", "E2");
-        m_mpPosition.get("j10").addPathConnection("E2", "D4");
-        m_mpPosition.get("j10").addPathConnection("D4", "E4");
-        m_mpPosition.get("j10").addPathConnection("E4", "D3");
-        m_mpPosition.get("j10").addPathConnection("D3", "E1");
+        m_mpPosition.get("j10").addPathConnection("D1", "E2");
+        m_mpPosition.get("j10").addPathConnection("E2", "D2");
+        m_mpPosition.get("j10").addPathConnection("D2", "E3");
+        m_mpPosition.get("j10").addPathConnection("E3", "D3");
+        m_mpPosition.get("j10").addPathConnection("D3", "E4");
+        m_mpPosition.get("j10").addPathConnection("E4", "D4");
+        m_mpPosition.get("j10").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("j11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j12")));
+        m_mpPosition.get("j11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k11")));
+        m_mpPosition.get("j11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k10")));
         m_mpPosition.get("j11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j10")));
+        m_mpPosition.get("j11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i10")));
         m_mpPosition.get("j11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i11")));
-        m_mpPosition.get("j11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k11")));
-        m_mpPosition.get("j11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i10")));
-        m_mpPosition.get("j11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i12")));
-        m_mpPosition.get("j11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k10")));
+        m_mpPosition.get("j11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("i12")));
+        m_mpPosition.get("j11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("j12")));
         m_mpPosition.get("j11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("k12")));
-        m_mpPosition.get("j11").addPathConnection("E2", "D1");
-        m_mpPosition.get("j11").addPathConnection("D1", "E3");
-        m_mpPosition.get("j11").addPathConnection("E3", "D2");
-        m_mpPosition.get("j11").addPathConnection("D2", "E1");
-        m_mpPosition.get("j11").addPathConnection("E1", "D4");
-        m_mpPosition.get("j11").addPathConnection("D4", "E4");
-        m_mpPosition.get("j11").addPathConnection("E4", "D3");
-        m_mpPosition.get("j11").addPathConnection("D3", "E2");
+        m_mpPosition.get("j11").addPathConnection("E1", "D1");
+        m_mpPosition.get("j11").addPathConnection("D1", "E2");
+        m_mpPosition.get("j11").addPathConnection("E2", "D2");
+        m_mpPosition.get("j11").addPathConnection("D2", "E3");
+        m_mpPosition.get("j11").addPathConnection("E3", "D3");
+        m_mpPosition.get("j11").addPathConnection("D3", "E4");
+        m_mpPosition.get("j11").addPathConnection("E4", "D4");
+        m_mpPosition.get("j11").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("j12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("j11")));
-        m_mpPosition.get("j12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("i12")));
-        m_mpPosition.get("j12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k12")));
-        m_mpPosition.get("j12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("i11")));
-        m_mpPosition.get("j12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k11")));
-        m_mpPosition.get("j12").addPathConnection("E3", "D2");
-        m_mpPosition.get("j12").addPathConnection("D2", "E1");
+        m_mpPosition.get("j12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k12")));
+        m_mpPosition.get("j12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k11")));
+        m_mpPosition.get("j12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j11")));
+        m_mpPosition.get("j12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("i11")));
+        m_mpPosition.get("j12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("i12")));
+        m_mpPosition.get("j12").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("j12").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("j12").addPath(new Path("D4", Direction.VERTEX, null));
         m_mpPosition.get("j12").addPathConnection("E1", "D1");
         m_mpPosition.get("j12").addPathConnection("D1", "E2");
+        m_mpPosition.get("j12").addPathConnection("E2", "D2");
+        m_mpPosition.get("j12").addPathConnection("D2", "E3");
+        m_mpPosition.get("j12").addPathConnection("E3", "D3");
+        m_mpPosition.get("j12").addPathConnection("D3", "E4");
+        m_mpPosition.get("j12").addPathConnection("E4", "D4");
+        m_mpPosition.get("j12").addPathConnection("D4", "E1");
+
 
         // k
-        m_mpPosition.get("k8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k7")));
-        m_mpPosition.get("k8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j8")));
-        m_mpPosition.get("k8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("l8")));
-        m_mpPosition.get("k8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j7")));
-        m_mpPosition.get("k8").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("l7")));
-        m_mpPosition.get("k8").addPathConnection("E3", "D2");
-        m_mpPosition.get("k8").addPathConnection("D2", "E1");
+
+        m_mpPosition.get("k8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l8")));
+        m_mpPosition.get("k8").addPath(new Path("D1", Direction.VERTEX, null));	//l9 ++
+        m_mpPosition.get("k8").addPath(new Path("E2", Direction.EDGE, null));	//k9 ++
+        m_mpPosition.get("k8").addPath(new Path("D2", Direction.VERTEX, null));	//j9 ++
+        m_mpPosition.get("k8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j8")));   
+        m_mpPosition.get("k8").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j7"))); 
+        m_mpPosition.get("k8").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k7")));
+        m_mpPosition.get("k8").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l7")));
         m_mpPosition.get("k8").addPathConnection("E1", "D1");
         m_mpPosition.get("k8").addPathConnection("D1", "E2");
+        m_mpPosition.get("k8").addPathConnection("E2", "D2");
+        m_mpPosition.get("k8").addPathConnection("D2", "E3");
+        m_mpPosition.get("k8").addPathConnection("E3", "D3");
+        m_mpPosition.get("k8").addPathConnection("D3", "E4");
+        m_mpPosition.get("k8").addPathConnection("E4", "D4");
+        m_mpPosition.get("k8").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k8")));
-        m_mpPosition.get("k7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k6")));
+        m_mpPosition.get("k7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l7")));
+        m_mpPosition.get("k7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l8")));
+        m_mpPosition.get("k7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k8")));
+        m_mpPosition.get("k7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j8")));
         m_mpPosition.get("k7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j7")));
-        m_mpPosition.get("k7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l7")));
-        m_mpPosition.get("k7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j8")));
-        m_mpPosition.get("k7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j6")));
-        m_mpPosition.get("k7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("l8")));
+        m_mpPosition.get("k7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j6")));
+        m_mpPosition.get("k7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k6")));
         m_mpPosition.get("k7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l6")));
         m_mpPosition.get("k7").addPathConnection("E1", "D1");
-        m_mpPosition.get("k7").addPathConnection("D1", "E3");
-        m_mpPosition.get("k7").addPathConnection("E3", "D2");
-        m_mpPosition.get("k7").addPathConnection("D2", "E2");
-        m_mpPosition.get("k7").addPathConnection("E2", "D4");
-        m_mpPosition.get("k7").addPathConnection("D4", "E4");
-        m_mpPosition.get("k7").addPathConnection("E4", "D3");
-        m_mpPosition.get("k7").addPathConnection("D3", "E1");
+        m_mpPosition.get("k7").addPathConnection("D1", "E2");
+        m_mpPosition.get("k7").addPathConnection("E2", "D2");
+        m_mpPosition.get("k7").addPathConnection("D2", "E3");
+        m_mpPosition.get("k7").addPathConnection("E3", "D3");
+        m_mpPosition.get("k7").addPathConnection("D3", "E4");
+        m_mpPosition.get("k7").addPathConnection("E4", "D4");
+        m_mpPosition.get("k7").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k5")));
+        m_mpPosition.get("k6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l6")));
+        m_mpPosition.get("k6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l7")));
         m_mpPosition.get("k6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k7")));
-        m_mpPosition.get("k6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j6")));
-        m_mpPosition.get("k6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l6")));
-        m_mpPosition.get("k6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j5")));
         m_mpPosition.get("k6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j7")));
-        m_mpPosition.get("k6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("l5")));
-        m_mpPosition.get("k6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l7")));
+        m_mpPosition.get("k6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j6")));
+        m_mpPosition.get("k6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j5")));
+        m_mpPosition.get("k6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k5")));
+        m_mpPosition.get("k6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l5")));
         m_mpPosition.get("k6").addPathConnection("E1", "D1");
-        m_mpPosition.get("k6").addPathConnection("D1", "E3");
-        m_mpPosition.get("k6").addPathConnection("E3", "D2");
-        m_mpPosition.get("k6").addPathConnection("D2", "E2");
-        m_mpPosition.get("k6").addPathConnection("E2", "D4");
-        m_mpPosition.get("k6").addPathConnection("D4", "E4");
-        m_mpPosition.get("k6").addPathConnection("E4", "D3");
-        m_mpPosition.get("k6").addPathConnection("D3", "E1");
+        m_mpPosition.get("k6").addPathConnection("D1", "E2");
+        m_mpPosition.get("k6").addPathConnection("E2", "D2");
+        m_mpPosition.get("k6").addPathConnection("D2", "E3");
+        m_mpPosition.get("k6").addPathConnection("E3", "D3");
+        m_mpPosition.get("k6").addPathConnection("D3", "E4");
+        m_mpPosition.get("k6").addPathConnection("E4", "D4");
+        m_mpPosition.get("k6").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k9")));
+        m_mpPosition.get("k5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l5")));
+        m_mpPosition.get("k5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l6")));
         m_mpPosition.get("k5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k6")));
+        m_mpPosition.get("k5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j6")));
         m_mpPosition.get("k5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j5")));
-        m_mpPosition.get("k5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l5")));
-        m_mpPosition.get("k5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j6")));
-        m_mpPosition.get("k5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("l6")));
         m_mpPosition.get("k5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j9")));
+        m_mpPosition.get("k5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k9")));
         m_mpPosition.get("k5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l9")));
-        m_mpPosition.get("k5").addPathConnection("E1", "D3");
-        m_mpPosition.get("k5").addPathConnection("D3", "E3");
-        m_mpPosition.get("k5").addPathConnection("E3", "D1");
+        m_mpPosition.get("k5").addPathConnection("E1", "D1");
         m_mpPosition.get("k5").addPathConnection("D1", "E2");
         m_mpPosition.get("k5").addPathConnection("E2", "D2");
-        m_mpPosition.get("k5").addPathConnection("D2", "E4");
+        m_mpPosition.get("k5").addPathConnection("D2", "E3");
+        m_mpPosition.get("k5").addPathConnection("E3", "D3");
+        m_mpPosition.get("k5").addPathConnection("D3", "E4");
         m_mpPosition.get("k5").addPathConnection("E4", "D4");
         m_mpPosition.get("k5").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k10")));
+        m_mpPosition.get("k9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l9")));
+        m_mpPosition.get("k9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l5")));
         m_mpPosition.get("k9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k5")));
+        m_mpPosition.get("k9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j5")));
         m_mpPosition.get("k9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j9")));
-        m_mpPosition.get("k9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l9")));
-        m_mpPosition.get("k9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j5")));
-        m_mpPosition.get("k9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j10")));
-        m_mpPosition.get("k9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("l5")));
+        m_mpPosition.get("k9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j10")));
+        m_mpPosition.get("k9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k10")));
         m_mpPosition.get("k9").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l10")));
-        m_mpPosition.get("k9").addPathConnection("E2", "D1");
-        m_mpPosition.get("k9").addPathConnection("D1", "E3");
-        m_mpPosition.get("k9").addPathConnection("E3", "D2");
-        m_mpPosition.get("k9").addPathConnection("D2", "E1");
-        m_mpPosition.get("k9").addPathConnection("E1", "D4");
-        m_mpPosition.get("k9").addPathConnection("D4", "E4");
-        m_mpPosition.get("k9").addPathConnection("E4", "D3");
-        m_mpPosition.get("k9").addPathConnection("D3", "E2");
+        m_mpPosition.get("k9").addPathConnection("E1", "D1");
+        m_mpPosition.get("k9").addPathConnection("D1", "E2");
+        m_mpPosition.get("k9").addPathConnection("E2", "D2");
+        m_mpPosition.get("k9").addPathConnection("D2", "E3");
+        m_mpPosition.get("k9").addPathConnection("E3", "D3");
+        m_mpPosition.get("k9").addPathConnection("D3", "E4");
+        m_mpPosition.get("k9").addPathConnection("E4", "D4");
+        m_mpPosition.get("k9").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k9")));
-        m_mpPosition.get("k10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k11")));
+
+        m_mpPosition.get("k10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l10")));
+        m_mpPosition.get("k10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l9")));
+        m_mpPosition.get("k10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k9")));
+        m_mpPosition.get("k10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j9")));
         m_mpPosition.get("k10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j10")));
-        m_mpPosition.get("k10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l10")));
-        m_mpPosition.get("k10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j9")));
-        m_mpPosition.get("k10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j11")));
-        m_mpPosition.get("k10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("l9")));
+        m_mpPosition.get("k10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j11")));
+        m_mpPosition.get("k10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k11")));
         m_mpPosition.get("k10").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l11")));
         m_mpPosition.get("k10").addPathConnection("E1", "D1");
-        m_mpPosition.get("k10").addPathConnection("D1", "E3");
-        m_mpPosition.get("k10").addPathConnection("E3", "D2");
-        m_mpPosition.get("k10").addPathConnection("D2", "E2");
-        m_mpPosition.get("k10").addPathConnection("E2", "D4");
-        m_mpPosition.get("k10").addPathConnection("D4", "E4");
-        m_mpPosition.get("k10").addPathConnection("E4", "D3");
-        m_mpPosition.get("k10").addPathConnection("D3", "E1");
+        m_mpPosition.get("k10").addPathConnection("D1", "E2");
+        m_mpPosition.get("k10").addPathConnection("E2", "D2");
+        m_mpPosition.get("k10").addPathConnection("D2", "E3");
+        m_mpPosition.get("k10").addPathConnection("E3", "D3");
+        m_mpPosition.get("k10").addPathConnection("D3", "E4");
+        m_mpPosition.get("k10").addPathConnection("E4", "D4");
+        m_mpPosition.get("k10").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k12")));
+        m_mpPosition.get("k11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l11")));
+        m_mpPosition.get("k11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l10")));
         m_mpPosition.get("k11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k10")));
+        m_mpPosition.get("k11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j10")));
         m_mpPosition.get("k11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j11")));
-        m_mpPosition.get("k11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l11")));
-        m_mpPosition.get("k11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j10")));
-        m_mpPosition.get("k11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j12")));
-        m_mpPosition.get("k11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("l10")));
+        m_mpPosition.get("k11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("j12")));
+        m_mpPosition.get("k11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("k12")));
         m_mpPosition.get("k11").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("l12")));
-        m_mpPosition.get("k11").addPathConnection("E2", "D1");
-        m_mpPosition.get("k11").addPathConnection("D1", "E3");
-        m_mpPosition.get("k11").addPathConnection("E3", "D2");
-        m_mpPosition.get("k11").addPathConnection("D2", "E1");
-        m_mpPosition.get("k11").addPathConnection("E1", "D4");
-        m_mpPosition.get("k11").addPathConnection("D4", "E4");
-        m_mpPosition.get("k11").addPathConnection("E4", "D3");
-        m_mpPosition.get("k11").addPathConnection("D3", "E2");
+        m_mpPosition.get("k11").addPathConnection("E1", "D1");
+        m_mpPosition.get("k11").addPathConnection("D1", "E2");
+        m_mpPosition.get("k11").addPathConnection("E2", "D2");
+        m_mpPosition.get("k11").addPathConnection("D2", "E3");
+        m_mpPosition.get("k11").addPathConnection("E3", "D3");
+        m_mpPosition.get("k11").addPathConnection("D3", "E4");
+        m_mpPosition.get("k11").addPathConnection("E4", "D4");
+        m_mpPosition.get("k11").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("k12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("k11")));
-        m_mpPosition.get("k12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("j12")));
-        m_mpPosition.get("k12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("l12")));
-        m_mpPosition.get("k12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("j11")));
-        m_mpPosition.get("k12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("l11")));
-        m_mpPosition.get("k12").addPathConnection("E3", "D2");
-        m_mpPosition.get("k12").addPathConnection("D2", "E1");
+        m_mpPosition.get("k12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l12")));
+        m_mpPosition.get("k12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("l11")));
+        m_mpPosition.get("k12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k11")));
+        m_mpPosition.get("k12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("j11")));
+        m_mpPosition.get("k12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("j12")));
+        m_mpPosition.get("k12").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("k12").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("k12").addPath(new Path("D4", Direction.VERTEX, null));
         m_mpPosition.get("k12").addPathConnection("E1", "D1");
         m_mpPosition.get("k12").addPathConnection("D1", "E2");
+        m_mpPosition.get("k12").addPathConnection("E2", "D2");
+        m_mpPosition.get("k12").addPathConnection("D2", "E3");
+        m_mpPosition.get("k12").addPathConnection("E3", "D3");
+        m_mpPosition.get("k12").addPathConnection("D3", "E4");
+        m_mpPosition.get("k12").addPathConnection("E4", "D4");
+        m_mpPosition.get("k12").addPathConnection("D4", "E1");
+
+        
 
         // l
-        m_mpPosition.get("l8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l7")));
-        m_mpPosition.get("l8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k8")));
-        m_mpPosition.get("l8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k7")));
+        m_mpPosition.get("l8").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l8").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l8").addPath(new Path("E2", Direction.EDGE, null));	//l9 ++
+        m_mpPosition.get("l8").addPath(new Path("D2", Direction.VERTEX, null));	//k9 ++
+        m_mpPosition.get("l8").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k8")));
+        m_mpPosition.get("l8").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k7")));
+        m_mpPosition.get("l8").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l7")));
+        m_mpPosition.get("l8").addPath(new Path("D4", Direction.VERTEX, null)); //m
         m_mpPosition.get("l8").addPathConnection("E1", "D1");
         m_mpPosition.get("l8").addPathConnection("D1", "E2");
+        m_mpPosition.get("l8").addPathConnection("E2", "D2");
+        m_mpPosition.get("l8").addPathConnection("D2", "E3");
+        m_mpPosition.get("l8").addPathConnection("E3", "D3");
+        m_mpPosition.get("l8").addPathConnection("D3", "E4");
+        m_mpPosition.get("l8").addPathConnection("E4", "D4");
+        m_mpPosition.get("l8").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l8")));
-        m_mpPosition.get("l7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l6")));
+        m_mpPosition.get("l7").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l7").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l8")));	//l8 ++
+        m_mpPosition.get("l7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k8")));	//k8 ++
         m_mpPosition.get("l7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k7")));
-        m_mpPosition.get("l7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k8")));
-        m_mpPosition.get("l7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k6")));
+        m_mpPosition.get("l7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k6")));
+        m_mpPosition.get("l7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l6")));
+        m_mpPosition.get("l7").addPath(new Path("D4", Direction.VERTEX, null)); //m
         m_mpPosition.get("l7").addPathConnection("E1", "D1");
-        m_mpPosition.get("l7").addPathConnection("D1", "E3");
-        m_mpPosition.get("l7").addPathConnection("E3", "D2");
-        m_mpPosition.get("l7").addPathConnection("D2", "E2");
+        m_mpPosition.get("l7").addPathConnection("D1", "E2");
+        m_mpPosition.get("l7").addPathConnection("E2", "D2");
+        m_mpPosition.get("l7").addPathConnection("D2", "E3");
+        m_mpPosition.get("l7").addPathConnection("E3", "D3");
+        m_mpPosition.get("l7").addPathConnection("D3", "E4");
+        m_mpPosition.get("l7").addPathConnection("E4", "D4");
+        m_mpPosition.get("l7").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l5")));
-        m_mpPosition.get("l6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l7")));
+
+        m_mpPosition.get("l6").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l6").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l7")));	//l8 ++
+        m_mpPosition.get("l6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k7")));	//k8 ++
         m_mpPosition.get("l6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k6")));
-        m_mpPosition.get("l6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k5")));
-        m_mpPosition.get("l6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k7")));
+        m_mpPosition.get("l6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k5")));
+        m_mpPosition.get("l6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l5")));
+        m_mpPosition.get("l6").addPath(new Path("D4", Direction.VERTEX, null)); //m
         m_mpPosition.get("l6").addPathConnection("E1", "D1");
-        m_mpPosition.get("l6").addPathConnection("D1", "E3");
-        m_mpPosition.get("l6").addPathConnection("E3", "D2");
-        m_mpPosition.get("l6").addPathConnection("D2", "E2");
+        m_mpPosition.get("l6").addPathConnection("D1", "E2");
+        m_mpPosition.get("l6").addPathConnection("E2", "D2");
+        m_mpPosition.get("l6").addPathConnection("D2", "E3");
+        m_mpPosition.get("l6").addPathConnection("E3", "D3");
+        m_mpPosition.get("l6").addPathConnection("D3", "E4");
+        m_mpPosition.get("l6").addPathConnection("E4", "D4");
+        m_mpPosition.get("l6").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l9")));
-        m_mpPosition.get("l5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l6")));
+        m_mpPosition.get("l5").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l5").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l6")));	//l8 ++
+        m_mpPosition.get("l5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k6")));	//k8 ++
         m_mpPosition.get("l5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k5")));
-        m_mpPosition.get("l5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k6")));
-        m_mpPosition.get("l5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k9")));
-        m_mpPosition.get("l5").addPathConnection("E1", "D2");
-        m_mpPosition.get("l5").addPathConnection("D2", "E3");
-        m_mpPosition.get("l5").addPathConnection("E3", "D1");
+        m_mpPosition.get("l5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k9")));
+        m_mpPosition.get("l5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l9")));
+        m_mpPosition.get("l5").addPath(new Path("D4", Direction.VERTEX, null)); //m
+        m_mpPosition.get("l5").addPathConnection("E1", "D1");
         m_mpPosition.get("l5").addPathConnection("D1", "E2");
+        m_mpPosition.get("l5").addPathConnection("E2", "D2");
+        m_mpPosition.get("l5").addPathConnection("D2", "E3");
+        m_mpPosition.get("l5").addPathConnection("E3", "D3");
+        m_mpPosition.get("l5").addPathConnection("D3", "E4");
+        m_mpPosition.get("l5").addPathConnection("E4", "D4");
+        m_mpPosition.get("l5").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l9").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l10")));
-        m_mpPosition.get("l9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l5")));
+
+        m_mpPosition.get("l9").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l9").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l9").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l5")));	//l8 ++
+        m_mpPosition.get("l9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k5")));	//k8 ++
         m_mpPosition.get("l9").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k9")));
-        m_mpPosition.get("l9").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k5")));
-        m_mpPosition.get("l9").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k10")));
-        m_mpPosition.get("l9").addPathConnection("E1", "D2");
-        m_mpPosition.get("l9").addPathConnection("D2", "E3");
-        m_mpPosition.get("l9").addPathConnection("E3", "D1");
+        m_mpPosition.get("l9").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k10")));
+        m_mpPosition.get("l9").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l10")));
+        m_mpPosition.get("l9").addPath(new Path("D4", Direction.VERTEX, null)); //m
+        m_mpPosition.get("l9").addPathConnection("E1", "D1");
         m_mpPosition.get("l9").addPathConnection("D1", "E2");
+        m_mpPosition.get("l9").addPathConnection("E2", "D2");
+        m_mpPosition.get("l9").addPathConnection("D2", "E3");
+        m_mpPosition.get("l9").addPathConnection("E3", "D3");
+        m_mpPosition.get("l9").addPathConnection("D3", "E4");
+        m_mpPosition.get("l9").addPathConnection("E4", "D4");
+        m_mpPosition.get("l9").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l10").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l9")));
-        m_mpPosition.get("l10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l11")));
+        m_mpPosition.get("l10").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l10").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l10").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l9")));	//l8 ++
+        m_mpPosition.get("l10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k9")));	//k8 ++
         m_mpPosition.get("l10").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k10")));
-        m_mpPosition.get("l10").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k9")));
-        m_mpPosition.get("l10").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k11")));
+        m_mpPosition.get("l10").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k11")));
+        m_mpPosition.get("l10").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l11")));
+        m_mpPosition.get("l10").addPath(new Path("D4", Direction.VERTEX, null)); //m
         m_mpPosition.get("l10").addPathConnection("E1", "D1");
-        m_mpPosition.get("l10").addPathConnection("D1", "E3");
-        m_mpPosition.get("l10").addPathConnection("E3", "D2");
-        m_mpPosition.get("l10").addPathConnection("D2", "E2");
+        m_mpPosition.get("l10").addPathConnection("D1", "E2");
+        m_mpPosition.get("l10").addPathConnection("E2", "D2");
+        m_mpPosition.get("l10").addPathConnection("D2", "E3");
+        m_mpPosition.get("l10").addPathConnection("E3", "D3");
+        m_mpPosition.get("l10").addPathConnection("D3", "E4");
+        m_mpPosition.get("l10").addPathConnection("E4", "D4");
+        m_mpPosition.get("l10").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l11").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l12")));
-        m_mpPosition.get("l11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l10")));
+        m_mpPosition.get("l11").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l11").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l11").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l10")));	//l8 ++
+        m_mpPosition.get("l11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k10")));	//k8 ++
         m_mpPosition.get("l11").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k11")));
-        m_mpPosition.get("l11").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k10")));
-        m_mpPosition.get("l11").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k12")));
-        m_mpPosition.get("l11").addPathConnection("E1", "D2");
-        m_mpPosition.get("l11").addPathConnection("D2", "E3");
-        m_mpPosition.get("l11").addPathConnection("E3", "D1");
+        m_mpPosition.get("l11").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("k12")));
+        m_mpPosition.get("l11").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("l12")));
+        m_mpPosition.get("l11").addPath(new Path("D4", Direction.VERTEX, null)); //m
+        m_mpPosition.get("l11").addPathConnection("E1", "D1");
         m_mpPosition.get("l11").addPathConnection("D1", "E2");
+        m_mpPosition.get("l11").addPathConnection("E2", "D2");
+        m_mpPosition.get("l11").addPathConnection("D2", "E3");
+        m_mpPosition.get("l11").addPathConnection("E3", "D3");
+        m_mpPosition.get("l11").addPathConnection("D3", "E4");
+        m_mpPosition.get("l11").addPathConnection("E4", "D4");
+        m_mpPosition.get("l11").addPathConnection("D4", "E1");
 
-        m_mpPosition.get("l12").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("l11")));
-        m_mpPosition.get("l12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("k12")));
-        m_mpPosition.get("l12").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("k11")));
+        m_mpPosition.get("l12").addPath(new Path("E1", Direction.EDGE, null)); //m
+        m_mpPosition.get("l12").addPath(new Path("D1", Direction.VERTEX, null));	//m
+        m_mpPosition.get("l12").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("l11")));	//l8 ++
+        m_mpPosition.get("l12").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("k11")));	//k8 ++
+        m_mpPosition.get("l12").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("k12")));
+        m_mpPosition.get("l12").addPath(new Path("D3", Direction.VERTEX, null));
+        m_mpPosition.get("l12").addPath(new Path("E4", Direction.EDGE, null));
+        m_mpPosition.get("l12").addPath(new Path("D4", Direction.VERTEX, null)); //m
         m_mpPosition.get("l12").addPathConnection("E1", "D1");
-        m_mpPosition.get("l12").addPathConnection("D1", "E2");    
+        m_mpPosition.get("l12").addPathConnection("D1", "E2");
+        m_mpPosition.get("l12").addPathConnection("E2", "D2");
+        m_mpPosition.get("l12").addPathConnection("D2", "E3");
+        m_mpPosition.get("l12").addPathConnection("E3", "D3");
+        m_mpPosition.get("l12").addPathConnection("D3", "E4");
+        m_mpPosition.get("l12").addPathConnection("E4", "D4");
+        m_mpPosition.get("l12").addPathConnection("D4", "E1");
+
+
     }
 
     public void populatePieces() {
