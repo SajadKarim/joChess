@@ -1,6 +1,7 @@
 package jchess.common;
 
 import java.util.List;
+import java.util.Map;
 
 import jchess.common.enumerator.Direction;
 import jchess.common.enumerator.Family;
@@ -24,5 +25,5 @@ public interface IRule{
 	public Family getFamily();
 	public File getFile();
 	public Rank getRank();
-	public List<Rule> getAllRules(); //to remove this from interfcae
+	public Map<String, Rule> getAllRules(); //to remove this from interfcae
 }

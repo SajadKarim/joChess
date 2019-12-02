@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import jchess.GUI;
 
@@ -43,7 +44,7 @@ public class PieceAgent implements IPiece {
 		return m_oPiece.getImagePath();
 	}
 	
-	public List<Rule> getAllRules(){
+	public Map<String, Rule> getAllRules(){
 		return m_oPiece.getAllRules();
 	}
 	
@@ -68,9 +69,11 @@ public class PieceAgent implements IPiece {
 	}
 	
 	private void populateRules() {
-		Iterator<Rule> it = getAllRules().iterator();
-    	while( it.hasNext()) {
-    		m_lstRules.add(new RuleAgent(it.next()));
+		for (Map.Entry<String, Rule> entry2 : getAllRules().entrySet()) {
+			m_lstRules.add(new RuleAgent(entry2.getValue()));
+		//Iterator<Rule> it = getAllRules().iterator();
+    	//while( it.hasNext()) {
+    	//	m_lstRules.add(new RuleAgent(it.next()));
     	}
 	}
 	

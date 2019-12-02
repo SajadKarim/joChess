@@ -78,7 +78,7 @@ public class BoardView extends JPanel implements IBoardView {
         	m_oGraphics.setClip(p2);
         	//g.setColor(Color.cyan);
         	//g.fillPolygon(p);
-        	m_oGraphics.drawImage(m_oBoard.getMarkedCellImage(), (int)p2.getBounds2D().getCenterX()-30, (int)p2.getBounds2D().getCenterY()-30, null);
+        	m_oGraphics.drawImage(m_oBoard.getMarkedCellImage(), (int)p2.getBounds2D().getCenterX()-20, (int)p2.getBounds2D().getCenterY()-20, null);
         }
 	}
 	

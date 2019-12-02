@@ -21,6 +21,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 import jchess.view.viewTemp;
+import jchess.common.Board;
 import jchess.common.BoardAgent;
 import jchess.model.modelTemp;
 import jchess.presenter.presenterTemp;
@@ -37,6 +38,8 @@ public class JChessApp extends SingleFrameApplication {
      */
     @Override protected void startup() {
 
+    	//StorageService o = StorageService.create(STORAGE_TYPE.FBDB);
+    	//Board b = o.getBoard();
     	
     	jcv = new JChessView(this);
         show(jcv);

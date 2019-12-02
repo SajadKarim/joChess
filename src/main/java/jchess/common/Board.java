@@ -19,6 +19,7 @@ public class Board implements IBoard {
     private Map<String, Player> m_mpPlayers;
     private Map<String, Piece> m_mpPieces;
     private Map<String, Map<String, String>> m_mpMapping;
+    private Map<String, Rule> m_mpRules;
     
     public Board() {
     	m_mpPosition = new HashMap<String, Position>();
@@ -46,16 +47,18 @@ public class Board implements IBoard {
 
     	m_mpMapping = new HashMap<String, Map<String, String>>();
     	
-		m_nWidth = 808;
+    	m_mpRules = new HashMap<String, Rule>();
+
+    	m_nWidth = 808;
 		m_nHeight = 700;
 		m_stBoardImagePath = "chessboard.png";
 		m_stActiveCellImagePath = "sel_square.png";
 		m_stMarkedCellImagePath = "able_square.png";
 		
 		//populatePositions();
-		populatePlayers();
-		populatePieces();
-		populateMappings();
+		//populatePlayers();
+		//populatePieces();
+		//populateMappings();
 	}
 	
 	public String getName() {
@@ -90,6 +93,25 @@ public class Board implements IBoard {
 		return m_mpPlayers;
 	}
 
+	public Map<String, Rule> getAllRules() {
+		return m_mpRules;
+	}
+
+	public void addRule(Rule oRule) {
+		m_mpRules.put(oRule.getName(), oRule);
+	}
+
+	public void addPiece(Piece oPiece) {
+		m_mpPieces.put(oPiece.m_stName, oPiece);
+	}
+	
+	public void addPlayer(Player oPlayer) {
+		m_mpPlayers.put(oPlayer.getName(), oPlayer);
+	}
+	
+	public Rule getRule(String stName) {
+		return m_mpRules.get(stName);
+	}
 	public Map<String, String> getPlayerMapping(String stName) {
 		return m_mpMapping.get(stName);
 	}
@@ -107,7 +129,7 @@ public class Board implements IBoard {
 	}
 	
     public void populatePositions() {
-    	Position oPosition = new Position('a',1, new Quadrilateral(217, 674, 264, 674, 245, 624, 193, 633), "Black");
+    	/*Position oPosition = new Position('a',1, new Quadrilateral(217, 674, 264, 674, 245, 624, 193, 633), "Black");
     	m_mpPosition.put(oPosition.getName(), oPosition);
     	oPosition = new Position('a',2, new Quadrilateral(193, 633, 245, 624, 228, 572, 171, 593), "White");
     	m_mpPosition.put(oPosition.getName(), oPosition);
@@ -346,23 +368,6 @@ public class Board implements IBoard {
         m_mpPosition.get("a2").addPathConnection("E4", "D4");
         m_mpPosition.get("a2").addPathConnection("D4", "E1");
 
-        /*m_mpPosition.get("a2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a1")));
-        m_mpPosition.get("a2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b2")));
-        m_mpPosition.get("a2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("a3")));
-        m_mpPosition.get("a2").addPath(new Path("E4", Direction.EDGE, null));        
-        m_mpPosition.get("a2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("b3")));
-        m_mpPosition.get("a2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b1")));
-        m_mpPosition.get("a2").addPath(new Path("D3", Direction.VERTEX, null));
-        m_mpPosition.get("a2").addPath(new Path("D4", Direction.VERTEX, null));
-        m_mpPosition.get("a2").addPathConnection("E1", "D1");
-        m_mpPosition.get("a2").addPathConnection("D1", "E2");
-        m_mpPosition.get("a2").addPathConnection("E2", "D2");
-        m_mpPosition.get("a2").addPathConnection("D2", "E3");
-        m_mpPosition.get("a2").addPathConnection("E1", "D1");
-        m_mpPosition.get("a2").addPathConnection("D1", "E2");
-        m_mpPosition.get("a2").addPathConnection("E2", "D2");
-        m_mpPosition.get("a2").addPathConnection("D2", "E3");
-*/
 
         m_mpPosition.get("a3").addPath(new Path("E1", Direction.EDGE, null));	//z3
         m_mpPosition.get("a3").addPath(new Path("D1", Direction.VERTEX, null));	//z2
@@ -381,16 +386,6 @@ public class Board implements IBoard {
         m_mpPosition.get("a3").addPathConnection("E4", "D4");
         m_mpPosition.get("a3").addPathConnection("D4", "E1");
 
-        /*m_mpPosition.get("a3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a2")));
-        m_mpPosition.get("a3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b3")));
-        m_mpPosition.get("a3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("a4")));
-        m_mpPosition.get("a3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("b4")));
-        m_mpPosition.get("a3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b2")));
-        m_mpPosition.get("a3").addPathConnection("E1", "D1");
-        m_mpPosition.get("a3").addPathConnection("D1", "E2");
-        m_mpPosition.get("a3").addPathConnection("E2", "D2");
-        m_mpPosition.get("a3").addPathConnection("D2", "E3");
-*/
 
         
         m_mpPosition.get("a4").addPath(new Path("E1", Direction.EDGE, null));	//z4
@@ -410,16 +405,6 @@ public class Board implements IBoard {
         m_mpPosition.get("a4").addPathConnection("E4", "D4");
         m_mpPosition.get("a4").addPathConnection("D4", "E1");
 
-        /*m_mpPosition.get("a4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a3")));
-        m_mpPosition.get("a4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b4")));
-        m_mpPosition.get("a4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("a5")));
-        m_mpPosition.get("a4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("b5")));
-        m_mpPosition.get("a4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b3")));
-        m_mpPosition.get("a4").addPathConnection("E1", "D1");
-        m_mpPosition.get("a4").addPathConnection("D1", "E2");
-        m_mpPosition.get("a4").addPathConnection("E2", "D2");
-        m_mpPosition.get("a4").addPathConnection("D2", "E3");
-*/
         
         m_mpPosition.get("a5").addPath(new Path("E1", Direction.EDGE, null));	//z5
         m_mpPosition.get("a5").addPath(new Path("D1", Direction.VERTEX, null));	//z4
@@ -438,17 +423,7 @@ public class Board implements IBoard {
         m_mpPosition.get("a5").addPathConnection("E4", "D4");
         m_mpPosition.get("a5").addPathConnection("D4", "E1");
 
-        
-        /*m_mpPosition.get("a5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a4")));
-        m_mpPosition.get("a5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b5")));
-        m_mpPosition.get("a5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("a6")));
-        m_mpPosition.get("a5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("b6")));
-        m_mpPosition.get("a5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b4")));
-        m_mpPosition.get("a5").addPathConnection("E1", "D1");
-        m_mpPosition.get("a5").addPathConnection("D1", "E2");
-        m_mpPosition.get("a5").addPathConnection("E2", "D2");
-        m_mpPosition.get("a5").addPathConnection("D2", "E3");
-*/
+    
         
         m_mpPosition.get("a6").addPath(new Path("E1", Direction.EDGE, null));	//z5
         m_mpPosition.get("a6").addPath(new Path("D1", Direction.VERTEX, null));	//z4
@@ -467,17 +442,7 @@ public class Board implements IBoard {
         m_mpPosition.get("a6").addPathConnection("E4", "D4");
         m_mpPosition.get("a6").addPathConnection("D4", "E1");
 
-        
-        /*m_mpPosition.get("a6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a5")));
-        m_mpPosition.get("a6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b6")));
-        m_mpPosition.get("a6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("a7")));
-        m_mpPosition.get("a6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("b7")));
-        m_mpPosition.get("a6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b5")));
-        m_mpPosition.get("a6").addPathConnection("E1", "D1");
-        m_mpPosition.get("a6").addPathConnection("D1", "E2");
-        m_mpPosition.get("a6").addPathConnection("E2", "D2");
-        m_mpPosition.get("a6").addPathConnection("D2", "E3");
-*/
+      
         
         m_mpPosition.get("a7").addPath(new Path("E1", Direction.EDGE, null));	//z5
         m_mpPosition.get("a7").addPath(new Path("D1", Direction.VERTEX, null));	//z4
@@ -496,16 +461,7 @@ public class Board implements IBoard {
         m_mpPosition.get("a7").addPathConnection("E4", "D4");
         m_mpPosition.get("a7").addPathConnection("D4", "E1");
 
-        /*m_mpPosition.get("a7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a6")));
-        m_mpPosition.get("a7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b7")));
-        m_mpPosition.get("a7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("a8")));
-        m_mpPosition.get("a7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("b8")));
-        m_mpPosition.get("a7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b6")));
-        m_mpPosition.get("a7").addPathConnection("E1", "D1");
-        m_mpPosition.get("a7").addPathConnection("D1", "E2");
-        m_mpPosition.get("a7").addPathConnection("E2", "D2");
-        m_mpPosition.get("a7").addPathConnection("D2", "E3");
-*/
+       
         
         m_mpPosition.get("a8").addPath(new Path("E1", Direction.EDGE, null));	//z5
         m_mpPosition.get("a8").addPath(new Path("D1", Direction.VERTEX, null));	//z4
@@ -524,14 +480,7 @@ public class Board implements IBoard {
         m_mpPosition.get("a8").addPathConnection("E4", "D4");
         m_mpPosition.get("a8").addPathConnection("D4", "E1");
 
-        
-        /*m_mpPosition.get("a8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a7")));
-        m_mpPosition.get("a8").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b8")));
-        m_mpPosition.get("a8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("b7")));
-        m_mpPosition.get("a8").addPathConnection("E1", "D1");
-        m_mpPosition.get("a8").addPathConnection("D1", "E2");
-*/
-        // File b
+     
         m_mpPosition.get("b1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a1")));	//a1
         m_mpPosition.get("b1").addPath(new Path("D1", Direction.VERTEX, null));	//a0
         m_mpPosition.get("b1").addPath(new Path("E2", Direction.EDGE, null));	//b0
@@ -550,16 +499,6 @@ public class Board implements IBoard {
         m_mpPosition.get("b1").addPathConnection("D4", "E1");
 
         
-        /*m_mpPosition.get("b1").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a1")));
-        m_mpPosition.get("b1").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b2")));
-        m_mpPosition.get("b1").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c1")));
-        m_mpPosition.get("b1").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a2")));
-        m_mpPosition.get("b1").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c2")));
-        m_mpPosition.get("b1").addPathConnection("E1", "D1");
-        m_mpPosition.get("b1").addPathConnection("D1", "E2");
-        m_mpPosition.get("b1").addPathConnection("E2", "D2");
-        m_mpPosition.get("b1").addPathConnection("D2", "E3");
-*/
         m_mpPosition.get("b2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a2")));	//a2
         m_mpPosition.get("b2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a1")));	//a1
         m_mpPosition.get("b2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b1")));	//b1
@@ -578,23 +517,6 @@ public class Board implements IBoard {
         m_mpPosition.get("b2").addPathConnection("D4", "E1");
 
         
-        /*m_mpPosition.get("b2").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a2")));
-        m_mpPosition.get("b2").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b1")));
-        m_mpPosition.get("b2").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c2")));
-        m_mpPosition.get("b2").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b3")));
-        m_mpPosition.get("b2").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a1")));
-        m_mpPosition.get("b2").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c1")));
-        m_mpPosition.get("b2").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("a3")));
-        m_mpPosition.get("b2").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c3")));
-        m_mpPosition.get("b2").addPathConnection("E1", "D3");
-        m_mpPosition.get("b2").addPathConnection("D3", "E4");
-        m_mpPosition.get("b2").addPathConnection("E4", "D4");
-        m_mpPosition.get("b2").addPathConnection("D4", "E3");
-        m_mpPosition.get("b2").addPathConnection("E3", "D2");
-        m_mpPosition.get("b2").addPathConnection("D2", "E2");
-        m_mpPosition.get("b2").addPathConnection("E2", "D1");
-        m_mpPosition.get("b2").addPathConnection("D1", "E1");
-*/
 
         m_mpPosition.get("b3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a3")));	
         m_mpPosition.get("b3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a2")));	
@@ -613,24 +535,6 @@ public class Board implements IBoard {
         m_mpPosition.get("b3").addPathConnection("E4", "D4");
         m_mpPosition.get("b3").addPathConnection("D4", "E1");
 
-        /*m_mpPosition.get("b3").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a3")));
-        m_mpPosition.get("b3").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b2")));
-        m_mpPosition.get("b3").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c3")));
-        m_mpPosition.get("b3").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b4")));
-        m_mpPosition.get("b3").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a2")));
-        m_mpPosition.get("b3").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c2")));
-        m_mpPosition.get("b3").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("a4")));
-        m_mpPosition.get("b3").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c4")));
-        m_mpPosition.get("b3").addPathConnection("E1", "D3");
-        m_mpPosition.get("b3").addPathConnection("D3", "E4");
-        m_mpPosition.get("b3").addPathConnection("E4", "D4");
-        m_mpPosition.get("b3").addPathConnection("D4", "E3");
-        m_mpPosition.get("b3").addPathConnection("E3", "D2");
-        m_mpPosition.get("b3").addPathConnection("D2", "E2");
-        m_mpPosition.get("b3").addPathConnection("E2", "D1");
-        m_mpPosition.get("b3").addPathConnection("D1", "E1");
-*/
-        
         m_mpPosition.get("b4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a4")));	
         m_mpPosition.get("b4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a3")));	
         m_mpPosition.get("b4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b3")));	
@@ -648,23 +552,6 @@ public class Board implements IBoard {
         m_mpPosition.get("b4").addPathConnection("E4", "D4");
         m_mpPosition.get("b4").addPathConnection("D4", "E1");
 
-        /*m_mpPosition.get("b4").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a4")));
-        m_mpPosition.get("b4").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b3")));
-        m_mpPosition.get("b4").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c4")));
-        m_mpPosition.get("b4").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b5")));
-        m_mpPosition.get("b4").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a3")));
-        m_mpPosition.get("b4").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c3")));
-        m_mpPosition.get("b4").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("a5")));
-        m_mpPosition.get("b4").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c5")));
-        m_mpPosition.get("b4").addPathConnection("E1", "D3");
-        m_mpPosition.get("b4").addPathConnection("D3", "E4");
-        m_mpPosition.get("b4").addPathConnection("E4", "D4");
-        m_mpPosition.get("b4").addPathConnection("D4", "E3");
-        m_mpPosition.get("b4").addPathConnection("E3", "D2");
-        m_mpPosition.get("b4").addPathConnection("D2", "E2");
-        m_mpPosition.get("b4").addPathConnection("E2", "D1");
-        m_mpPosition.get("b4").addPathConnection("D1", "E1");
-*/
         
         m_mpPosition.get("b5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a5")));	
         m_mpPosition.get("b5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a4")));	
@@ -683,23 +570,7 @@ public class Board implements IBoard {
         m_mpPosition.get("b5").addPathConnection("E4", "D4");
         m_mpPosition.get("b5").addPathConnection("D4", "E1");
 
-/*        m_mpPosition.get("b5").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a5")));
-        m_mpPosition.get("b5").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b4")));
-        m_mpPosition.get("b5").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c5")));
-        m_mpPosition.get("b5").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b6")));
-        m_mpPosition.get("b5").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a4")));
-        m_mpPosition.get("b5").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c4")));
-        m_mpPosition.get("b5").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("a6")));
-        m_mpPosition.get("b5").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c6")));
-        m_mpPosition.get("b5").addPathConnection("E1", "D3");
-        m_mpPosition.get("b5").addPathConnection("D3", "E4");
-        m_mpPosition.get("b5").addPathConnection("E4", "D4");
-        m_mpPosition.get("b5").addPathConnection("D4", "E3");
-        m_mpPosition.get("b5").addPathConnection("E3", "D2");
-        m_mpPosition.get("b5").addPathConnection("D2", "E2");
-        m_mpPosition.get("b5").addPathConnection("E2", "D1");
-        m_mpPosition.get("b5").addPathConnection("D1", "E1");
-*/
+
         m_mpPosition.get("b6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a6")));	
         m_mpPosition.get("b6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a5")));	
         m_mpPosition.get("b6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b5")));	
@@ -718,23 +589,7 @@ public class Board implements IBoard {
         m_mpPosition.get("b6").addPathConnection("D4", "E1");
 
         
-       /* m_mpPosition.get("b6").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a6")));
-        m_mpPosition.get("b6").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b5")));
-        m_mpPosition.get("b6").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c6")));
-        m_mpPosition.get("b6").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b7")));
-        m_mpPosition.get("b6").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a5")));
-        m_mpPosition.get("b6").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c5")));
-        m_mpPosition.get("b6").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("a7")));
-        m_mpPosition.get("b6").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c7")));
-        m_mpPosition.get("b6").addPathConnection("E1", "D3");
-        m_mpPosition.get("b6").addPathConnection("D3", "E4");
-        m_mpPosition.get("b6").addPathConnection("E4", "D4");
-        m_mpPosition.get("b6").addPathConnection("D4", "E3");
-        m_mpPosition.get("b6").addPathConnection("E3", "D2");
-        m_mpPosition.get("b6").addPathConnection("D2", "E2");
-        m_mpPosition.get("b6").addPathConnection("E2", "D1");
-        m_mpPosition.get("b6").addPathConnection("D1", "E1");
-*/
+     
         
         m_mpPosition.get("b7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a7")));	
         m_mpPosition.get("b7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a6")));	
@@ -752,24 +607,6 @@ public class Board implements IBoard {
         m_mpPosition.get("b7").addPathConnection("D3", "E4");
         m_mpPosition.get("b7").addPathConnection("E4", "D4");
         m_mpPosition.get("b7").addPathConnection("D4", "E1");
-/*
-        m_mpPosition.get("b7").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a7")));
-        m_mpPosition.get("b7").addPath(new Path("E2", Direction.EDGE, m_mpPosition.get("b6")));
-        m_mpPosition.get("b7").addPath(new Path("E3", Direction.EDGE, m_mpPosition.get("c7")));
-        m_mpPosition.get("b7").addPath(new Path("E4", Direction.EDGE, m_mpPosition.get("b8")));
-        m_mpPosition.get("b7").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a6")));
-        m_mpPosition.get("b7").addPath(new Path("D2", Direction.VERTEX, m_mpPosition.get("c6")));
-        m_mpPosition.get("b7").addPath(new Path("D3", Direction.VERTEX, m_mpPosition.get("a8")));
-        m_mpPosition.get("b7").addPath(new Path("D4", Direction.VERTEX, m_mpPosition.get("c8")));
-        m_mpPosition.get("b7").addPathConnection("E1", "D3");
-        m_mpPosition.get("b7").addPathConnection("D3", "E4");
-        m_mpPosition.get("b7").addPathConnection("E4", "D4");
-        m_mpPosition.get("b7").addPathConnection("D4", "E3");
-        m_mpPosition.get("b7").addPathConnection("E3", "D2");
-        m_mpPosition.get("b7").addPathConnection("D2", "E2");
-        m_mpPosition.get("b7").addPathConnection("E2", "D1");
-        m_mpPosition.get("b7").addPathConnection("D1", "E1");
-*/
         
         m_mpPosition.get("b8").addPath(new Path("E1", Direction.EDGE, m_mpPosition.get("a8")));	
         m_mpPosition.get("b8").addPath(new Path("D1", Direction.VERTEX, m_mpPosition.get("a7")));	
@@ -2178,11 +2015,11 @@ public class Board implements IBoard {
         m_mpPosition.get("l12").addPathConnection("E4", "D4");
         m_mpPosition.get("l12").addPathConnection("D4", "E1");
 
-
+*/
     }
 
     public void populatePieces() {
-    	Piece oPiece = new Piece("RookWhite", "Rook-W.png");
+    	/*Piece oPiece = new Piece("RookWhite", "Rook-W.png");
     	m_mpPieces.put(oPiece.getName(), oPiece);
     	oPiece = new Piece("KnightWhite", "Knight-W.png");
     	m_mpPieces.put(oPiece.getName(), oPiece);
@@ -2207,15 +2044,15 @@ public class Board implements IBoard {
     	m_mpPieces.put(oPiece.getName(), oPiece);
         oPiece = new Piece("PawnBlack", "Pawn-B.png");
         m_mpPieces.put(oPiece.getName(), oPiece);
-}
+*/}
 
     public void populatePlayers() {
-		m_mpPlayers.put("P1", new Player("P1", "white"));
+		/*m_mpPlayers.put("P1", new Player("P1", "white"));
 		m_mpPlayers.put("P2", new Player("P2", "black"));
-    }
+    */}
     
     public void populateMappings() {
-    	m_mpMapping.put("P1", new HashMap<String, String>());
+  /*  	m_mpMapping.put("P1", new HashMap<String, String>());
     	m_mpMapping.get("P1").put("a1", "RookWhite");
     	m_mpMapping.get("P1").put("h1", "RookWhite");
     	m_mpMapping.get("P1").put("b1", "KnightWhite");
@@ -2252,8 +2089,15 @@ public class Board implements IBoard {
     	m_mpMapping.get("P2").put("j7", "PawnBlack");
     	m_mpMapping.get("P2").put("k7", "PawnBlack");
     	m_mpMapping.get("P2").put("l7", "PawnBlack");
-
+*/
     	
     	//getPosition("e9").setPiece(new PieceAgent(new Piece("KnightWhite", "Knight-W.png"), playerWhite));    
+    }
+    
+
+    public void addMapping(String stPlayer, String stPiece, String stPosition) {
+    	if( m_mpMapping.get(stPlayer) == null)
+        	m_mpMapping.put(stPlayer, new HashMap<String, String>());	
+    	m_mpMapping.get(stPlayer).put(stPosition, stPiece);
     }
 }

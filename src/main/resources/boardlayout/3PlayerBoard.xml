@@ -1,7 +1,8 @@
-<Board Name="2Player" Image="" Width="" Height="">
+<Board Name="3PlayerBoard" Image="" Width="" Height="">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />
+    <Family Name="Black" Color="Red" />
   </ColourScheme>
   <Positions>
     <Position File="a" Rank="1" Family="Black">
@@ -3643,4 +3644,186 @@
       </Shape>
     </Position>
   </Positions>
+  <Rules>
+    <Rule Name="Vertex_Traversal" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="SAME"/>
+    <Rule Name="Edge_Traversal" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
+    <Rule Name="Knight_Move" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="SAME">
+      <Rules>        
+        <Rule Name="Vertex_Traversal1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
+        <Rule Name="Vertex_Traversal2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
+      </Rules>
+    </Rule>
+  </Rules>
+  <Pieces>
+    <Piece Name="KingWhite" Image="King-W.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="KingBlack" Image="King-B.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="KingRed" Image="King-R.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="QueenWhite" Image="Queen-W.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="QueenBlack" Image="Queen-B.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="QueenRed" Image="Queen-R.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="RookWhite" Image="Rook-W.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="RookBlack" Image="Rook-B.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="RookRed" Image="Rook-R.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="BishopWhite" Image="Bishop-W.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="BishopBlack" Image="Bishop-B.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="BishopRed" Image="Bishop-R.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="KnightWhite" Image="Knight-W.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="KnightBlack" Image="Knight-B.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="KnightRed" Image="Knight-R.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="PawnWhite" Image="Pawn-W.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="PawnBlack" Image="Pawn-B.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="PawnRed" Image="Pawn-R.png">
+      <AllowedMoves>
+        <Rule>Vertex_Traversal</Rule>
+        <Rule>Edge_Traversal</Rule>
+      </AllowedMoves>
+    </Piece>
+  </Pieces>
+  <Players>
+    <Player Name="P1">
+      <Pieces>
+        <Piece Name="KingWhite" Position="e1" />
+        <Piece Name="QueenWhite" Position="d1" />
+        <Piece Name="BishopWhite" Position="f1" />
+        <Piece Name="BishopWhite" Position="c1" />
+        <Piece Name="KnightWhite" Position="g1" />
+        <Piece Name="KnightWhite" Position="b1" />
+        <Piece Name="RookWhite" Position="h1" />
+        <Piece Name="RookWhite" Position="a1" />
+        <Piece Name="PawnWhite" Position="a2" />
+        <Piece Name="PawnWhite" Position="b2" />
+        <Piece Name="PawnWhite" Position="c2" />
+        <Piece Name="PawnWhite" Position="d2" />
+        <Piece Name="PawnWhite" Position="e2" />
+        <Piece Name="PawnWhite" Position="f2" />
+        <Piece Name="PawnWhite" Position="g2" />
+        <Piece Name="PawnWhite" Position="h2" />
+      </Pieces>
+    </Player>
+    <Player Name="P2">
+      <Pieces>
+        <Piece Name="KingBlack" Position="i8" />
+        <Piece Name="QueenBlack" Position="d8" />
+        <Piece Name="BishopBlack" Position="j8" />
+        <Piece Name="BishopBlack" Position="c8" />
+        <Piece Name="KnightBlack" Position="k8" />
+        <Piece Name="KnightBlack" Position="b8" />
+        <Piece Name="RookBlack" Position="l8" />
+        <Piece Name="RookBlack" Position="a8" />
+        <Piece Name="PawnBlack" Position="a7" />
+        <Piece Name="PawnBlack" Position="b7" />
+        <Piece Name="PawnBlack" Position="c7" />
+        <Piece Name="PawnBlack" Position="d7" />
+        <Piece Name="PawnBlack" Position="i7" />
+        <Piece Name="PawnBlack" Position="j7" />
+        <Piece Name="PawnBlack" Position="k7" />
+        <Piece Name="PawnBlack" Position="l7" />
+      </Pieces>
+    </Player>
+    <Player Name="P3">
+      <Pieces>
+        <Piece Name="KingRed" Position="i12" />
+        <Piece Name="QueenRed" Position="e12" />
+        <Piece Name="BishopRed" Position="j12" />
+        <Piece Name="BishopRed" Position="f12" />
+        <Piece Name="KnightRed" Position="k12" />
+        <Piece Name="KnightRed" Position="g12" />
+        <Piece Name="RookRed" Position="l12" />
+        <Piece Name="RookRed" Position="h12" />
+        <Piece Name="PawnRed" Position="e11" />
+        <Piece Name="PawnRed" Position="f11" />
+        <Piece Name="PawnRed" Position="g11" />
+        <Piece Name="PawnRed" Position="h11" />
+        <Piece Name="PawnRed" Position="i11" />
+        <Piece Name="PawnRed" Position="j11" />
+        <Piece Name="PawnRed" Position="k11" />
+        <Piece Name="PawnRed" Position="l11" />
+      </Pieces>
+    </Player>
+  </Players>
 </Board>

@@ -1,6 +1,8 @@
 package jchess.common;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jchess.common.enumerator.Direction;
 import jchess.common.enumerator.Family;
@@ -17,6 +19,7 @@ import jchess.common.enumerator.RuleType;
  */
 
 public class Rule implements IRule {
+	private String m_stName;
 	private RuleType m_enRuleType;
 	private Direction m_enDirection;
 	private Manoeuvre m_enManoeuvreStratgy;
@@ -24,17 +27,23 @@ public class Rule implements IRule {
 	private int	m_nMaxRecurrenceAllowed;
 	private File m_enFile;
 	private Rank m_enRank;	
-	private List<Rule> m_lstRule;
+	private Map<String, Rule> m_mpRule;
 		
-	public Rule(RuleType enRuleType
-			, Direction enDirection
-			, Manoeuvre enManoeuvre
-			, int nRecurrence
-			, Family enFamily
-			, File enFile
-			, Rank enRank
-			, Boolean bIgnorePiece
-			, List<Rule> lstRule) {
+	public Rule() {
+		
+	}
+	
+	public Rule(String stName,
+			RuleType enRuleType, 
+			Direction enDirection, 
+			Manoeuvre enManoeuvre, 
+			int nRecurrence, 
+			Family enFamily, 
+			File enFile, 
+			Rank enRank, 
+			Boolean bIgnorePiece, 
+			Map<String, Rule> mpRule) {
+		m_stName = stName;
 		m_enRuleType = enRuleType;
 		m_enDirection = enDirection;
 		m_nMaxRecurrenceAllowed = nRecurrence;
@@ -42,8 +51,10 @@ public class Rule implements IRule {
 		m_enFile = enFile;
 		m_enRank = enRank;
 		//m_bIgnorePiece = bIgnorePiece;
-		m_lstRule = lstRule;
+		m_mpRule = mpRule;
 		m_enManoeuvreStratgy = enManoeuvre;
+		
+		m_mpRule = new HashMap<String, Rule>();
 	}
 	
 	public Rule(Rule rule) {
@@ -54,8 +65,12 @@ public class Rule implements IRule {
 		m_enFile = rule.m_enFile;
 		m_enRank = rule.m_enRank;
 		//m_bIgnorePiece = rule.m_bIgnorePiece;
-		m_lstRule = rule.m_lstRule;
+		m_mpRule = rule.m_mpRule;
 		m_enManoeuvreStratgy = rule.m_enManoeuvreStratgy;
+	}
+	
+	public String getName() {
+		return m_stName;
 	}
 	
 	public RuleType getRuleType() {
@@ -107,13 +122,10 @@ public class Rule implements IRule {
 		m_enRank = enRank;
 	}
 	
-	public List<Rule> getAllRules(){
-		return m_lstRule;
-	}
-	public void addRules(List<Rule> lstRules){
-		m_lstRule = lstRules;
+	public Map<String, Rule> getAllRules(){
+		return m_mpRule;
 	}
 	public void addRule(Rule oRule){
-		m_lstRule.add(oRule);
+		m_mpRule.put(oRule.getName(), oRule);
 	}
 }

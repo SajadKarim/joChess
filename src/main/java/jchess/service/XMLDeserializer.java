@@ -2,6 +2,7 @@ package jchess.service;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,10 +17,18 @@ import org.w3c.dom.NodeList;
 import jchess.common.Board;
 import jchess.common.IPolygon;
 import jchess.common.Path;
+import jchess.common.Piece;
 import jchess.common.PieceAgent;
+import jchess.common.Player;
 import jchess.common.Position;
 import jchess.common.PositionAgent;
 import jchess.common.Quadrilateral;
+import jchess.common.Rule;
+import jchess.common.enumerator.Direction;
+import jchess.common.enumerator.Family;
+import jchess.common.enumerator.Manoeuvre;
+import jchess.common.enumerator.Rank;
+import jchess.common.enumerator.RuleType;
 
 class XMLDeserializer {
 	Board m_oBoard;
@@ -97,6 +106,12 @@ class XMLDeserializer {
 			populateBoardAttributes();
 			
 			populatePositions(oRootElement);
+			
+			loadRules(oRootElement);
+			
+			loadPieces(oRootElement);
+			
+			loadPlayers(oRootElement);
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
@@ -272,6 +287,107 @@ class XMLDeserializer {
 			
 			m_oBoard.addPosition( oPosition);
 			*/
+		}
+		}
+		catch(java.lang.Exception e) {
+			System.out.println(e);
+		}
+
+	}
+
+	
+	void loadRules(Element oRootElement){
+		populateRule(oRootElement, null);
+	}
+	
+	void populateRule(Element oRootElement, Rule oParentRule) {
+		try{			
+			NodeList lstRuleNodes = ((Element)oRootElement.getElementsByTagName("Rules").item(0)).getElementsByTagName("Rule");
+			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
+				Element oRuleNode = (Element)(lstRuleNodes.item(nRuleIndex));
+				
+				String stName = oRuleNode.getAttributes().getNamedItem("Name").getNodeValue();
+				RuleType enRuleType = CustomTypeMapping.convertStringToRuleType( oRuleNode.getAttributes().getNamedItem("Type").getNodeValue());
+				Direction enDirection = CustomTypeMapping.convertStringToDirection( oRuleNode.getAttributes().getNamedItem("Direction").getNodeValue());
+				Manoeuvre enManoeuvre = CustomTypeMapping.convertStringToManoeuvre(  oRuleNode.getAttributes().getNamedItem("Manoeuvre").getNodeValue());
+				int nMaxRecurrenceAllowed = Integer.parseInt( oRuleNode.getAttributes().getNamedItem("MaxRecurrenceAllowed").getNodeValue());
+				jchess.common.enumerator.File enFile = CustomTypeMapping.convertStringToFile( oRuleNode.getAttributes().getNamedItem("File").getNodeValue());
+				Rank enRank = CustomTypeMapping.convertStringToRank( oRuleNode.getAttributes().getNamedItem("Rank").getNodeValue());
+				Family enFamily = CustomTypeMapping.convertStringToFamily( oRuleNode.getAttributes().getNamedItem("Family").getNodeValue());
+				
+				Rule oRule= new Rule(stName, enRuleType, enDirection, enManoeuvre, nMaxRecurrenceAllowed, enFamily, enFile, enRank, false, null);
+				
+				if( oParentRule != null)
+					oParentRule.addRule( oRule);
+				else
+					m_oBoard.addRule( oRule);
+				
+				populateRule(oRuleNode, oRule);
+			}
+		}
+		catch(java.lang.Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	void loadPieces(Element oRootElement){
+
+		try
+		{
+		NodeList lstPieceNodes = ((Element)oRootElement.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
+		for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
+		
+			Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
+			
+			String stName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
+			String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
+						
+			Piece oPiece = new Piece(stName, stImage);
+
+			NodeList lstRuleNodes = ((Element)oPieceNode.getElementsByTagName("AllowedMoves").item(0)).getElementsByTagName("Rule");
+			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
+				Element oRuleNode = (Element)(lstRuleNodes.item(nRuleIndex));
+
+				String stRule = oRuleNode.getChildNodes().item(0).getNodeValue();
+				
+				oPiece.addRule(m_oBoard.getRule(stRule));
+			}   
+
+			m_oBoard.addPiece( oPiece);
+		}
+		}
+		catch(java.lang.Exception e) {
+			System.out.println(e);
+		}
+
+	}
+
+	void loadPlayers(Element oRootElement){
+
+		try
+		{
+		NodeList lstPlayerNodes = ((Element)oRootElement.getElementsByTagName("Players").item(0)).getElementsByTagName("Player");
+		for( int nPlayerIndex = 0, nPlayerIndexMax = lstPlayerNodes.getLength(); nPlayerIndex < nPlayerIndexMax; nPlayerIndex++) {
+		
+			Element oPlayerNode = (Element)(lstPlayerNodes.item(nPlayerIndex));
+			
+			String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
+						
+			Player oPlayer = new Player(stName, "white");
+
+			NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
+			for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
+				Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
+
+				String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
+				String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
+
+				//oPlayer.se.addRule(m_oBoard.getRule(stRule));
+				
+				m_oBoard.addMapping(stName, stPieceName, stPosition);
+			}   
+
+			m_oBoard.addPlayer( oPlayer);
 		}
 		}
 		catch(java.lang.Exception e) {

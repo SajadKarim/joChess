@@ -3,6 +3,7 @@ package jchess.common;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -60,7 +61,7 @@ public class RuleAgent implements IRule {
 		return m_oRule.getRank();		
 	}
 	
-	public List<Rule> getAllRules(){
+	public Map<String, Rule> getAllRules(){
 		return m_oRule.getAllRules();		
 	}
 	//endregion
@@ -99,9 +100,12 @@ public class RuleAgent implements IRule {
 		if( m_oRule.getAllRules() == null)
 			return;
 		
-		Iterator<Rule> it = m_oRule.getAllRules().iterator();
-    	while( it.hasNext()) {
-    		m_qRules.add(it.next());
+		for (Map.Entry<String, Rule> entry2 : m_oRule.getAllRules().entrySet()) {
+			
+		//Iterator<Rule> it = m_oRule.getAllRules().iterator();
+    	//while( it.hasNext()) {
+    		//m_qRules.add(it.next());
+			m_qRules.add(entry2.getValue());
     	}
 	}
 

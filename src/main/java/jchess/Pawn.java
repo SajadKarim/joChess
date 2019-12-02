@@ -89,8 +89,8 @@ public class Pawn extends Piece
         //m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200000, FAMILY.SAME, FILE.FORWARD, RANK.FORWARD, true, null));
         //m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200000, FAMILY.SAME, FILE.BACKWARD, RANK.FORWARD, true, null));
 
-        m_lstRules.add(new RuleAgent( new Rule(RuleType.MOVE_AND_CAPTURE, Direction.VERTEX, Manoeuvre.BLINKER, 1000, Family.SAME, File.IGNORE, Rank.IGNORE, true, null)));
-        m_lstRules.add(new RuleAgent( new Rule(RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.BLINKER, 3000, Family.IGNORE, File.IGNORE, Rank.IGNORE, true, null)));
+        m_lstRules.add(new RuleAgent( new Rule("1", RuleType.MOVE_AND_CAPTURE, Direction.VERTEX, Manoeuvre.BLINKER, 1000, Family.SAME, File.IGNORE, Rank.IGNORE, true, null)));
+        m_lstRules.add(new RuleAgent( new Rule("2", RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.BLINKER, 3000, Family.IGNORE, File.IGNORE, Rank.IGNORE, true, null)));
        // m_lstRules.add( new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.VERTEX, 200000, FAMILY.SAME, FILE.BACKWARD, RANK.BACKWARD, true, null));
 }
     

@@ -21,7 +21,9 @@
 package jchess;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.awt.Graphics;
 import java.awt.Image;
 import jchess.common.enumerator.*;
@@ -59,11 +61,11 @@ public class Knight extends Piece
     }
 
     void populateRules() {
-        List<Rule> _rules1 = new ArrayList<Rule>();
-        _rules1.add(new Rule(RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.FILE_AND_RANK, 1, Family.IGNORE, File.SAME, Rank.FORWARD, false, null));
-        _rules1.add(new Rule(RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.FILE_AND_RANK, 1, Family.IGNORE, File.FORWARD, Rank.SAME, false, null));
+        Map<String, Rule> _rules1 = new HashMap<String, Rule>();
+        _rules1.put("1", new Rule("1", RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.FILE_AND_RANK, 1, Family.IGNORE, File.SAME, Rank.FORWARD, false, null));
+        _rules1.put("2", new Rule("2", RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.FILE_AND_RANK, 1, Family.IGNORE, File.FORWARD, Rank.SAME, false, null));
         
-        Rule rule1 = new Rule(RuleType.MOVE_TRANSIENT, Direction.VERTEX, Manoeuvre.BLINKER, 1, Family.SAME, File.IGNORE, Rank.IGNORE, true, _rules1);
+        Rule rule1 = new Rule("", RuleType.MOVE_TRANSIENT, Direction.VERTEX, Manoeuvre.BLINKER, 1, Family.SAME, File.IGNORE, Rank.IGNORE, true, _rules1);
         		 	
         List<Rule> _rules2 = new ArrayList<Rule>();
         //_rules2.add(new Rule(RULE_TYPE.MOVE_AND_CAPTURE, DIRECTION.EDGE, 1, FAMILY.ANY, FILE.SAME, RANK.FORWARD, false, null));
