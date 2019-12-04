@@ -13,18 +13,18 @@ import jchess.common.enumerator.Direction;
  *
  */
 
-public class Path implements IPath{
+public class PathData implements IPathData{
 	
 	private String m_stName;
 	private Direction  m_enDirection;	
-	private List<Position> m_lstPosition;	
-	private List<Path> m_lstNeighbour;
+	private List<IPositionData> m_lstPosition;	
+	private List<IPathData> m_lstNeighbour;
 	
-	public Path(String stName, Direction enDirection, Position oPosition) {
+	public PathData(String stName, Direction enDirection, IPositionData oPosition) {
 		m_stName = stName;
 		m_enDirection = enDirection;		
-		m_lstNeighbour = new ArrayList<Path>();
-		m_lstPosition = new ArrayList<Position>();
+		m_lstNeighbour = new ArrayList<IPathData>();
+		m_lstPosition = new ArrayList<IPositionData>();
 
 		if( oPosition != null)
 			addPosition(oPosition);
@@ -38,26 +38,26 @@ public class Path implements IPath{
 		return m_enDirection;
 	}
 	
-	public void addNeighbour(Path oPath) {
+	public void addNeighbour(IPathData oPath) {
 		m_lstNeighbour.add(oPath);
 	}
 	
-	public void addPosition(Position oPosition) {
+	public void addPosition(IPositionData oPosition) {
 		m_lstPosition.add(oPosition);
 	}
 
-	public List<Path> getAllNeighbors(){
+	public List<IPathData> getAllNeighbors(){
 		return m_lstNeighbour;
 	}
 		
-	public List<Position> getAllPositions() {
+	public List<IPositionData> getAllPositions() {
 		return m_lstPosition;
 	}
 	
 	public Boolean doesPositionExist(String stName) {		
-		Iterator<Position> it = m_lstPosition.iterator();
+		Iterator<IPositionData> it = m_lstPosition.iterator();
     	while( it.hasNext()) {
-    		Position oPosition = it.next();
+    		IPositionData oPosition = it.next();
     		if( oPosition != null && oPosition.getName().equals(stName))
     			return true;
     	}

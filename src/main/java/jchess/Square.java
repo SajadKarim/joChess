@@ -28,10 +28,10 @@ public class Square
 
     int pozX; // 0-7, becouse 8 squares for row/column
     int pozY; // 0-7, becouse 8 squares for row/column
-    public PieceAgent piece = null;//object Piece on square (and extending Piecie)
-    public PositionAgent m_oPosition = null;
+    public jchess.common.Piece piece = null;//object Piece on square (and extending Piecie)
+    public Position m_oPosition = null;
     
-    Square(int pozX, int pozY, PieceAgent piece, PositionAgent oPosition)
+    Square(int pozX, int pozY, jchess.common.Piece piece, Position oPosition)
     {
         this.pozX = pozX;
         this.pozY = pozY;
@@ -52,7 +52,7 @@ public class Square
         return new Square(square);
     }
 
-    void setPiece(PieceAgent piece)
+    void setPiece(jchess.common.Piece piece)
     {
     	this.m_oPosition.setPiece(piece);
         this.piece = null;

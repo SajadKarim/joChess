@@ -451,7 +451,7 @@ public class Moves extends AbstractTableModel
      */
     public void setMoves(String moves)
     {
-        int from = 0;
+/*        int from = 0;
         int to = 0;
         int n = 1;
         ArrayList<String> tempArray = new ArrayList();
@@ -504,7 +504,7 @@ public class Moves extends AbstractTableModel
                 int[] values = new int[4];
                 if (locMove.equals("O-O-O"))
                 {
-                    if (this.game.getActivePlayer().color == Player.colors.black) //if black turn
+                    if (this.game.getActivePlayer().color == PlayerData.colors.black) //if black turn
                     { 
                         values = new int[]
                         {
@@ -521,7 +521,7 @@ public class Moves extends AbstractTableModel
                 }
                 else if (locMove.equals("O-O")) //if short castling
                 { 
-                    if (this.game.getActivePlayer().color == Player.colors.black) //if black turn
+                    if (this.game.getActivePlayer().color == PlayerData.colors.black) //if black turn
                     {
                         values = new int[]
                         {
@@ -565,7 +565,7 @@ public class Moves extends AbstractTableModel
                 {
                     for(int j=0; j<squares[i].length && !pieceFound; j++)
                     {
-                        if(squares[i][j].piece == null || this.game.getActivePlayer().color != squares[i][j].piece.getPlayer().color)
+                        if(squares[i][j].piece == null || this.game.getActivePlayer().color != squares[i][j].piece.getPlayer().getPlayerData().getcolor())
                         {
                             continue;
                         }
@@ -599,7 +599,7 @@ public class Moves extends AbstractTableModel
                 this.game.chessboard.activeSquare = null;
                 return;//finish reading game and show message
             }
-        }
+        }*/
     }
 }
 /*

@@ -107,7 +107,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         Calendar cal = Calendar.getInstance();
         String str = new String("");
         String info = new String("[Event \"Game\"]\n[Date \"" + cal.get(cal.YEAR) + "." + (cal.get(cal.MONTH) + 1) + "." + cal.get(cal.DAY_OF_MONTH) + "\"]\n"
-                + "[White \"" + this.settings.playerWhite.name + "\"]\n[Black \"" + this.settings.playerBlack.name + "\"]\n\n");
+                + "[White \"" + this.settings.playerWhite.getName()+ "\"]\n[Black \"" + this.settings.playerBlack.getName()+ "\"]\n\n");
         str += info;
         str += this.moves.getMovesInString();
         try
@@ -172,10 +172,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         }
         Game newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
         Settings locSetts = newGUI.settings;
-        locSetts.playerBlack.name = blackName;
-        locSetts.playerWhite.name = whiteName;
-        locSetts.playerBlack.setType(Player.playerTypes.localUser);
-        locSetts.playerWhite.setType(Player.playerTypes.localUser);
+        locSetts.playerBlack.setName(blackName);
+        locSetts.playerWhite.setName(whiteName);
+        locSetts.playerBlack.setType(PlayerData.playerTypes.localUser);
+        locSetts.playerWhite.setType(PlayerData.playerTypes.localUser);
         locSetts.gameMode = Settings.gameModes.loadGame;
         locSetts.gameType = Settings.gameTypes.local;
 
@@ -254,8 +254,8 @@ public class Game extends JPanel implements MouseListener, ComponentListener
 
         //System.out.println("new game, game type: "+settings.gameType.name());
 
-        activePlayer = boardManager.getInstance().getPlayer1();
-        if (activePlayer.playerType != Player.playerTypes.localUser)
+        //activePlayer = boardManager.getInstance().getPlayer1();
+        if (activePlayer.getplayertype() != PlayerData.playerTypes.localUser)
         {
             this.blockedChessboard = true;
         }
@@ -313,16 +313,16 @@ public class Game extends JPanel implements MouseListener, ComponentListener
     {
         switchActive();
 
-        System.out.println("next move, active player: " + activePlayer.name + ", color: " + activePlayer.color.name() + ", type: " + activePlayer.playerType.name());
-        if (activePlayer.playerType == Player.playerTypes.localUser)
+        System.out.println("next move, active player: " + activePlayer.getName() + ", color: " + activePlayer.getColor().name() + ", type: " + activePlayer.getplayertype().name());
+        if (activePlayer.getplayertype() == PlayerData.playerTypes.localUser)
         {
             this.blockedChessboard = false;
         }
-        else if (activePlayer.playerType == Player.playerTypes.networkUser)
+        else if (activePlayer.getplayertype() == PlayerData.playerTypes.networkUser)
         {
             this.blockedChessboard = true;
         }
-        else if (activePlayer.playerType == Player.playerTypes.computer)
+        else if (activePlayer.getplayertype()== PlayerData.playerTypes.computer)
         {
         }
     }
@@ -517,7 +517,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
                         this.nextMove();
 
                         //checkmate or stalemate
-                        King king;
+                        /*King king;
                         if (this.activePlayer == settings.playerWhite)
                         {
                             king = chessboard.kingWhite;
@@ -525,9 +525,9 @@ public class Game extends JPanel implements MouseListener, ComponentListener
                         else
                         {
                             king = chessboard.kingBlack;
-                        }
+                        }*/
 
-                        switch (king.isCheckmatedOrStalemated())
+                        /*switch (king.isCheckmatedOrStalemated())
                         {
                             case 1:
                                 this.endGame("Checkmate! " + king.player.color.toString() + " player lose!");
@@ -535,7 +535,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
                             case 2:
                                 this.endGame("Stalemate! Draw!");
                                 break;
-                        }
+                        }*/
                     }
                     
                 } 

@@ -15,7 +15,7 @@
 
 package jchess;
 import jchess.common.*;
-import jchess.common.Player.playerTypes;
+import jchess.common.PlayerData.playerTypes;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

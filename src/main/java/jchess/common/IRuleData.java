@@ -17,13 +17,15 @@ import jchess.common.enumerator.RuleType;
  *
  */
 
-public interface IRule{
+public interface IRuleData{
+	public File getFile();
+	public Rank getRank();
+	public String getName();
 	public RuleType getRuleType();
 	public Direction getDirection();
 	public Manoeuvre getManoeuvreStrategy();
 	public int getMaxRecurrenceCount();
 	public Family getFamily();
-	public File getFile();
-	public Rank getRank();
-	public Map<String, Rule> getAllRules(); //to remove this from interfcae
+	public List<IRuleData> getAllRules(); //to remove this from interfcae
+	public RuleData getRuleData();
 }

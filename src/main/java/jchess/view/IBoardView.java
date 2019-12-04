@@ -1,12 +1,12 @@
 package jchess.view;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.util.ArrayList;
+import java.awt.Component;
 
-import jchess.common.IPolygon;
-import jchess.common.PositionAgent;
+import jchess.model.IBoardModel;
 
 public interface IBoardView {
-	public void paintComponent(Graphics g, PositionAgent oPosition, ArrayList<PositionAgent> lstPositions);
+	public void setModelData(IBoardModel oBoardModel);
+    public void addListener(final BoardViewListener oListener);
+    public void paintView();
+    public Component getViewComponent();
 }

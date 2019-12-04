@@ -1,105 +1,148 @@
 package jchess.common;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import jchess.common.enumerator.*;
-/**
- * Position.java
- * 
- * This is data class to store a Position.
- *
- */
 
-public class Position implements IPosition {
-	private int m_nFile;
-	private int m_nRank;
-	private String m_stCategory;
-	private IShape m_oShape;
-	private Map<String, Path> m_mpPath;
+public class Position implements IPositionData {
+	private PositionData m_oPosition;
+	private Piece m_oPiece;
 	
-	public Position( ) {		
-		m_mpPath = new HashMap<String, Path>();
-	}
+	private Boolean m_bSelected;
+	private Boolean m_bMoveCandidacy;
 	
-	public Position( char chFile, int nRank, IShape oShape, String stCategory) {
-		m_nFile = (int)chFile;
-		m_nRank = nRank;
-		m_oShape = oShape;		
-		m_stCategory = stCategory;
+	Position() {
+		//m_oPiece = new Piece();
+		m_oPosition = new PositionData();
 		
-		m_mpPath = new HashMap<String, Path>();
+		m_bSelected = false;
+		m_bMoveCandidacy = false;	
 	}
 	
-	public Position( Position oPosition) {
-		m_nFile = oPosition.m_nFile;
-		m_nRank = oPosition.m_nRank;
-		m_oShape = oPosition.m_oShape;		
-		m_stCategory = oPosition.m_stCategory;
-		
-		m_mpPath = new HashMap<String, Path>(oPosition.m_mpPath);
-	}
-
+	//region	
 	public int getFile() {
-		return m_nFile;
-	}
-
-	public void setFile(int nFile) {
-		m_nFile = nFile;
-	}
-
-	public int getRank() {
-		return m_nRank;
+		return m_oPosition.getFile();
 	}
 	
-	public void setRank(int nRank) {
-		m_nRank = nRank;
+	public int getRank() {
+		return m_oPosition.getRank();
 	}
-
+	
 	public String getName() {
-		return "" + (char)m_nFile + "" + m_nRank;
+		return m_oPosition.getName();
 	}
 
 	public String getCategory() {
-		return m_stCategory;
-	}
-
-	public void setCategory(String  stCategory) {
-		m_stCategory = stCategory;
+		return m_oPosition.getCategory();
 	}
 
 	public IShape getShape() {
-		return m_oShape;
+		return m_oPosition.getShape();
 	}
 
-	public void setShape(IShape oShape) {
-		m_oShape = oShape;
+	public IPathData getPath(String stName) {
+		return m_oPosition.getPath(stName);
 	}
 
-	public Path getPath(String stName) {
-		return m_mpPath.get(stName);
+	public List<IPathData> getAllPaths(){
+		return m_oPosition.getAllPaths();
 	}
-
-	public Map<String, Path> getAllPaths(){
-		return m_mpPath;
-	}
-
-	public void addPath(Path oPath) {		
-		m_mpPath.put(oPath.getName(), oPath);
+	//endregion
+	
+	public PositionData getPosition() {
+		return m_oPosition;
 	}
 	
-	public void addPathConnection(String stSource, String stDestination) {
-		Path oSource = m_mpPath.get(stSource);
-		if( oSource == null)
-			return;
+	private String getOtherNeighbour(String stPathName, String stNeighbour) {
+		IPathData oPath = m_oPosition.getPath(stPathName);
 		
-		Path oDestination = m_mpPath.get(stDestination);
-		if( oDestination == null)
-			return;
+		if( oPath.getAllNeighbors().size() != 2)
+			return null;
 		
-		oSource.addNeighbour(oDestination);
-		oDestination.addNeighbour(oSource);
+		if( !oPath.getAllNeighbors().get(0).getName().equals(stNeighbour))
+			return oPath.getAllNeighbors().get(0).getName();
+		
+		if( !oPath.getAllNeighbors().get(1).getName().equals(stNeighbour))
+			return oPath.getAllNeighbors().get(1).getName();
+		
+		return null;
+	}
+	
+	public List<Position> tryGetOppositePath( IPositionData oPosition) {	
+		String stInitiator = null;
+		
+		Iterator<IPathData> it = m_oPosition.getAllPaths().iterator(); 
+	    while( it.hasNext()) {
+	    	IPathData oPath = it.next();
+	    	if( oPath.doesPositionExist(oPosition.getName())) {
+		        stInitiator = oPath.getName();
+		        break;
+	    	}
+	    }
+	    
+	    if( stInitiator == null)
+	    	return null;
+   	
+		IPathData oPath = m_oPosition.getPath(stInitiator);
+		
+		if( oPath.getAllNeighbors().size() != 2)
+			return null;
+		
+		String stA = oPath.getAllNeighbors().get(0).getName();
+		String stB = oPath.getAllNeighbors().get(1).getName();
+
+		String stInitiatorA = stInitiator;
+		String stInitiatorB = stInitiator;
+		while( true) {
+			String newA = getOtherNeighbour(stA, stInitiatorA);
+			String newB = getOtherNeighbour(stB, stInitiatorB);
+
+			if( newA == null || newB == null)
+				return null;
+			
+			if( newA.equals(newB)) {
+				List<Position> lst = new ArrayList<Position>();
+				
+				List<IPositionData> temp = m_oPosition.getPath(newA).getAllPositions();
+				
+				
+				Iterator<IPositionData> __it = temp.iterator(); 
+			    while( __it.hasNext()) {
+
+			    	//lst.add(boardManager.getInstance().getBoard().getPositionByName(__it.next().getName()));
+			    }
+
+				
+				return lst;
+			}
+			
+			stInitiatorA = stA;
+			stInitiatorB = stB;
+			stA = newA;
+			stB = newB;
+		}
 	}
 
+	public void setPiece(Piece oPiece) {
+		this.m_oPiece = oPiece;
+	}
+
+	public Piece getPiece() {
+		return m_oPiece;
+	}
+	
+	public Boolean getSelectState() {
+		return m_bSelected;
+	}
+	public void setSelectState(Boolean oSelect) {
+		m_bSelected = oSelect;
+	}
+	
+	public Boolean getMoveCandidacy() {
+		return m_bMoveCandidacy;
+	}
+	public void setMoveCandidacy(Boolean bMoveCandidacy) {
+		m_bMoveCandidacy = bMoveCandidacy;
+	}
 }

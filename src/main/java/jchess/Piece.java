@@ -41,7 +41,7 @@ public abstract class Piece
 
     Chessboard chessboard; // <-- this relations isn't in class diagram, but it's necessary :/
     public Square square;
-    public Player player;
+    public PlayerData player;
     String name;
     protected String symbol;
     protected static Image imageBlack;// = null;
@@ -50,7 +50,7 @@ public abstract class Piece
     public Image image;
     public static short value = 0;
 
-    public List<RuleAgent> m_lstRules = null;
+    public List<Rule> m_lstRules = null;
 
     public ArrayList getPossibleMoves() {
     	return null;
@@ -60,7 +60,7 @@ public abstract class Piece
 
     }
 
-    Piece(Chessboard chessboard, Player player)
+    Piece(Chessboard chessboard, PlayerData player)
     {
         this.chessboard = chessboard;
         this.player = player;
@@ -74,7 +74,7 @@ public abstract class Piece
         }
         this.name = this.getClass().getSimpleName();
 
-        m_lstRules = new ArrayList<RuleAgent>();
+        m_lstRules = new ArrayList<Rule>();
 
         populateRules();
 
@@ -118,7 +118,7 @@ public abstract class Piece
         }
     }
 
-    final void draw(Graphics g, PositionAgent oPosition)
+    final void draw(Graphics g, Position oPosition)
     {
         try
         {

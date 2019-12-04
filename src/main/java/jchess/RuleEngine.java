@@ -8,14 +8,14 @@ import java.util.concurrent.atomic.*;
 import jchess.common.*;
 import jchess.common.enumerator.*;
 public class RuleEngine {
-	public static ArrayList<PositionAgent> getTryFindPossibleMove( PieceAgent oPiece, PositionAgent oPosition) {		
+	public static ArrayList<Position> getTryFindPossibleMove( jchess.common.Piece oPiece, Position oPosition) {		
     	ArrayList lstPosition = new ArrayList();
     	
-    	for( RuleAgent rule : oPiece.getAllRuleAgents()) {
+    	/****for( Rule rule : oPiece.getAllRules()) {
     		
     		rule.reset();
     		
-    		tryFindPossibleMoves(new BoardMapping(), lstPosition, (RuleAgent)rule, oPosition);
+    		tryFindPossibleMoves(new BoardMapping(), lstPosition, (Rule)rule, oPosition);
 			
     		/*RULE_TYPE enRuleType = ((Rule)rule).m_enRuleType;
     		switch( enRuleType) {
@@ -34,16 +34,16 @@ public class RuleEngine {
     		default:
     			break;
     		}*/
-    	}
+    	//}***/
     	
     	return lstPosition;
     }
 
-	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, RuleAgent rule, PositionAgent position) {		
+	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position) {		
 		if ( rule == null)
 			return;
 
-		Map<String, Path> positions = position.getAllPaths();
+		/*Map<String, Path> positions = position.getAllPaths();
 		Iterator<Map.Entry<String, Path>> it = null;
 
 		Direction enDirection = rule.getDirection();
@@ -57,12 +57,12 @@ public class RuleEngine {
 	        	if( ((Path)entry.getValue()).getDirection() != Direction.EDGE)
 	        		continue;
 	    		
-	    		Iterator<Position> it2 = entry.getValue().getAllPositions().iterator();
+	    		Iterator<PositionData> it2 = entry.getValue().getAllPositions().iterator();
 	        	while( it2.hasNext()) {
 
-	        		Position __ = it2.next();
+	        		PositionData __ = it2.next();
 	        		
-	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new RuleAgent(rule), position, boardManager.getInstance().getPosition(__.getName()));
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule(rule), position, boardManager.getInstance().getPosition(__.getName()));
 	        	}
 	        	
 	        	}
@@ -78,12 +78,12 @@ public class RuleEngine {
 	        	if( ((Path)entry.getValue()).getDirection()!= Direction.VERTEX)
 	        		continue;
 	
-	    		Iterator<Position> it2 = entry.getValue().getAllPositions().iterator();
+	    		Iterator<PositionData> it2 = entry.getValue().getAllPositions().iterator();
 	        	while( it2.hasNext()) {
 
-	        		Position __ = it2.next();
+	        		PositionData __ = it2.next();
 	        		
-	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new RuleAgent(rule), position, boardManager.getInstance().getPosition(__.getName()));
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule(rule), position, boardManager.getInstance().getPosition(__.getName()));
 	        	}
 	        	
 	        
@@ -96,18 +96,18 @@ public class RuleEngine {
 	        	}*/
 
 //	        	tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule((Rule)rule), position, (Position)(((Path)entry.getValue()).m_oPosition));
-	    	}
+	    /***	}
 		}
 			break;
 		default:
 			break;
 		}
-		
+		*/
 		rule.makeRuleDead();
 		
 	}
 
-	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, RuleAgent rule, PositionAgent position, PositionAgent nextPosition) {		
+	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position, Position nextPosition) {		
 		
 		if( nextPosition == null) {
 			rule.makeRuleDead();
@@ -132,7 +132,7 @@ public class RuleEngine {
 			return;
 		}
 		
-		RuleAgent newrule = null;
+		Rule newrule = null;
 		if ( (newrule = rule.getNextRule()) == null)
 			return;
 			
@@ -169,14 +169,14 @@ public class RuleEngine {
     	rule.makeRuleDead();
 }
 */
-	public static void tryFindPossibleMovesUsingBlinkers(IBoardMapping oBoardMapping, ArrayList lstPosition, RuleAgent rule, PositionAgent oldposition, PositionAgent newPosition) {		
+	public static void tryFindPossibleMovesUsingBlinkers(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position oldposition, Position newPosition) {		
 		
 		if( newPosition == null) {
 			rule.makeRuleDead();
 			return;
 		}
 				
-		List<PositionAgent> pos = newPosition.tryGetOppositePath(oldposition);
+		List<Position> pos = newPosition.tryGetOppositePath(oldposition);
 		if( pos == null) {
 			rule.makeRuleDead();
 			return;
@@ -201,23 +201,23 @@ public class RuleEngine {
 	}
 	*/
 
-		Iterator<PositionAgent> it = pos.iterator();
+		Iterator<Position> it = pos.iterator();
     	while( it.hasNext()) {
 
-    		RuleAgent _rule = new RuleAgent((RuleAgent)rule);
+    		Rule _rule = rule.clone();
     		
-    		RuleAgent newrule = null;
-    		PositionAgent _abc =  it.next();
+    		Rule newrule = null;
+    		Position _abc =  it.next();
     		//while( (newrule = _rule.getNextRule()) != null)
-    			tryFindPossibleMoves(oBoardMapping, lstPosition, (RuleAgent)_rule, newPosition, _abc);
+    			tryFindPossibleMoves(oBoardMapping, lstPosition, (Rule)_rule, newPosition, _abc);
     		
-    		((RuleAgent)_rule).makeRuleDead();
+    		((Rule)_rule).makeRuleDead();
     	}
     	
     	rule.makeRuleDead();
 }
 
-	public static Boolean validateMove(IBoardMapping oBoardMapping, RuleAgent rule, PositionAgent position, PositionAgent nextPosition) {		
+	public static Boolean validateMove(IBoardMapping oBoardMapping, Rule rule, Position position, Position nextPosition) {		
 		
 		String stCategorySource = position.getCategory().toUpperCase();
 		String stCategoryDestination = nextPosition.getCategory().toUpperCase();

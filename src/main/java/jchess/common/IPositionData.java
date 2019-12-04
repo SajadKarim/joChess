@@ -1,5 +1,6 @@
 package jchess.common;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,12 +10,13 @@ import java.util.Map;
  *
  */
 
-public interface IPosition{
+public interface IPositionData{
 	public int getFile();
 	public int getRank();
 	public String getName();
 	public String getCategory();
 	public IShape getShape();
-	public Path getPath(String stName);
-	public Map<String, Path> getAllPaths();
+	public PositionData getPosition();
+	public IPathData getPath(String stName);
+	public List<IPathData> getAllPaths();
 }

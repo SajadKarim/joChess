@@ -28,6 +28,8 @@ import java.awt.*;
 import javax.swing.text.BadLocationException;
 
 import jchess.common.Player;
+import jchess.common.PlayerData;
+import jchess.view.BoardView;
 
 /**
  * Class responsible for drawing the fold with local game settings
@@ -138,7 +140,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
                 JOptionPane.showMessageDialog(this, Settings.lang("fill_name"));
                 return;
             }
-            Game newGUI = JChessApp.jcv.addNewTab(this.firstName.getText() + " vs " + this.secondName.getText());
+           /* Game newGUI = JChessApp.jcv.addNewTab(this.firstName.getText() + " vs " + this.secondName.getText());
             Settings sett = newGUI.settings;//sett local settings variable
             Player pl1 = boardManager.getInstance().getPlayer1();//set local player variable
             Player pl2 = boardManager.getInstance().getPlayer2();//set local player variable
@@ -154,12 +156,12 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
                 pl2.setName(this.firstName.getText());//set name of player
                 pl1.setName(this.secondName.getText());//set name of player
             }
-            pl1.setType(Player.playerTypes.localUser);//set type of player
-            pl2.setType(Player.playerTypes.localUser);//set type of player
+            pl1.setType(PlayerData.playerTypes.localUser);//set type of player
+            pl2.setType(PlayerData.playerTypes.localUser);//set type of player
             sett.gameType = Settings.gameTypes.local;
             if (this.oponentComp.isSelected()) //if computer oponent is checked
             {
-                pl2.setType(Player.playerTypes.computer);
+                pl2.setType(PlayerData.playerTypes.computer);
             }
             if (this.upsideDown.isSelected()) //if upsideDown is checked
             { 
@@ -180,13 +182,19 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             }
             System.out.println(this.time4Game.getActionCommand());
             //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
-            System.out.println("****************\nStarting new game: " + pl1.name + " vs. " + pl2.name
+            System.out.println("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
                     + "\ntime 4 game: " + sett.timeForGame + "\ntime limit set: " + sett.timeLimitSet
                     + "\nwhite on top?: " + sett.upsideDown + "\n****************");//4test
             newGUI.newGame();//start new Game
-            this.parent.setVisible(false);//hide parent
-            newGUI.chessboard.repaint();
+            */this.parent.setVisible(false);//hide parent
+            /*newGUI.chessboard.repaint();
             newGUI.chessboard.draw();
+            */
+            //BoardView b = JChessApp.jcv.addNewTab_("new");
+            //b.setBoard(boardManager.getInstance().getBoard());
+        	//b.drawBoard(b.getGraphics());
+        	//b.drawPieces(b.getGraphics(), boardManager.getInstance().getAllPositions());
+
         }
 
     }

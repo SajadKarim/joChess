@@ -66,8 +66,8 @@ public class Chessboard extends JPanel
     public static final int img_height = 700;//image height
     private ArrayList moves;
     private Settings settings;
-    public King kingWhite;
-    public King kingBlack;
+    //public King kingWhite;
+    //public King kingBlack;
     //-------- for undo ----------
     private Square undo1_sq_begin = null;
     private Square undo1_sq_end = null;
@@ -79,8 +79,8 @@ public class Chessboard extends JPanel
     //----------------------------
     //For En passant:
     //|-> Pawn whose in last turn moved two square
-    public Pawn twoSquareMovedPawn = null;
-    public Pawn twoSquareMovedPawn2 = null;
+    //public Pawn twoSquareMovedPawn = null;
+    //public Pawn twoSquareMovedPawn2 = null;
     private Moves moves_history;
 
     /** Chessboard class constructor
@@ -89,8 +89,8 @@ public class Chessboard extends JPanel
      */
     public Chessboard(Settings settings, Moves moves_history)
     {
-    	m_oBoardView = new BoardView(this.getGraphics(), this.topLeft);
-    	m_oBoardView.setBoard(boardManager.getInstance().getBoard());
+    	//m_oBoardView = new BoardView(this.getGraphics(), this.topLeft);
+    	//m_oBoardView.setBoard(boardManager.getInstance().getBoard());
         this.settings = settings;
         this.activeSquare = null;
         this.square_height = img_height / 8;//we need to devide to know height of field
@@ -104,7 +104,7 @@ public class Chessboard extends JPanel
             for (int y = 0; y < 8; y++)
             {
             	char cfile = (char)file;
-            	IPosition oPosition = boardManager.getInstance().getPosition("" + cfile + (8 - y));
+            	//IPositionData oPosition = boardManager.getInstance().getPosition("" + cfile + (8 - y));
                 this.squares[i][y] = new Square(i, y, null, null);
             }
             file++;
@@ -191,12 +191,12 @@ public class Chessboard extends JPanel
     /**
      *
      */
-    private void setPieces4NewGame(boolean upsideDown, Player plWhite, Player plBlack)
+    private void setPieces4NewGame(boolean upsideDown, PlayerData plWhite, PlayerData plBlack)
     {
 
         /* WHITE PIECES */
-        Player player = plBlack;
-        Player player1 = plWhite;
+        PlayerData player = plBlack;
+        PlayerData player1 = plWhite;
         if (upsideDown) //if white on Top
         { 
             player = plWhite;
@@ -214,7 +214,7 @@ public class Chessboard extends JPanel
      *  @param player which is owner of pawns
      *  @param upsideDown if true white pieces will be on top of chessboard
      * */
-    private void setFigures4NewGame(int i, Player player, boolean upsideDown)
+    private void setFigures4NewGame(int i, PlayerData player, boolean upsideDown)
     {
 /*
         if (i != 0 && i != 7)
@@ -267,7 +267,7 @@ public class Chessboard extends JPanel
      *  @param i row where to set pawns
      *  @param player player which is owner of pawns
      * */
-    private void setPawns4NewGame(int i, Player player)
+    private void setPawns4NewGame(int i, PlayerData player)
     {
     /*    if (i != 1 && i != 6)
         {
@@ -287,20 +287,20 @@ public class Chessboard extends JPanel
      */
     public Square getSquare(int x, int y)
     { 
-    	for (Map.Entry<String, PositionAgent> entry : boardManager.getInstance().getAllPositions().entrySet()) {
+    	/*for (Map.Entry<String, Position> entry : boardManager.getInstance().getAllPositions().entrySet()) {
     		if( ((IPolygon) entry.getValue().getShape()).getPolygon().contains(new Point(x, y)))
     		{
-    			Square sq = new Square(x, y, (PieceAgent)entry.getValue().getPiece(), entry.getValue());
+    			Square sq = new Square(x, y, (jchess.common.Piece)entry.getValue().getPiece(), entry.getValue());
     			return sq;
     		}
-    	}
+    	}*/
     	
-        /*Iterator<PositionAgent> itt = boardManager.getInstance().getAllPositions().iterator();
+        /*Iterator<Position> itt = boardManager.getInstance().getAllPositions().iterator();
     	while( itt.hasNext()) {
-    		PositionAgent oPosition = itt.next();
+    		Position oPosition = itt.next();
     		if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y)))
     		{
-    			Square sq = new Square(x, y, (PieceAgent)oPosition.getPiece(), oPosition);
+    			Square sq = new Square(x, y, oPosition.getPiece(), oPosition);
     			return sq;
     		}
     	}
@@ -619,10 +619,10 @@ public class Chessboard extends JPanel
             for (int y = 0; y < 8; y++)
             {
             	char cfile = (char)file;
-            	PositionAgent oPositionAgent = boardManager.getInstance().getPosition("" + cfile + (8 - y));
-            	oPositionAgent.setPiece( null);
-            	this.squares[i][y].m_oPosition = oPositionAgent;
-                oPositionAgent.setPiece(this.squares[i][y].piece);
+            	//Position oPositionAgent = boardManager.getInstance().getPosition("" + cfile + (8 - y));
+            	//oPositionAgent.setPiece( null);
+            	//this.squares[i][y].m_oPosition = oPositionAgent;
+                //oPositionAgent.setPiece(this.squares[i][y].piece);
             }
             file++;
         }//--endOf--create object for each square
@@ -852,14 +852,14 @@ public class Chessboard extends JPanel
     }*//*--endOf-paint--*/
     public void paintComponent(Graphics g)
     {
-    	m_oBoardView.drawBoard(g);
-    	m_oBoardView.drawPieces(g, boardManager.getInstance().getAllPositions());
+    	//m_oBoardView.drawBoard(g);
+    	//m_oBoardView.drawPieces(g, boardManager.getInstance().getAllPositions());
 
     	if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
     	{        
-    	ArrayList<PositionAgent> temp = RuleEngine.getTryFindPossibleMove(  this.activeSquare.piece, this.activeSquare.m_oPosition );
+    	ArrayList<Position> temp = RuleEngine.getTryFindPossibleMove(  this.activeSquare.piece, this.activeSquare.m_oPosition );
 
-    	m_oBoardView.paintComponent(g, this.activeSquare.m_oPosition, temp);
+    	//m_oBoardView.paintComponent(g, this.activeSquare.m_oPosition, temp);
     }
     
         /*Graphics2D g2d = (Graphics2D) g;

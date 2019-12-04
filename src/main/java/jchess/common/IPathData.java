@@ -11,18 +11,12 @@ import jchess.common.enumerator.Direction;
  *
  */
 
-public interface IPath{	
+public interface IPathData{	
 	public String getName();
-	
 	public Direction getDirection();
-	
-	public void addNeighbour(Path oPath);
-	
-	public void addPosition(Position oPosition);
-
-	public List<Path> getAllNeighbors();
-		
-	public List<Position> getAllPositions();	// remove all the primitive data objects from interface
-	
+	public void addNeighbour(IPathData oPath);
+	public void addPosition(IPositionData oPosition);
+	public List<IPathData> getAllNeighbors();
+	public List<IPositionData> getAllPositions();	// remove all the primitive data objects from interface	
 	public Boolean doesPositionExist(String stName);	
 }

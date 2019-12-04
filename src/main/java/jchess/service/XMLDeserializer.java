@@ -14,16 +14,22 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import jchess.common.Board;
+import jchess.common.BoardData;
+import jchess.common.IBoardData;
+import jchess.common.IPathData;
+import jchess.common.IPieceData;
+import jchess.common.IPlayerData;
 import jchess.common.IPolygon;
-import jchess.common.Path;
+import jchess.common.IPositionData;
+import jchess.common.IRuleData;
+import jchess.common.PathData;
+import jchess.common.PieceData;
 import jchess.common.Piece;
-import jchess.common.PieceAgent;
-import jchess.common.Player;
+import jchess.common.PlayerData;
+import jchess.common.PositionData;
 import jchess.common.Position;
-import jchess.common.PositionAgent;
 import jchess.common.Quadrilateral;
-import jchess.common.Rule;
+import jchess.common.RuleData;
 import jchess.common.enumerator.Direction;
 import jchess.common.enumerator.Family;
 import jchess.common.enumerator.Manoeuvre;
@@ -31,19 +37,15 @@ import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 
 class XMLDeserializer {
-	Board m_oBoard;
-	Document m_oDocument;
-	DocumentBuilder m_oBuilder;	
-	DocumentBuilderFactory m_oFactory;	
 	
-	void serialize(Board b) {		
+	static void serialize(BoardData b) {		
 		try
 		{
-		Map<String, Position> treeMap = new TreeMap<String, Position>(b.getAllPositions());
+		/*Map<String, PositionData> treeMap = new TreeMap<String, PositionData>(b.getAllPositions());
 	        
 		
-		for (Map.Entry<String, Position> entry : treeMap.entrySet()) {
-	    		Position oPosition = entry.getValue();
+		for (Map.Entry<String, PositionData> entry : treeMap.entrySet()) {
+	    		PositionData oPosition = entry.getValue();
 	    		
 	    		System.out.print("<Position File=\"" + (char)( oPosition.getFile()) + "\" Rank=\"" + oPosition.getRank() + "\" Family=\"" + oPosition.getCategory() + "\">");
 	    		System.out.print("<Directions>");
@@ -52,7 +54,7 @@ class XMLDeserializer {
 				
 		    		System.out.print("<Direction Name=\""+ entry2.getValue().getName()+"\" Type=\""+ entry2.getValue().getDirection()+"\">");
 
-		    		Iterator<Position> it = entry2.getValue().getAllPositions().iterator();
+		    		Iterator<PositionData> it = entry2.getValue().getAllPositions().iterator();
 		    		while( it.hasNext()) {
 		    			System.out.print("<LinkedPosition>"+ it.next().getName()+"</LinkedPosition>");
 		    		}
@@ -80,7 +82,7 @@ class XMLDeserializer {
 	    		System.out.print("<Shape Type=\"Quard\"><Coordinates " + oPosition.getShape().toString() +" />");
 
 	    		System.out.print("</Shape></Position>");
-		}
+		}*/
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
@@ -89,10 +91,16 @@ class XMLDeserializer {
 		System.out.println("end");
 	}
 	
-	Board deserliaizeBoard(String stFilePath) {
+	static void populateBoard(String stFilePath, IBoardData oBoard) {
 		
 		try
 		{
+			Document m_oDocument;
+			DocumentBuilder m_oBuilder;	
+			DocumentBuilderFactory m_oFactory;	
+
+			//m_oBoard = oBoard;
+			
 			//serialize(new Board("","","","",808,700));
 			m_oFactory = DocumentBuilderFactory.newInstance();
 			m_oBuilder = m_oFactory.newDocumentBuilder();
@@ -103,15 +111,17 @@ class XMLDeserializer {
 	
 			Element oRootElement = m_oDocument.getDocumentElement();
 	
-			populateBoardAttributes();
+			populateBoardAttributes(oBoard, oRootElement);
 			
-			populatePositions(oRootElement);
+			populatePositions(oBoard, oRootElement);
 			
-			loadRules(oRootElement);
+			loadRules(oBoard, oRootElement);
 			
-			loadPieces(oRootElement);
+			loadPieces(oBoard, oRootElement);
 			
-			loadPlayers(oRootElement);
+			loadPlayers(oBoard, oRootElement);
+			
+			oBoard.init();
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
@@ -120,29 +130,41 @@ class XMLDeserializer {
 		//System.out.println("hello");
 		//serialize(m_oBoard);
 		
-		return m_oBoard;
+		//return m_oBoard;
 	}	
 
-	void populateBoardAttributes() {
-		m_oBoard = new Board("","","","",808,700);
-		//m_oBoard = new Board();
+	private static void populateBoardAttributes(IBoardData oBoard, Element oRootElement) {
+		
+		String stName = oRootElement.getAttributes().getNamedItem("Name").getNodeValue();
+		String stBoardImage = oRootElement.getAttributes().getNamedItem("BoardImage").getNodeValue();
+		String stCellSelectionImage = oRootElement.getAttributes().getNamedItem("ActiveCellImage").getNodeValue();
+		String stMoveCandidateImage = oRootElement.getAttributes().getNamedItem("MarkedCellImage").getNodeValue();
+		int nWidth = Integer.parseInt( oRootElement.getAttributes().getNamedItem("Width").getNodeValue());
+		int nHeight = Integer.parseInt( oRootElement.getAttributes().getNamedItem("Height").getNodeValue());
+		
+		oBoard.getBoardData().setName(stName);
+		oBoard.getBoardData().setBoardImagePath(stBoardImage);
+		oBoard.getBoardData().setActivCellImagePath(stCellSelectionImage);
+		oBoard.getBoardData().setMarkedCellImagePath(stMoveCandidateImage);
+		oBoard.getBoardData().setBoardWidth(nWidth);
+		oBoard.getBoardData().setBoardHeight(nHeight);
 	}
 
-	void populatePositions(Element oRootElement){
+	private static void populatePositions(IBoardData oBoard, Element oRootElement){
 		
-		loadPositionsBasicDetails(oRootElement);
+		loadPositionsBasicDetails(oBoard, oRootElement);
 		
-		loadPositionsConnectionDetails(oRootElement);
+		loadPositionsConnectionDetails(oBoard, oRootElement);
 	}
 
-	void loadPositionsBasicDetails(Element oRootElement){
+	private static void loadPositionsBasicDetails(IBoardData oBoard, Element oRootElement){
 
 		try
 		{
 		NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
 		for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
 		
-			Position oPosition = new Position();
+			IPositionData oPosition = oBoard.createPosition();
 
 			Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
 			
@@ -150,38 +172,10 @@ class XMLDeserializer {
 			String stRank = oPositionNode.getAttributes().getNamedItem("Rank").getNodeValue();
 			String stFamily = oPositionNode.getAttributes().getNamedItem("Family").getNodeValue();
 			
-			oPosition.setFile(stFile.charAt(0));
-			oPosition.setRank(Integer.parseInt(stRank));
-			oPosition.setCategory(stFamily);
+			oPosition.getPosition().setFile(stFile.charAt(0));
+			oPosition.getPosition().setRank(Integer.parseInt(stRank));
+			oPosition.getPosition().setCategory(stFamily);
 						
-			/*NodeList lstDirectionNodes = ((Element)oPositionNode.getElementsByTagName("Directions").item(0)).getElementsByTagName("Direction");
-			for( int nDirectionIndex = 0, nDirectionIndexMax = lstPositionNodes.getLength(); nDirectionIndex < nDirectionIndexMax; nDirectionIndex++) {
-				Element oDirectionNode = (Element)(lstDirectionNodes.item(nDirectionIndex));
-
-				String stType = oDirectionNode.getAttributes().getNamedItem("Type").getNodeValue();
-				String stName = oDirectionNode.getAttributes().getNamedItem("Name").getNodeValue();
-
-				Path oPath = new Path(stName, CustomTypeMapping.convertStringToDirection(stType), null);
-
-				NodeList lstLinkedPositionNodes = oDirectionNode.getElementsByTagName("LinkedPosition");
-				for( int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
-					String stLinkedPosition = lstLinkedPositionNodes.item(nLinkedPositionIndex).getNodeValue();
-				}
-				
-				oPosition.addPath(oPath);
-			}   
-
-			NodeList lstConnectionNodes = ((Element)oPositionNode.getElementsByTagName("Connections").item(0)).getElementsByTagName("Connection");
-			for( int nConnectionIndex = 0, nConnectionIndexMax = lstConnectionNodes.getLength(); nConnectionIndex < nConnectionIndexMax; nConnectionIndex++) {
-
-				Element oConnectionNode = (Element)(lstConnectionNodes.item(nConnectionIndex));
-
-				String stPoint1 = oConnectionNode.getAttributes().getNamedItem("Point1").getNodeValue();
-				String stPoint2 = oConnectionNode.getAttributes().getNamedItem("Point2").getNodeValue();
-				
-				oPosition.addPathConnection(stPoint1, stPoint2);
-			}
-			*/
 			Node oShapeNode = ((Element)oPositionNode.getElementsByTagName("Shape").item(0)).getElementsByTagName("Coordinates").item(0);
 
 			String stX1 = oShapeNode.getAttributes().getNamedItem("x1").getNodeValue();
@@ -202,9 +196,9 @@ class XMLDeserializer {
 					Integer.parseInt(stX4), 
 					Integer.parseInt(stY4));
 			
-			oPosition.setShape(oShape);
+			oPosition.getPosition().setShape(oShape);
 			
-			m_oBoard.addPosition( oPosition);
+			oBoard.addPosition(oPosition);
 		}
 		}
 		catch(java.lang.Exception e) {
@@ -213,81 +207,49 @@ class XMLDeserializer {
 
 	}
 
-	void loadPositionsConnectionDetails(Element oRootElement){
+	private static void loadPositionsConnectionDetails(IBoardData oBoard, Element oRootElement){
 
 		try
 		{
-		NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
-		for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
-			//Position oPosition = new Position();
-
-			Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
-			
-			String stFile = oPositionNode.getAttributes().getNamedItem("File").getNodeValue();
-			String stRank = oPositionNode.getAttributes().getNamedItem("Rank").getNodeValue();
-			//String stFamily = oPositionNode.getAttributes().getNamedItem("Family").getNodeValue();
-			
-			/*oPosition.setFile(stFile.charAt(0));
-			oPosition.setRank(Character.getNumericValue(stRank.charAt(0)));
-			oPosition.setCategory(stFamily);
-			*/		
-			
-			Position oPosition = m_oBoard.getPosition(stFile + stRank);
-			NodeList lstDirectionNodes = ((Element)oPositionNode.getElementsByTagName("Directions").item(0)).getElementsByTagName("Direction");
-			for( int nDirectionIndex = 0, nDirectionIndexMax = lstDirectionNodes.getLength(); nDirectionIndex < nDirectionIndexMax; nDirectionIndex++) {
-				Element oDirectionNode = (Element)(lstDirectionNodes.item(nDirectionIndex));
-
-				String stType = oDirectionNode.getAttributes().getNamedItem("Type").getNodeValue();
-				String stName = oDirectionNode.getAttributes().getNamedItem("Name").getNodeValue();
-
-				Path oPath = new Path(stName, CustomTypeMapping.convertStringToDirection(stType), null);
-
-				NodeList lstLinkedPositionNodes = oDirectionNode.getElementsByTagName("LinkedPosition");
-				for( int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
-					String stLinkedPosition = lstLinkedPositionNodes.item(nLinkedPositionIndex).getChildNodes().item(0).getNodeValue();
+			NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
+			for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
+	
+				Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
+				
+				String stFile = oPositionNode.getAttributes().getNamedItem("File").getNodeValue();
+				String stRank = oPositionNode.getAttributes().getNamedItem("Rank").getNodeValue();
+				
+				IPositionData oPosition = oBoard.getPosition(stFile + stRank);
+				NodeList lstDirectionNodes = ((Element)oPositionNode.getElementsByTagName("Directions").item(0)).getElementsByTagName("Direction");
+				for( int nDirectionIndex = 0, nDirectionIndexMax = lstDirectionNodes.getLength(); nDirectionIndex < nDirectionIndexMax; nDirectionIndex++) {
+					Element oDirectionNode = (Element)(lstDirectionNodes.item(nDirectionIndex));
+	
+					String stType = oDirectionNode.getAttributes().getNamedItem("Type").getNodeValue();
+					String stName = oDirectionNode.getAttributes().getNamedItem("Name").getNodeValue();
+	
+					IPathData oPath = new PathData(stName, CustomTypeMapping.convertStringToDirection(stType), null);
+	
+					NodeList lstLinkedPositionNodes = oDirectionNode.getElementsByTagName("LinkedPosition");
+					for( int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
+						String stLinkedPosition = lstLinkedPositionNodes.item(nLinkedPositionIndex).getChildNodes().item(0).getNodeValue();
+						
+						oPath.addPosition(oBoard.getPosition(stLinkedPosition));
+					}
 					
-					oPath.addPosition(m_oBoard.getPosition(stLinkedPosition));
+					oPosition.getPosition().addPath(oPath);
+				}   
+	
+				NodeList lstConnectionNodes = ((Element)oPositionNode.getElementsByTagName("Connections").item(0)).getElementsByTagName("Connection");
+				for( int nConnectionIndex = 0, nConnectionIndexMax = lstConnectionNodes.getLength(); nConnectionIndex < nConnectionIndexMax; nConnectionIndex++) {
+	
+					Element oConnectionNode = (Element)(lstConnectionNodes.item(nConnectionIndex));
+	
+					String stPoint1 = oConnectionNode.getAttributes().getNamedItem("Point1").getNodeValue();
+					String stPoint2 = oConnectionNode.getAttributes().getNamedItem("Point2").getNodeValue();
+					
+					oPosition.getPosition().linkPaths(stPoint1, stPoint2);
 				}
-				
-				oPosition.addPath(oPath);
-			}   
-
-			NodeList lstConnectionNodes = ((Element)oPositionNode.getElementsByTagName("Connections").item(0)).getElementsByTagName("Connection");
-			for( int nConnectionIndex = 0, nConnectionIndexMax = lstConnectionNodes.getLength(); nConnectionIndex < nConnectionIndexMax; nConnectionIndex++) {
-
-				Element oConnectionNode = (Element)(lstConnectionNodes.item(nConnectionIndex));
-
-				String stPoint1 = oConnectionNode.getAttributes().getNamedItem("Point1").getNodeValue();
-				String stPoint2 = oConnectionNode.getAttributes().getNamedItem("Point2").getNodeValue();
-				
-				oPosition.addPathConnection(stPoint1, stPoint2);
 			}
-			/*
-			Node oShapeNode = ((Element)oPositionNode.getElementsByTagName("Shape").item(0)).getElementsByTagName("Coordinates").item(0);
-
-			String stX1 = oShapeNode.getAttributes().getNamedItem("x1").getNodeValue();
-			String stY1 = oShapeNode.getAttributes().getNamedItem("y1").getNodeValue();
-			String stX2 = oShapeNode.getAttributes().getNamedItem("x2").getNodeValue();
-			String stY2 = oShapeNode.getAttributes().getNamedItem("y2").getNodeValue();
-			String stX3 = oShapeNode.getAttributes().getNamedItem("x3").getNodeValue();
-			String stY3 = oShapeNode.getAttributes().getNamedItem("y3").getNodeValue();
-			String stX4 = oShapeNode.getAttributes().getNamedItem("x4").getNodeValue();
-			String stY4 = oShapeNode.getAttributes().getNamedItem("y4").getNodeValue();
-
-			Quadrilateral oShape = new Quadrilateral(Character.getNumericValue(stX1.charAt(0)), 
-					Character.getNumericValue(stY1.charAt(0)), 
-					Character.getNumericValue(stX2.charAt(0)), 
-					Character.getNumericValue(stY2.charAt(0)), 
-					Character.getNumericValue(stX3.charAt(0)), 
-					Character.getNumericValue(stY3.charAt(0)), 
-					Character.getNumericValue(stX4.charAt(0)), 
-					Character.getNumericValue(stY4.charAt(0)));
-			
-			oPosition.setShape(oShape);
-			
-			m_oBoard.addPosition( oPosition);
-			*/
-		}
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
@@ -296,11 +258,11 @@ class XMLDeserializer {
 	}
 
 	
-	void loadRules(Element oRootElement){
-		populateRule(oRootElement, null);
+	private static void loadRules(IBoardData oBoard, Element oRootElement){
+		populateRule(oBoard, oRootElement, null);
 	}
 	
-	void populateRule(Element oRootElement, Rule oParentRule) {
+	private static void populateRule(IBoardData oBoard, Element oRootElement, IRuleData oParentRule) {
 		try{			
 			NodeList lstRuleNodes = ((Element)oRootElement.getElementsByTagName("Rules").item(0)).getElementsByTagName("Rule");
 			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
@@ -315,14 +277,23 @@ class XMLDeserializer {
 				Rank enRank = CustomTypeMapping.convertStringToRank( oRuleNode.getAttributes().getNamedItem("Rank").getNodeValue());
 				Family enFamily = CustomTypeMapping.convertStringToFamily( oRuleNode.getAttributes().getNamedItem("Family").getNodeValue());
 				
-				Rule oRule= new Rule(stName, enRuleType, enDirection, enManoeuvre, nMaxRecurrenceAllowed, enFamily, enFile, enRank, false, null);
+				IRuleData oRule = oBoard.createRule();
+				
+				oRule.getRuleData().setName(stName);
+				oRule.getRuleData().setRuleType(enRuleType);
+				oRule.getRuleData().setDirection(enDirection);
+				oRule.getRuleData().setManoeuvreStrategy(enManoeuvre);
+				oRule.getRuleData().setMaxRecurrenceCount(nMaxRecurrenceAllowed);
+				oRule.getRuleData().setFamily(enFamily);
+				oRule.getRuleData().setFile(enFile);
+				oRule.getRuleData().setRank(enRank);
 				
 				if( oParentRule != null)
-					oParentRule.addRule( oRule);
+					oParentRule.getRuleData().addRule( oRule);
 				else
-					m_oBoard.addRule( oRule);
+					oBoard.getBoardData().addRule( oRule);
 				
-				populateRule(oRuleNode, oRule);
+				populateRule(oBoard, oRuleNode, oRule);
 			}
 		}
 		catch(java.lang.Exception e) {
@@ -330,7 +301,7 @@ class XMLDeserializer {
 		}
 	}
 	
-	void loadPieces(Element oRootElement){
+	private static void loadPieces(IBoardData oBoard, Element oRootElement){
 
 		try
 		{
@@ -341,8 +312,11 @@ class XMLDeserializer {
 			
 			String stName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
 			String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
-						
-			Piece oPiece = new Piece(stName, stImage);
+			
+			IPieceData oPiece = oBoard.createPiece();
+			
+			oPiece.getPieceData().setName(stName);
+			oPiece.getPieceData().setImagePath(stImage);
 
 			NodeList lstRuleNodes = ((Element)oPieceNode.getElementsByTagName("AllowedMoves").item(0)).getElementsByTagName("Rule");
 			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
@@ -350,10 +324,10 @@ class XMLDeserializer {
 
 				String stRule = oRuleNode.getChildNodes().item(0).getNodeValue();
 				
-				oPiece.addRule(m_oBoard.getRule(stRule));
+				oPiece.getPieceData().addRule(oBoard.getRule(stRule));
 			}   
 
-			m_oBoard.addPiece( oPiece);
+			oBoard.getBoardData().addPiece( oPiece);
 		}
 		}
 		catch(java.lang.Exception e) {
@@ -362,7 +336,7 @@ class XMLDeserializer {
 
 	}
 
-	void loadPlayers(Element oRootElement){
+	private static void loadPlayers(IBoardData oBoard, Element oRootElement){
 
 		try
 		{
@@ -373,7 +347,9 @@ class XMLDeserializer {
 			
 			String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
 						
-			Player oPlayer = new Player(stName, "white");
+			IPlayerData oPlayer = oBoard.createPlayer();
+			oPlayer.getPlayerData().setName(stName);
+			oPlayer.getPlayerData().setColor("white");
 
 			NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
 			for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
@@ -382,12 +358,12 @@ class XMLDeserializer {
 				String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
 				String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
 
-				//oPlayer.se.addRule(m_oBoard.getRule(stRule));
+				//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
 				
-				m_oBoard.addMapping(stName, stPieceName, stPosition);
+				oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
 			}   
 
-			m_oBoard.addPlayer( oPlayer);
+			oBoard.getBoardData().addPlayer( oPlayer);
 		}
 		}
 		catch(java.lang.Exception e) {

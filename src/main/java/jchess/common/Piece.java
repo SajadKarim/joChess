@@ -1,61 +1,120 @@
 package jchess.common;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import jchess.common.enumerator.Direction;
-import jchess.common.enumerator.Family;
-import jchess.common.enumerator.File;
-import jchess.common.enumerator.Manoeuvre;
-import jchess.common.enumerator.Rank;
-import jchess.common.enumerator.RuleType;
+import jchess.GUI;
 
-public class Piece implements IPiece {
-	String m_stName;
-	String m_stImagePath;
-	Map<String, Rule> m_mpRules;
+public class Piece implements IPieceData {
+	private PieceData m_oPiece;
+	private IPlayerData m_oPlayer;
+	private Image m_oImage;
+	//private Map<String, IRuleData> m_lstRules;
 	
-	public Piece(String stName, String stImagePath) {
-		m_stName = stName;
-		m_stImagePath = stImagePath;
+	public Piece() {
+		m_oPiece = new PieceData();
+	}
+	
+	public Piece(PieceData oPiece, PlayerData oPlayer){
+		m_oPiece = oPiece;
+		m_oPlayer = oPlayer;
 		
-		m_mpRules = new HashMap<String, Rule>();
-		m_mpRules.put("1", new Rule("1", RuleType.MOVE_AND_CAPTURE, Direction.VERTEX, Manoeuvre.BLINKER, 1000, Family.SAME, File.IGNORE, Rank.IGNORE, true, null));
-		m_mpRules.put("2",  new Rule("2", RuleType.MOVE_AND_CAPTURE, Direction.EDGE, Manoeuvre.BLINKER, 3000, Family.IGNORE, File.IGNORE, Rank.IGNORE, true, null));
-
+		//m_lstRules = new HashMap<String, IRuleData>();
+		
+		populateRules();
+		
+		m_oImage = GUI.loadImage(getImagePath());
 	}
 	
 	public Piece(Piece oPiece) {
-		this.m_stName = oPiece.m_stName;
-		this.m_stImagePath = oPiece.m_stImagePath;
 		
-		this.m_mpRules = new HashMap<String, Rule>(oPiece.m_mpRules);
 	}
 	
 	public String getName() {
-		return m_stName;
+		return m_oPiece.getName();
 	}
-	
-	public void setName(String stName) {
-		m_stName = stName;
-	}
-	
+		
 	public String getImagePath() {
-		return m_stImagePath;
+		return m_oPiece.getImagePath();
 	}
 	
-	public void setImagePath(String stImagePath) {
-		m_stImagePath = stImagePath;
+	public List< IRuleData> getAllRules(){
+		return m_oPiece.getAllRules();
 	}
 	
-	public Map<String, Rule> getAllRules(){
-		return m_mpRules;
+	public IPlayerData getPlayer() {
+		return m_oPlayer;
 	}
 	
-	public void addRule(Rule oRule) {
-		m_mpRules.put(oRule.getName(), oRule);
+	public void setPlayer(PlayerData oPlayer) {
+		m_oPlayer = oPlayer;
+	}
+
+	public Image getImage() {
+		return m_oImage;
+	}
+
+	public void setImage(Image oImage) {
+		m_oImage = oImage;
+	}
+	
+	//public List<IRuleData> getAllRuleAgents(){
+//		return m_lstRules;
+	//}
+	
+	private void populateRules() {
+		//for (Map.Entry<String, RuleData> entry2 : getAllRules().entrySet()) {
+		//	m_lstRules.add(new Rule(entry2.getValue()));
+		/*Iterator<IRuleData> it = getAllRules().iterator();
+    	//while( it.hasNext()) {
+    	//	m_lstRules.add(new RuleData(it.next()));
+    	}*/
+	}
+	
+	public void draw(Graphics g, Position oPosition)
+    {
+        try
+        {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int x = oPosition.getShape().getTopLeftX();
+            int y = oPosition.getShape().getTopLeftY();
+            if (m_oImage != null && g != null)
+            {            	
+            	Polygon p = ((IPolygon)oPosition.getShape()).getPolygon();
+            	
+            	g.setClip(p);
+            	g.drawImage(m_oImage, (int)p.getBounds2D().getCenterX()-30, (int)p.getBounds2D().getCenterY()-30, null);
+
+            }
+            else
+            {
+                System.out.println("image is null!");
+            }
+
+        }
+        catch (java.lang.NullPointerException exc)
+        {
+            System.out.println("Something wrong when painting piece: " + exc.getMessage());
+        }
+    }
+	
+	public ArrayList allMoves() {
+		return new ArrayList();
+	}
+	
+	public PieceData getPieceData() {
+		return m_oPiece;
 	}
 }
