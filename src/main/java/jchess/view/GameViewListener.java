@@ -2,6 +2,6 @@ package jchess.view;
 
 import jchess.common.Position;
 
-public interface BoardViewListener {
+public interface GameViewListener {
     public void onPositionClicked(Position oPosition);
 }

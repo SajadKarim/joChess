@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import jchess.common.enumerator.*;
-import jchess.view.BoardView;
+import jchess.view.GameView;
 import jchess.common.*;
 /** Class to represent chessboard. Chessboard is made from squares.
  * It is setting the squers of chessboard and sets the pieces(pawns)
@@ -41,7 +41,7 @@ import jchess.common.*;
 public class Chessboard extends JPanel
 {
 
-	private BoardView m_oBoardView = null;
+	private GameView m_oBoardView = null;
 	
     public static final int top = 0;
     public static final int bottom = 7;

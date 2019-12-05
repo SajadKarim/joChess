@@ -38,12 +38,12 @@ import java.util.logging.Logger;
 public class GUI
 {
 
-    public Game game;
+    public GameOld game;
     static final public Properties configFile = GUI.getConfigFile();
 
     public GUI()
     {
-        this.game = new Game();
+        this.game = new GameOld();
 
         //this.drawGUI();
     }/*--endOf-GUI--*/

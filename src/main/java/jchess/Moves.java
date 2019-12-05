@@ -51,7 +51,7 @@ public class Moves extends AbstractTableModel
     private JScrollPane scrollPane;
     private JTable table;
     private boolean enterBlack = false;
-    private Game game;
+    //private Game game;
     protected Stack<Move> moveBackStack = new Stack<Move>();
     protected Stack<Move> moveForwardStack = new Stack<Move>();
 
@@ -60,7 +60,11 @@ public class Moves extends AbstractTableModel
         none, shortCastling, longCastling
     }
 
-    Moves(Game game)
+    public Moves()
+    {
+    
+    }
+    public Moves(GameOld game)
     {
         super();
         this.tableModel = new MyDefaultTableModel();
@@ -68,7 +72,7 @@ public class Moves extends AbstractTableModel
         this.scrollPane = new JScrollPane(this.table);
         this.scrollPane.setMaximumSize(new Dimension(100, 100));
         this.table.setMinimumSize(new Dimension(100, 100));
-        this.game = game;
+       //this.game = game;
 
         this.tableModel.addColumn(this.names[0]);
         this.tableModel.addColumn(this.names[1]);
@@ -292,34 +296,7 @@ public class Moves extends AbstractTableModel
     {
         try
         {
-            Move last = this.moveBackStack.pop();
-            if (last != null)
-            {
-                if( this.game.settings.gameType == Settings.gameTypes.local ) //moveForward / redo available only for local game
-                {
-                    this.moveForwardStack.push(last);
-                }
-                if (this.enterBlack)
-                {
-                    this.tableModel.setValueAt("", this.tableModel.getRowCount() - 1, 0);
-                    this.tableModel.removeRow(this.tableModel.getRowCount() - 1);
-
-                    if (this.rowsNum > 0)
-                    {
-                        this.rowsNum--;
-                    }
-                }
-                else
-                {
-                    if (this.tableModel.getRowCount() > 0)
-                    {
-                        this.tableModel.setValueAt("", this.tableModel.getRowCount() - 1, 1);
-                    }
-                }
-                this.move.remove(this.move.size() - 1);
-                this.enterBlack = !this.enterBlack;
-            }
-            return last;
+        	return null;
         }
         catch (java.util.EmptyStackException exc)
         {
@@ -336,13 +313,6 @@ public class Moves extends AbstractTableModel
     {
         try
         {
-            if( this.game.settings.gameType == Settings.gameTypes.local)
-            {
-                Move first = this.moveForwardStack.pop();
-                this.moveBackStack.push(first);
-
-                return first;
-            }
             return null;
         }
         catch (java.util.EmptyStackException exc)

@@ -6,21 +6,24 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import jchess.Game;
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
 import jchess.common.Position;
-import jchess.model.BoardModel;
-import jchess.model.IBoardModel;
-import jchess.view.BoardView;
-import jchess.view.BoardViewListener;
-import jchess.view.IBoardView;
+import jchess.model.GameModel;
+import jchess.model.IGameModel;
+import jchess.view.GameView;
+import jchess.view.GameViewListener;
+import jchess.view.IGameView;
 
-public class BoardPresenter extends AbstractModule implements BoardViewListener{
-	    private final IBoardView m_oView;
-	    private final IBoardModel m_oModel;
+public class GamePresenter extends AbstractModule implements GameViewListener, IGamePresenter{
+	    private final IGameView m_oView;
+	    private final IGameModel m_oModel;
 	    private final ICacheManager m_oCacheManager;
 
-	    public BoardPresenter() {
+	    private Game m_oGame;
+	    
+	    public GamePresenter() {
 	    	m_oView = null;
 	    	m_oModel = null;
 	    	m_oCacheManager = null;
@@ -29,15 +32,15 @@ public class BoardPresenter extends AbstractModule implements BoardViewListener{
 	    @Override 
 		  protected void configure() {
 		
-			  bind(IBoardView.class).to(BoardView.class);
+			  bind(IGameView.class).to(GameView.class);
 		
-			  bind(IBoardModel.class).to(BoardModel.class);
+			  bind(IGameModel.class).to(GameModel.class);
 
 			  bind(ICacheManager.class).to(CacheManager.class).in(Singleton.class);
 		  }
 
 	    @Inject
-	    public BoardPresenter(final IBoardView oView, final IBoardModel oModel, final ICacheManager oCacheManager) {
+	    public GamePresenter(final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager) {
 	        m_oView = oView;
 	        m_oModel = oModel;
 	        m_oCacheManager = oCacheManager;
@@ -46,12 +49,16 @@ public class BoardPresenter extends AbstractModule implements BoardViewListener{
 	    }
 
 	    public void init() {
+	    	m_oGame = new Game(this);
+	    	
 	    	m_oCacheManager.loadBoardFromFile("Mock", "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\3PlayerBoard.xml");
 	    	m_oModel.setBoard(m_oCacheManager.getBoard("Mock"));
+	    	m_oView.setModelData(m_oModel);
+	    	
+	    	m_oView.init();
 	    }
 	    
 	    public void showView() {
-	    	m_oView.setModelData(m_oModel);
 	    	m_oView.paintView();
 	    }
 	    
@@ -67,4 +74,19 @@ public class BoardPresenter extends AbstractModule implements BoardViewListener{
 	    	
 	    	m_oView.getViewComponent().getParent().repaint();
 	    }
+	    
+		public void timerUpdateForRemainingSeconds(int nRemainingSeconds) {
+			int nHours = nRemainingSeconds / 60;
+	        int nMintues = (nRemainingSeconds / 60) % 60;
+	        int nSeconds = nRemainingSeconds  % 60;
+	        //nMintues = nMintues / 60;
+
+			m_oModel.setClockText(nMintues + ":" + nSeconds);
+			m_oView.repaintClockView();
+		}
+		
+		public void timerElapsed() {
+			m_oModel.setClockText("--:--");
+		}
+
 }

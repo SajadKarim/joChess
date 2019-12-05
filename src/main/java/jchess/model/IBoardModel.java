@@ -3,11 +3,16 @@ package jchess.model;
 import java.awt.Image;
 import java.util.List;
 
-import jchess.common.Board;
-import jchess.common.IBoard;
+import jchess.common.Piece;
+import jchess.common.Player;
 import jchess.common.Position;
+import jchess.common.Rule;
 
 public interface IBoardModel {
-	public void setBoard(IBoard oBoard);	
-	public IBoard getBoard();	
+	public int getBoardWidth();
+	public int getBoardHeight();
+	public Image getBoardImage();
+	public Image getActivCellImage();
+	public Image getMarkedCellImage();
+	public List<Position> getPositions();
 }
