@@ -855,12 +855,12 @@ public class Chessboard extends JPanel
     	//m_oBoardView.drawBoard(g);
     	//m_oBoardView.drawPieces(g, boardManager.getInstance().getAllPositions());
 
-    	if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
-    	{        
-    	ArrayList<Position> temp = RuleEngine.getTryFindPossibleMove(  this.activeSquare.piece, this.activeSquare.m_oPosition );
+    	//if ((this.active_x_square != 0) && (this.active_y_square != 0)) //if some square is active
+    	//{        
+    	//ArrayList<Position> temp = RuleEngine.getTryFindPossibleMove(  this.activeSquare.piece, this.activeSquare.m_oPosition );
 
     	//m_oBoardView.paintComponent(g, this.activeSquare.m_oPosition, temp);
-    }
+    //}
     
         /*Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

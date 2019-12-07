@@ -3,7 +3,7 @@ package jchess.common;
 import jchess.common.PlayerData.colors;
 import jchess.common.PlayerData.playerTypes;
 
-public class Player implements IPlayerData {
+public class Player implements IPlayerData, IPlayer {
 	private PlayerData m_oPlayerData;
 	
 	public Player() {

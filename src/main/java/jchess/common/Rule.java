@@ -15,13 +15,14 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 
-public class Rule implements IRuleData {
+public class Rule implements IRuleData, IRule {
 	private RuleData m_oRule;	// this should be rule
 	private int m_nRepeatCount;
 	private Queue<IRuleData> m_qRules;
 
 	Rule() {
 		m_oRule = new RuleData();	
+		m_qRules = new LinkedList<IRuleData>();
 	}
 	
 	Rule(RuleData oRule) {
@@ -122,7 +123,7 @@ public class Rule implements IRuleData {
 	}
 
 	
-	public void isValidMove( Position oPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
+	public void isValidMove( IPosition oPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		bIsValidMode.set(false);
 		bCanContinue.set(false);
 		
@@ -159,7 +160,7 @@ public class Rule implements IRuleData {
 		}
 	}
 	
-	public void canContinue( IPositionData oPosition) {
+	public void canContinue( IPosition oPosition) {
 		
 	}
 	//endregion

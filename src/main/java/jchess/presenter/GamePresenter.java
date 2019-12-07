@@ -49,11 +49,11 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    }
 
 	    public void init() {
-	    	m_oGame = new Game(this);
-	    	
 	    	m_oCacheManager.loadBoardFromFile("Mock", "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\3PlayerBoard.xml");
 	    	m_oModel.setBoard(m_oCacheManager.getBoard("Mock"));
 	    	m_oView.setModelData(m_oModel);
+	    	
+	    	m_oGame = new Game(this, m_oModel.getBoard().getPlayers());
 	    	
 	    	m_oView.init();
 	    }
@@ -67,10 +67,12 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    }
 	    
 	    public void onPositionClicked(Position oPosition) {
-	    	if( oPosition.getPiece() != null)
-		    	oPosition.setSelectState(true);
-	    	else
-	    		oPosition.setMoveCandidacy(true);
+	    	//if( oPosition.getPiece() != null)
+		   // 	oPosition.setSelectState(true);
+	    	//else
+	    	//	oPosition.setMoveCandidacy(true);
+	    	
+	    	m_oGame.onBoardActivity(oPosition);
 	    	
 	    	m_oView.getViewComponent().getParent().repaint();
 	    }

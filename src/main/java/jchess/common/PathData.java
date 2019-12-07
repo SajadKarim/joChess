@@ -13,7 +13,7 @@ import jchess.common.enumerator.Direction;
  *
  */
 
-public class PathData implements IPathData{
+public class PathData implements IPathData, IPath{
 	
 	private String m_stName;
 	private Direction  m_enDirection;	
@@ -63,5 +63,13 @@ public class PathData implements IPathData{
     	}
 
     	return false;
+	}
+	
+	public List<IPath> getNeighbors(){
+		return (List<IPath>)(Object)getAllNeighbors();
+	}
+		
+	public List<IPosition> getPositions() {
+		return (List<IPosition>)(Object)getAllPositions();
 	}
 }

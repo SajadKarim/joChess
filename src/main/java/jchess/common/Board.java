@@ -138,11 +138,11 @@ public class Board implements IBoardData, IBoard {
     
     public void mapPieces() {
     	try {
-    	Iterator<IPlayerData> it = m_oBoard.getAllPlayers().iterator();
+    	Iterator<IPlayer> it = this.getPlayers().iterator();
     	while( it.hasNext()){
-    		IPlayerData o = it.next();
+    		IPlayer o = it.next();
     		for (Map.Entry<String, String> entry2 : m_oBoard.getPlayerMapping(o.getName()).entrySet()) {
-    			Piece oo = new Piece(m_oBoard.getPiece(entry2.getValue()).getPieceData(), o.getPlayerData());
+    			Piece oo = new Piece(m_oBoard.getPiece(entry2.getValue()).getPieceData(), o);
     			((Position)getPosition(entry2.getKey())).setPiece(oo);
     		}
     	}    
@@ -158,11 +158,11 @@ public class Board implements IBoardData, IBoard {
 		return (List<Position>)(Object)getAllPositions();
 	}
 	
-	public Player getPlayerByName(String stName) {
+	public IPlayer getPlayerByName(String stName) {
 		return (Player)getPlayer(stName);
 	}
-	public List<Player> getPlayers(){
-		return (List<Player>)(Object)getAllPlayers();		
+	public List<IPlayer> getPlayers(){
+		return (List<IPlayer>)(Object)getAllPlayers();		
 	}
 	
 	public Rule getRuleByName(String stName) {

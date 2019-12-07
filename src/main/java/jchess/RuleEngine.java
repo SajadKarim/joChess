@@ -1,68 +1,54 @@
 package jchess;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.*;
-import jchess.common.*;
+
+import org.javatuples.Pair;
+
+import jchess.common.IPath;
+import jchess.common.IPosition;
+import jchess.common.IRule;
 import jchess.common.enumerator.*;
 public class RuleEngine {
-	public static ArrayList<Position> getTryFindPossibleMove( jchess.common.Piece oPiece, Position oPosition) {		
-    	ArrayList lstPosition = new ArrayList();
+	public static Map<String,Pair<IPosition, IRule>> tryFindPossibleMove( IPosition oPosition) {		
+		Map<String,Pair<IPosition, IRule>> lstPosition = new HashMap<String, Pair<IPosition, IRule>>();
     	
-    	/****for( Rule rule : oPiece.getAllRules()) {
+    	for( IRule oRule : oPosition.getPiece().getRules()) {
     		
-    		rule.reset();
+    		oRule.reset();
     		
-    		tryFindPossibleMoves(new BoardMapping(), lstPosition, (Rule)rule, oPosition);
-			
-    		/*RULE_TYPE enRuleType = ((Rule)rule).m_enRuleType;
-    		switch( enRuleType) {
-    		case MOVE:
-    		case MOVE_TRANSIENT:	
-    			tryFindPossibleMoves(oPiece.player.m_oBoardMapping, lstPosition, (Rule)rule, (Position)oPosition);
-    			break;
-    		case MOVE_IFF_CAPTURE_POSSIBLE:
-    			tryFindPossibleMoves(oPiece.player.m_oBoardMapping, lstPosition, (Rule)rule, (Position)oPosition);
-    			//if( ((Position) lstPosition.get(lstPosition.size() -1)).getPiece() == null)
-    			//	lstPosition.clear();
-    			break;
-    		case MOVE_AND_CAPTURE:
-    			tryFindPossibleMoves(oPiece.player.m_oBoardMapping, lstPosition, (Rule)rule, (Position)oPosition);
-    			break;
-    		default:
-    			break;
-    		}*/
-    	//}***/
+    		tryFindPossibleMoves(new BoardMapping(), lstPosition, oRule, oPosition);			
+    	}
     	
     	return lstPosition;
     }
 
-	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position) {		
-		if ( rule == null)
+	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, Map<String,Pair<IPosition, IRule>> lstPosition, IRule oRule, IPosition oPosition) {		
+		if ( oRule == null)
 			return;
 
-		/*Map<String, Path> positions = position.getAllPaths();
-		Iterator<Map.Entry<String, Path>> it = null;
+		Iterator<IPath> it = oPosition.getPaths().iterator();
 
-		Direction enDirection = rule.getDirection();
+		Direction enDirection = oRule.getDirection();
 		switch( enDirection) {
 		case EDGE: 
-		{			
-			it = positions.entrySet().iterator(); 
-	        while( it.hasNext()) {
+		{
+			while( it.hasNext()) {
 	        	
-	        	Map.Entry<String, Path> entry = it.next();
-	        	if( ((Path)entry.getValue()).getDirection() != Direction.EDGE)
+	        	IPath oPathData = it.next();
+	        	if( oPathData.getDirection() != Direction.EDGE)
 	        		continue;
 	    		
-	    		Iterator<PositionData> it2 = entry.getValue().getAllPositions().iterator();
-	        	while( it2.hasNext()) {
+	    		Iterator<IPosition> itt = oPathData.getPositions().iterator();
+	        	while( itt.hasNext()) {
 
-	        		PositionData __ = it2.next();
+	        		IPosition iPosition = itt.next();
 	        		
-	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule(rule), position, boardManager.getInstance().getPosition(__.getName()));
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, oRule.clone(), oPosition, iPosition);
 	        	}
 	        	
 	        	}
@@ -71,7 +57,23 @@ public class RuleEngine {
 			break;
 		case VERTEX:
 		{			
-			it = positions.entrySet().iterator(); 
+			while( it.hasNext()) {
+	        	
+	        	IPath oPathData = it.next();
+	        	if( oPathData.getDirection() != Direction.VERTEX)
+	        		continue;
+	    		
+	    		Iterator<IPosition > itt = oPathData.getPositions().iterator();
+	        	while( itt.hasNext()) {
+
+	        		IPosition iPosition = itt.next();
+	        		
+	        		tryFindPossibleMoves(oBoardMapping, lstPosition, oRule.clone(), oPosition, iPosition);
+	        	}
+	        	
+	        	}
+
+			/*it = positions.entrySet().iterator(); 
 	        while( it.hasNext()) {
 	        	
 	        	Map.Entry<String, Path> entry = it.next();
@@ -85,7 +87,7 @@ public class RuleEngine {
 	        		
 	        		tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule(rule), position, boardManager.getInstance().getPosition(__.getName()));
 	        	}
-	        	
+	        */	
 	        
 
 	    		/*Iterator<PositionAgent> it2 = entry.getValue().getAllPositions().iterator();
@@ -96,18 +98,16 @@ public class RuleEngine {
 	        	}*/
 
 //	        	tryFindPossibleMoves(oBoardMapping, lstPosition, new Rule((Rule)rule), position, (Position)(((Path)entry.getValue()).m_oPosition));
-	    /***	}
 		}
 			break;
 		default:
 			break;
 		}
-		*/
-		rule.makeRuleDead();
 		
+		oRule.makeRuleDead();		
 	}
 
-	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position position, Position nextPosition) {		
+	public static void tryFindPossibleMoves(IBoardMapping oBoardMapping, Map<String,Pair<IPosition, IRule>> lstPosition, IRule rule, IPosition position, IPosition nextPosition) {		
 		
 		if( nextPosition == null) {
 			rule.makeRuleDead();
@@ -125,14 +125,15 @@ public class RuleEngine {
 		rule.isValidMove( nextPosition, bIsValidMode, bCanContinue);
 			
 		if( bIsValidMode.get())
-			lstPosition.add(nextPosition);
+			lstPosition.put(nextPosition.getName(), new Pair<IPosition, IRule>(nextPosition, rule));
+			//lstPosition.add(nextPosition);
 		
 		if( !bCanContinue.get()) {
 			rule.makeRuleDead();
 			return;
 		}
 		
-		Rule newrule = null;
+		IRule newrule = null;
 		if ( (newrule = rule.getNextRule()) == null)
 			return;
 			
@@ -169,14 +170,14 @@ public class RuleEngine {
     	rule.makeRuleDead();
 }
 */
-	public static void tryFindPossibleMovesUsingBlinkers(IBoardMapping oBoardMapping, ArrayList lstPosition, Rule rule, Position oldposition, Position newPosition) {		
+	public static void tryFindPossibleMovesUsingBlinkers(IBoardMapping oBoardMapping, Map<String,Pair<IPosition, IRule>> lstPosition, IRule rule, IPosition oldposition, IPosition newPosition) {		
 		
 		if( newPosition == null) {
 			rule.makeRuleDead();
 			return;
 		}
 				
-		List<Position> pos = newPosition.tryGetOppositePath(oldposition);
+		List<IPosition> pos = newPosition.tryGetOppositePath(oldposition);
 		if( pos == null) {
 			rule.makeRuleDead();
 			return;
@@ -201,23 +202,23 @@ public class RuleEngine {
 	}
 	*/
 
-		Iterator<Position> it = pos.iterator();
+		Iterator<IPosition> it = pos.iterator();
     	while( it.hasNext()) {
 
-    		Rule _rule = rule.clone();
+    		IRule _rule = rule.clone();
     		
-    		Rule newrule = null;
-    		Position _abc =  it.next();
+    		IRule newrule = null;
+    		IPosition _abc =  it.next();
     		//while( (newrule = _rule.getNextRule()) != null)
-    			tryFindPossibleMoves(oBoardMapping, lstPosition, (Rule)_rule, newPosition, _abc);
+    			tryFindPossibleMoves(oBoardMapping, lstPosition, _rule, newPosition, _abc);
     		
-    		((Rule)_rule).makeRuleDead();
+    		_rule.makeRuleDead();
     	}
     	
     	rule.makeRuleDead();
 }
 
-	public static Boolean validateMove(IBoardMapping oBoardMapping, Rule rule, Position position, Position nextPosition) {		
+	public static Boolean validateMove(IBoardMapping oBoardMapping, IRule rule, IPosition position, IPosition nextPosition) {		
 		
 		String stCategorySource = position.getCategory().toUpperCase();
 		String stCategoryDestination = nextPosition.getCategory().toUpperCase();

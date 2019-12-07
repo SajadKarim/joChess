@@ -16,9 +16,9 @@ import java.util.Map;
 
 import jchess.GUI;
 
-public class Piece implements IPieceData {
+public class Piece implements IPieceData, IPiece {
 	private PieceData m_oPiece;
-	private IPlayerData m_oPlayer;
+	private IPlayer m_oPlayer;
 	private Image m_oImage;
 	//private Map<String, IRuleData> m_lstRules;
 	
@@ -26,7 +26,7 @@ public class Piece implements IPieceData {
 		m_oPiece = new PieceData();
 	}
 	
-	public Piece(PieceData oPiece, PlayerData oPlayer){
+	public Piece(PieceData oPiece, IPlayer oPlayer){
 		m_oPiece = oPiece;
 		m_oPlayer = oPlayer;
 		
@@ -53,11 +53,11 @@ public class Piece implements IPieceData {
 		return m_oPiece.getAllRules();
 	}
 	
-	public IPlayerData getPlayer() {
+	public IPlayer getPlayer() {
 		return m_oPlayer;
 	}
 	
-	public void setPlayer(PlayerData oPlayer) {
+	public void setPlayer(IPlayer oPlayer) {
 		m_oPlayer = oPlayer;
 	}
 
@@ -116,5 +116,9 @@ public class Piece implements IPieceData {
 	
 	public PieceData getPieceData() {
 		return m_oPiece;
+	}
+
+	public List<IRule> getRules() {
+		return (List<IRule>)(Object)m_oPiece.getAllRules();
 	}
 }

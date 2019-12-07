@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Position implements IPositionData {
+public class Position implements IPositionData, IPosition {
 	private PositionData m_oPosition;
 	private Piece m_oPiece;
 	
@@ -69,7 +69,7 @@ public class Position implements IPositionData {
 		return null;
 	}
 	
-	public List<Position> tryGetOppositePath( IPositionData oPosition) {	
+	public List<IPosition> tryGetOppositePath( IPosition oPosition) {	
 		String stInitiator = null;
 		
 		Iterator<IPathData> it = m_oPosition.getAllPaths().iterator(); 
@@ -102,15 +102,15 @@ public class Position implements IPositionData {
 				return null;
 			
 			if( newA.equals(newB)) {
-				List<Position> lst = new ArrayList<Position>();
+				List<IPosition> lst = new ArrayList<IPosition>();
 				
-				List<IPositionData> temp = m_oPosition.getPath(newA).getAllPositions();
+				List<IPosition> temp = this.getPathByName(newA).getPositions();
 				
 				
-				Iterator<IPositionData> __it = temp.iterator(); 
+				Iterator<IPosition> __it = temp.iterator(); 
 			    while( __it.hasNext()) {
 
-			    	//lst.add(boardManager.getInstance().getBoard().getPositionByName(__it.next().getName()));
+			    	lst.add((Position)__it.next());
 			    }
 
 				
@@ -144,5 +144,13 @@ public class Position implements IPositionData {
 	}
 	public void setMoveCandidacy(Boolean bMoveCandidacy) {
 		m_bMoveCandidacy = bMoveCandidacy;
+	}
+	
+	public IPath getPathByName(String stName) {
+		return (IPath)m_oPosition.getPath(stName);
+	}
+	
+	public List<IPath> getPaths(){
+		return  (List<IPath>)(Object)m_oPosition.getAllPaths();
 	}
 }

@@ -14,8 +14,8 @@ public interface IBoard {
 	public Position getPositionByName(String stName);
 	public List<Position> getPositions();
 	
-	public Player getPlayerByName(String stName);
-	public List<Player> getPlayers();
+	public IPlayer getPlayerByName(String stName);
+	public List<IPlayer> getPlayers();
 	
 	public Rule getRuleByName(String stName);
 	public List<Rule> getRules();
