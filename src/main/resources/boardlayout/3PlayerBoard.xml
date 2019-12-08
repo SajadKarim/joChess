@@ -3679,6 +3679,8 @@
     </Position>
   </Positions>
   <Rules>
+    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="IGNORE" Family="IGNORE"/>
+    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Vertex_Traversal" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="SAME"/>
     <Rule Name="Edge_Traversal" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Knight_Move" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="SAME">
@@ -3781,20 +3783,20 @@
     </Piece>
     <Piece Name="PawnWhite" Image="Pawn-W.png">
       <AllowedMoves>
-        <Rule>Vertex_Traversal</Rule>
-        <Rule>Edge_Traversal</Rule>
+        <Rule>Pawn_Move</Rule>
+        <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
     <Piece Name="PawnBlack" Image="Pawn-B.png">
       <AllowedMoves>
-        <Rule>Vertex_Traversal</Rule>
-        <Rule>Edge_Traversal</Rule>
+        <Rule>Pawn_Move</Rule>
+        <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
     <Piece Name="PawnRed" Image="Pawn-R.png">
       <AllowedMoves>
-        <Rule>Vertex_Traversal</Rule>
-        <Rule>Edge_Traversal</Rule>
+        <Rule>Pawn_Move</Rule>
+        <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
   </Pieces>

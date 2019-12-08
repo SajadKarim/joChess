@@ -27,8 +27,8 @@ import java.awt.event.TextEvent;
 import java.awt.*;
 import javax.swing.text.BadLocationException;
 
-import jchess.common.Player;
-import jchess.common.PlayerData;
+import jchess.cache.PlayerData;
+import jchess.gamelogic.PlayerAgent;
 import jchess.view.GameView;
 
 /**

@@ -20,12 +20,9 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
-import jchess.view.viewTemp;
-import jchess.common.BoardData;
+import jchess.cache.BoardData;
 import jchess.common.IBoardData;
-import jchess.common.Board;
-import jchess.model.modelTemp;
-import jchess.presenter.presenterTemp;
+import jchess.gamelogic.BoardAgent;
 import jchess.service.STORAGE_TYPE;
 import jchess.service.StorageService;
 

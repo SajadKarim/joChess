@@ -1,12 +1,9 @@
 package jchess.model;
 
 import java.awt.Image;
-import java.util.List;
+import java.util.Map;
 
-import jchess.common.Piece;
-import jchess.common.Player;
-import jchess.common.Position;
-import jchess.common.Rule;
+import jchess.common.IPositionAgent;
 
 public interface IBoardModel {
 	public int getBoardWidth();
@@ -14,5 +11,5 @@ public interface IBoardModel {
 	public Image getBoardImage();
 	public Image getActivCellImage();
 	public Image getMarkedCellImage();
-	public List<Position> getPositions();
+	public Map<String, IPositionAgent> getPositions();
 }

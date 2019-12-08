@@ -32,7 +32,11 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+
+import jchess.cache.PlayerData;
 import jchess.common.*;
+import jchess.gamelogic.PositionAgent;
+import jchess.gamelogic.RuleAgent;
 /**
 Class to represent a piece (any kind) - this class should be extended to represent pawn, bishop etc.
  */
@@ -50,7 +54,7 @@ public abstract class Piece
     public Image image;
     public static short value = 0;
 
-    public List<Rule> m_lstRules = null;
+    public List<RuleAgent> m_lstRules = null;
 
     public ArrayList getPossibleMoves() {
     	return null;
@@ -64,17 +68,17 @@ public abstract class Piece
     {
         this.chessboard = chessboard;
         this.player = player;
-        if (player.color == player.color.black)
+       // if (player.color == player.color.black)
         {
             image = imageBlack;
         }
-        else
+        //else
         {
             image = imageWhite;
         }
         this.name = this.getClass().getSimpleName();
 
-        m_lstRules = new ArrayList<Rule>();
+        m_lstRules = new ArrayList<RuleAgent>();
 
         populateRules();
 
@@ -118,7 +122,7 @@ public abstract class Piece
         }
     }
 
-    final void draw(Graphics g, Position oPosition)
+    final void draw(Graphics g, PositionAgent oPosition)
     {
         try
         {
@@ -189,11 +193,11 @@ public abstract class Piece
 
     void setImage()
     {
-        if (this.player.color == this.player.color.black)
+        //if (this.player.color == this.player.color.black)
         {
             image = imageBlack;
         }
-        else
+        //else
         {
             image = imageWhite;
         }

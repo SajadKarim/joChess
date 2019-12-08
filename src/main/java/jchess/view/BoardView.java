@@ -17,14 +17,17 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import jchess.Moves;
+import jchess.common.IPlayerAgent;
 import jchess.common.IPolygon;
-import jchess.common.Piece;
-import jchess.common.Position;
+import jchess.common.IPositionAgent;
+import jchess.gamelogic.PieceAgent;
+import jchess.gamelogic.PositionAgent;
 import jchess.model.IBoardModel;
 import jchess.model.IGameModel;
 
@@ -50,11 +53,13 @@ public class BoardView extends JPanel implements IBoardView {
     }
 	
 	private void drawPositions(Graphics oGraphics) {
-		Iterator<Position> itt = m_oBoardModel.getPositions().iterator();
-    	while( itt.hasNext()) {
-    		Position oPosition = itt.next();//entry.getValue();
+		for (Map.Entry<String,IPositionAgent> entry : m_oBoardModel.getPositions().entrySet()) {
+
+		//Iterator<PositionAgent> itt = m_oBoardModel.getPositions().iterator();
+    	//while( itt.hasNext()) {
+    		IPositionAgent oPosition = entry.getValue(); // itt.next();//
     		if( oPosition.getPiece() != null) {
-    			drawPiece(oGraphics, ((IPolygon)(oPosition.getShape())).getPolygon(), ((Piece)oPosition.getPiece()).getImage());
+    			drawPiece(oGraphics, ((IPolygon)(oPosition.getShape())).getPolygon(), ((PieceAgent)oPosition.getPiece()).getImage());
     			
     			if( oPosition.getSelectState())
     				selectPosition(oGraphics, oPosition);
@@ -64,7 +69,7 @@ public class BoardView extends JPanel implements IBoardView {
     	}
 	}
 	
-	public void selectPosition(Graphics oGraphics, Position oPosition) {
+	public void selectPosition(Graphics oGraphics, IPositionAgent oPosition) {
 		
 		Polygon p = ((IPolygon)oPosition.getShape()).getPolygon();
     	
@@ -83,7 +88,7 @@ public class BoardView extends JPanel implements IBoardView {
 
 	}
 	
-	public void markPositions(Graphics oGraphics, Position oPosition) {	
+	public void markPositions(Graphics oGraphics, IPositionAgent oPosition) {	
         	Polygon p2 = ((IPolygon)oPosition.getShape()).getPolygon();
         	
             Image tempImage2 = m_oBoardModel.getMarkedCellImage();
@@ -121,7 +126,7 @@ public class BoardView extends JPanel implements IBoardView {
     }
 	
 	@Override
-    public void paintComponent(Graphics oGraphics)
+    public void paint(Graphics oGraphics)
     {
 		draw(oGraphics);
     }

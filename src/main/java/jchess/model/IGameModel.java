@@ -1,15 +1,13 @@
 package jchess.model;
 
-import java.awt.Image;
-import java.util.List;
-
-import jchess.common.Board;
-import jchess.common.IBoard;
-import jchess.common.Position;
+import jchess.common.IBoardAgent;
+import jchess.common.IPlayer;
 
 public interface IGameModel {
-	public void setBoard(IBoard oBoard);	
-	public IBoard getBoard();	
+	public IBoardAgent getBoard();	
+	public void setBoard(IBoardAgent oBoard);	
 	public String getClockText();
 	public void setClockText(String stClockText);
+	public IPlayer getPlayer();
+	public void setPlayer(IPlayer oPlayer);
 }

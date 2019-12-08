@@ -1,12 +1,15 @@
-package jchess.common;
+package jchess.cache;
 
 import java.awt.Polygon;
 
+import jchess.common.IPolygon;
+
 /**
- * Quadrilateral.java
+ * This class is specific for figures with four vertexes.
  * 
- * This is a data class to store a Position coordinates for designing purpose.
- *
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ * 
  */
 
 public class Quadrilateral implements IPolygon{

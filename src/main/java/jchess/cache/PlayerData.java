@@ -18,67 +18,38 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess.common;
+package jchess.cache;
 
-import java.io.Serializable;
-import java.util.Hashtable;
-
-import jchess.*;
-
+import jchess.common.IBoardMapping;
+import jchess.common.IPlayerData;
 
 /**
- * Class representing the player in the game
+ * This is a container class to store "Player" related details in cache.
+ * It actually maps XML or DB structure for "Player" to memory.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  */
+
 public class PlayerData implements IPlayerData{
 
-	public String name;
+	public String m_stName;
 	public IBoardMapping m_oBoardMapping = null;
     
-    public enum colors
+    public PlayerData()
     {
-
-        white, black
-    }
-    public colors color;
-
-    public enum playerTypes
-    {
-
-        localUser, networkUser, computer
-    }
-    public playerTypes playerType;
-    public boolean goDown;
-
-    PlayerData()
-    {
-    	name="";
         populateCustomBoardMapping();
     }
 
-    PlayerData(String name, String color)
+    PlayerData(String stName)
     {
-        this.name = name;
-        this.color = colors.valueOf(color);
-        this.goDown = false;
-        
-        populateCustomBoardMapping();
-    }
-
-    PlayerData(PlayerData oPlayerData)
-    {
-    	this.name = oPlayerData.name;
-    	this.color = oPlayerData.color;
-    	this.goDown = oPlayerData.goDown;
-    	
+        m_stName = stName;        
         populateCustomBoardMapping();
     }
 
     public void populateCustomBoardMapping() {
     	m_oBoardMapping = new BoardMapping();
-    	
-    	if( color == colors.white)
-    		return;
-    	
+    	    	
     	m_oBoardMapping.addMapping('a', 'h');
     	m_oBoardMapping.addMapping('b', 'g');
     	m_oBoardMapping.addMapping('c', 'f');
@@ -98,39 +69,21 @@ public class PlayerData implements IPlayerData{
     	m_oBoardMapping.addMapping('8', '1');
     }
 
-    
-    /** Method setting the players name
-     *  @param name name of player
-     */
-    public void setName(String name)
+    public void setName(String stName)
     {
-        this.name = name;
+        m_stName = stName;
     }
 
-    public void setColor(String stName) {
-    	this.color = colors.valueOf(stName);
-    }
-    /** Method getting the players name
-     *  @return name of player
-     */
     public String getName()
     {
-        return this.name;
+        return m_stName;
     }
 
-    /** Method setting the players type
-     *  @param type type of player - enumerate
-     */
-    public void setType(playerTypes type)
-    {
-        this.playerType = type;
-    }
-    
-	public PlayerData getPlayerData() {
+    public PlayerData getPlayerData() {
 		return this;
 	}
-	
-	public colors getcolor() {
-		return this.color;
+
+	public IBoardMapping getBoardMapping() {
+		return m_oBoardMapping;
 	}
 }

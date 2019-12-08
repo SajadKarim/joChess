@@ -2,8 +2,6 @@ package jchess.util;
 
 import java.util.ArrayList;
 
-import jchess.view.viewTempListener;
-
 public class Timer implements ITimer {
     private Thread m_oThread;
 	private int m_nTimerLengthInSeconds;
@@ -103,7 +101,7 @@ public class Timer implements ITimer {
 
     private void notifyListeners_onTimerEnds() {
         for (final ITimerListener listener : lstLiteners) {
-            listener.onTimerEnds();
+            listener.onTimerElapsed();
         }
     }
 

@@ -3,13 +3,12 @@ package jchess.common;
 import java.awt.Polygon;
 
 /**
- * IPolygon.java
+ * IPolygon provides abstraction to polygons.
  * 
- * This interface exposes necessary details to the classes responsible to generate view.
- *
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  */
 
 public interface IPolygon extends IShape{
 	public Polygon getPolygon();	
-
 }

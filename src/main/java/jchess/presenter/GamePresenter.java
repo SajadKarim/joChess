@@ -6,17 +6,18 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import jchess.Game;
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
-import jchess.common.Position;
+import jchess.common.IPlayer;
+import jchess.common.IPositionAgent;
+import jchess.gamelogic.Game;
 import jchess.model.GameModel;
 import jchess.model.IGameModel;
 import jchess.view.GameView;
 import jchess.view.GameViewListener;
 import jchess.view.IGameView;
 
-public class GamePresenter extends AbstractModule implements GameViewListener, IGamePresenter{
+public class GamePresenter extends AbstractModule implements GameViewListener, IGamePresenterCallback{
 	    private final IGameView m_oView;
 	    private final IGameModel m_oModel;
 	    private final ICacheManager m_oCacheManager;
@@ -51,10 +52,11 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    public void init() {
 	    	m_oCacheManager.loadBoardFromFile("Mock", "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\3PlayerBoard.xml");
 	    	m_oModel.setBoard(m_oCacheManager.getBoard("Mock"));
+
+	    	//m_oModel.setPlayer();	    	
+	    	m_oGame = new Game(this, m_oModel.getBoard().getAllPlayerAgents());
+	    	
 	    	m_oView.setModelData(m_oModel);
-	    	
-	    	m_oGame = new Game(this, m_oModel.getBoard().getPlayers());
-	    	
 	    	m_oView.init();
 	    }
 	    
@@ -66,29 +68,32 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    	return m_oView.getViewComponent();
 	    }
 	    
-	    public void onPositionClicked(Position oPosition) {
-	    	//if( oPosition.getPiece() != null)
-		   // 	oPosition.setSelectState(true);
-	    	//else
-	    	//	oPosition.setMoveCandidacy(true);
-	    	
-	    	m_oGame.onBoardActivity(oPosition);
-	    	
+	    //region: Notifications from GameView
+	    public void onPositionClicked(IPositionAgent oPosition) {
+	    	m_oGame.onBoardActivity(oPosition);	    	
 	    	m_oView.getViewComponent().getParent().repaint();
 	    }
+	    //endregion
 	    
-		public void timerUpdateForRemainingSeconds(int nRemainingSeconds) {
-			int nHours = nRemainingSeconds / 60;
+	    //region: Notifications from Game
+		public void onTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
 	        int nMintues = (nRemainingSeconds / 60) % 60;
 	        int nSeconds = nRemainingSeconds  % 60;
-	        //nMintues = nMintues / 60;
+			m_oModel.setClockText(String.format("%02d", nMintues) + ":" + String.format("%02d", nSeconds));
 
-			m_oModel.setClockText(nMintues + ":" + nSeconds);
 			m_oView.repaintClockView();
 		}
 		
-		public void timerElapsed() {
+		public void onTimerUpdate_TimerElapsed(IPlayer oPlayer) {
 			m_oModel.setClockText("--:--");
+			m_oModel.setPlayer(oPlayer);
+			m_oView.repaintClockView();
+	    	m_oView.getViewComponent().getParent().repaint();
 		}
-
+		
+		public void updateCurrentPlayer(IPlayer oPlayer) {
+			m_oModel.setPlayer(oPlayer);
+			m_oView.repaintPlayerView();
+		}
+		//endregion
 }

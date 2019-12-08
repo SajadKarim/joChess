@@ -5,18 +5,19 @@ import java.util.List;
 import jchess.common.enumerator.Direction;
 
 /**
- * IPath.java
+ * IPathData provides interface for the cache module.
+ * It expose getters and setters and does not support
+ * methods that are linked to logic of the game.
  * 
- * This interface exposes necessary details to data manipulation classes.
- *
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  */
 
-public interface IPathData{	
-	public String getName();
-	public Direction getDirection();
-	public void addNeighbour(IPathData oPath);
-	public void addPosition(IPositionData oPosition);
-	public List<IPathData> getAllNeighbors();
-	public List<IPositionData> getAllPositions();	// remove all the primitive data objects from interface	
-	public Boolean doesPositionExist(String stName);	
+public interface IPathData extends IPath {	
+	public void setName(String stName);
+	public void setDirection(Direction enDirection );
+	public void addNeighbour(IPath oPath);
+	public void addPosition(IPosition oPosition);
+	public List<IPathData> getAllNeighbourPathData();
+	public List<IPositionData> getAllPositionData();
 }

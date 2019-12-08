@@ -1,22 +1,19 @@
 package jchess.common;
 
-import java.util.List;
-import java.util.Map;
-
 /**
- * IPosition.java
+ * IPositionData provides interface for the cache module.
+ * It expose getters and setters and does not support
+ * methods that are linked to logic of the game.
  * 
- * This interface exposes necessary details to data manipulation classes.
- *
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  */
 
-public interface IPositionData{
-	public int getFile();
-	public int getRank();
-	public String getName();
-	public String getCategory();
-	public IShape getShape();
-	public PositionData getPosition();
-	public IPathData getPath(String stName);
-	public List<IPathData> getAllPaths();
+public interface IPositionData extends IPosition {
+	public void setFile(int nFile);
+	public void setRank(int nRank);
+	public void setCategory(String  stCategory);
+	public void setShape(IShape oShape);
+	public void addPath(IPathData oPath);	
+	public void linkPaths(String stPathA, String stPathB);
 }

@@ -28,10 +28,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JPanel;
 import jchess.Moves.castling;
+import jchess.cache.PlayerData;
+
 import java.util.List;
 import java.util.Map;
 
 import jchess.common.enumerator.*;
+import jchess.gamelogic.PlayerAgent;
 import jchess.view.GameView;
 import jchess.common.*;
 /** Class to represent chessboard. Chessboard is made from squares.
@@ -121,7 +124,7 @@ public class Chessboard extends JPanel
      * @param plWhite reference to white player
      * @param plBlack reference to black player
      */
-    public void setPieces(String places, Player plWhite, Player plBlack)
+    public void setPieces(String places, PlayerAgent plWhite, PlayerAgent plBlack)
     {
 
         /*Iterator<IPosition> itt = m_lstPosition.iterator();

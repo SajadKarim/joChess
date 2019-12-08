@@ -11,4 +11,6 @@ public interface IGameView {
     public void paintView();
     public Component getViewComponent();
     public void repaintClockView();
+    public void repaintBoardView();
+    public void repaintPlayerView();
 }

@@ -1,6 +1,8 @@
-package jchess;
+package jchess.cache;
 
 import java.util.*;
+
+import jchess.common.IBoardMapping;
 
 public class BoardMapping implements IBoardMapping {
     Dictionary m_dictMappings = null; 

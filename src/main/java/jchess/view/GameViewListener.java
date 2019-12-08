@@ -1,7 +1,7 @@
 package jchess.view;
 
-import jchess.common.Position;
+import jchess.common.IPositionAgent;
 
 public interface GameViewListener {
-    public void onPositionClicked(Position oPosition);
+    public void onPositionClicked(IPositionAgent oPosition);
 }

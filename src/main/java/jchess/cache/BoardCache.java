@@ -1,16 +1,21 @@
 package jchess.cache;
 
-import java.util.HashMap;
-import java.util.Map;
+import jchess.common.IBoardAgent;
 
-import jchess.common.IBoard;
+/**
+ * This class is to store all the details regarding a Board.
+ * It is also supposed to store all the movements (snapshots) made to Board.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class BoardCache
 {
 	private String m_stName;
-	private IBoard m_oBoard;
+	private IBoardAgent m_oBoard;
 	
-    public BoardCache(String stName, IBoard oBoard) {
+    public BoardCache(String stName, IBoardAgent oBoard) {
     	m_stName = stName;
     	m_oBoard = oBoard;
     }
@@ -19,7 +24,7 @@ public class BoardCache
     	return m_stName;
     }
     
-    public IBoard getBoard() {
+    public IBoardAgent getBoard() {
     	return m_oBoard;
     }
 } 

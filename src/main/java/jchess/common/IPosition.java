@@ -1,6 +1,17 @@
 package jchess.common;
 
-import java.util.List;
+import java.util.Map;
+
+/**
+ * IPosition provides abstraction to IPositionData and IPositionAgent.
+ * It fulfills functionality of Abstract Factory Pattern, and
+ * it is mainly built for Cache module to make both the
+ * type compatible with its implementation (data population logic). 
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ *
+ */
 
 public interface IPosition {
 	public int getFile();
@@ -8,14 +19,7 @@ public interface IPosition {
 	public String getName();
 	public String getCategory();
 	public IShape getShape();
-	public IPath getPathByName(String stName);
-	public List<IPath> getPaths();
-	public IPiece getPiece();
-	public List<IPosition> tryGetOppositePath( IPosition oPosition);
-	public void setPiece(Piece oPiece);
-	
-	public Boolean getSelectState();
-	public void setSelectState(Boolean oSelect);
-	public Boolean getMoveCandidacy();
-	public void setMoveCandidacy(Boolean bMoveCandidacy);
+	public IPositionData getPosition();
+	public IPath getPath(String stName);
+	public Map<String, IPath> getAllPaths();
 }

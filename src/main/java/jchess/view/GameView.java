@@ -10,29 +10,35 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import jchess.model.IBoardModel;
 import jchess.model.IGameModel;
+import jchess.model.IPlayerModel;
 import jchess.model.IClockModel;
 import jchess.common.IPolygon;
-import jchess.common.Position;
+import jchess.common.IPositionAgent;
+import jchess.gamelogic.PositionAgent;
 
 public class GameView extends JPanel implements IGameView, MouseListener, ComponentListener {
 	private IGameModel m_oGameModel;
     
+	private IPlayerView m_oPlayerView;
 	private IClockView m_oClockView;
 	private IBoardView m_oBoardView;
     private IMoveHistoryView m_oMoveHistoryView;
     
 	private final ArrayList<GameViewListener> m_lstListeners;
 
+	private Dimension m_oPlayerViewDimensions;        
 	private Dimension m_oBoardViewDimensions;        
 	private Dimension m_oClockViewDimensions;
 	private Dimension m_oHistoryViewDimensions;
 
+	private Point m_oPlayerViewStartLocation;
 	private Point m_oBoardViewStartLocation;
 	private Point m_oClockViewStartLocation;
 	private Point m_oHistoryViewStartLocation;
@@ -58,12 +64,14 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 	
 	public void initPositionsAndDimensions() {
 		m_oBoardViewDimensions = new Dimension(m_oGameModel.getBoard().getBoardWidth(), m_oGameModel.getBoard().getBoardHeight());        
+		m_oPlayerViewDimensions = new Dimension(180, 60);
         m_oClockViewDimensions = new Dimension(180, 60);
         m_oHistoryViewDimensions = new Dimension(180, 500);
 
         m_oBoardViewStartLocation = new Point(0, 0);
-        m_oClockViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 0);
-        m_oHistoryViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 60);
+        m_oPlayerViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 0);
+        m_oClockViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 60);
+        m_oHistoryViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 120);
 	}
 	
 	public void initSubViews() {
@@ -74,6 +82,14 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         oBoardComponent.setSize(m_oBoardViewDimensions);
         oBoardComponent.setLocation(m_oBoardViewStartLocation);        
         this.add(oBoardComponent);
+
+        m_oPlayerView = new PlayerView();
+        m_oPlayerView.setData((IPlayerModel)m_oGameModel);
+        m_oPlayerView.setDimension( m_oPlayerViewDimensions);
+        Component oPlayerComponent = m_oPlayerView.getComponent();
+        oPlayerComponent .setSize(m_oPlayerViewDimensions);
+        oPlayerComponent .setLocation(m_oPlayerViewStartLocation);
+        this.add(oPlayerComponent );
 
         m_oClockView = new ClockView();
         m_oClockView.setData((IClockModel)m_oGameModel);
@@ -111,7 +127,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
                 int x = event.getX();
                 int y = event.getY();
    	
-                Position oPosition = getPosition(x, y);
+                IPositionAgent oPosition = getPosition(x, y);
                 
                 notifyListenersOnPositionClicked(oPosition);
     		}
@@ -119,10 +135,9 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     	}
     }
 
-    public Position getPosition(int x, int y) {
-	    Iterator<Position> itt = m_oGameModel.getBoard().getPositions().iterator();
-		while( itt.hasNext()) {
-			Position oPosition = itt.next();
+    public IPositionAgent getPosition(int x, int y) {
+    	for (Map.Entry<String, IPositionAgent> entry : m_oGameModel.getBoard().getAllPositionAgents().entrySet()) {
+			IPositionAgent oPosition = entry.getValue();
 			if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y)))
 			{
 				return oPosition;
@@ -167,7 +182,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     {
     }
     
-    private void notifyListenersOnPositionClicked(Position oPosition) {
+    private void notifyListenersOnPositionClicked(IPositionAgent oPosition) {
         for (final GameViewListener oListener : m_lstListeners) {
             oListener.onPositionClicked(oPosition);
         }
@@ -190,6 +205,20 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     	m_oClockView.getComponent().repaint();
     	}catch(java.lang.Exception e) {
     		
+    	}
+    }
+    public void repaintBoardView() {
+    	try {    		
+    		m_oBoardView.getComponent().repaint();
+    	}
+    	catch(java.lang.Exception e) {
+    	}
+    }
+    public void repaintPlayerView() {
+    	try {    		
+    		m_oPlayerView.getComponent().repaint();
+    	}
+    	catch(java.lang.Exception e) {
     	}
     }
 }

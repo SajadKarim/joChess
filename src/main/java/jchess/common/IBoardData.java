@@ -1,35 +1,33 @@
 package jchess.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public interface IBoardData {
-	public String getName();
-	public int getBoardWidth();
-	public int getBoardHeight();
+/**
+ * IBoardData provides interface for the cache module.
+ * It expose getters and setters and does not support
+ * methods that are linked to logic of the game.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+public interface IBoardData extends IBoard {
+	public void setName(String stName);
+	public void setBoardWidth(int nWidth);
+	public void setBoardHeight(int nHeight);
+	public void setBoardImagePath(String stPath);
+	public void setActivCellImagePath(String stPath);
+	public void setMarkedCellImagePath(String stPath);
+
 	public String getBoardImagePath();
 	public String getActivCellImagePath();
 	public String getMarkedCellImagePath();
 	
-	public void addPosition(IPositionData oPosition);
-	public IPositionData getPosition(String stName);
+	public void addMapping(String stPlayer, String stPiece, String stPosition);
+	public void addPiece(IPiece oPiece) ;
+	public void addRule(IRule oRule);
+	public void addPlayer(IPlayer oPlayer);
+	public void addPosition(IPosition oPosition);
 	
-	public IPlayerData getPlayer(String stName);
-	public List<IPlayerData> getAllPlayers();
-	
-	public IRuleData getRule(String stName);
-	public List<IRuleData> getAllRules();
-	
-	public List<IPieceData> getAllPieces();
-	
-	public IPositionData createPosition();
-	public IPieceData createPiece();
-	public IRuleData createRule();
-	public IPlayerData createPlayer();
-	
-	public BoardData getBoardData();
-	
-	public void init();
+	public Map<String, String> getPlayerMapping(String stName);	
 }

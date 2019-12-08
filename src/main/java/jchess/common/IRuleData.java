@@ -1,31 +1,28 @@
 package jchess.common;
 
 import java.util.List;
-import java.util.Map;
 
-import jchess.common.enumerator.Direction;
-import jchess.common.enumerator.Family;
-import jchess.common.enumerator.File;
-import jchess.common.enumerator.Manoeuvre;
-import jchess.common.enumerator.Rank;
-import jchess.common.enumerator.RuleType;
+import jchess.common.enumerator.*;
 
 /**
- * IRule.java
+ * IRuleData provides interface for the cache module.
+ * It expose getters and setters and does not support
+ * methods that are linked to logic of the game.
  * 
- * This interface exposes necessary details to data manipulation classes.
- *
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  */
 
-public interface IRuleData{
-	public File getFile();
-	public Rank getRank();
-	public String getName();
-	public RuleType getRuleType();
-	public Direction getDirection();
-	public Manoeuvre getManoeuvreStrategy();
-	public int getMaxRecurrenceCount();
-	public Family getFamily();
-	public List<IRuleData> getAllRules(); //to remove this from interfcae
-	public RuleData getRuleData();
+public interface IRuleData extends IRule {
+	public void setName(String stName);
+	public void setRuleType(RuleType enRuleType);
+	public void setDirection(Direction enDirection);
+	public void setManoeuvreStrategy(Manoeuvre enManoeuvre);
+	public void setMaxRecurrenceCount(int nMaxRecurrenceCount);
+	public void setFamily(Family enFamily);
+	public void setFile(File enFile);
+	public void setRank(Rank enRank);
+	public List<IRule> getAllRules();
+	public void addRule(IRule oRule);
+	public IRuleData clone();
 }

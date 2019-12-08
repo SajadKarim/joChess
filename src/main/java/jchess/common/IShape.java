@@ -1,11 +1,10 @@
 package jchess.common;
 
-import java.awt.Polygon;
-
 /**
- * IShape.java
+ * IShape provides abstraction to IPolygon and ICircle.
  * 
- * This interface exposes necessary details to the classes responsible to generate view.
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  *
  */
 

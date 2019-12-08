@@ -2,7 +2,6 @@ package jchess.service;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,22 +13,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import jchess.common.BoardData;
-import jchess.common.IBoardData;
+import jchess.cache.BoardData;
+import jchess.cache.Path;
+import jchess.cache.Quadrilateral;
+import jchess.common.IBoard;
+import jchess.common.IPath;
 import jchess.common.IPathData;
-import jchess.common.IPieceData;
-import jchess.common.IPlayerData;
-import jchess.common.IPolygon;
-import jchess.common.IPositionData;
-import jchess.common.IRuleData;
-import jchess.common.PathData;
-import jchess.common.PieceData;
-import jchess.common.Piece;
-import jchess.common.PlayerData;
-import jchess.common.PositionData;
-import jchess.common.Position;
-import jchess.common.Quadrilateral;
-import jchess.common.RuleData;
+import jchess.common.IPiece;
+import jchess.common.IPlayer;
+import jchess.common.IPosition;
+import jchess.common.IRule;
 import jchess.common.enumerator.Direction;
 import jchess.common.enumerator.Family;
 import jchess.common.enumerator.Manoeuvre;
@@ -38,23 +31,28 @@ import jchess.common.enumerator.RuleType;
 
 class XMLDeserializer {
 	
-	static void serialize(BoardData b) {		
+	/**
+	 * Following code serializes Board object.
+	 * Important: Need to re-factor it.
+	 * 
+	 * @param oBoard
+	 */
+	static void serializeBoard(BoardData oBoard) {		
 		try
 		{
-		/*Map<String, PositionData> treeMap = new TreeMap<String, PositionData>(b.getAllPositions());
-	        
-		
-		for (Map.Entry<String, PositionData> entry : treeMap.entrySet()) {
-	    		PositionData oPosition = entry.getValue();
+			Map<String, IPosition> treeMap = new TreeMap<String, IPosition>(oBoard.getAllPositions());
+
+			for (Map.Entry<String, IPosition> entry : treeMap.entrySet()) {
+				IPosition oPosition = entry.getValue();
 	    		
 	    		System.out.print("<Position File=\"" + (char)( oPosition.getFile()) + "\" Rank=\"" + oPosition.getRank() + "\" Family=\"" + oPosition.getCategory() + "\">");
 	    		System.out.print("<Directions>");
 	    		
-				for (Map.Entry<String, Path> entry2 : oPosition.getAllPaths().entrySet()) {
+				for (Map.Entry<String, IPath> entry2 : oPosition.getAllPaths().entrySet()) {
 				
 		    		System.out.print("<Direction Name=\""+ entry2.getValue().getName()+"\" Type=\""+ entry2.getValue().getDirection()+"\">");
 
-		    		Iterator<PositionData> it = entry2.getValue().getAllPositions().iterator();
+		    		Iterator<IPosition> it = entry2.getValue().getAllPositions().iterator();
 		    		while( it.hasNext()) {
 		    			System.out.print("<LinkedPosition>"+ it.next().getName()+"</LinkedPosition>");
 		    		}
@@ -65,12 +63,12 @@ class XMLDeserializer {
 	    		System.out.print("</Directions><Connections>");
 
 	    		int i=0;
-	    		Map<String, Path> tempMap = new TreeMap<String, Path>(oPosition.getAllPaths());
-	    		for (Map.Entry<String, Path> entry2 : tempMap.entrySet()) {
+	    		Map<String, IPath> tempMap = new TreeMap<String, IPath>(oPosition.getAllPaths());
+	    		for (Map.Entry<String, IPath> entry2 : tempMap.entrySet()) {
 				//for (Map.Entry<String, Path> entry2 : oPosition.getAllPaths().entrySet()) {
 					if( ++i == 5)
 						break;
-		    		Iterator<Path> it = entry2.getValue().getAllNeighbors().iterator();
+		    		Iterator<IPath> it = entry2.getValue().getAllNeighbors().iterator();
 		    		while( it.hasNext()) {
 		    			System.out.print("<Connection Point1=\""+ entry2.getKey() + " Point2=\"" + it.next().getName() + "\" />");
 		    		}
@@ -82,16 +80,14 @@ class XMLDeserializer {
 	    		System.out.print("<Shape Type=\"Quard\"><Coordinates " + oPosition.getShape().toString() +" />");
 
 	    		System.out.print("</Shape></Position>");
-		}*/
+			}
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
-
-		System.out.println("end");
 	}
 	
-	static void populateBoard(String stFilePath, IBoardData oBoard) {
+	static void populateBoard(String stFilePath, IBoard oBoard) {
 		
 		try
 		{
@@ -99,10 +95,8 @@ class XMLDeserializer {
 			DocumentBuilder m_oBuilder;	
 			DocumentBuilderFactory m_oFactory;	
 
-			//m_oBoard = oBoard;
-			
-			//serialize(new Board("","","","",808,700));
 			m_oFactory = DocumentBuilderFactory.newInstance();
+
 			m_oBuilder = m_oFactory.newDocumentBuilder();
 			
 			m_oDocument = m_oBuilder.parse(new File(stFilePath));
@@ -126,14 +120,9 @@ class XMLDeserializer {
 		catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
-		
-		//System.out.println("hello");
-		//serialize(m_oBoard);
-		
-		//return m_oBoard;
 	}	
 
-	private static void populateBoardAttributes(IBoardData oBoard, Element oRootElement) {
+	private static void populateBoardAttributes(IBoard oBoard, Element oRootElement) {
 		
 		String stName = oRootElement.getAttributes().getNamedItem("Name").getNodeValue();
 		String stBoardImage = oRootElement.getAttributes().getNamedItem("BoardImage").getNodeValue();
@@ -150,21 +139,21 @@ class XMLDeserializer {
 		oBoard.getBoardData().setBoardHeight(nHeight);
 	}
 
-	private static void populatePositions(IBoardData oBoard, Element oRootElement){
+	private static void populatePositions(IBoard oBoard, Element oRootElement){
 		
 		loadPositionsBasicDetails(oBoard, oRootElement);
 		
 		loadPositionsConnectionDetails(oBoard, oRootElement);
 	}
 
-	private static void loadPositionsBasicDetails(IBoardData oBoard, Element oRootElement){
+	private static void loadPositionsBasicDetails(IBoard oBoard, Element oRootElement){
 
 		try
 		{
 		NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
 		for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
 		
-			IPositionData oPosition = oBoard.createPosition();
+			IPosition oPosition = oBoard.createPosition();
 
 			Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
 			
@@ -198,7 +187,7 @@ class XMLDeserializer {
 			
 			oPosition.getPosition().setShape(oShape);
 			
-			oBoard.addPosition(oPosition);
+			oBoard.getBoardData().addPosition(oPosition);
 		}
 		}
 		catch(java.lang.Exception e) {
@@ -207,7 +196,7 @@ class XMLDeserializer {
 
 	}
 
-	private static void loadPositionsConnectionDetails(IBoardData oBoard, Element oRootElement){
+	private static void loadPositionsConnectionDetails(IBoard oBoard, Element oRootElement){
 
 		try
 		{
@@ -219,7 +208,7 @@ class XMLDeserializer {
 				String stFile = oPositionNode.getAttributes().getNamedItem("File").getNodeValue();
 				String stRank = oPositionNode.getAttributes().getNamedItem("Rank").getNodeValue();
 				
-				IPositionData oPosition = oBoard.getPosition(stFile + stRank);
+				IPosition oPosition = oBoard.getPosition(stFile + stRank);
 				NodeList lstDirectionNodes = ((Element)oPositionNode.getElementsByTagName("Directions").item(0)).getElementsByTagName("Direction");
 				for( int nDirectionIndex = 0, nDirectionIndexMax = lstDirectionNodes.getLength(); nDirectionIndex < nDirectionIndexMax; nDirectionIndex++) {
 					Element oDirectionNode = (Element)(lstDirectionNodes.item(nDirectionIndex));
@@ -227,7 +216,7 @@ class XMLDeserializer {
 					String stType = oDirectionNode.getAttributes().getNamedItem("Type").getNodeValue();
 					String stName = oDirectionNode.getAttributes().getNamedItem("Name").getNodeValue();
 	
-					IPathData oPath = new PathData(stName, CustomTypeMapping.convertStringToDirection(stType), null);
+					IPathData oPath = new Path(stName, CustomTypeMapping.convertStringToDirection(stType), null);
 	
 					NodeList lstLinkedPositionNodes = oDirectionNode.getElementsByTagName("LinkedPosition");
 					for( int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
@@ -258,11 +247,11 @@ class XMLDeserializer {
 	}
 
 	
-	private static void loadRules(IBoardData oBoard, Element oRootElement){
+	private static void loadRules(IBoard oBoard, Element oRootElement){
 		populateRule(oBoard, oRootElement, null);
 	}
 	
-	private static void populateRule(IBoardData oBoard, Element oRootElement, IRuleData oParentRule) {
+	private static void populateRule(IBoard oBoard, Element oRootElement, IRule oParentRule) {
 		try{			
 			NodeList lstRuleNodes = ((Element)oRootElement.getElementsByTagName("Rules").item(0)).getElementsByTagName("Rule");
 			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
@@ -277,7 +266,7 @@ class XMLDeserializer {
 				Rank enRank = CustomTypeMapping.convertStringToRank( oRuleNode.getAttributes().getNamedItem("Rank").getNodeValue());
 				Family enFamily = CustomTypeMapping.convertStringToFamily( oRuleNode.getAttributes().getNamedItem("Family").getNodeValue());
 				
-				IRuleData oRule = oBoard.createRule();
+				IRule oRule = oBoard.createRule();
 				
 				oRule.getRuleData().setName(stName);
 				oRule.getRuleData().setRuleType(enRuleType);
@@ -301,7 +290,7 @@ class XMLDeserializer {
 		}
 	}
 	
-	private static void loadPieces(IBoardData oBoard, Element oRootElement){
+	private static void loadPieces(IBoard oBoard, Element oRootElement){
 
 		try
 		{
@@ -313,7 +302,7 @@ class XMLDeserializer {
 			String stName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
 			String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
 			
-			IPieceData oPiece = oBoard.createPiece();
+			IPiece oPiece = oBoard.createPiece();
 			
 			oPiece.getPieceData().setName(stName);
 			oPiece.getPieceData().setImagePath(stImage);
@@ -336,7 +325,7 @@ class XMLDeserializer {
 
 	}
 
-	private static void loadPlayers(IBoardData oBoard, Element oRootElement){
+	private static void loadPlayers(IBoard oBoard, Element oRootElement){
 
 		try
 		{
@@ -347,9 +336,9 @@ class XMLDeserializer {
 			
 			String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
 						
-			IPlayerData oPlayer = oBoard.createPlayer();
+			IPlayer oPlayer = oBoard.createPlayer();
 			oPlayer.getPlayerData().setName(stName);
-			oPlayer.getPlayerData().setColor("white");
+			//oPlayer.getPlayerData().setColor("white");
 
 			NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
 			for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {

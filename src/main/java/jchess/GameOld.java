@@ -25,7 +25,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
 
+import jchess.cache.PlayerData;
 import jchess.common.*;
+import jchess.gamelogic.PlayerAgent;
 
 import java.awt.*;
 import java.io.File;
@@ -48,7 +50,7 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
     public Settings settings;
     public boolean blockedChessboard;
     public Chessboard chessboard;
-    private Player activePlayer;
+    private PlayerAgent activePlayer;
     public GameClock gameClock;
     public Client client;
     public Moves moves;
@@ -172,10 +174,10 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
         }
         GameOld newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
         Settings locSetts = newGUI.settings;
-        locSetts.playerBlack.setName(blackName);
-        locSetts.playerWhite.setName(whiteName);
-        locSetts.playerBlack.setType(PlayerData.playerTypes.localUser);
-        locSetts.playerWhite.setType(PlayerData.playerTypes.localUser);
+        //locSetts.playerBlack.setName(blackName);
+        //locSetts.playerWhite.setName(whiteName);
+        //locSetts.playerBlack.setType(PlayerData.playerTypes.localUser);
+        //locSetts.playerWhite.setType(PlayerData.playerTypes.localUser);
         locSetts.gameMode = Settings.gameModes.loadGame;
         locSetts.gameType = Settings.gameTypes.local;
 
@@ -255,10 +257,10 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
         //System.out.println("new game, game type: "+settings.gameType.name());
 
         //activePlayer = boardManager.getInstance().getPlayer1();
-        if (activePlayer.getplayertype() != PlayerData.playerTypes.localUser)
-        {
-            this.blockedChessboard = true;
-        }
+       // if (activePlayer.getplayertype() != PlayerData.playerTypes.localUser)
+       // {
+        //    this.blockedChessboard = true;
+        //}
         //dirty hacks starts over here :) 
         //to fix rendering artefacts on first run
         GameOld activeGame = JChessApp.jcv.getActiveTabGame();
@@ -302,7 +304,7 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
     /** Method of getting accualy active player
      *  @return  player The player which have a move
      */
-    public Player getActivePlayer()
+    public PlayerAgent getActivePlayer()
     {
         return this.activePlayer;
     }
@@ -312,7 +314,7 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
     public void nextMove()
     {
         switchActive();
-
+/*
         System.out.println("next move, active player: " + activePlayer.getName() + ", color: " + activePlayer.getColor().name() + ", type: " + activePlayer.getplayertype().name());
         if (activePlayer.getplayertype() == PlayerData.playerTypes.localUser)
         {
@@ -325,7 +327,7 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
         else if (activePlayer.getplayertype()== PlayerData.playerTypes.computer)
         {
         }
-    }
+*/    }
 
     /** Method to simulate Move to check if it's correct etc. (usable for network game).
      * @param beginX from which X (on chessboard) move starts
@@ -498,8 +500,8 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
                     {
                         chessboard.unselect();
                     }
-                    else if (chessboard.activeSquare != null && chessboard.activeSquare.piece != null
-                            && chessboard.activeSquare.piece.allMoves().indexOf(sq) != -1) //move
+                    //else if (chessboard.activeSquare != null && chessboard.activeSquare.piece != null
+                    //        && chessboard.activeSquare.piece.allMoves().indexOf(sq) != -1) //move
                     {
                         if (settings.gameType == Settings.gameTypes.local)
                         {
