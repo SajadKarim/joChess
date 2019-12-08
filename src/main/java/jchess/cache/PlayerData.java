@@ -36,37 +36,8 @@ public class PlayerData implements IPlayerData{
 	public String m_stName;
 	public IBoardMapping m_oBoardMapping = null;
     
-    public PlayerData()
-    {
-        populateCustomBoardMapping();
-    }
-
-    PlayerData(String stName)
-    {
-        m_stName = stName;        
-        populateCustomBoardMapping();
-    }
-
-    public void populateCustomBoardMapping() {
+    public PlayerData() {    	
     	m_oBoardMapping = new BoardMapping();
-    	    	
-    	m_oBoardMapping.addMapping('a', 'h');
-    	m_oBoardMapping.addMapping('b', 'g');
-    	m_oBoardMapping.addMapping('c', 'f');
-    	m_oBoardMapping.addMapping('d', 'e');
-    	m_oBoardMapping.addMapping('e', 'd');
-    	m_oBoardMapping.addMapping('f', 'c');
-    	m_oBoardMapping.addMapping('g', 'b');
-    	m_oBoardMapping.addMapping('h', 'a');
-
-    	m_oBoardMapping.addMapping('1', '8');
-    	m_oBoardMapping.addMapping('2', '7');
-    	m_oBoardMapping.addMapping('3', '6');
-    	m_oBoardMapping.addMapping('4', '5');
-    	m_oBoardMapping.addMapping('5', '4');
-    	m_oBoardMapping.addMapping('6', '3');
-    	m_oBoardMapping.addMapping('7', '2');
-    	m_oBoardMapping.addMapping('8', '1');
     }
 
     public void setName(String stName)
@@ -85,5 +56,13 @@ public class PlayerData implements IPlayerData{
 
 	public IBoardMapping getBoardMapping() {
 		return m_oBoardMapping;
+	}
+	
+	public void addBoardMapping(int nSource, int nDestination) {
+		m_oBoardMapping.addMapping(nSource, nDestination);
+	}
+	
+	public int getBoardMapping(int nSource) {
+		return m_oBoardMapping.getMapping(nSource);
 	}
 }

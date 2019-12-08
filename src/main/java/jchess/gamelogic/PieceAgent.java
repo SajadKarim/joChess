@@ -23,6 +23,7 @@ public class PieceAgent implements IPieceAgent {
 	private IPieceData m_oPiece;
 	private IPlayerAgent m_oPlayer;
 	private Image m_oImage;
+	private Boolean m_bFirstMove = false;	// Temporary variable to try Pawn first move. Need to do it proper way through move history.
 	
 	public PieceAgent() {
 		m_oPiece = new PieceData();
@@ -32,9 +33,6 @@ public class PieceAgent implements IPieceAgent {
 		m_oPiece = oPiece;
 		m_oPlayer = oPlayer;
 		m_oImage = GUI.loadImage(getImagePath());
-	}
-	
-	public PieceAgent(PieceAgent oPiece) {
 	}
 	
 	public String getName() {
@@ -71,5 +69,13 @@ public class PieceAgent implements IPieceAgent {
 
 	public List<IRuleAgent> getRules() {
 		return (List<IRuleAgent>)(Object)m_oPiece.getAllRules();
+	}
+	
+	public Boolean hasPieceAlreadyMadeMove() {
+		return m_bFirstMove;
+	}
+
+	public void recordPeiceFirstMove() {
+		m_bFirstMove = true;
 	}
 }

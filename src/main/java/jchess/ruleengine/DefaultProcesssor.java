@@ -20,7 +20,7 @@ import jchess.common.enumerator.*;
  */
 
 class DefaultProcesssor implements IRuleProcessor{
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IPositionAgent oPosition) {
+	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition) {
 		IPieceAgent oPiece = oPosition.getPiece();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 		
@@ -41,7 +41,39 @@ class DefaultProcesssor implements IRuleProcessor{
     	return mpCandidateMovePositions;
     }
 
-	private void tryFindPossibleCandidateMovePositions(IPlayer oPlayer, IPiece oPiece, IPositionAgent oPosition, IRuleAgent oRule, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {		
+	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
+		switch( oDestinationPositionAndRule.getValue1().getRuleType()) {
+			case MOVE:{
+				if( oDestinationPositionAndRule.getValue0().getPiece() == null) {
+					jchess.common.IPieceAgent oPiece = oSourcePosition.getPiece();
+					oDestinationPositionAndRule.getValue0().setPiece((jchess.gamelogic.PieceAgent)oPiece);
+					oSourcePosition.setPiece(null);
+				}
+			}
+				break;
+			case MOVE_AND_CAPTURE:{
+				jchess.common.IPieceAgent oPiece = oSourcePosition.getPiece();
+				oDestinationPositionAndRule.getValue0().setPiece((jchess.gamelogic.PieceAgent)oPiece);
+				oSourcePosition.setPiece(null);
+			}
+				break;
+			case MOVE_IFF_CAPTURE_POSSIBLE:{
+				jchess.common.IPieceAgent oPiece = oSourcePosition.getPiece();
+				oDestinationPositionAndRule.getValue0().setPiece((jchess.gamelogic.PieceAgent)oPiece);
+				oSourcePosition.setPiece(null);				
+			}
+				break;
+			case MOVE_TRANSIENT:{
+				
+			}
+				break;
+			//case CUSTOM:	-- NEED TO ADD THIS IN XML 	
+			default:
+				break;
+		}
+	}
+
+	public void tryFindPossibleCandidateMovePositions(IPlayerAgent oPlayer, IPieceAgent oPiece, IPositionAgent oPosition, IRuleAgent oRule, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {		
 		if ( oRule == null)
 			return;
 	
@@ -61,7 +93,7 @@ class DefaultProcesssor implements IRuleProcessor{
 		oRule.makeRuleDead();		
 	}
 
-	private void tryFindPossibleCandidateMovePositions(IPlayer oPlayer, IPiece oPiece, IRuleAgent oRule, IPositionAgent oPosition, IPositionAgent oNextPosition,  Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {				
+	private void tryFindPossibleCandidateMovePositions(IPlayerAgent oPlayer, IPieceAgent oPiece, IRuleAgent oRule, IPositionAgent oPosition, IPositionAgent oNextPosition,  Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {				
 		if( oNextPosition == null) {
 			oRule.makeRuleDead();
 			return;
@@ -84,25 +116,25 @@ class DefaultProcesssor implements IRuleProcessor{
 		}
 		
 		IRuleAgent oNextRule = null;
-		if ( (oNextRule = oRule.getNextRule()) == null)
-			return;
-			
-		switch( oNextRule.getManoeuvreStrategy()) {
-			case BLINKER:
-				tryFindPossibleCandidateMovePositionsUsingBlinkers(oPlayer, oPiece, oNextRule, oPosition, oNextPosition, mpCandidateMovePositions);
-			break;
-			case FILE_AND_RANK:
-				tryFindPossibleCandidateMovePositions(oPlayer, oPiece, oNextPosition, oNextRule, mpCandidateMovePositions);
-			break;
-			default:
-			break;
+		//if ( (oNextRule = oRule.getNextRule()) == null)
+		//	return;
+		while( (oNextRule = oRule.getNextRule()) != null) {
+			switch( oNextRule.getManoeuvreStrategy()) {
+				case BLINKER:
+					tryFindPossibleCandidateMovePositionsUsingBlinkers(oPlayer, oPiece, oNextRule, oPosition, oNextPosition, mpCandidateMovePositions);
+				break;
+				case FILE_AND_RANK:
+					tryFindPossibleCandidateMovePositions(oPlayer, oPiece, oNextPosition, oNextRule, mpCandidateMovePositions);
+				break;
+				default:
+				break;
+			}
 		}
-		
     	oRule.makeRuleDead();
 	}
 
 
-	private void tryFindPossibleCandidateMovePositionsUsingBlinkers(IPlayer oPlayer, IPiece oPiece, IRuleAgent oRule, IPositionAgent oPosition, IPositionAgent oNextPosition,  Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {				
+	private void tryFindPossibleCandidateMovePositionsUsingBlinkers(IPlayerAgent oPlayer, IPieceAgent oPiece, IRuleAgent oRule, IPositionAgent oPosition, IPositionAgent oNextPosition,  Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {				
 		if( oNextPosition == null) {
 			oRule.makeRuleDead();
 			return;
@@ -194,7 +226,7 @@ class DefaultProcesssor implements IRuleProcessor{
 		return true;
 	}
 	
-	private void checkForPositionMoveCandidacyAndContinuity(IPlayer oPlayer, IPiece oPiece, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
+	private void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IPieceAgent oPiece, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		bIsValidMode.set(false);
 		bCanContinue.set(false);
 		

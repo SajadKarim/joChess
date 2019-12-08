@@ -11,4 +11,6 @@ package jchess.common;
 
 public interface IPlayerData extends IPlayer {
     public void setName(String stName);
+	public void addBoardMapping(int nSource, int nDestination);
+	public int getBoardMapping(int nSource);
 }

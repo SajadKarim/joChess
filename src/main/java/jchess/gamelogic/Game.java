@@ -2,6 +2,7 @@ package jchess.gamelogic;
 
 import org.javatuples.Pair;
 
+import jchess.common.IBoardAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
@@ -26,18 +27,21 @@ import java.util.Map;
  */
 
 public class Game implements ITimerListener{
+	private IBoardAgent m_oBoard;
 	private IGamePresenterCallback m_oGamePresenter;
 	private Timer m_oTimer;
 	private GameState m_oGameState;
 	private IRuleProcessor m_oRuleProcessor;
 	
-	public Game(IGamePresenterCallback oGamePresenter, Map<String, IPlayerAgent> lstPlayers){
-		m_oGameState = new GameState(lstPlayers);
+	public Game(IGamePresenterCallback oGamePresenter, IBoardAgent oBoard){
+		m_oGameState = new GameState(oBoard.getAllPlayerAgents());
+		
+		m_oBoard = oBoard;
 		
 		m_oGamePresenter = oGamePresenter;
 		m_oGamePresenter.updateCurrentPlayer(m_oGameState.getActivePlayer());
 		
-		m_oRuleProcessor = RuleEngine.getRuleEngine(RuleEngineType.RULEENGINE_DEFAULT);
+		m_oRuleProcessor = RuleEngine.getRuleEngine(RuleEngineType.RULEENGINE_3PLAYER);
 		
 		m_oTimer = new Timer(60*60, 10000, 0, true, true);
 		m_oTimer.addListener(this);		
@@ -80,7 +84,7 @@ public class Game implements ITimerListener{
 		
 			Pair<IPositionAgent, IRuleAgent> oData =m_oGameState.doesPositionExistsInMoveCandidates(oPosition); 
 			if( oData != null) {
-				makeMove( m_oGameState.getActivePosition(), oData);
+				m_oRuleProcessor.tryMakeMove(m_oGameState.getActivePosition(), oData);
 				deselectedActivePosition();
 				m_oGameState.switchPlayTurn();
 				m_oGamePresenter.updateCurrentPlayer(m_oGameState.getActivePlayer());
@@ -88,37 +92,7 @@ public class Game implements ITimerListener{
 			}
 		}		
 	}
-	
-	public void makeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
-		switch( oDestinationPositionAndRule.getValue1().getRuleType()) {
-			case MOVE:{
-				if( oDestinationPositionAndRule.getValue0().getPiece() == null) {
-					jchess.common.IPieceAgent oPiece = oSourcePosition.getPiece();
-					oDestinationPositionAndRule.getValue0().setPiece((jchess.gamelogic.PieceAgent)oPiece);
-					oSourcePosition.setPiece(null);
-				}
-			}
-				break;
-			case MOVE_AND_CAPTURE:{
-				jchess.common.IPieceAgent oPiece = oSourcePosition.getPiece();
-				oDestinationPositionAndRule.getValue0().setPiece((jchess.gamelogic.PieceAgent)oPiece);
-				oSourcePosition.setPiece(null);
-			}
-				break;
-			case MOVE_IFF_CAPTURE_POSSIBLE:{
-				
-			}
-				break;
-			case MOVE_TRANSIENT:{
-				
-			}
-				break;
-			//case CUSTOM:	-- NEED TO ADD THIS IN XML 	
-			default:
-				break;
-		}
-	}
-	
+		
 	public void deselectedActivePosition() {
 		if( m_oGameState.getPossibleMovesForActivePosition() != null) {
 
@@ -144,7 +118,7 @@ public class Game implements ITimerListener{
 		
 		deselectedActivePosition();
 		
-		Map<String,Pair<IPositionAgent, IRuleAgent>> lstPosition = m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPosition);
+		Map<String,Pair<IPositionAgent, IRuleAgent>> lstPosition = m_oRuleProcessor.tryFindPossibleCandidateMovePositions(m_oBoard, oPosition);
 		
 		for (Map.Entry<String,Pair<IPositionAgent, IRuleAgent>> entry : lstPosition.entrySet()) {
 			entry.getValue().getValue0().setMoveCandidacy(true);

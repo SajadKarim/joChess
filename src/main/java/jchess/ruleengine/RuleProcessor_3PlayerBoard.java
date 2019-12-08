@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
+import jchess.common.IBoardAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 
@@ -16,7 +17,33 @@ import jchess.common.IRuleAgent;
 
 class RuleProcessor_3PlayerBoard extends DefaultProcesssor {
 	@Override
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions( IPositionAgent oPosition) {		
-		return super.tryFindPossibleCandidateMovePositions(oPosition);
+	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition) {		
+		Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions = super.tryFindPossibleCandidateMovePositions(oBoard, oPosition);
+		
+		tryMakePiecePeculiarMoves(oBoard, oPosition, mpCandidateMovePositions);
+		
+		return mpCandidateMovePositions;
+	}
+	@Override
+	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
+		super.tryMakeMove(oSourcePosition, oDestinationPositionAndRule);
+		
+		if( oDestinationPositionAndRule.getValue0().getPiece() != null) {
+			if( oDestinationPositionAndRule.getValue0().getPiece().getName().startsWith("Pawn")) {
+				if(!oDestinationPositionAndRule.getValue0().getPiece().hasPieceAlreadyMadeMove() ) { 
+					oDestinationPositionAndRule.getValue0().getPiece().recordPeiceFirstMove();
+				}
+			}
+		}
+	}
+	
+	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
+		if( oPosition.getPiece() != null) {
+			if( oPosition.getPiece().getName().startsWith("Pawn")) {
+				if(!oPosition.getPiece().hasPieceAlreadyMadeMove() ) { 
+					MoveEx.tryPawnFirstMove(oBoard, oPosition, mpCandidateMovePositions);
+				}
+			}
+		}
 	}
 }

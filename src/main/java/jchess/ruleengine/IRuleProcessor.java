@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
+import jchess.common.IBoardAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 
@@ -17,5 +18,6 @@ import jchess.common.IRuleAgent;
  */
 
 public interface IRuleProcessor {
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions( IPositionAgent oPosition);
+	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition);
+	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule);
 }

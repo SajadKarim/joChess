@@ -54,7 +54,7 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    	m_oModel.setBoard(m_oCacheManager.getBoard("Mock"));
 
 	    	//m_oModel.setPlayer();	    	
-	    	m_oGame = new Game(this, m_oModel.getBoard().getAllPlayerAgents());
+	    	m_oGame = new Game(this, m_oModel.getBoard());
 	    	
 	    	m_oView.setModelData(m_oModel);
 	    	m_oView.init();

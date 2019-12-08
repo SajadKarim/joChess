@@ -46,6 +46,7 @@ public class RuleData implements IRuleData {
 		m_enDirection = rule.m_enDirection;
 		m_nMaxRecurrenceAllowed = rule.m_nMaxRecurrenceAllowed;
 		m_enManoeuvreStratgy = rule.m_enManoeuvreStratgy;
+		m_mpRule = new HashMap<String, IRule>(rule.m_mpRule);
 	}
 	
 	// region: Implements IRule

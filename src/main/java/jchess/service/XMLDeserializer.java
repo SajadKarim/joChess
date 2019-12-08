@@ -17,6 +17,7 @@ import jchess.cache.BoardData;
 import jchess.cache.Path;
 import jchess.cache.Quadrilateral;
 import jchess.common.IBoard;
+import jchess.common.IBoardMapping;
 import jchess.common.IPath;
 import jchess.common.IPathData;
 import jchess.common.IPiece;
@@ -327,37 +328,130 @@ class XMLDeserializer {
 
 	private static void loadPlayers(IBoard oBoard, Element oRootElement){
 
-		try
-		{
-		NodeList lstPlayerNodes = ((Element)oRootElement.getElementsByTagName("Players").item(0)).getElementsByTagName("Player");
-		for( int nPlayerIndex = 0, nPlayerIndexMax = lstPlayerNodes.getLength(); nPlayerIndex < nPlayerIndexMax; nPlayerIndex++) {
-		
-			Element oPlayerNode = (Element)(lstPlayerNodes.item(nPlayerIndex));
+		try{
+			NodeList lstPlayerNodes = ((Element)oRootElement.getElementsByTagName("Players").item(0)).getElementsByTagName("Player");
+			for( int nPlayerIndex = 0, nPlayerIndexMax = lstPlayerNodes.getLength(); nPlayerIndex < nPlayerIndexMax; nPlayerIndex++) {
 			
-			String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
-						
-			IPlayer oPlayer = oBoard.createPlayer();
-			oPlayer.getPlayerData().setName(stName);
-			//oPlayer.getPlayerData().setColor("white");
-
-			NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
-			for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
-				Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
-
-				String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
-				String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
-
-				//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
+				Element oPlayerNode = (Element)(lstPlayerNodes.item(nPlayerIndex));
 				
-				oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
-			}   
+				String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
+							
+				IPlayer oPlayer = oBoard.createPlayer();
+				oPlayer.getPlayerData().setName(stName);
+				//oPlayer.getPlayerData().setColor("white");
+	
+				NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
+				for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
+					Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
+	
+					String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
+					String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
+	
+					//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
+					
+					oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
+				}   
+				
+				NodeList lstMappingNodes = ((Element)oPlayerNode.getElementsByTagName("BoardMapping").item(0)).getElementsByTagName("Map");
+				for( int nMappingIndex = 0, nMappingIndexMax = lstMappingNodes.getLength(); nMappingIndex < nMappingIndexMax; nMappingIndex++) {
+					Element oMappingNode = (Element)(lstMappingNodes.item(nMappingIndex));
+	
+					String stTo = oMappingNode.getAttributes().getNamedItem("To").getNodeValue();
+					String stFrom = oMappingNode.getAttributes().getNamedItem("From").getNodeValue();
+	
+					int nTo = tryParseInt(stTo);
+					int nFrom = tryParseInt(stFrom);
+					
+					//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
+					
+					oPlayer.getPlayerData().addBoardMapping(nFrom, nTo);
+				}   
 
-			oBoard.getBoardData().addPlayer( oPlayer);
-		}
+				/*if( oPlayer.getName().equals("P2"))
+					populateCustomBoardMapping2( oPlayer.getPlayerData().getBoardMapping());
+				if( oPlayer.getName().equals("P3"))
+					populateCustomBoardMapping3( oPlayer.getPlayerData().getBoardMapping());
+	*/
+				oBoard.getBoardData().addPlayer( oPlayer);
+			}
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
-
 	}
+	
+	private static int tryParseInt(String stValue) {
+		
+		try {
+			return Integer.parseInt(stValue);
+			
+		} catch(java.lang.Exception e) {
+			
+		}
+		
+		try {
+			return (int)stValue.charAt(0);
+			
+		} catch(java.lang.Exception e) {
+			
+		}
+		return -1;
+	}
+	
+    private static void populateCustomBoardMapping2(IBoardMapping oBoardMapping) {
+    	
+    	oBoardMapping.addMapping('l', 'a');
+    	oBoardMapping.addMapping('k', 'b');
+    	oBoardMapping.addMapping('j', 'c');
+    	oBoardMapping.addMapping('i', 'd');
+    	oBoardMapping.addMapping('d', 'e');
+    	oBoardMapping.addMapping('c', 'f');
+    	oBoardMapping.addMapping('b', 'g');
+    	oBoardMapping.addMapping('a', 'h');
+    	oBoardMapping.addMapping('e', 'i');
+    	oBoardMapping.addMapping('f', 'j');
+    	oBoardMapping.addMapping('g', 'k');
+    	oBoardMapping.addMapping('h', 'l');
+
+    	oBoardMapping.addMapping(8, 1);
+    	oBoardMapping.addMapping(7, 2);
+    	oBoardMapping.addMapping(6, 3);
+    	oBoardMapping.addMapping(5, 4);
+    	oBoardMapping.addMapping(9, 5);
+    	oBoardMapping.addMapping(10,6);
+    	oBoardMapping.addMapping(11,7);
+    	oBoardMapping.addMapping(12,8);
+    	oBoardMapping.addMapping(1, 12);
+    	oBoardMapping.addMapping(2, 11);
+    	oBoardMapping.addMapping(3, 10);
+    	oBoardMapping.addMapping(4, 9);
+    }
+    private static void populateCustomBoardMapping3(IBoardMapping oBoardMapping) {
+    	
+    	oBoardMapping.addMapping('h', 'a');
+    	oBoardMapping.addMapping('g', 'b');
+    	oBoardMapping.addMapping('f', 'c');
+    	oBoardMapping.addMapping('e', 'd');
+    	oBoardMapping.addMapping('i', 'e');
+    	oBoardMapping.addMapping('j', 'f');
+    	oBoardMapping.addMapping('k', 'g');
+    	oBoardMapping.addMapping('l', 'h');
+    	oBoardMapping.addMapping('d', 'i');
+    	oBoardMapping.addMapping('c', 'j');
+    	oBoardMapping.addMapping('b', 'k');
+    	oBoardMapping.addMapping('a', 'l');
+
+    	oBoardMapping.addMapping(12, 1);
+    	oBoardMapping.addMapping(11, 2);
+    	oBoardMapping.addMapping(10, 3);
+    	oBoardMapping.addMapping(9, 4);
+    	oBoardMapping.addMapping(4, 5);
+    	oBoardMapping.addMapping(3, 6);
+    	oBoardMapping.addMapping(2, 7);
+    	oBoardMapping.addMapping(1, 8);
+    	oBoardMapping.addMapping(5, 9);
+    	oBoardMapping.addMapping(6, 10);
+    	oBoardMapping.addMapping(7, 11);
+    	oBoardMapping.addMapping(8, 12);
+    }
 }

@@ -14,4 +14,6 @@ import java.util.List;
 public interface IPieceAgent extends IPiece {
 	public List<IRuleAgent> getRules();
 	public IPlayerAgent getPlayer();
+	public Boolean hasPieceAlreadyMadeMove();
+	public void recordPeiceFirstMove();
 }
