@@ -50,7 +50,7 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    }
 
 	    public void init() {
-	    	m_oCacheManager.loadBoardFromFile("Mock", "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\3PlayerBoard.xml");
+	    	m_oCacheManager.loadBoardFromFile("Mock", "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\2PlayerBoard.xml");
 	    	m_oModel.setBoard(m_oCacheManager.getBoard("Mock"));
 
 	    	//m_oModel.setPlayer();	    	

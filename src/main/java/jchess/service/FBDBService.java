@@ -13,6 +13,12 @@ class FBDBService extends StorageService {
 
 	public IBoardAgent getBoardAgent(String stFilePath) {
 		IBoardAgent oBoard = new BoardAgent();
+		
+		//BoardData abc = new BoardData();
+		//abc.populate2plyaerboard();
+		//XMLDeserializer.serializeBoard(abc);
+
+		
 		XMLDeserializer.populateBoard(stFilePath, oBoard);
 		return oBoard;
 	}	

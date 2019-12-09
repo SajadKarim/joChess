@@ -1,4 +1,4 @@
-<Board Name="3PlayerBoard" BoardImage="chessboard.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700">
+<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />
