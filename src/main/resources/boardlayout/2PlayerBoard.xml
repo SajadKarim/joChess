@@ -834,24 +834,30 @@
     </Position>
     <Position File="c" Rank="7" Family="Black">
       <Directions>
-        <Direction Name="D4" Type="VERTEX"></Direction>
-        <Direction Name="E1" Type="EDGE">
+        <Direction Name="D4" Type="VERTEX">
           <LinkedPosition>b8</LinkedPosition>
         </Direction>
-        <Direction Name="D1" Type="VERTEX">
+        <Direction Name="E1" Type="EDGE">
           <LinkedPosition>b7</LinkedPosition>
         </Direction>
+        <Direction Name="D1" Type="VERTEX">
+          <LinkedPosition>b6</LinkedPosition>
+        </Direction>
         <Direction Name="E2" Type="EDGE">
-          <LinkedPosition>c7</LinkedPosition>
+          <LinkedPosition>c6</LinkedPosition>
         </Direction>
         <Direction Name="D2" Type="VERTEX">
-          <LinkedPosition>d7</LinkedPosition>
+          <LinkedPosition>d6</LinkedPosition>
         </Direction>
         <Direction Name="E3" Type="EDGE">
+          <LinkedPosition>d7</LinkedPosition>
+        </Direction>
+        <Direction Name="D3" Type="VERTEX">
           <LinkedPosition>d8</LinkedPosition>
         </Direction>
-        <Direction Name="D3" Type="VERTEX"></Direction>
-        <Direction Name="E4" Type="EDGE"></Direction>
+        <Direction Name="E4" Type="EDGE">
+          <LinkedPosition>c8</LinkedPosition>
+        </Direction>
       </Directions>
       <Connections>
         <Connection Point1="D1" Point2="E1" />
@@ -868,8 +874,39 @@
       </Shape>
     </Position>
     <Position File="c" Rank="8" Family="White">
-      <Directions></Directions>
-      <Connections></Connections>
+      <Directions>
+        <Direction Name="D4" Type="VERTEX">
+        </Direction>
+        <Direction Name="E1" Type="EDGE">
+          <LinkedPosition>b8</LinkedPosition>
+        </Direction>
+        <Direction Name="D1" Type="VERTEX">
+          <LinkedPosition>b7</LinkedPosition>
+        </Direction>
+        <Direction Name="E2" Type="EDGE">
+          <LinkedPosition>c7</LinkedPosition>
+        </Direction>
+        <Direction Name="D2" Type="VERTEX">
+          <LinkedPosition>d7</LinkedPosition>
+        </Direction>
+        <Direction Name="E3" Type="EDGE">
+          <LinkedPosition>d8</LinkedPosition>
+        </Direction>
+        <Direction Name="D3" Type="VERTEX">
+        </Direction>
+        <Direction Name="E4" Type="EDGE">
+        </Direction>
+      </Directions>
+      <Connections>
+        <Connection Point1="D1" Point2="E1" />
+        <Connection Point1="D1" Point2="E2" />
+        <Connection Point1="D2" Point2="E2" />
+        <Connection Point1="D2" Point2="E3" />
+        <Connection Point1="D3" Point2="E3" />
+        <Connection Point1="D3" Point2="E4" />
+        <Connection Point1="D4" Point2="E4" />
+        <Connection Point1="D4" Point2="E1" />
+      </Connections>
       <Shape Type="Quard">
         <Coordinates x1="120" y1="60" x2="180" y2="60" x3="180" y3="0" x4="120" y4="0"  />
       </Shape>
