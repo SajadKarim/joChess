@@ -41,7 +41,7 @@ class XMLDeserializer {
 	static void serializeBoard(BoardData oBoard) {		
 		try
 		{
-			Map<String, IPosition> treeMap = new TreeMap<String, IPosition>(oBoard.getAllPositions_());
+			Map<String, IPosition> treeMap = new TreeMap<String, IPosition>(oBoard.getAllPositions());
 
 			for (Map.Entry<String, IPosition> entry : treeMap.entrySet()) {
 				IPosition oPosition = entry.getValue();
@@ -86,8 +86,6 @@ class XMLDeserializer {
 		catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
-		
-		System.out.print("End!");
 	}
 	
 	static void populateBoard(String stFilePath, IBoard oBoard) {
