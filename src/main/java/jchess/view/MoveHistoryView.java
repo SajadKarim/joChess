@@ -2,7 +2,6 @@ package jchess.view;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -13,6 +12,13 @@ import jchess.GameOld;
 import jchess.Piece;
 import jchess.Settings;
 import jchess.Square;
+
+/**
+ * This class is responsible to draw Move History related controls on GUI.
+ * 
+ * @author  Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryView
 {

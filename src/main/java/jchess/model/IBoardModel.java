@@ -5,7 +5,13 @@ import java.util.Map;
 
 import jchess.common.IPositionAgent;
 
-public interface IBoardModel {
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+public interface IBoardModel extends IModel {
 	public int getBoardWidth();
 	public int getBoardHeight();
 	public Image getBoardImage();

@@ -13,11 +13,19 @@ import jchess.common.IPositionAgent;
 import jchess.gamelogic.Game;
 import jchess.model.GameModel;
 import jchess.model.IGameModel;
+import jchess.model.INewGameModel;
 import jchess.view.GameView;
-import jchess.view.GameViewListener;
+import jchess.view.IGameViewCallback;
 import jchess.view.IGameView;
 
-public class GamePresenter extends AbstractModule implements GameViewListener, IGamePresenterCallback{
+/**
+ * This is class is responsible to show or load Game window with the help of model and presenter.
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+public class GamePresenter extends AbstractModule implements IGameViewCallback, IGamePresenterCallback{
 	    private final IGameView m_oView;
 	    private final IGameModel m_oModel;
 	    private final ICacheManager m_oCacheManager;
@@ -31,14 +39,11 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    }
 	    
 	    @Override 
-		  protected void configure() {
-		
-			  bind(IGameView.class).to(GameView.class);
-		
-			  bind(IGameModel.class).to(GameModel.class);
-
-			  bind(ICacheManager.class).to(CacheManager.class).in(Singleton.class);
-		  }
+	    protected void configure() {		
+	    	bind(IGameView.class).to(GameView.class);		
+			bind(IGameModel.class).to(GameModel.class);
+			bind(ICacheManager.class).to(CacheManager.class).in(Singleton.class);
+		}
 
 	    @Inject
 	    public GamePresenter(final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager) {
@@ -46,22 +51,22 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	        m_oModel = oModel;
 	        m_oCacheManager = oCacheManager;
 	        
-	        m_oView.addListener(this);
+	        m_oView.setCallback(this);
 	    }
 
-	    public void init() {
-	    	m_oCacheManager.loadBoardFromFile("Mock", "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\2PlayerBoard.xml");
-	    	m_oModel.setBoard(m_oCacheManager.getBoard("Mock"));
+	    public void init(INewGameModel oNewGameDetails) {
+	    	m_oCacheManager.loadBoardFromFile("Test", oNewGameDetails.getSelectedBoardFileName());
+	    	m_oModel.setBoard(m_oCacheManager.getBoard("Test"));
 
 	    	//m_oModel.setPlayer();	    	
 	    	m_oGame = new Game(this, m_oModel.getBoard());
 	    	
-	    	m_oView.setModelData(m_oModel);
+	    	m_oView.setViewData(m_oModel);
 	    	m_oView.init();
 	    }
 	    
 	    public void showView() {
-	    	m_oView.paintView();
+	    	m_oView.drawView();
 	    }
 	    
 	    public Component getViewComponent() {
@@ -70,8 +75,8 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 	    
 	    //region: Notifications from GameView
 	    public void onPositionClicked(IPositionAgent oPosition) {
-	    	m_oGame.onBoardActivity(oPosition);	    	
-	    	m_oView.getViewComponent().getParent().repaint();
+	    	m_oGame.onBoardActivity(oPosition);
+	    	m_oView.repaintBoardView();
 	    }
 	    //endregion
 	    
@@ -88,7 +93,6 @@ public class GamePresenter extends AbstractModule implements GameViewListener, I
 			m_oModel.setClockText("--:--");
 			m_oModel.setPlayer(oPlayer);
 			m_oView.repaintClockView();
-	    	m_oView.getViewComponent().getParent().repaint();
 		}
 		
 		public void updateCurrentPlayer(IPlayer oPlayer) {

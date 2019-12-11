@@ -1,7 +1,5 @@
 package jchess.common;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * IRuleAgent provides interface for the module where the
  * all the decisions (game) are taken. It ensures that user

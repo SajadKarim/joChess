@@ -4,13 +4,15 @@ import java.awt.Component;
 
 import jchess.model.IGameModel;
 
-public interface IGameView {
-	public void init();
-	public void setModelData(IGameModel oBoardModel);
-    public void addListener(final GameViewListener oListener);
-    public void paintView();
-    public Component getViewComponent();
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+public interface IGameView extends IView {
     public void repaintClockView();
     public void repaintBoardView();
     public void repaintPlayerView();
+    public void setCallback(IGameViewCallback oCallback);
 }

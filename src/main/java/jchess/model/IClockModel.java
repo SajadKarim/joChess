@@ -1,5 +1,11 @@
 package jchess.model;
 
-public interface IClockModel {
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+public interface IClockModel extends IModel  {
 	public String getClockText();
 }

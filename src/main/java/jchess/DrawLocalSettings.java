@@ -199,7 +199,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
 
     }
 
-    DrawLocalSettings(JDialog parent)
+    public DrawLocalSettings(JDialog parent)
     {
         super();
         //this.setA//choose oponent
