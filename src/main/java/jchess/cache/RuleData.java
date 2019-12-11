@@ -37,16 +37,17 @@ public class RuleData implements IRuleData {
 		m_mpRule = new HashMap<String, IRule>();
 	}
 	
-	public RuleData(RuleData rule) {
-		m_enFile = rule.m_enFile;
-		m_enRank = rule.m_enRank;
-		m_mpRule = rule.m_mpRule;
-		m_enFamily = rule.m_enFamily;
-		m_enRuleType = rule.m_enRuleType;
-		m_enDirection = rule.m_enDirection;
-		m_nMaxRecurrenceAllowed = rule.m_nMaxRecurrenceAllowed;
-		m_enManoeuvreStratgy = rule.m_enManoeuvreStratgy;
-		m_mpRule = new HashMap<String, IRule>(rule.m_mpRule);
+	public RuleData(RuleData oRule) {
+		m_stName = oRule.m_stName;
+		m_enFile = oRule.m_enFile;
+		m_enRank = oRule.m_enRank;
+		m_mpRule = oRule.m_mpRule;
+		m_enFamily = oRule.m_enFamily;
+		m_enRuleType = oRule.m_enRuleType;
+		m_enDirection = oRule.m_enDirection;
+		m_nMaxRecurrenceAllowed = oRule.m_nMaxRecurrenceAllowed;
+		m_enManoeuvreStratgy = oRule.m_enManoeuvreStratgy;
+		m_mpRule = new HashMap<String, IRule>(oRule.m_mpRule);
 	}
 	
 	// region: Implements IRule

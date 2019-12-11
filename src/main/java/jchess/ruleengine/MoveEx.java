@@ -15,6 +15,14 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 
+/**
+ * 
+ * Helper class to make run custom Rules.
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class MoveEx {
 	public static void tryPawnFirstMove(IBoardAgent oBoard, IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
 		if( oPosition.getPiece().hasPieceAlreadyMadeMove())

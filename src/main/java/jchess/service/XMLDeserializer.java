@@ -30,6 +30,13 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 
+/**
+ * This class loads data from XML file.
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 class XMLDeserializer {
 	
 	/**
@@ -122,7 +129,42 @@ class XMLDeserializer {
 			System.out.println(e);
 		}
 	}	
+	
+	static void populateBoardPlayerDetailsOnly(String stFilePath, IBoard oBoard) {
+		
+		try
+		{
+			Document m_oDocument;
+			DocumentBuilder m_oBuilder;	
+			DocumentBuilderFactory m_oFactory;	
 
+			m_oFactory = DocumentBuilderFactory.newInstance();
+
+			m_oBuilder = m_oFactory.newDocumentBuilder();
+			
+			m_oDocument = m_oBuilder.parse(new File(stFilePath));
+	
+			m_oDocument.getDocumentElement().normalize();
+	
+			Element oRootElement = m_oDocument.getDocumentElement();
+	
+			populateBoardAttributes(oBoard, oRootElement);
+			
+			//populatePositions(oBoard, oRootElement);
+			
+			//loadRules(oBoard, oRootElement);
+			
+			//loadPieces(oBoard, oRootElement);
+			
+			loadPlayers(oBoard, oRootElement);
+			
+			//oBoard.init();
+		}
+		catch(java.lang.Exception e) {
+			System.out.println(e);
+		}
+	}	
+	
 	private static void populateBoardAttributes(IBoard oBoard, Element oRootElement) {
 		
 		String stName = oRootElement.getAttributes().getNamedItem("Name").getNodeValue();
@@ -217,7 +259,7 @@ class XMLDeserializer {
 					String stType = oDirectionNode.getAttributes().getNamedItem("Type").getNodeValue();
 					String stName = oDirectionNode.getAttributes().getNamedItem("Name").getNodeValue();
 	
-					IPathData oPath = new Path(stName, CustomTypeMapping.convertStringToDirection(stType), null);
+					IPathData oPath = new Path(stName, StringToEnum.convertStringToDirection(stType), null);
 	
 					NodeList lstLinkedPositionNodes = oDirectionNode.getElementsByTagName("LinkedPosition");
 					for( int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
@@ -259,13 +301,13 @@ class XMLDeserializer {
 				Element oRuleNode = (Element)(lstRuleNodes.item(nRuleIndex));
 				
 				String stName = oRuleNode.getAttributes().getNamedItem("Name").getNodeValue();
-				RuleType enRuleType = CustomTypeMapping.convertStringToRuleType( oRuleNode.getAttributes().getNamedItem("Type").getNodeValue());
-				Direction enDirection = CustomTypeMapping.convertStringToDirection( oRuleNode.getAttributes().getNamedItem("Direction").getNodeValue());
-				Manoeuvre enManoeuvre = CustomTypeMapping.convertStringToManoeuvre(  oRuleNode.getAttributes().getNamedItem("Manoeuvre").getNodeValue());
+				RuleType enRuleType = StringToEnum.convertStringToRuleType( oRuleNode.getAttributes().getNamedItem("Type").getNodeValue());
+				Direction enDirection = StringToEnum.convertStringToDirection( oRuleNode.getAttributes().getNamedItem("Direction").getNodeValue());
+				Manoeuvre enManoeuvre = StringToEnum.convertStringToManoeuvre(  oRuleNode.getAttributes().getNamedItem("Manoeuvre").getNodeValue());
 				int nMaxRecurrenceAllowed = Integer.parseInt( oRuleNode.getAttributes().getNamedItem("MaxRecurrenceAllowed").getNodeValue());
-				jchess.common.enumerator.File enFile = CustomTypeMapping.convertStringToFile( oRuleNode.getAttributes().getNamedItem("File").getNodeValue());
-				Rank enRank = CustomTypeMapping.convertStringToRank( oRuleNode.getAttributes().getNamedItem("Rank").getNodeValue());
-				Family enFamily = CustomTypeMapping.convertStringToFamily( oRuleNode.getAttributes().getNamedItem("Family").getNodeValue());
+				jchess.common.enumerator.File enFile = StringToEnum.convertStringToFile( oRuleNode.getAttributes().getNamedItem("File").getNodeValue());
+				Rank enRank = StringToEnum.convertStringToRank( oRuleNode.getAttributes().getNamedItem("Rank").getNodeValue());
+				Family enFamily = StringToEnum.convertStringToFamily( oRuleNode.getAttributes().getNamedItem("Family").getNodeValue());
 				
 				IRule oRule = oBoard.createRule();
 				
@@ -340,33 +382,37 @@ class XMLDeserializer {
 				oPlayer.getPlayerData().setName(stName);
 				//oPlayer.getPlayerData().setColor("white");
 	
-				NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
-				for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
-					Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
-	
-					String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
-					String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
-	
-					//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
+				try {
+					NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
+					for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
+						Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
+		
+						String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
+						String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
+		
+						//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
+						
+						oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
+					}   
 					
-					oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
-				}   
-				
-				NodeList lstMappingNodes = ((Element)oPlayerNode.getElementsByTagName("BoardMapping").item(0)).getElementsByTagName("Map");
-				for( int nMappingIndex = 0, nMappingIndexMax = lstMappingNodes.getLength(); nMappingIndex < nMappingIndexMax; nMappingIndex++) {
-					Element oMappingNode = (Element)(lstMappingNodes.item(nMappingIndex));
-	
-					String stTo = oMappingNode.getAttributes().getNamedItem("To").getNodeValue();
-					String stFrom = oMappingNode.getAttributes().getNamedItem("From").getNodeValue();
-	
-					int nTo = tryParseInt(stTo);
-					int nFrom = tryParseInt(stFrom);
-					
-					//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
-					
-					oPlayer.getPlayerData().addBoardMapping(nFrom, nTo);
-				}   
-
+					NodeList lstMappingNodes = ((Element)oPlayerNode.getElementsByTagName("BoardMapping").item(0)).getElementsByTagName("Map");
+					for( int nMappingIndex = 0, nMappingIndexMax = lstMappingNodes.getLength(); nMappingIndex < nMappingIndexMax; nMappingIndex++) {
+						Element oMappingNode = (Element)(lstMappingNodes.item(nMappingIndex));
+		
+						String stTo = oMappingNode.getAttributes().getNamedItem("To").getNodeValue();
+						String stFrom = oMappingNode.getAttributes().getNamedItem("From").getNodeValue();
+		
+						int nTo = tryParseInt(stTo);
+						int nFrom = tryParseInt(stFrom);
+						
+						//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
+						
+						oPlayer.getPlayerData().addBoardMapping(nFrom, nTo);
+					}   
+				}
+				catch(java.lang.Exception e) {
+					System.out.println(e);
+				}
 				/*if( oPlayer.getName().equals("P2"))
 					populateCustomBoardMapping2( oPlayer.getPlayerData().getBoardMapping());
 				if( oPlayer.getName().equals("P3"))
@@ -397,61 +443,4 @@ class XMLDeserializer {
 		}
 		return -1;
 	}
-	
-    private static void populateCustomBoardMapping2(IBoardMapping oBoardMapping) {
-    	
-    	oBoardMapping.addMapping('l', 'a');
-    	oBoardMapping.addMapping('k', 'b');
-    	oBoardMapping.addMapping('j', 'c');
-    	oBoardMapping.addMapping('i', 'd');
-    	oBoardMapping.addMapping('d', 'e');
-    	oBoardMapping.addMapping('c', 'f');
-    	oBoardMapping.addMapping('b', 'g');
-    	oBoardMapping.addMapping('a', 'h');
-    	oBoardMapping.addMapping('e', 'i');
-    	oBoardMapping.addMapping('f', 'j');
-    	oBoardMapping.addMapping('g', 'k');
-    	oBoardMapping.addMapping('h', 'l');
-
-    	oBoardMapping.addMapping(8, 1);
-    	oBoardMapping.addMapping(7, 2);
-    	oBoardMapping.addMapping(6, 3);
-    	oBoardMapping.addMapping(5, 4);
-    	oBoardMapping.addMapping(9, 5);
-    	oBoardMapping.addMapping(10,6);
-    	oBoardMapping.addMapping(11,7);
-    	oBoardMapping.addMapping(12,8);
-    	oBoardMapping.addMapping(1, 12);
-    	oBoardMapping.addMapping(2, 11);
-    	oBoardMapping.addMapping(3, 10);
-    	oBoardMapping.addMapping(4, 9);
-    }
-    private static void populateCustomBoardMapping3(IBoardMapping oBoardMapping) {
-    	
-    	oBoardMapping.addMapping('h', 'a');
-    	oBoardMapping.addMapping('g', 'b');
-    	oBoardMapping.addMapping('f', 'c');
-    	oBoardMapping.addMapping('e', 'd');
-    	oBoardMapping.addMapping('i', 'e');
-    	oBoardMapping.addMapping('j', 'f');
-    	oBoardMapping.addMapping('k', 'g');
-    	oBoardMapping.addMapping('l', 'h');
-    	oBoardMapping.addMapping('d', 'i');
-    	oBoardMapping.addMapping('c', 'j');
-    	oBoardMapping.addMapping('b', 'k');
-    	oBoardMapping.addMapping('a', 'l');
-
-    	oBoardMapping.addMapping(12, 1);
-    	oBoardMapping.addMapping(11, 2);
-    	oBoardMapping.addMapping(10, 3);
-    	oBoardMapping.addMapping(9, 4);
-    	oBoardMapping.addMapping(4, 5);
-    	oBoardMapping.addMapping(3, 6);
-    	oBoardMapping.addMapping(2, 7);
-    	oBoardMapping.addMapping(1, 8);
-    	oBoardMapping.addMapping(5, 9);
-    	oBoardMapping.addMapping(6, 10);
-    	oBoardMapping.addMapping(7, 11);
-    	oBoardMapping.addMapping(8, 12);
-    }
 }

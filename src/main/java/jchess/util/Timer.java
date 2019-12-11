@@ -2,6 +2,13 @@ package jchess.util;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible to launch Timer and notify others.
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class Timer implements ITimer {
     private Thread m_oThread;
 	private int m_nTimerLengthInSeconds;

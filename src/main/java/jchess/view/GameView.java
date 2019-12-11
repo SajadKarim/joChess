@@ -9,7 +9,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -17,21 +16,26 @@ import javax.swing.JScrollPane;
 
 import jchess.model.IBoardModel;
 import jchess.model.IGameModel;
+import jchess.model.IModel;
 import jchess.model.IPlayerModel;
 import jchess.model.IClockModel;
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
-import jchess.gamelogic.PositionAgent;
+
+/**
+ * This class with the help of custom control (child view) draws Chessboard, Clock, etc.
+ * 
+ * @author  Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class GameView extends JPanel implements IGameView, MouseListener, ComponentListener {
-	private IGameModel m_oGameModel;
+	private IGameModel m_oData;
     
 	private IPlayerView m_oPlayerView;
 	private IClockView m_oClockView;
 	private IBoardView m_oBoardView;
-    private IMoveHistoryView m_oMoveHistoryView;
-    
-	private final ArrayList<GameViewListener> m_lstListeners;
+    private IMoveHistoryView m_oMoveHistoryView;	
 
 	private Dimension m_oPlayerViewDimensions;        
 	private Dimension m_oBoardViewDimensions;        
@@ -43,65 +47,66 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 	private Point m_oClockViewStartLocation;
 	private Point m_oHistoryViewStartLocation;
 
+	private IGameViewCallback m_oCallback;
+	
 	public GameView() {
-        m_lstListeners = new ArrayList<GameViewListener>();
 	}
 	
 	public void init() {
 		this.setLayout(null);
 		this.setLocation(new Point(0, 0));        
-        
+        this.setSize(1000, 800);
 		initPositionsAndDimensions();
 		initSubViews();
 		
 		addMouseListener(this);		
         addComponentListener(this);
 
-        //m_oBoardView.draw(this.getGraphics());
-		this.setDoubleBuffered(true);
-
+        this.setDoubleBuffered(true);
+	}
+	
+	public void setCallback(IGameViewCallback oCallback) {
+		m_oCallback = oCallback; 
 	}
 	
 	public void initPositionsAndDimensions() {
-		m_oBoardViewDimensions = new Dimension(m_oGameModel.getBoard().getBoardWidth(), m_oGameModel.getBoard().getBoardHeight());        
+		m_oBoardViewDimensions = new Dimension(m_oData.getBoard().getBoardWidth(), m_oData.getBoard().getBoardHeight());        
 		m_oPlayerViewDimensions = new Dimension(180, 60);
         m_oClockViewDimensions = new Dimension(180, 60);
         m_oHistoryViewDimensions = new Dimension(180, 500);
 
         m_oBoardViewStartLocation = new Point(0, 0);
-        m_oPlayerViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 0);
-        m_oClockViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 60);
-        m_oHistoryViewStartLocation = new Point(m_oGameModel.getBoard().getBoardWidth() + 20, 120);
+        m_oPlayerViewStartLocation = new Point(m_oData.getBoard().getBoardWidth() + 20, 0);
+        m_oClockViewStartLocation = new Point(m_oData.getBoard().getBoardWidth() + 20, 60);
+        m_oHistoryViewStartLocation = new Point(m_oData.getBoard().getBoardWidth() + 20, 120);
 	}
 	
 	public void initSubViews() {
         m_oBoardView = new BoardView();
-        m_oBoardView.setData((IBoardModel)m_oGameModel);
+        m_oBoardView.setViewData((IBoardModel)m_oData);
         m_oBoardView.SetDimension(m_oBoardViewDimensions);
-        Component oBoardComponent = m_oBoardView.getComponent();
+        Component oBoardComponent = m_oBoardView.getViewComponent();
         oBoardComponent.setSize(m_oBoardViewDimensions);
-        oBoardComponent.setLocation(m_oBoardViewStartLocation);        
+        oBoardComponent.setLocation(m_oBoardViewStartLocation);
         this.add(oBoardComponent);
 
         m_oPlayerView = new PlayerView();
-        m_oPlayerView.setData((IPlayerModel)m_oGameModel);
+        m_oPlayerView.setViewData(m_oData);
         m_oPlayerView.setDimension( m_oPlayerViewDimensions);
-        Component oPlayerComponent = m_oPlayerView.getComponent();
+        Component oPlayerComponent = m_oPlayerView.getViewComponent();
         oPlayerComponent .setSize(m_oPlayerViewDimensions);
         oPlayerComponent .setLocation(m_oPlayerViewStartLocation);
         this.add(oPlayerComponent );
 
         m_oClockView = new ClockView();
-        m_oClockView.setData((IClockModel)m_oGameModel);
+        m_oClockView.setViewData(m_oData);
         m_oClockView.setDimension( m_oClockViewDimensions);
-        Component oClockComponent = m_oClockView.getComponent();
+        Component oClockComponent = m_oClockView.getViewComponent();
         oClockComponent.setSize(m_oClockViewDimensions);
         oClockComponent.setLocation(m_oClockViewStartLocation);
         this.add(oClockComponent);
 
         m_oMoveHistoryView = new MoveHistoryView(null);
-        //m_oMoveHistoryView.setData((IMoveHistoryModel)m_oGameModel);
-        //m_oMoveHistoryView.setDimensions( m_oHistoryViewDimensions);
         JScrollPane oMoveHistory = m_oMoveHistoryView.getScrollPane();
         oMoveHistory.setSize(m_oHistoryViewDimensions);
         oMoveHistory.setLocation(m_oHistoryViewStartLocation);
@@ -109,16 +114,6 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         
 	}
 	
-	public void setModelData(IGameModel oBoardModel) {
-		m_oGameModel = oBoardModel;
-	}
-	
-	
-	@Override
-    public void paintComponent(Graphics g)
-    {
-    }
-    
     public void mouseClicked(MouseEvent event)
     {
     
@@ -129,17 +124,18 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
    	
                 IPositionAgent oPosition = getPosition(x, y);
                 
-                notifyListenersOnPositionClicked(oPosition);
+                if( oPosition != null) {
+                	m_oCallback.onPositionClicked(oPosition);
+                }
     		}
     		break;
     	}
     }
 
     public IPositionAgent getPosition(int x, int y) {
-    	for (Map.Entry<String, IPositionAgent> entry : m_oGameModel.getBoard().getAllPositionAgents().entrySet()) {
+    	for (Map.Entry<String, IPositionAgent> entry : m_oData.getBoard().getAllPositionAgents().entrySet()) {
 			IPositionAgent oPosition = entry.getValue();
-			if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y)))
-			{
+			if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y))) {
 				return oPosition;
 			}
 		}
@@ -182,43 +178,60 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     {
     }
     
-    private void notifyListenersOnPositionClicked(IPositionAgent oPosition) {
-        for (final GameViewListener oListener : m_lstListeners) {
-            oListener.onPositionClicked(oPosition);
-        }
-    }
-
-    public void addListener(final GameViewListener oListener) {
-        m_lstListeners.add(oListener);
-    }
-
-    public void paintView() {
-    	paintComponent(this.getGraphics());
-    }
-    
     public Component getViewComponent() {
     	return this;
     }
     
     public void repaintClockView() {
     	try {
-    	m_oClockView.getComponent().repaint();
+    		m_oClockView.getViewComponent().repaint();
     	}catch(java.lang.Exception e) {
     		
     	}
     }
+    
     public void repaintBoardView() {
-    	try {    		
-    		m_oBoardView.getComponent().repaint();
+    	try {
+    		m_oBoardView.getViewComponent().repaint();
     	}
     	catch(java.lang.Exception e) {
     	}
     }
+    
     public void repaintPlayerView() {
     	try {    		
-    		m_oPlayerView.getComponent().repaint();
+    		m_oPlayerView.getViewComponent().repaint();
     	}
     	catch(java.lang.Exception e) {
     	}
     }
+
+    @Override
+    public void paint(Graphics oGraphics)
+    {
+    	super.paint(oGraphics);
+    	drawView();
+    }
+	
+    @Override
+    public void update(Graphics oGraphics) {
+    	paint(oGraphics);
+    }
+
+	@Override
+	public void drawView() {
+		m_oBoardView.drawView();
+		m_oPlayerView.drawView();
+		m_oClockView.drawView();
+	}
+
+	@Override
+	public void refreshView() {
+		drawView();
+	}
+
+	@Override
+	public void setViewData(IModel oData) {
+		m_oData = (IGameModel)oData;
+	}
 }

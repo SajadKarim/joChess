@@ -198,11 +198,12 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
         }
 
     }
-    /**
+
+     /**
      * method to draw the Local Setting of new game window
      * @param parent its a JPannel
      */
-    DrawLocalSettings(JDialog parent)
+    public DrawLocalSettings(JDialog parent)
     {
         super();
         //this.setA//choose oponent

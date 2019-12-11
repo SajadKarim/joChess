@@ -2,12 +2,15 @@ package jchess.view;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
+
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 import jchess.model.IBoardModel;
 
-public interface IBoardView {
-	public void setData(IBoardModel oBoardModel);
+public interface IBoardView extends IView {
 	public void SetDimension(Dimension oDimension);
-    public Component getComponent();
 }

@@ -7,7 +7,14 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 
-class CustomTypeMapping {
+/**
+ * This is helper class that maps String to Enums.
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+class StringToEnum {
 
 	static public Direction convertStringToDirection(String stDirection) {
 		switch(stDirection.toUpperCase()) {
