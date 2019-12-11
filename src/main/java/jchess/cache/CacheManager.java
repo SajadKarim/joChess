@@ -3,13 +3,13 @@ package jchess.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.javatuples.Pair;
+
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-import jchess.common.IBoard;
 import jchess.common.IBoardAgent;
-import jchess.gamelogic.BoardAgent;
-import jchess.service.STORAGE_TYPE;
+import jchess.service.StorageType;
 import jchess.service.StorageService;
 
 /**
@@ -22,29 +22,28 @@ import jchess.service.StorageService;
 
 @Singleton
 public class CacheManager implements ICacheManager{
+    private static String BOARDLAYOUTS_DIRECTORY = "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\"; 
+
     private static CacheManager m_oInstance = null; 
 
     private Map<String, BoardCache> m_mpBoardCache;
+    private Map<String, Pair<String, Integer>> m_mpPlayerAllowedInBoard;
     
     public CacheManager() {
-    	m_mpBoardCache = new HashMap<String, BoardCache>();    	
+    	System.out.println("Cache manager new instance.");
+    	m_mpBoardCache = new HashMap<String, BoardCache>();
+    	m_mpPlayerAllowedInBoard = new HashMap<String, Pair<String, Integer>>();
     } 
   
     @Provides 
     @Singleton
-    public ICacheManager provideCacheManager(){
+    public static ICacheManager provideCacheManager(){
         if (m_oInstance == null) 
-       	m_oInstance = new CacheManager(); 
+        	m_oInstance = new CacheManager(); 
  
         return m_oInstance; 
     }
- /*   public static CacheManager getInstance() { 
-        if (m_oInstance == null) 
-       	m_oInstance = new CacheManager(); 
- 
-        return m_oInstance; 
-    }
-   */ 
+
     public IBoardAgent getBoard(String stName) {
     	if( m_mpBoardCache.containsKey(stName))
     		return m_mpBoardCache.get(stName).getBoard();
@@ -52,10 +51,25 @@ public class CacheManager implements ICacheManager{
     	return null;
     }
     
+    public Boolean init() {
+    	StorageService oStorageService = StorageService.create(StorageType.FBDB);
+    	m_mpPlayerAllowedInBoard = oStorageService.getPossiblePlayerInEachBoard(BOARDLAYOUTS_DIRECTORY);
+
+    	if( m_mpPlayerAllowedInBoard == null)
+    		return false;
+    	
+    	return false;
+    }
+    
     public void loadBoardFromFile(String stName, String stFilePath) {
-    	StorageService oStorageService = StorageService.create(STORAGE_TYPE.FBDB);
-    	IBoardAgent oBoard = oStorageService.getBoardAgent(stFilePath);
+    	StorageService oStorageService = StorageService.create(StorageType.FBDB);
+    	IBoardAgent oBoard = oStorageService.getBoardAgent(BOARDLAYOUTS_DIRECTORY + stFilePath);
     	
     	m_mpBoardCache.put(stName, new BoardCache(stName, oBoard));
     }
+    
+    public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(){
+    	return new HashMap<String, Pair<String, Integer>>(m_mpPlayerAllowedInBoard);
+    }
+
 }

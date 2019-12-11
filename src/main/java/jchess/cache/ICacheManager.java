@@ -1,5 +1,9 @@
 package jchess.cache;
 
+import java.util.Map;
+
+import org.javatuples.Pair;
+
 import jchess.common.IBoardAgent;
 
 /**
@@ -11,6 +15,8 @@ import jchess.common.IBoardAgent;
  */
 
 public interface ICacheManager {
+	public Boolean init();
     public IBoardAgent getBoard(String stName);
     public void loadBoardFromFile(String stName, String stFilePath);
+    public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard();
 }

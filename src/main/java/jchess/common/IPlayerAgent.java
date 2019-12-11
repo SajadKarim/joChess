@@ -1,5 +1,7 @@
 package jchess.common;
 
+import java.awt.Image;
+
 /**
  * IPlayerAgent provides interface for the module where the
  * all the decisions (game) are taken. It ensures that user
@@ -10,4 +12,10 @@ package jchess.common;
  */
 
 public interface IPlayerAgent extends IPlayer {
+	public void setFirstName(String stName);
+	public String  getFirstName();
+	public void setLastName(String stName);
+	public String  getLastName();
+	public void setImage(Image oImage);
+	public Image getImage();
 }

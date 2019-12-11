@@ -7,6 +7,13 @@ import jchess.common.IBoardAgent;
 import jchess.common.IPlayer;
 import jchess.common.IPositionAgent;
 
+/**
+ * This class hold all the data that is required to draw Game in whole.
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerModel{
 	IBoardAgent m_oBoard;
 	String m_stClockText;

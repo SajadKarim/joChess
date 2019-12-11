@@ -3,7 +3,13 @@ package jchess.model;
 import jchess.common.IBoardAgent;
 import jchess.common.IPlayer;
 
-public interface IGameModel {
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
+public interface IGameModel extends IModel  {
 	public IBoardAgent getBoard();	
 	public void setBoard(IBoardAgent oBoard);	
 	public String getClockText();

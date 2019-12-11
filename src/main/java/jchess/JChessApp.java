@@ -21,9 +21,11 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 import jchess.cache.BoardData;
+import jchess.cache.CacheManager;
+import jchess.cache.ICacheManager;
 import jchess.common.IBoardData;
 import jchess.gamelogic.BoardAgent;
-import jchess.service.STORAGE_TYPE;
+import jchess.service.StorageType;
 import jchess.service.StorageService;
 
 /**
@@ -36,6 +38,7 @@ public class JChessApp extends SingleFrameApplication {
      */
     @Override protected void startup() {
 
+    	CacheManager.provideCacheManager().init();
     	//StorageService o = StorageService.create(STORAGE_TYPE.FBDB);
     	//IBoardData b = o.getBoard();
     	
