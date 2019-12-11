@@ -24,6 +24,7 @@ import jchess.cache.BoardData;
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
 import jchess.common.IBoardData;
+import jchess.common.enumerator.LogLevel;
 import jchess.gamelogic.BoardAgent;
 import jchess.service.StorageType;
 import jchess.service.StorageService;
@@ -84,6 +85,8 @@ public class JChessApp extends SingleFrameApplication {
             }
         });
     	*/
+    	
+    	JChessLogger.getInstance().writeLog(LogLevel.INFO, "Launching game");
         launch(JChessApp.class, args);    	
     }
 }
