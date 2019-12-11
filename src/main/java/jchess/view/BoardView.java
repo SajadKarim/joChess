@@ -60,7 +60,11 @@ public class BoardView extends JPanel implements IBoardView {
     			markPositions(oGraphics, oPosition);
     	}
 	}
-	
+	/**
+	 * Select the position in the chess board
+	 * @param oGraphics the chess board
+	 * @param oPosition the position in the chess board
+	 */
 	public void selectPosition(Graphics oGraphics, IPositionAgent oPosition) {
 		
 		Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
@@ -79,14 +83,23 @@ public class BoardView extends JPanel implements IBoardView {
     	oGraphics.drawImage(oResizedImage, (int)oPolygon.getBounds2D().getMinX(), (int)oPolygon.getBounds2D().getMinY(), null);
 
 	}
-	
+	/**
+	 * Mark the position in the chess board
+	 * @param oGraphics the chess board
+	 * @param oPosition the position in the chess board
+	 */
 	public void markPositions(Graphics oGraphics, IPositionAgent oPosition) {	
         	Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
         	
         	oGraphics.setClip(oPolygon);
         	oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX()-20, (int)oPolygon.getBounds2D().getCenterY()-20, null);
         }
-	
+	/**
+	 * Draw the pice in the position of the chess board
+	 * @param oGraphics the chess board
+	 * @param oPolygon the position of the piece
+	 * @param oPieceImage the image of the piece
+	 */
 	public void drawPiece(Graphics oGraphics, Polygon oPolygon, Image oPieceImage)
     {
         try
