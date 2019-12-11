@@ -35,7 +35,7 @@ import javax.swing.JOptionPane;
  * that the moves taken by player are correct.
  * All moves which was taken by current player are saving as List of Strings
  * The history of moves is printing in a table
- * @param game The current game
+ * game The current game
  */
 public class Moves extends AbstractTableModel
 {
@@ -84,19 +84,30 @@ public class Moves extends AbstractTableModel
     public void draw()
     {
     }
-
+    /**
+     * To get the value of the cell at columnIndex and rowIndex
+     * @param x The columnIndex
+     * @param y The rowIndex
+     * @return returns the String value of the cell
+     */
     @Override
     public String getValueAt(int x, int y)
     {
         return this.move.get((y * 2) - 1 + (x - 1));
     }
-
+    /**
+     * Get the number of rows in the model
+     * @return return the numbers of rows in the model
+     */
     @Override
     public int getRowCount()
     {
         return this.rowsNum;
     }
-
+    /**
+     * Get the number of column in the model
+     * @return return the numbers of column in the model
+     */
     @Override
     public int getColumnCount()
     {
@@ -107,7 +118,11 @@ public class Moves extends AbstractTableModel
     {
         this.tableModel.addRow(new String[2]);
     }
-
+    /**
+     * add Castling move to the chess
+     * which will move the Rook and the King at the same time
+     * @param move String which in is current player move
+     */
     protected void addCastling(String move)
     {
         this.move.remove(this.move.size() - 1);//remove last element (move of Rook)
@@ -161,7 +176,7 @@ public class Moves extends AbstractTableModel
     }
 
     /** Method of adding new move
-     * @param move String which in is capt player move
+     * @param move String which in is current player move
      */
     public void addMove(String move)
     {

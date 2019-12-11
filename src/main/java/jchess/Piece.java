@@ -121,7 +121,11 @@ public abstract class Piece
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
     }
-
+    /**
+     * Draw chess board
+     * @param g where to draw
+     * @param oPosition the position
+     */
     final void draw(Graphics g, PositionAgent oPosition)
     {
         try
@@ -175,6 +179,7 @@ public abstract class Piece
     /** method check if Piece can move to given square
      * @param square square where piece want to move (Square object)
      * @param allmoves  all moves which can piece do
+     * @return return true if the piece can move and false if it can't 
      * */
     boolean canMove(Square square, ArrayList allmoves)
     {

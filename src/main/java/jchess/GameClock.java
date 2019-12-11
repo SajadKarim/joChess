@@ -28,7 +28,7 @@ import jchess.common.*;
 import jchess.gamelogic.PlayerAgent;
 
 /** Class to representing the full game time
- * @param game The current game
+ * game The current game
  */
 public class GameClock extends JPanel implements Runnable
 {

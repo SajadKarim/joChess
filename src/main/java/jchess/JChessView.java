@@ -49,6 +49,11 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     static GUI gui = null;
     GUI activeGUI;//in future it will be reference to active tab
     Injector injector;
+    /**
+     * adding new tab to the Jpanel
+     * @param title name of the new tab
+     * @return name of the old tab
+     */
     public GameOld addNewTab(String title)
     {
     	//BoardView t = new BoardView();
