@@ -30,7 +30,7 @@ public class VoidTest {
 	    void justAnExample() {
 	        System.out.println("This test method should be run");
 	    }
-
+	 @Test
 		public void test() {
 			fail("Not yet implemented");
 		}
