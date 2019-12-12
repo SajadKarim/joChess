@@ -17,13 +17,11 @@ package jchess;
 
 import javax.swing.SwingUtilities;
 
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 import jchess.view.viewTemp;
+import jchess.common.enumerator.LogLevel;
 import jchess.model.modelTemp;
 import jchess.presenter.presenterTemp;
 
@@ -82,6 +80,6 @@ public class JChessApp extends SingleFrameApplication {
         });
     	*/
         launch(JChessApp.class, args);    	
-        JChessLogger.getInstance().log(level.INFO, "Launching Game");
+        JChessLogger.getInstance().writeLog(LogLevel.INFO, "Launching game");
     }
 }
