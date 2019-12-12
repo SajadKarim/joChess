@@ -24,12 +24,13 @@ import org.jdesktop.application.TaskMonitor;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import jchess.model.INewGameModel;
-import jchess.presenter.GamePresenter;
-import jchess.presenter.NewGamePresenter;
-import jchess.view.GameView;
-import jchess.view.INewGameCallback;
-import jchess.view.NewGameView;
+import jchess.dimodule.NewGameWndModule;
+import jchess.dimodule.GameWndModule;
+import jchess.model.newgamewindow.INewGameModel;
+import jchess.presenter.gamewindow.GamePresenter;
+import jchess.presenter.newgamewindow.NewGamePresenter;
+import jchess.view.newgamewindow.*;
+import jchess.view.gamewindow.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,8 +49,9 @@ import java.io.File;
 /**
  * The application's main frame.
  */
-public class JChessView extends FrameView implements ActionListener, ComponentListener, INewGameCallback
+public class JChessView extends FrameView implements ActionListener, ComponentListener, INewGame_Callback
 {
+	
     static GUI gui = null;
     GUI activeGUI;//in future it will be reference to active tab
     public GameOld addNewTab(String title)
@@ -62,19 +64,13 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         return newGUI;
     }
 
-    public GameView addNewTab_(String title)
-    {
-    	GameView t = new GameView();
-    	this.gamesPane.addTab("temp view", t);
-    	return t;
-    }
 
     public void actionPerformed(ActionEvent event)
     {
         Object target = event.getSource();
         if (target == newGameItem)
         {
-        	Injector injector = Guice.createInjector(new NewGamePresenter());
+        	Injector injector = Guice.createInjector(new NewGameWndModule(	));
 
         	NewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
         	oPresenter.init();
@@ -630,7 +626,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
 	@Override
 	public void launchNewGame(INewGameModel oData) {
-		Injector injector = Guice.createInjector(new GamePresenter());
+		Injector injector = Guice.createInjector(new GameWndModule());
 		GamePresenter oPresenter = injector.getInstance(GamePresenter.class);
 
 		oPresenter.init(oData);

@@ -7,9 +7,9 @@ import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.common.enumerator.RuleEngineType;
-import jchess.presenter.IGamePresenterCallback;
+import jchess.presenter.gamewindow.IGamePresenter_Callback;
 import jchess.ruleengine.IRuleProcessor;
-import jchess.ruleengine.RuleEngine;
+import jchess.ruleengine.RuleEngineFactory;
 import jchess.util.ITimerListener;
 import jchess.util.Timer;
 import java.util.Map;
@@ -28,12 +28,12 @@ import java.util.Map;
 
 public class Game implements ITimerListener{
 	private IBoardAgent m_oBoard;
-	private IGamePresenterCallback m_oGamePresenter;
+	private IGamePresenter_Callback m_oGamePresenter;
 	private Timer m_oTimer;
 	private GameState m_oGameState;
 	private IRuleProcessor m_oRuleProcessor;
 	
-	public Game(IGamePresenterCallback oGamePresenter, IBoardAgent oBoard){
+	public Game(IGamePresenter_Callback oGamePresenter, IBoardAgent oBoard){
 		m_oGameState = new GameState(oBoard.getAllPlayerAgents());
 		
 		m_oBoard = oBoard;
@@ -41,7 +41,7 @@ public class Game implements ITimerListener{
 		m_oGamePresenter = oGamePresenter;
 		m_oGamePresenter.updateCurrentPlayer(m_oGameState.getActivePlayer());
 		
-		m_oRuleProcessor = RuleEngine.getRuleEngine(RuleEngineType.RULEENGINE_3PLAYER);
+		m_oRuleProcessor = RuleEngineFactory.getRuleEngine(RuleEngineType.RULEENGINE_3PLAYER);
 		
 		m_oTimer = new Timer(60*60, 10000, 0, true, true);
 		m_oTimer.addListener(this);		

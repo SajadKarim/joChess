@@ -29,7 +29,6 @@ import javax.swing.text.BadLocationException;
 
 import jchess.cache.PlayerData;
 import jchess.gamelogic.PlayerAgent;
-import jchess.view.GameView;
 
 /**
  * Class responsible for drawing the fold with local game settings

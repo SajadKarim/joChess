@@ -38,7 +38,7 @@ public class JChessApp extends SingleFrameApplication {
      */
     @Override protected void startup() {
 
-    	CacheManager.provideCacheManager().init();
+    	CacheManager.getInstance().init();
     	//StorageService o = StorageService.create(STORAGE_TYPE.FBDB);
     	//IBoardData b = o.getBoard();
     	

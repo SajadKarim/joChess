@@ -20,13 +20,13 @@ import jchess.gamelogic.BoardAgent;
 class FBDBService extends StorageService {
 	public IBoardData getBoardData(String stFilePath) {
 		IBoardData oBoard = new BoardData();
-		XMLDeserializer.populateBoard(stFilePath, oBoard);
+		BoardXMLDeserializer.populateBoard(stFilePath, oBoard);
 		return oBoard;
 	}	
 
 	public IBoardAgent getBoardAgent(String stFilePath) {
 		IBoardAgent oBoard = new BoardAgent();
-		XMLDeserializer.populateBoard(stFilePath, oBoard);
+		BoardXMLDeserializer.populateBoard(stFilePath, oBoard);
 		return oBoard;
 	}	
 	
@@ -41,7 +41,7 @@ class FBDBService extends StorageService {
 				String stBoardFilePath = stFolderPath + arFiles[i].getName();
 				
 				IBoardAgent oBoard = new BoardAgent();
-				XMLDeserializer.populateBoardPlayerDetailsOnly(stBoardFilePath, oBoard);
+				BoardXMLDeserializer.populateBoardPlayerDetailsOnly(stBoardFilePath, oBoard);
 
 				if( oBoard != null) {
 					mpData.put(oBoard.getName(), new Pair<String, Integer>(arFiles[i].getName(), oBoard.getAllPlayers().size()));

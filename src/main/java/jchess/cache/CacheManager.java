@@ -20,7 +20,6 @@ import jchess.service.StorageService;
  * @since	7 Dec 2019
  */
 
-@Singleton
 public class CacheManager implements ICacheManager{
     private static String BOARDLAYOUTS_DIRECTORY = "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\"; 
 
@@ -35,9 +34,7 @@ public class CacheManager implements ICacheManager{
     	m_mpPlayerAllowedInBoard = new HashMap<String, Pair<String, Integer>>();
     } 
   
-    @Provides 
-    @Singleton
-    public static ICacheManager provideCacheManager(){
+    public static ICacheManager getInstance(){
         if (m_oInstance == null) 
         	m_oInstance = new CacheManager(); 
  
