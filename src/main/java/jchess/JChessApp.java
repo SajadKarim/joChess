@@ -17,6 +17,9 @@ package jchess;
 
 import javax.swing.SwingUtilities;
 
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -32,6 +35,9 @@ import jchess.service.StorageService;
  * The main class of the application.
  */
 public class JChessApp extends SingleFrameApplication {
+	
+	//private final static JChessLogger logger = JChessLogger.getInstance();
+	
      static JChessView jcv;
     /**
      * At startup create and show the main frame of the application.
@@ -85,5 +91,6 @@ public class JChessApp extends SingleFrameApplication {
         });
     	*/
         launch(JChessApp.class, args);    	
+        JChessLogger.getInstance().log(level.INFO, "Launching Game");
     }
 }
