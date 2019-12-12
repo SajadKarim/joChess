@@ -105,51 +105,51 @@ public abstract class Piece
     //  * @param g where to draw
     //  * @param oPosition the position
     //  */
-    // final void draw(Graphics g, PositionAgent oPosition)
-    // {
-    //     try
-    //     {
-    //         Graphics2D g2d = (Graphics2D) g;
-    //         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    //         //Point topLeft = this.chessboard.getTopLeftPoint();
-    //         //int height = this.chessboard.get_square_height();
-    //         int x = oPosition.getShape().getTopLeftX();
-    //         int y = oPosition.getShape().getTopLeftY();
-    //         //int x = (this.square.pozX * height) + topLeft.x;
-    //         //int y = (this.square.pozY * height) + topLeft.y;            
-    //         //float addX = (height - image.getWidth(null)) / 2;
-    //         //float addY = (height - image.getHeight(null)) / 2;
-    //         if (image != null && g != null)
-    //         {
+    final void draw(Graphics g, PositionAgent oPosition)
+    {
+        try
+        {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            //Point topLeft = this.chessboard.getTopLeftPoint();
+            //int height = this.chessboard.get_square_height();
+            int x = oPosition.getShape().getTopLeftX();
+            int y = oPosition.getShape().getTopLeftY();
+            //int x = (this.square.pozX * height) + topLeft.x;
+            //int y = (this.square.pozY * height) + topLeft.y;            
+            //float addX = (height - image.getWidth(null)) / 2;
+            //float addY = (height - image.getHeight(null)) / 2;
+            if (image != null && g != null)
+            {
             	
-    //         	Polygon p = ((IPolygon)oPosition.getShape()).getPolygon();
+            	Polygon p = ((IPolygon)oPosition.getShape()).getPolygon();
             	
-    //             /*Image tempImage = orgImage;
-    //             BufferedImage resized = new BufferedImage((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
-    //             Graphics2D imageGr = (Graphics2D) resized.createGraphics();
-    //             imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    //             imageGr.drawImage(tempImage, 0, 0, (int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), null);
-    //             imageGr.dispose();
-    //             image = resized.getScaledInstance((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), 0);
-    //             //g2d.drawImage(image, x, y, null);
-    //             */
-    //         	g.setClip(p);
-    //         	//g.setColor(Color.cyan);
-    //         	//g.fillPolygon(p);
-    //         	g.drawImage(orgImage, (int)p.getBounds2D().getCenterX()-30, (int)p.getBounds2D().getCenterY()-30, null);
+                /*Image tempImage = orgImage;
+                BufferedImage resized = new BufferedImage((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+                Graphics2D imageGr = (Graphics2D) resized.createGraphics();
+                imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                imageGr.drawImage(tempImage, 0, 0, (int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), null);
+                imageGr.dispose();
+                image = resized.getScaledInstance((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), 0);
+                //g2d.drawImage(image, x, y, null);
+                */
+            	g.setClip(p);
+            	//g.setColor(Color.cyan);
+            	//g.fillPolygon(p);
+            	g.drawImage(orgImage, (int)p.getBounds2D().getCenterX()-30, (int)p.getBounds2D().getCenterY()-30, null);
 
-    //         }
-    //         else
-    //         {
-    //             System.out.println("image is null!");
-    //         }
+            }
+            else
+            {
+                System.out.println("image is null!");
+            }
 
-    //     }
-    //     catch (java.lang.NullPointerException exc)
-    //     {
-    //         System.out.println("Something wrong when painting piece: " + exc.getMessage());
-    //     }
-    // }
+        }
+        catch (java.lang.NullPointerException exc)
+        {
+            System.out.println("Something wrong when painting piece: " + exc.getMessage());
+        }
+    }
     //resolve
     void clean()
     {
