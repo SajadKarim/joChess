@@ -19,8 +19,7 @@
  * Damian Marciniak
  */
 package jchess;
-import jchess.common.*;
-import jchess.gamelogic.PositionAgent;
+
 /**
  * Class to represent a chessboard square
  */
@@ -29,15 +28,13 @@ public class Square
 
     int pozX; // 0-7, becouse 8 squares for row/column
     int pozY; // 0-7, becouse 8 squares for row/column
-    public jchess.gamelogic.PieceAgent piece = null;//object Piece on square (and extending Piecie)
-    public PositionAgent m_oPosition = null;
-    
-    Square(int pozX, int pozY, jchess.gamelogic.PieceAgent piece, PositionAgent oPosition)
+    public Piece piece = null;//object Piece on square (and extending Piecie)
+
+    Square(int pozX, int pozY, Piece piece)
     {
         this.pozX = pozX;
         this.pozY = pozY;
         this.piece = piece;
-        this.m_oPosition = oPosition;
     }/*--endOf-Square--*/
 
 
@@ -53,10 +50,9 @@ public class Square
         return new Square(square);
     }
 
-    void setPiece(jchess.gamelogic.PieceAgent piece)
+    void setPiece(Piece piece)
     {
-    	this.m_oPosition.setPiece(piece);
-        this.piece = null;
-        //this.piece.square = this;
+        this.piece = piece;
+        this.piece.square = this;
     }
 }
