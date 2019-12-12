@@ -1,12 +1,12 @@
 package jchess.common.enumerator;
 
 /**
- * Rank.java
+ * Category.java
  * 
  *
  */
 
-public enum Rank{
+public enum Category{
 	
 }
 

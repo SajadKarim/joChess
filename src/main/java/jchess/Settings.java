@@ -26,25 +26,10 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import jchess.common.*;
-import jchess.gamelogic.PlayerAgent;
-
 /** Class representings game settings available for the current player
  */
 public class Settings implements Serializable
 {
-    public enum colors
-    {
-
-        white, black
-    }
-    public colors color;
-
-    public enum playerTypes
-    {
-
-        localUser, networkUser, computer
-    }
 
     private static ResourceBundle loc = null;
     public int timeForGame;
@@ -59,8 +44,8 @@ public class Settings implements Serializable
         newGame, loadGame
     }
     public gameModes gameMode;
-    public PlayerAgent playerWhite;
-    public PlayerAgent playerBlack;
+    public Player playerWhite;
+    public Player playerBlack;
 
     public enum gameTypes
     {
@@ -68,17 +53,13 @@ public class Settings implements Serializable
         local, network
     }
     public gameTypes gameType;
-    public boolean renderLabels = false;
+    public boolean renderLabels = true;
 
     public Settings()
     {
         //temporally
-        this.playerWhite = new PlayerAgent( );
-        this.playerBlack = new PlayerAgent( );
-
-        //this.playerWhite.setColor("white");
-        //this.playerBlack.setColor("black");
-
+        this.playerWhite = new Player("", "white");
+        this.playerBlack = new Player("", "black");
         this.timeLimitSet = false;
 
         gameMode = gameModes.newGame;

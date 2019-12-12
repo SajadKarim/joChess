@@ -44,7 +44,7 @@ public class Client implements Runnable
     ObjectInputStream input;
     String ip;
     int port;
-    GameOld game;
+    Game game;
     Settings sett;
     boolean wait4undoAnswer = false;
     boolean isObserver = false;
