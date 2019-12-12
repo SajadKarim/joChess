@@ -8,9 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
-import jchess.Piece;
 import jchess.Settings;
-import jchess.Square;
 
 /**
  * This class is responsible to draw Move History related controls on GUI.
@@ -143,82 +141,6 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
 
     }
 
-    public void addMove(Square begin, Square end, boolean registerInHistory, castling castlingMove, boolean wasEnPassant, Piece promotedPiece)
-    {}/*
-        boolean wasCastling = castlingMove != castling.none;
-        String locMove = new String(begin.piece.symbol);
-        
-        if( game.settings.upsideDown )
-        {
-            locMove += Character.toString((char) ( ( Chessboard.bottom - begin.pozX) + 97));//add letter of Square from which move was made
-            locMove += Integer.toString( begin.pozY + 1 );//add number of Square from which move was made
-        }
-        else
-        {
-            locMove += Character.toString((char) (begin.pozX + 97));//add letter of Square from which move was made
-            locMove += Integer.toString(8 - begin.pozY);//add number of Square from which move was made
-        }
-        
-        if (end.piece != null)
-        {
-            locMove += "x";//take down opponent piece
-        }
-        else
-        {
-            locMove += "-";//normal move
-        }
-        
-        if ( game.settings.upsideDown )
-        {
-            locMove += Character.toString((char) (( Chessboard.bottom - end.pozX) +  97));//add letter of Square to which move was made
-            locMove += Integer.toString( end.pozY + 1 );//add number of Square to which move was made
-        }
-        else
-        {
-            locMove += Character.toString((char) (end.pozX + 97));//add letter of Square to which move was made
-            locMove += Integer.toString(8 - end.pozY);//add number of Square to which move was made
-        }
-        
-        if (begin.piece.symbol.equals("") && begin.pozX - end.pozX != 0 && end.piece == null)
-        {
-            locMove += "(e.p)";//pawn take down opponent en passant
-            wasEnPassant = true;
-        }
-        if ((!this.enterBlack && this.game.chessboard.kingBlack.isChecked())
-                || (this.enterBlack && this.game.chessboard.kingWhite.isChecked()))
-        {//if checked
-
-            if ((!this.enterBlack && this.game.chessboard.kingBlack.isCheckmatedOrStalemated() == 1)
-                    || (this.enterBlack && this.game.chessboard.kingWhite.isCheckmatedOrStalemated() == 1))
-            {//check if checkmated
-                locMove += "#";//check mate
-            }
-            else
-            {
-                locMove += "+";//check
-            }
-        }
-        if (castlingMove == castling.shortCastling)
-        {
-            this.addCastling("0-0");
-        }
-        else if (castlingMove == castling.longCastling)
-        {
-            this.addCastling("0-0-0");
-        }
-        else
-        {
-            this.move.add(locMove);
-            this.addMove2Table(locMove);
-        }
-        this.scrollPane.scrollRectToVisible(new Rectangle(0, this.scrollPane.getHeight() - 2, 1, 1));
-
-        if (registerInHistory)
-        {
-            this.moveBackStack.add(new Move(new Square(begin), new Square(end), begin.piece, end.piece, castlingMove, wasEnPassant, promotedPiece));
-        }
-    }
-*/
     public void clearMoveForwardStack()
     {
         //this.moveForwardStack.clear();

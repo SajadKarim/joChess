@@ -37,15 +37,10 @@ import java.util.logging.Logger;
  */
 public class GUI
 {
-
-    public GameOld game;
     static final public Properties configFile = GUI.getConfigFile();
 
     public GUI()
     {
-        this.game = new GameOld();
-
-        //this.drawGUI();
     }/*--endOf-GUI--*/
 
     /*Method load image by a given name with extension

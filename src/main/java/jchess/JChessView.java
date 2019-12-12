@@ -66,65 +66,10 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         	JChessApp.getApplication().show((NewGameView)oPresenter.getView()); 
         }
         else if (target == saveGameItem)
-        { //saveGame
-            if (this.gamesPane.getTabCount() == 0)
-            {
-                JOptionPane.showMessageDialog(null, Settings.lang("save_not_called_for_tab"));
-                return;
-            }
-            while (true)
-            {//until
-                JFileChooser fc = new JFileChooser();
-                int retVal = fc.showSaveDialog(this.gamesPane);
-                if (retVal == JFileChooser.APPROVE_OPTION)
-                {
-                    File selFile = fc.getSelectedFile();
-                    GameOld tempGUI = (GameOld) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
-                    if (!selFile.exists())
-                    {
-                        try
-                        {
-                            selFile.createNewFile();
-                        }
-                        catch (java.io.IOException exc)
-                        {
-                            System.out.println("error creating file: " + exc);
-                        }
-                    }
-                    else if (selFile.exists())
-                    {
-                        int opt = JOptionPane.showConfirmDialog(tempGUI, Settings.lang("file_exists"), Settings.lang("file_exists"), JOptionPane.YES_NO_OPTION);
-                        if (opt == JOptionPane.NO_OPTION)//if user choose to now overwrite
-                        {
-                            continue; // go back to file choose
-                        }
-                    }
-                    if (selFile.canWrite())
-                    {
-                        tempGUI.saveGame(selFile);
-                    }
-                    System.out.println(fc.getSelectedFile().isFile());
-                    break;
-                }
-                else if (retVal == JFileChooser.CANCEL_OPTION)
-                {
-                    break;
-                }
-                ///JChessView.gui.game.saveGame(fc.);
-            }
+        { 
         }
         else if (target == loadGameItem)
-        { //loadGame
-            JFileChooser fc = new JFileChooser();
-            int retVal = fc.showOpenDialog(this.gamesPane);
-            if (retVal == JFileChooser.APPROVE_OPTION)
-            {
-                File file = fc.getSelectedFile();
-                if (file.exists() && file.canRead())
-                {
-                    GameOld.loadGame(file);
-                }
-            }
+        { 
         }
         else if (target == this.themeSettingsMenu)
         {
@@ -220,21 +165,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     }
 
     public String showPawnPromotionBox(String color) {
-        if (promotionBox == null) {
-            JFrame mainFrame = JChessApp.getApplication().getMainFrame();
-            promotionBox = new PawnPromotionWindow(mainFrame, color);
-            promotionBox.setLocationRelativeTo(mainFrame);
-            promotionBox.setModal(true);
-            
-        }
-        promotionBox.setColor(color);
-        JChessApp.getApplication().show(promotionBox);
-
-        return promotionBox.result;
-    }
-
-    public String showSaveWindow() {
-
+       
         return "";
     }
 
@@ -443,32 +374,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     }// </editor-fold>//GEN-END:initComponents
 
     private void moveBackItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
-    {//GEN-HEADEREND:event_moveBackItemActionPerformed
-        if( gui != null && gui.game != null )
-        {
-            gui.game.undo();
-        }
-        else
-        {
-            try 
-            {
-                GameOld activeGame = this.getActiveTabGame();
-                if( !activeGame.undo() )
-                {
-                    JOptionPane.showMessageDialog(null, "Nie da sie cofnac!");
-                }
-            } 
-            catch( java.lang.ArrayIndexOutOfBoundsException exc )
-            {
-                JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            }
-            catch( UnsupportedOperationException exc )
-            {
-                JOptionPane.showMessageDialog(null , exc.getMessage());
-            }
-        }
-
-    }//GEN-LAST:event_moveBackItemActionPerformed
+    {    }//GEN-LAST:event_moveBackItemActionPerformed
 
     private void moveBackItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
     {//GEN-HEADEREND:event_moveBackItemMouseClicked
@@ -483,71 +389,16 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     }//GEN-LAST:event_moveForwardItemMouseClicked
 
     private void moveForwardItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveForwardItemActionPerformed
-    {//GEN-HEADEREND:event_moveForwardItemActionPerformed
-        // TODO add your handling code here:
-        if( gui != null && gui.game != null)
-        {
-            gui.game.redo();
-        }
-        else
-        {
-            try
-            {
-                GameOld activeGame = this.getActiveTabGame();
-                if( !activeGame.redo() )
-                {
-                    JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
-                }
-            } 
-            catch( java.lang.ArrayIndexOutOfBoundsException exc )
-            {
-                JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            }
-            catch( UnsupportedOperationException exc )
-            {
-                JOptionPane.showMessageDialog(null , exc.getMessage());
-            }
-        }        
-    }//GEN-LAST:event_moveForwardItemActionPerformed
+    {    }//GEN-LAST:event_moveForwardItemActionPerformed
 
     private void rewindToBeginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToBeginActionPerformed
     {//GEN-HEADEREND:event_rewindToBeginActionPerformed
-        try
-        {
-            GameOld activeGame = this.getActiveTabGame();
-            if( !activeGame.rewindToBegin() )
-            {
-                JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
-            }
-        }   
-        catch(ArrayIndexOutOfBoundsException exc)
-        {
-            JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        }
-        catch( UnsupportedOperationException exc )
-        {
-            JOptionPane.showMessageDialog(null , exc.getMessage());
-        }
+     
     }//GEN-LAST:event_rewindToBeginActionPerformed
 
     private void rewindToEndActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToEndActionPerformed
     {//GEN-HEADEREND:event_rewindToEndActionPerformed
-        try
-        {
-            GameOld activeGame = this.getActiveTabGame();
-            if( !activeGame.rewindToEnd() )
-            {
-                JOptionPane.showMessageDialog(null, "W pamieci brak ruchow wstecz!");
-            }
-        }   
-        catch( ArrayIndexOutOfBoundsException exc )
-        {
-            JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        }
-        catch( UnsupportedOperationException exc )
-        {
-            JOptionPane.showMessageDialog(null , exc.getMessage());
-        }        
+     
     }//GEN-LAST:event_rewindToEndActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -577,7 +428,6 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private int busyIconIndex = 0;
 
     private JDialog aboutBox;
-    private PawnPromotionWindow promotionBox;
     public  JDialog  newGameFrame;
 
     public void componentResized(ComponentEvent e) {
@@ -585,10 +435,9 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    protected GameOld getActiveTabGame() throws ArrayIndexOutOfBoundsException
+    protected JPanel getActiveTabGame() throws ArrayIndexOutOfBoundsException
     {
-        GameOld activeGame = (GameOld)this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
-        return activeGame;
+        return null;
     }
     
     public int getNumberOfOpenedTabs()

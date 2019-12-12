@@ -116,9 +116,6 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
         this.themePreviewButton.setIcon(this.themePreview);
     }
 
-    /** Method wich is changing a pawn into queen, rook, bishop or knight
-     * @param arg0 Capt information about performed action
-     */
     public void actionPerformed(ActionEvent evt)
     {
         if (evt.getSource() == this.okButton)
