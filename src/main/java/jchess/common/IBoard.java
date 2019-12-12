@@ -47,7 +47,7 @@ public interface IBoard extends IBoardFactory {
 	public IPosition getPosition(String stName);
 	/**
 	 * This method returns all the available IPosition objects.
-	 * @return Map<String, IPosition>
+	 * @return Map of String, IPosition
 	 */
 	public Map<String, IPosition> getAllPositions() ;
 	/**
@@ -60,7 +60,7 @@ public interface IBoard extends IBoardFactory {
 	public IPlayer getPlayer(String stName);
 	/**
 	 * This method returns all the available IPlayer objects.
-	 * @return Map<String, IPlayer>
+	 * @return Map of String, IPlayer
 	 */
 	public Map<String, IPlayer > getAllPlayers();
 	/**
@@ -73,7 +73,7 @@ public interface IBoard extends IBoardFactory {
 	public IRule getRule(String stName);
 	/**
 	 * This method returns all the available IRule objects.
-	 * @return Map<String, IRule>
+	 * @return Map of String, IRule
 	 */
 	public  Map<String, IRule>  getAllRules();
 	/**
@@ -86,7 +86,7 @@ public interface IBoard extends IBoardFactory {
 	public IPiece getPiece(String stName);
 	/**
 	 * This method returns all the available IPiece objects.
-	 * @return Map<String, IPiece>
+	 * @return Map of String, IPiece
 	 */
 	public  Map<String, IPiece>  getAllPieces();
 	/**
