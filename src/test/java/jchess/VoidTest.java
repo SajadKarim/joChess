@@ -31,6 +31,10 @@ public class VoidTest {
 	        System.out.println("This test method should be run");
 	    }
 
+		public void test() {
+			fail("Not yet implemented");
+		}
+
 	 @Test
 	    void justAnExample76() {
 	        System.out.println("This test method should be run");
