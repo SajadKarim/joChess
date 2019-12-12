@@ -59,7 +59,11 @@ public class BoardView extends JPanel implements IBoardView {
     			markPositions(oGraphics, oPosition);
     	}
 	}
-	
+	/**
+	 * Select the position in the chess board
+	 * @param oGraphics the chess board
+	 * @param oPosition the position in the chess board
+	 */
 	public void selectPosition(Graphics oGraphics, IPositionAgent oPosition) {
 		try
         {
@@ -84,7 +88,11 @@ public class BoardView extends JPanel implements IBoardView {
         }
 
 	}
-	
+	/**
+	 * Mark the position in the chess board
+	 * @param oGraphics the chess board
+	 * @param oPosition the position in the chess board
+	 */
 	public void markPositions(Graphics oGraphics, IPositionAgent oPosition) {
     	
 		try
@@ -99,7 +107,12 @@ public class BoardView extends JPanel implements IBoardView {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
     }
-	
+	/**
+	 * Draw the pice in the position of the chess board
+	 * @param oGraphics the chess board
+	 * @param oPolygon the position of the piece
+	 * @param oPieceImage the image of the piece
+	 */
 	public void drawPiece(Graphics oGraphics, Polygon oPolygon, Image oPieceImage)
     {
         try

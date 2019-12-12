@@ -43,11 +43,16 @@ public class GameState implements IGameState {
 	public void setActivePosition(IPositionAgent oSelectedPiece) {
 		m_oSelectedPiece = oSelectedPiece;
 	}
-
+	/**
+	 * Get the player that is currently active
+	 * @return the active player
+	 */
 	public IPlayerAgent getActivePlayer() {
 		return m_oActivePlayer;
 	}
-
+	/**
+	 * Switch the turn of the player
+	 */
 	public void switchPlayTurn() {
 		m_oActivePlayer = m_qPlayersInQueue.poll();
 		m_qPlayersInQueue.add(m_oActivePlayer);
