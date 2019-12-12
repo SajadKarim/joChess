@@ -38,12 +38,12 @@ import java.util.logging.Logger;
 public class GUI
 {
 
-    public Game game;
+    public GameOld game;
     static final public Properties configFile = GUI.getConfigFile();
 
     public GUI()
     {
-        this.game = new Game();
+        this.game = new GameOld();
 
         //this.drawGUI();
     }/*--endOf-GUI--*/
@@ -53,7 +53,7 @@ public class GUI
      * @returns  : image or null if cannot load
      * */
 
-    static Image loadImage(String name)
+    public static Image loadImage(String name)
     {
         if (configFile == null)
         {
@@ -101,7 +101,7 @@ public class GUI
     {
         Properties defConfFile = new Properties();
         Properties confFile = new Properties();
-        File outFile = new File(GUI.getJarPath() + File.separator + "config.txt");
+        File outFile = new File(GUI.getJarPath() + File.separator+"jchess"+File.separator + "config.txt");
         try
         {
             defConfFile.load(GUI.class.getResourceAsStream("config.txt"));
@@ -121,13 +121,13 @@ public class GUI
             {
             }
         }
-        try
-        {   
-            confFile.load(new FileInputStream("config.txt"));
-        }
-        catch (java.io.IOException exc)
-        {
-        }
-        return confFile;
+        //try
+        //{   
+        //    confFile.load(new FileInputStream("config.txt"));
+       // }
+        //catch (java.io.IOException exc)
+        //{
+        //}
+        return defConfFile;
     }
 }

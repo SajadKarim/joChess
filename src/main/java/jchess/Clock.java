@@ -20,6 +20,9 @@
  */
 package jchess;
 
+import jchess.common.*;
+import jchess.gamelogic.PlayerAgent;
+
 /** Class to represent seperate wall-clock for one player.
  *  Full ChessClock is represented by GameClock object (two clock - one for each player)
  */
@@ -27,7 +30,7 @@ public class Clock
 {
 
     private int time_left;
-    private Player player;
+    private PlayerAgent player;
 
     Clock()
     {
@@ -75,7 +78,7 @@ public class Clock
     /** Method to get player (owner of this clock)
      *  @param player  player to set as owner of clock
      */
-    public void setPlayer(Player player)
+    public void setPlayer(PlayerAgent player)
     {
         this.player = player;
     }
@@ -83,7 +86,7 @@ public class Clock
     /** Method to get player (owner of this clock)
      *  @return  Reference to player class object
      */
-    public Player getPlayer()
+    public PlayerAgent getPlayer()
     {
         return this.player;
     }

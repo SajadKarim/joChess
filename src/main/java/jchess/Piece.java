@@ -21,15 +21,22 @@
 package jchess;
 
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import jchess.cache.PlayerData;
+import jchess.common.*;
+import jchess.gamelogic.PositionAgent;
+import jchess.gamelogic.RuleAgent;
 /**
 Class to represent a piece (any kind) - this class should be extended to represent pawn, bishop etc.
  */
@@ -38,7 +45,7 @@ public abstract class Piece
 
     Chessboard chessboard; // <-- this relations isn't in class diagram, but it's necessary :/
     public Square square;
-    public Player player;
+    public PlayerData player;
     String name;
     protected String symbol;
     protected static Image imageBlack;// = null;
@@ -47,19 +54,33 @@ public abstract class Piece
     public Image image;
     public static short value = 0;
 
-    Piece(Chessboard chessboard, Player player)
+    public List<RuleAgent> m_lstRules = null;
+
+    public ArrayList getPossibleMoves() {
+    	return null;
+    }
+
+    void populateRules() {
+
+    }
+
+    Piece(Chessboard chessboard, PlayerData player)
     {
         this.chessboard = chessboard;
         this.player = player;
-        if (player.color == player.color.black)
+       // if (player.color == player.color.black)
         {
             image = imageBlack;
         }
-        else
+        //else
         {
             image = imageWhite;
         }
         this.name = this.getClass().getSimpleName();
+
+        m_lstRules = new ArrayList<RuleAgent>();
+
+        populateRules();
 
     }
     /* Method to draw piece on chessboard
@@ -101,6 +122,52 @@ public abstract class Piece
         }
     }
 
+    final void draw(Graphics g, PositionAgent oPosition)
+    {
+        try
+        {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            //Point topLeft = this.chessboard.getTopLeftPoint();
+            //int height = this.chessboard.get_square_height();
+            int x = oPosition.getShape().getTopLeftX();
+            int y = oPosition.getShape().getTopLeftY();
+            //int x = (this.square.pozX * height) + topLeft.x;
+            //int y = (this.square.pozY * height) + topLeft.y;            
+            //float addX = (height - image.getWidth(null)) / 2;
+            //float addY = (height - image.getHeight(null)) / 2;
+            if (image != null && g != null)
+            {
+            	
+            	Polygon p = ((IPolygon)oPosition.getShape()).getPolygon();
+            	
+                /*Image tempImage = orgImage;
+                BufferedImage resized = new BufferedImage((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+                Graphics2D imageGr = (Graphics2D) resized.createGraphics();
+                imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                imageGr.drawImage(tempImage, 0, 0, (int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), null);
+                imageGr.dispose();
+                image = resized.getScaledInstance((int)p.getBounds2D().getWidth(), (int)p.getBounds2D().getHeight(), 0);
+                //g2d.drawImage(image, x, y, null);
+                */
+            	g.setClip(p);
+            	//g.setColor(Color.cyan);
+            	//g.fillPolygon(p);
+            	g.drawImage(orgImage, (int)p.getBounds2D().getCenterX()-30, (int)p.getBounds2D().getCenterY()-30, null);
+
+            }
+            else
+            {
+                System.out.println("image is null!");
+            }
+
+        }
+        catch (java.lang.NullPointerException exc)
+        {
+            System.out.println("Something wrong when painting piece: " + exc.getMessage());
+        }
+    }
+
     void clean()
     {
     }
@@ -126,11 +193,11 @@ public abstract class Piece
 
     void setImage()
     {
-        if (this.player.color == this.player.color.black)
+        //if (this.player.color == this.player.color.black)
         {
             image = imageBlack;
         }
-        else
+        //else
         {
             image = imageWhite;
         }
@@ -171,7 +238,7 @@ public abstract class Piece
      * @return true if can move, false otherwise
      * */
     protected boolean checkPiece(int x, int y)
-    {
+    {/*sk
         if (chessboard.squares[x][y].piece != null
                 && chessboard.squares[x][y].piece.name.equals("King"))
         {
@@ -182,7 +249,7 @@ public abstract class Piece
                 piece.player != this.player) //or piece is another player
         {
             return true;
-        }
+        }*/
         return false;
     }
 
@@ -198,7 +265,7 @@ public abstract class Piece
         {
             return false;
         }
-        if (this.player != sq.piece.player)
+        if (this.player != sq.piece.getPlayer())
         {
             return true;
         }

@@ -20,9 +20,13 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
-import jchess.view.viewTemp;
-import jchess.model.modelTemp;
-import jchess.presenter.presenterTemp;
+import jchess.cache.BoardData;
+import jchess.cache.CacheManager;
+import jchess.cache.ICacheManager;
+import jchess.common.IBoardData;
+import jchess.gamelogic.BoardAgent;
+import jchess.service.StorageType;
+import jchess.service.StorageService;
 
 /**
  * The main class of the application.
@@ -33,19 +37,24 @@ public class JChessApp extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        //jcv = new JChessView(this);
-        //show(jcv);
+
+    	CacheManager.getInstance().init();
+    	//StorageService o = StorageService.create(STORAGE_TYPE.FBDB);
+    	//IBoardData b = o.getBoard();
     	
-    	final viewTemp view = new viewTemp();
-        final modelTemp model = new modelTemp();
-        new presenterTemp(view, model);
+    	jcv = new JChessView(this);
+        show(jcv);
+    	
+    	//final viewTemp view = new viewTemp();
+        //final modelTemp model = new modelTemp();
+        //new presenterTemp(view, model);
 
     }
 
     public JChessApp() {
-    	final viewTemp view = new viewTemp();
-        final modelTemp model = new modelTemp();
-        new presenterTemp(view, model);
+    	//final viewTemp view = new viewTemp();
+        //final modelTemp model = new modelTemp();
+        //new presenterTemp(view, model);
     }
     
     /**
