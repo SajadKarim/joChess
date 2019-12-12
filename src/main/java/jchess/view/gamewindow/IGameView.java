@@ -1,7 +1,5 @@
 package jchess.view.gamewindow;
 
-import java.awt.Component;
-
 import jchess.view.IView;
 
 /**

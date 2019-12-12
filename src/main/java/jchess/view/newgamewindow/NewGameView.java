@@ -10,6 +10,12 @@ import jchess.Settings;
 import jchess.model.IModel;
 import jchess.model.newgamewindow.INewGameModel;
 
+/**
+ * 
+ * @author  Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class NewGameView extends JDialog implements INewGameView, INewGame_Callback {
     private INewGameModel m_oData;
     private INewLocalGameView m_NewLocalGameView;

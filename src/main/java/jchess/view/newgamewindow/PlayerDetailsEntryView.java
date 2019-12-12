@@ -15,6 +15,12 @@ import javax.swing.JTextField;
 import jchess.model.IModel;
 import jchess.model.newgamewindow.INewGameModel;
 
+/**
+ * 
+ * @author  Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class PlayerDetailsEntryView extends JPanel implements IPlayerDetailsEntryView {
 
 	private INewGameModel m_oData;

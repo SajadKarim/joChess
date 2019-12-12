@@ -6,6 +6,8 @@ import java.util.Queue;
 
 import org.javatuples.Pair;
 
+import com.google.inject.Inject;
+
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;

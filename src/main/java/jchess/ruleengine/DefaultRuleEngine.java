@@ -19,7 +19,7 @@ import jchess.common.enumerator.*;
  * @since	7 Dec 2019
  */
 
-class DefaultRuleEngine implements IRuleProcessor{
+class DefaultRuleEngine implements IRuleEngine{
 	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition) {
 		IPieceAgent oPiece = oPosition.getPiece();
 		IPlayerAgent oPlayer = oPiece.getPlayer();

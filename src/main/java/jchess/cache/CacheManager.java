@@ -5,9 +5,6 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-
 import jchess.common.IBoardAgent;
 import jchess.service.StorageType;
 import jchess.service.StorageService;
@@ -23,7 +20,7 @@ import jchess.service.StorageService;
 public class CacheManager implements ICacheManager{
     private static String BOARDLAYOUTS_DIRECTORY = "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\"; 
 
-    private static CacheManager m_oInstance = null; 
+    //private static CacheManager m_oInstance = null; 
 
     private Map<String, BoardCache> m_mpBoardCache;
     private Map<String, Pair<String, Integer>> m_mpPlayerAllowedInBoard;
@@ -32,15 +29,9 @@ public class CacheManager implements ICacheManager{
     	System.out.println("Cache manager new instance.");
     	m_mpBoardCache = new HashMap<String, BoardCache>();
     	m_mpPlayerAllowedInBoard = new HashMap<String, Pair<String, Integer>>();
+    	init();
     } 
   
-    public static ICacheManager getInstance(){
-        if (m_oInstance == null) 
-        	m_oInstance = new CacheManager(); 
- 
-        return m_oInstance; 
-    }
-
     public IBoardAgent getBoard(String stName) {
     	if( m_mpBoardCache.containsKey(stName))
     		return m_mpBoardCache.get(stName).getBoard();

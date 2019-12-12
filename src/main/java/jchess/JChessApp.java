@@ -15,18 +15,13 @@
 
 package jchess;
 
-import javax.swing.SwingUtilities;
-
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
-import jchess.cache.BoardData;
-import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
-import jchess.common.IBoardData;
-import jchess.gamelogic.BoardAgent;
-import jchess.service.StorageType;
-import jchess.service.StorageService;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import jchess.dimodule.GlobalModule;
 
 /**
  * The main class of the application.
@@ -37,24 +32,13 @@ public class JChessApp extends SingleFrameApplication {
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
+    	Injector oGlobalModuleInjector = Guice.createInjector(new GlobalModule());
 
-    	CacheManager.getInstance().init();
-    	//StorageService o = StorageService.create(STORAGE_TYPE.FBDB);
-    	//IBoardData b = o.getBoard();
-    	
-    	jcv = new JChessView(this);
+    	jcv = new JChessView(this, oGlobalModuleInjector);
         show(jcv);
-    	
-    	//final viewTemp view = new viewTemp();
-        //final modelTemp model = new modelTemp();
-        //new presenterTemp(view, model);
-
     }
 
     public JChessApp() {
-    	//final viewTemp view = new viewTemp();
-        //final modelTemp model = new modelTemp();
-        //new presenterTemp(view, model);
     }
     
     /**
@@ -77,13 +61,6 @@ public class JChessApp extends SingleFrameApplication {
      * Main method launching the application.
      */
     public static void main(String[] args) {
-    	/*SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	new JChessApp();
-            }
-        });
-    	*/
         launch(JChessApp.class, args);    	
     }
 }

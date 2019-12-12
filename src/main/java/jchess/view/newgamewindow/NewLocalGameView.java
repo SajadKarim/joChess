@@ -21,6 +21,12 @@ import jchess.Settings;
 import jchess.model.IModel;
 import jchess.model.newgamewindow.INewGameModel;
 
+/**
+ * 
+ * @author  Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class NewLocalGameView extends JPanel implements ActionListener, INewLocalGameView {
 
 	INewGameModel m_oData;

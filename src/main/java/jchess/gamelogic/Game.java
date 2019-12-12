@@ -3,12 +3,11 @@ package jchess.gamelogic;
 import org.javatuples.Pair;
 
 import jchess.common.IBoardAgent;
-import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.common.enumerator.RuleEngineType;
 import jchess.presenter.gamewindow.IGamePresenter_Callback;
-import jchess.ruleengine.IRuleProcessor;
+import jchess.ruleengine.IRuleEngine;
 import jchess.ruleengine.RuleEngineFactory;
 import jchess.util.ITimerListener;
 import jchess.util.Timer;
@@ -31,7 +30,7 @@ public class Game implements ITimerListener{
 	private IGamePresenter_Callback m_oGamePresenter;
 	private Timer m_oTimer;
 	private GameState m_oGameState;
-	private IRuleProcessor m_oRuleProcessor;
+	private IRuleEngine m_oRuleProcessor;
 	
 	public Game(IGamePresenter_Callback oGamePresenter, IBoardAgent oBoard){
 		m_oGameState = new GameState(oBoard.getAllPlayerAgents());

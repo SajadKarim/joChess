@@ -2,19 +2,15 @@ package jchess.view.gamewindow;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import com.google.inject.Inject;
 
 import jchess.model.IModel;
 import jchess.model.gamewindow.IGameModel;
@@ -48,21 +44,17 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 
 	private IGameView_Callback m_oCallback;
 	
-	@Inject
-	public GameView(IGameModel oData, IBoardView oBoardView, IClockView oClockView, IPlayerView oPlayerView, IMoveHistoryView oHistoryView) {
+	public GameView(IGameView_Callback oCallback, IGameModel oData) {
+		m_oCallback = oCallback;
 		m_oData = oData;
-		m_oBoardView = oBoardView;
-		m_oClockView = oClockView;
-		m_oPlayerView = oPlayerView;
-		m_oMoveHistoryView = oHistoryView;
 	}
-	
 	
 	public void init() {
 		this.setLayout(null);
 		this.setLocation(new Point(0, 0));        
-        this.setSize(1000, 800);
+        
 		initPositionsAndDimensions();
+		
 		initSubViews();
 		
 		addMouseListener(this);		
@@ -71,8 +63,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         this.setDoubleBuffered(true);
 	}
 	
-	public void setCallback(IGameView_Callback oCallback) {
-		m_oCallback = oCallback; 
+	public void setCallback() {
 	}
 	
 	public void initPositionsAndDimensions() {
@@ -88,7 +79,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 	}
 	
 	public void initSubViews() {
-        //m_oBoardView = new BoardView();
+        m_oBoardView = new BoardView();
         m_oBoardView.setViewData(m_oData);
         m_oBoardView.SetDimension(m_oBoardViewDimensions);
         Component oBoardComponent = m_oBoardView.getViewComponent();
@@ -96,7 +87,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         oBoardComponent.setLocation(m_oBoardViewStartLocation);
         this.add(oBoardComponent);
 
-        //m_oPlayerView = new PlayerView();
+        m_oPlayerView = new PlayerView();
         m_oPlayerView.setViewData(m_oData);
         m_oPlayerView.setDimension( m_oPlayerViewDimensions);
         Component oPlayerComponent = m_oPlayerView.getViewComponent();
@@ -104,7 +95,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         oPlayerComponent .setLocation(m_oPlayerViewStartLocation);
         this.add(oPlayerComponent );
 
-        //m_oClockView = new ClockView();
+        m_oClockView = new ClockView();
         m_oClockView.setViewData(m_oData);
         m_oClockView.setDimension( m_oClockViewDimensions);
         Component oClockComponent = m_oClockView.getViewComponent();
@@ -112,7 +103,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         oClockComponent.setLocation(m_oClockViewStartLocation);
         this.add(oClockComponent);
 
-        //m_oMoveHistoryView = new MoveHistoryView(null);
+        m_oMoveHistoryView = new MoveHistoryView();
         JScrollPane oMoveHistory = m_oMoveHistoryView.getScrollPane();
         oMoveHistory.setSize(m_oHistoryViewDimensions);
         oMoveHistory.setLocation(m_oHistoryViewStartLocation);
@@ -228,6 +219,13 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 
 	@Override
 	public void setViewData(IModel oData) {
-		//m_oData = (IGameModel)oData;
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCallback(IGameView_Callback oCallback) {
+		// TODO Auto-generated method stub
+		
 	}
 }

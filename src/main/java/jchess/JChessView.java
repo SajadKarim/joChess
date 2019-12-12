@@ -21,7 +21,6 @@ import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import jchess.dimodule.NewGameWndModule;
@@ -30,7 +29,6 @@ import jchess.model.newgamewindow.INewGameModel;
 import jchess.presenter.gamewindow.GamePresenter;
 import jchess.presenter.newgamewindow.NewGamePresenter;
 import jchess.view.newgamewindow.*;
-import jchess.view.gamewindow.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,43 +42,28 @@ import java.awt.Point;
 import java.awt.event.*;
 import java.io.File;
 
-
-
 /**
  * The application's main frame.
  */
 public class JChessView extends FrameView implements ActionListener, ComponentListener, INewGame_Callback
 {
+	Injector m_oGlobalModuleInjector;
 	
     static GUI gui = null;
     GUI activeGUI;//in future it will be reference to active tab
-    public GameOld addNewTab(String title)
-    {
-    	//BoardView t = new BoardView();
-    	//this.gamesPane.addTab("temp view", t);
-    	
-        GameOld newGUI = new GameOld();
-        this.gamesPane.addTab(title, newGUI);
-        return newGUI;
-    }
-
 
     public void actionPerformed(ActionEvent event)
     {
         Object target = event.getSource();
         if (target == newGameItem)
         {
-        	Injector injector = Guice.createInjector(new NewGameWndModule(	));
+        	Injector injector = m_oGlobalModuleInjector.createChildInjector(new NewGameWndModule(	));
 
         	NewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
         	oPresenter.init();
         	oPresenter.setCallback(this);
         	
         	JChessApp.getApplication().show((NewGameView)oPresenter.getView()); 
-
-        	
-        	//this.newGameFrame = new NewGameWindow();
-            //ChessApp.getApplication().show(this.newGameFrame);
         }
         else if (target == saveGameItem)
         { //saveGame
@@ -165,9 +148,10 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     ///--endOf- don't delete, becouse they're interfaces for MouseEvent
         
 
-    public JChessView(SingleFrameApplication app) {
+    public JChessView(SingleFrameApplication app, Injector oGlobalModuleInjector) {
         super(app);
-        
+        m_oGlobalModuleInjector = oGlobalModuleInjector;
+
         initComponents();
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
@@ -266,7 +250,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        gamesPane = new jchess.JChessTabbedPane();
+        gamesPane = new jchess.JChessTabbedPane(m_oGlobalModuleInjector);
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
@@ -626,13 +610,14 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
 	@Override
 	public void launchNewGame(INewGameModel oData) {
-		Injector injector = Guice.createInjector(new GameWndModule());
+		Injector injector = m_oGlobalModuleInjector.createChildInjector(new GameWndModule(m_oGlobalModuleInjector));
 		GamePresenter oPresenter = injector.getInstance(GamePresenter.class);
 
-		oPresenter.init(oData);
+		oPresenter.init(oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
 		
 		oPresenter.getViewComponent().setLocation(new Point(0, 0));
 		this.gamesPane.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());
+		this.gamesPane.setSelectedComponent(oPresenter.getViewComponent());
 		
 		oPresenter.showView();
 	}

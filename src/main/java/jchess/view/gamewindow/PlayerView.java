@@ -8,8 +8,6 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import com.google.inject.Inject;
-
 import jchess.model.IModel;
 import jchess.model.gamewindow.IPlayerModel;
 
@@ -24,10 +22,8 @@ public class PlayerView extends JPanel implements IPlayerView {
 	private IPlayerModel m_oData;
 	private Dimension m_oDimension; 
 
-	@Inject
-    public PlayerView(IPlayerModel oData)
+    public PlayerView()
     {
-    	m_oData = oData;
         setDoubleBuffered(true);
     }
     
@@ -89,6 +85,7 @@ public class PlayerView extends JPanel implements IPlayerView {
 
 	@Override
 	public void setViewData(IModel oData) {
+		m_oData = (IPlayerModel)oData;
 	}
 
 }

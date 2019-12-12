@@ -17,7 +17,7 @@ import jchess.common.IRuleAgent;
  * @since	7 Dec 2019
  */
 
-public interface IRuleProcessor {
+public interface IRuleEngine {
 	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition);
 	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule);
 }

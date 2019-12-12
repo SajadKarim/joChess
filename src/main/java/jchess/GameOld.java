@@ -172,20 +172,20 @@ public class GameOld extends JPanel implements MouseListener, ComponentListener
             System.out.println("Error reading file: " + err);
             return;
         }
-        GameOld newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
-        Settings locSetts = newGUI.settings;
+       // GameOld newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
+        //Settings locSetts = newGUI.settings;
         //locSetts.playerBlack.setName(blackName);
         //locSetts.playerWhite.setName(whiteName);
         //locSetts.playerBlack.setType(PlayerData.playerTypes.localUser);
         //locSetts.playerWhite.setType(PlayerData.playerTypes.localUser);
-        locSetts.gameMode = Settings.gameModes.loadGame;
-        locSetts.gameType = Settings.gameTypes.local;
+        //locSetts.gameMode = Settings.gameModes.loadGame;
+        //locSetts.gameType = Settings.gameTypes.local;
 
-        newGUI.newGame();
-        newGUI.blockedChessboard = true;
-        newGUI.moves.setMoves(tempStr);
-        newGUI.blockedChessboard = false;
-        newGUI.chessboard.repaint();
+        //newGUI.newGame();
+        //newGUI.blockedChessboard = true;
+        //newGUI.moves.setMoves(tempStr);
+        //newGUI.blockedChessboard = false;
+        //newGUI.chessboard.repaint();
         //newGUI.chessboard.draw();
     }
 

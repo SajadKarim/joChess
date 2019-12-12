@@ -21,11 +21,22 @@
 package jchess;
 
 import javax.swing.*;
+
+import com.google.inject.Injector;
+
+import jchess.dimodule.GameWndModule;
+import jchess.dimodule.NewGameWndModule;
+import jchess.model.newgamewindow.INewGameModel;
+import jchess.presenter.gamewindow.GamePresenter;
+import jchess.presenter.newgamewindow.NewGamePresenter;
+import jchess.view.newgamewindow.INewGame_Callback;
+import jchess.view.newgamewindow.NewGameView;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.ImageObserver;
 
-public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver
+public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver, INewGame_Callback
 {
 
     private TabbedPaneIcon closeIcon;
@@ -33,8 +44,9 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     private Image clickedAddIcon = null;
     private Image unclickedAddIcon = null;
     private Rectangle addIconRect = null;
+	Injector m_oGlobalModuleInjector;
 
-    JChessTabbedPane()
+    JChessTabbedPane(Injector oGlobalModuleInjector)
     {
         super();
         this.closeIcon = new TabbedPaneIcon(this.closeIcon);
@@ -43,6 +55,8 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         this.addIcon = this.unclickedAddIcon;
         this.setDoubleBuffered(true);
         super.addMouseListener(this);
+        
+        m_oGlobalModuleInjector = oGlobalModuleInjector;
     }
 
     @Override
@@ -68,13 +82,28 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
 
     private void showNewGameWindow()
     {
-        /*if (JChessApp.jcv.newGameFrame == null)
-        {
-            JChessApp.jcv.newGameFrame = new NewGameWindow();
-        }
-        JChessApp.getApplication().show(JChessApp.jcv.newGameFrame);
-        */
+    	Injector injector = m_oGlobalModuleInjector.createChildInjector(new NewGameWndModule(	));
+
+    	NewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
+    	oPresenter.init();
+    	oPresenter.setCallback(this);
+    	
+    	JChessApp.getApplication().show((NewGameView)oPresenter.getView()); 
+
     }
+
+	@Override
+	public void launchNewGame(INewGameModel oData) {
+		Injector injector = m_oGlobalModuleInjector.createChildInjector(new GameWndModule(m_oGlobalModuleInjector));
+		GamePresenter oPresenter = injector.getInstance(GamePresenter.class);
+
+		oPresenter.init(oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
+		
+		oPresenter.getViewComponent().setLocation(new Point(0, 0));
+		this.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());
+		this.setSelectedComponent(oPresenter.getViewComponent());
+		oPresenter.showView();
+	}
 
     @Override
     public void mouseClicked(MouseEvent e)

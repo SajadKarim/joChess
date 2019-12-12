@@ -8,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
-import jchess.GameOld;
 import jchess.Piece;
 import jchess.Settings;
 import jchess.Square;
