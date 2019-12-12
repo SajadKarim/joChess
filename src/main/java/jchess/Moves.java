@@ -19,6 +19,7 @@
  * Damian Marciniak
  */
 package jchess;
+import jchess.common.*;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -34,7 +35,7 @@ import javax.swing.JOptionPane;
  * that the moves taken by player are correct.
  * All moves which was taken by current player are saving as List of Strings
  * The history of moves is printing in a table
- * @param game The current game
+ * game The current game
  */
 public class Moves extends AbstractTableModel
 {
@@ -50,7 +51,7 @@ public class Moves extends AbstractTableModel
     private JScrollPane scrollPane;
     private JTable table;
     private boolean enterBlack = false;
-    private Game game;
+    //private Game game;
     protected Stack<Move> moveBackStack = new Stack<Move>();
     protected Stack<Move> moveForwardStack = new Stack<Move>();
 
@@ -59,7 +60,11 @@ public class Moves extends AbstractTableModel
         none, shortCastling, longCastling
     }
 
-    Moves(Game game)
+    public Moves()
+    {
+    
+    }
+    public Moves(GameOld game)
     {
         super();
         this.tableModel = new MyDefaultTableModel();
@@ -67,7 +72,7 @@ public class Moves extends AbstractTableModel
         this.scrollPane = new JScrollPane(this.table);
         this.scrollPane.setMaximumSize(new Dimension(100, 100));
         this.table.setMinimumSize(new Dimension(100, 100));
-        this.game = game;
+       //this.game = game;
 
         this.tableModel.addColumn(this.names[0]);
         this.tableModel.addColumn(this.names[1]);
@@ -79,19 +84,30 @@ public class Moves extends AbstractTableModel
     public void draw()
     {
     }
-
+    /**
+     * To get the value of the cell at columnIndex and rowIndex
+     * @param x The columnIndex
+     * @param y The rowIndex
+     * @return returns the String value of the cell
+     */
     @Override
     public String getValueAt(int x, int y)
     {
         return this.move.get((y * 2) - 1 + (x - 1));
     }
-
+    /**
+     * Get the number of rows in the model
+     * @return return the numbers of rows in the model
+     */
     @Override
     public int getRowCount()
     {
         return this.rowsNum;
     }
-
+    /**
+     * Get the number of column in the model
+     * @return return the numbers of column in the model
+     */
     @Override
     public int getColumnCount()
     {
@@ -102,7 +118,11 @@ public class Moves extends AbstractTableModel
     {
         this.tableModel.addRow(new String[2]);
     }
-
+    /**
+     * add Castling move to the chess
+     * which will move the Rook and the King at the same time
+     * @param move String which in is current player move
+     */
     protected void addCastling(String move)
     {
         this.move.remove(this.move.size() - 1);//remove last element (move of Rook)
@@ -156,7 +176,7 @@ public class Moves extends AbstractTableModel
     }
 
     /** Method of adding new move
-     * @param move String which in is capt player move
+     * @param move String which in is current player move
      */
     public void addMove(String move)
     {
@@ -170,7 +190,7 @@ public class Moves extends AbstractTableModel
     }
 
     public void addMove(Square begin, Square end, boolean registerInHistory, castling castlingMove, boolean wasEnPassant, Piece promotedPiece)
-    {
+    {}/*
         boolean wasCastling = castlingMove != castling.none;
         String locMove = new String(begin.piece.symbol);
         
@@ -244,7 +264,7 @@ public class Moves extends AbstractTableModel
             this.moveBackStack.add(new Move(new Square(begin), new Square(end), begin.piece, end.piece, castlingMove, wasEnPassant, promotedPiece));
         }
     }
-
+*/
     public void clearMoveForwardStack()
     {
         this.moveForwardStack.clear();
@@ -291,34 +311,7 @@ public class Moves extends AbstractTableModel
     {
         try
         {
-            Move last = this.moveBackStack.pop();
-            if (last != null)
-            {
-                if( this.game.settings.gameType == Settings.gameTypes.local ) //moveForward / redo available only for local game
-                {
-                    this.moveForwardStack.push(last);
-                }
-                if (this.enterBlack)
-                {
-                    this.tableModel.setValueAt("", this.tableModel.getRowCount() - 1, 0);
-                    this.tableModel.removeRow(this.tableModel.getRowCount() - 1);
-
-                    if (this.rowsNum > 0)
-                    {
-                        this.rowsNum--;
-                    }
-                }
-                else
-                {
-                    if (this.tableModel.getRowCount() > 0)
-                    {
-                        this.tableModel.setValueAt("", this.tableModel.getRowCount() - 1, 1);
-                    }
-                }
-                this.move.remove(this.move.size() - 1);
-                this.enterBlack = !this.enterBlack;
-            }
-            return last;
+        	return null;
         }
         catch (java.util.EmptyStackException exc)
         {
@@ -335,13 +328,6 @@ public class Moves extends AbstractTableModel
     {
         try
         {
-            if( this.game.settings.gameType == Settings.gameTypes.local)
-            {
-                Move first = this.moveForwardStack.pop();
-                this.moveBackStack.push(first);
-
-                return first;
-            }
             return null;
         }
         catch (java.util.EmptyStackException exc)
@@ -450,7 +436,7 @@ public class Moves extends AbstractTableModel
      */
     public void setMoves(String moves)
     {
-        int from = 0;
+/*        int from = 0;
         int to = 0;
         int n = 1;
         ArrayList<String> tempArray = new ArrayList();
@@ -503,7 +489,7 @@ public class Moves extends AbstractTableModel
                 int[] values = new int[4];
                 if (locMove.equals("O-O-O"))
                 {
-                    if (this.game.getActivePlayer().color == Player.colors.black) //if black turn
+                    if (this.game.getActivePlayer().color == PlayerData.colors.black) //if black turn
                     { 
                         values = new int[]
                         {
@@ -520,7 +506,7 @@ public class Moves extends AbstractTableModel
                 }
                 else if (locMove.equals("O-O")) //if short castling
                 { 
-                    if (this.game.getActivePlayer().color == Player.colors.black) //if black turn
+                    if (this.game.getActivePlayer().color == PlayerData.colors.black) //if black turn
                     {
                         values = new int[]
                         {
@@ -564,7 +550,7 @@ public class Moves extends AbstractTableModel
                 {
                     for(int j=0; j<squares[i].length && !pieceFound; j++)
                     {
-                        if(squares[i][j].piece == null || this.game.getActivePlayer().color != squares[i][j].piece.player.color)
+                        if(squares[i][j].piece == null || this.game.getActivePlayer().color != squares[i][j].piece.getPlayer().getPlayerData().getcolor())
                         {
                             continue;
                         }
@@ -574,8 +560,10 @@ public class Moves extends AbstractTableModel
                             Square currSquare = (Square)square;
                             if(currSquare.pozX == xTo && currSquare.pozY == yTo)
                             {
-                                xFrom = squares[i][j].piece.square.pozX;
-                                yFrom = squares[i][j].piece.square.pozY;
+                                xFrom = 0;
+                                yFrom = 0;
+                                //xFrom = squares[i][j].piece.square.pozX;
+                                //yFrom = squares[i][j].piece.square.pozY;
                                 pieceFound = true;
                             }
                         }
@@ -596,7 +584,7 @@ public class Moves extends AbstractTableModel
                 this.game.chessboard.activeSquare = null;
                 return;//finish reading game and show message
             }
-        }
+        }*/
     }
 }
 /*

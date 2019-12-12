@@ -20,6 +20,17 @@ import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import jchess.model.INewGameModel;
+import jchess.presenter.GamePresenter;
+import jchess.presenter.NewGamePresenter;
+import jchess.view.GameView;
+import jchess.view.INewGameCallback;
+import jchess.view.NewGameView;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
@@ -27,26 +38,40 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.*;
+
+import java.awt.Point;
 import java.awt.event.*;
 import java.io.File;
-import java.applet.*;
-import java.io.IOException;
 
 
 
 /**
  * The application's main frame.
  */
-public class JChessView extends FrameView implements ActionListener, ComponentListener
+public class JChessView extends FrameView implements ActionListener, ComponentListener, INewGameCallback
 {
     static GUI gui = null;
     GUI activeGUI;//in future it will be reference to active tab
-
-    public Game addNewTab(String title)
+    /**
+     * adding new tab to the Jpanel
+     * @param title name of the new tab
+     * @return name of the old tab
+     */
+    public GameOld addNewTab(String title)
     {
-        Game newGUI = new Game();
+    	//BoardView t = new BoardView();
+    	//this.gamesPane.addTab("temp view", t);
+    	
+        GameOld newGUI = new GameOld();
         this.gamesPane.addTab(title, newGUI);
         return newGUI;
+    }
+
+    public GameView addNewTab_(String title)
+    {
+    	GameView t = new GameView();
+    	this.gamesPane.addTab("temp view", t);
+    	return t;
     }
 
     public void actionPerformed(ActionEvent event)
@@ -54,8 +79,17 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         Object target = event.getSource();
         if (target == newGameItem)
         {
-            this.newGameFrame = new NewGameWindow();
-            JChessApp.getApplication().show(this.newGameFrame);
+        	Injector injector = Guice.createInjector(new NewGamePresenter());
+
+        	NewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
+        	oPresenter.init();
+        	oPresenter.setCallback(this);
+        	
+        	JChessApp.getApplication().show((NewGameView)oPresenter.getView()); 
+
+        	
+        	//this.newGameFrame = new NewGameWindow();
+            //ChessApp.getApplication().show(this.newGameFrame);
         }
         else if (target == saveGameItem)
         { //saveGame
@@ -71,7 +105,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
                 if (retVal == JFileChooser.APPROVE_OPTION)
                 {
                     File selFile = fc.getSelectedFile();
-                    Game tempGUI = (Game) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
+                    GameOld tempGUI = (GameOld) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
                     if (!selFile.exists())
                     {
                         try
@@ -114,7 +148,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
                 File file = fc.getSelectedFile();
                 if (file.exists() && file.canRead())
                 {
-                    Game.loadGame(file);
+                    GameOld.loadGame(file);
                 }
             }
         }
@@ -443,7 +477,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         {
             try 
             {
-                Game activeGame = this.getActiveTabGame();
+                GameOld activeGame = this.getActiveTabGame();
                 if( !activeGame.undo() )
                 {
                     JOptionPane.showMessageDialog(null, "Nie da sie cofnac!");
@@ -484,7 +518,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         {
             try
             {
-                Game activeGame = this.getActiveTabGame();
+                GameOld activeGame = this.getActiveTabGame();
                 if( !activeGame.redo() )
                 {
                     JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
@@ -505,7 +539,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     {//GEN-HEADEREND:event_rewindToBeginActionPerformed
         try
         {
-            Game activeGame = this.getActiveTabGame();
+            GameOld activeGame = this.getActiveTabGame();
             if( !activeGame.rewindToBegin() )
             {
                 JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
@@ -525,7 +559,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     {//GEN-HEADEREND:event_rewindToEndActionPerformed
         try
         {
-            Game activeGame = this.getActiveTabGame();
+            GameOld activeGame = this.getActiveTabGame();
             if( !activeGame.rewindToEnd() )
             {
                 JOptionPane.showMessageDialog(null, "W pamieci brak ruchow wstecz!");
@@ -576,9 +610,9 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    protected Game getActiveTabGame() throws ArrayIndexOutOfBoundsException
+    protected GameOld getActiveTabGame() throws ArrayIndexOutOfBoundsException
     {
-        Game activeGame = (Game)this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
+        GameOld activeGame = (GameOld)this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
         return activeGame;
     }
     
@@ -598,5 +632,18 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     public void componentHidden(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+	@Override
+	public void launchNewGame(INewGameModel oData) {
+		Injector injector = Guice.createInjector(new GamePresenter());
+		GamePresenter oPresenter = injector.getInstance(GamePresenter.class);
+
+		oPresenter.init(oData);
+		
+		oPresenter.getViewComponent().setLocation(new Point(0, 0));
+		this.gamesPane.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());
+		
+		oPresenter.showView();
+	}
     
 }
