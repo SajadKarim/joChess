@@ -1,7 +1,5 @@
 package jchess.dimodule;
 
-import java.util.Timer;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
@@ -10,30 +8,22 @@ import com.google.inject.Singleton;
 import jchess.cache.ICacheManager;
 import jchess.gamelogic.Game;
 import jchess.gamelogic.IGame;
-import jchess.model.gamewindow.GameModel;
-import jchess.model.gamewindow.IBoardModel;
-import jchess.model.gamewindow.IClockModel;
-import jchess.model.gamewindow.IGameModel;
-import jchess.model.gamewindow.IPlayerModel;
-import jchess.model.newgamewindow.INewGameModel;
-import jchess.model.newgamewindow.NewGameModel;
-import jchess.presenter.gamewindow.GamePresenter;
-import jchess.util.AppLogger;
-import jchess.util.IAppLogger;
+import jchess.gui.model.gamewindow.GameModel;
+import jchess.gui.model.gamewindow.IBoardModel;
+import jchess.gui.model.gamewindow.IClockModel;
+import jchess.gui.model.gamewindow.IGameModel;
+import jchess.gui.model.gamewindow.IPlayerModel;
 import jchess.util.ITimer;
-import jchess.view.gamewindow.BoardView;
-import jchess.view.gamewindow.ClockView;
-import jchess.view.gamewindow.GameView;
-import jchess.view.gamewindow.IBoardView;
-import jchess.view.gamewindow.IClockView;
-import jchess.view.gamewindow.IGameView;
-import jchess.view.gamewindow.IGameViewListener;
-import jchess.view.gamewindow.IMoveHistoryView;
-import jchess.view.gamewindow.IPlayerView;
-import jchess.view.gamewindow.MoveHistoryView;
-import jchess.view.gamewindow.PlayerView;
-import jchess.view.newgamewindow.INewGameView;
-import jchess.view.newgamewindow.NewGameView;
+import jchess.gui.view.gamewindow.BoardView;
+import jchess.gui.view.gamewindow.ClockView;
+import jchess.gui.view.gamewindow.GameView;
+import jchess.gui.view.gamewindow.IBoardView;
+import jchess.gui.view.gamewindow.IClockView;
+import jchess.gui.view.gamewindow.IGameView;
+import jchess.gui.view.gamewindow.IMoveHistoryView;
+import jchess.gui.view.gamewindow.IPlayerView;
+import jchess.gui.view.gamewindow.MoveHistoryView;
+import jchess.gui.view.gamewindow.PlayerView;
 
 /**
  * This class binds all the dependencies that are required for Game window.

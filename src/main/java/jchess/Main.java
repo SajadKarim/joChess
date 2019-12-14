@@ -20,13 +20,16 @@ import javax.swing.JFrame;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.View;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
+import jchess.dimodule.DIManager;
 import jchess.dimodule.GlobalModule;
+import jchess.dimodule.IDIManager;
+import jchess.gui.GUIManager;
+import jchess.gui.IGUIManager;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -35,10 +38,10 @@ import jchess.util.LogLevel;
  * The main class of the application.
  */
 public class Main extends SingleFrameApplication implements IMain{
-	private JChessView m_oJChessView;
-    private static IAppLogger m_oLogger; 
+	private static IAppLogger m_oLogger; 
  	private static Injector m_oGlobalModuleInjector;
 
+ 	private static IGUIManager m_oGUIManager;
      /**
      * At startup create and show the main frame of the application.
      */
@@ -47,8 +50,7 @@ public class Main extends SingleFrameApplication implements IMain{
      	m_oLogger.writeLog(LogLevel.INFO, "Launching main window.");
 
     	// Initializing and launching main window.
-    	m_oJChessView = new JChessView(this, m_oGlobalModuleInjector);
-    	show(m_oJChessView);
+    	m_oGUIManager.showMainWindow();
     }
     
     /**
@@ -59,6 +61,10 @@ public class Main extends SingleFrameApplication implements IMain{
     @Override protected void configureWindow(java.awt.Window root) {
     }
 
+    public void showView(View oView) {
+    	this.show(oView);
+    }
+    
     public void showDialog(JDialog oDialog) {
     	this.show(oDialog);
     }
@@ -74,12 +80,15 @@ public class Main extends SingleFrameApplication implements IMain{
     	// Initializing DI for objects that should instantiate once.
     	m_oGlobalModuleInjector = Guice.createInjector(new GlobalModule());
 
+    	IDIManager m_oDIManager = m_oGlobalModuleInjector.getInstance(DIManager.class);
+    	m_oDIManager.setGlobalInjector(m_oGlobalModuleInjector);
+    	
+    	m_oGUIManager = m_oGlobalModuleInjector.getInstance(GUIManager.class);    	
+
     	// Acquiring AppLogger.
     	m_oLogger = m_oGlobalModuleInjector.getInstance(AppLogger.class);    	
     	m_oLogger.writeLog(LogLevel.INFO, "Game startup.");
-
-    	ICacheManager oo = m_oGlobalModuleInjector.getInstance(CacheManager.class);    	
-
+    	
     	// **IMPORTANT
     	// TODO: before launching main window, we need to call CacheManager and load cache with preliminary details about all the boards available.
     	

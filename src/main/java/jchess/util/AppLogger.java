@@ -9,12 +9,14 @@ package jchess.util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class AppLogger implements IAppLogger {
 	private final Logger m_oLogger;
 
+	@Inject
 	public AppLogger() {
 		m_oLogger = LogManager.getLogger(AppLogger.class);
 	}
