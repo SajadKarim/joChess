@@ -1,5 +1,6 @@
 package jchess.view.gamewindow;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
@@ -9,6 +10,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 import jchess.Settings;
+import jchess.model.IModel;
 
 /**
  * This class is responsible to draw Move History related controls on GUI.
@@ -155,6 +157,36 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
     {
         return this.move;
     }
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void drawView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refreshView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Component getViewComponent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setViewData(IModel oData) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
 /*

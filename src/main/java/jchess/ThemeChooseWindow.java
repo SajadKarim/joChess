@@ -83,7 +83,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             catch (java.lang.NullPointerException exc)
             {
                 System.out.println("Cannot find preview image: " + exc);
-                this.themePreview = new ImageIcon(JChessApp.class.getResource("theme/noPreview.png"));
+                this.themePreview = new ImageIcon(Main.class.getResource("theme/noPreview.png"));
                 return;
             }
             this.result = "";
@@ -110,7 +110,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     {
         String element = this.themesList.getModel().getElementAt(this.themesList.getSelectedIndex()).toString();
         //String path = GUI.getJarPath() + File.separator + "theme/";
-        String path  = JChessApp.class.getResource("theme/").getPath().toString();
+        String path  = Main.class.getResource("theme/").getPath().toString();
         System.out.println(path + element + "/images/Preview.png");
         this.themePreview = new ImageIcon(path + element + "/images/Preview.png");
         this.themePreviewButton.setIcon(this.themePreview);

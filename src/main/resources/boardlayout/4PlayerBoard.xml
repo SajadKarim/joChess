@@ -1,4 +1,4 @@
-<Board Name="4PlayerBoard" BoardImage="chessboard_4players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="800" Height="801">
+<Board Name="4PlayerBoard" BoardImage="chessboard_4players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="800" Height="801" RuleEngine="RULEENGINE_DEFAULT">
   <Positions/>
   <Rules/>
   <Pieces/>

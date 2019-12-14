@@ -28,15 +28,17 @@ import jchess.dimodule.GameWndModule;
 import jchess.dimodule.NewGameWndModule;
 import jchess.model.newgamewindow.INewGameModel;
 import jchess.presenter.gamewindow.GamePresenter;
+import jchess.presenter.gamewindow.IGamePresenter;
+import jchess.presenter.newgamewindow.INewGamePresenter;
 import jchess.presenter.newgamewindow.NewGamePresenter;
-import jchess.view.newgamewindow.INewGame_Callback;
+import jchess.view.newgamewindow.INewGameListener;
 import jchess.view.newgamewindow.NewGameView;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.ImageObserver;
 
-public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver, INewGame_Callback
+public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver, INewGameListener
 {
 
     private TabbedPaneIcon closeIcon;
@@ -44,9 +46,11 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     private Image clickedAddIcon = null;
     private Image unclickedAddIcon = null;
     private Rectangle addIconRect = null;
-	Injector m_oGlobalModuleInjector;
-
-    JChessTabbedPane(Injector oGlobalModuleInjector)
+	private Injector m_oGlobalModuleInjector;
+	private IMain m_oMainApplication;
+	
+	
+    JChessTabbedPane(IMain oMainApplication, Injector oGlobalModuleInjector)
     {
         super();
         this.closeIcon = new TabbedPaneIcon(this.closeIcon);
@@ -56,6 +60,7 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         this.setDoubleBuffered(true);
         super.addMouseListener(this);
         
+        m_oMainApplication = oMainApplication;
         m_oGlobalModuleInjector = oGlobalModuleInjector;
     }
 
@@ -82,28 +87,15 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
 
     private void showNewGameWindow()
     {
-    	Injector injector = m_oGlobalModuleInjector.createChildInjector(new NewGameWndModule(	));
+    	Injector injector = m_oGlobalModuleInjector.createChildInjector(new NewGameWndModule(m_oGlobalModuleInjector));
 
-    	NewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
+    	INewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
     	oPresenter.init();
-    	oPresenter.setCallback(this);
+    	oPresenter.addListener(this);
     	
-    	JChessApp.getApplication().show((NewGameView)oPresenter.getView()); 
+    	m_oMainApplication.showDialog(oPresenter.getViewJDialog()); 
 
     }
-
-	@Override
-	public void launchNewGame(INewGameModel oData) {
-		Injector injector = m_oGlobalModuleInjector.createChildInjector(new GameWndModule(m_oGlobalModuleInjector));
-		GamePresenter oPresenter = injector.getInstance(GamePresenter.class);
-
-		oPresenter.init(oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
-		
-		oPresenter.getViewComponent().setLocation(new Point(0, 0));
-		this.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());
-		this.setSelectedComponent(oPresenter.getViewComponent());
-		oPresenter.showView();
-	}
 
     @Override
     public void mouseClicked(MouseEvent e)
@@ -182,6 +174,19 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     {
         this.repaint();
     }
+
+	public void onNewGameLaunchRequest(INewGameModel oData) {
+		Injector injector = m_oGlobalModuleInjector.createChildInjector(
+				new GameWndModule(m_oGlobalModuleInjector, oData.getSelectedBoardName(), oData.getSelectedBoardFileName()));
+		IGamePresenter oPresenter = injector.getInstance(GamePresenter.class);
+
+		oPresenter.init();
+		
+		oPresenter.getViewComponent().setLocation(new Point(0, 0));
+		this.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());
+		this.setSelectedComponent(oPresenter.getViewComponent());
+		oPresenter.showView();
+	}
 }
 
 class TabbedPaneIcon implements Icon

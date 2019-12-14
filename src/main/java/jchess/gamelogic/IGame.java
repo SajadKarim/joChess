@@ -1,8 +1,10 @@
 package jchess.gamelogic;
 
-import jchess.presenter.gamewindow.IGamePresenter_Callback;
+import jchess.common.IBoardAgent;
+import jchess.common.IPositionAgent;
 
 public interface IGame {
-	public void init();
-	public void setCallback(IGamePresenter_Callback oGamePresenter);
+	public void init(IBoardAgent oBoard);
+	public void addListener(IGameListener oListerner);
+	public void onBoardActivity(IPositionAgent oPosition);
 }

@@ -20,7 +20,6 @@ import jchess.common.IRuleAgent;
  */
 
 public class GameState implements IGameState {
-
 	private IPlayerAgent m_oActivePlayer;
 	private IPositionAgent m_oSelectedPiece;
 	private Map<String, Pair<IPositionAgent, IRuleAgent>> m_lstPossibleMovePositionsForSelectedPiece;

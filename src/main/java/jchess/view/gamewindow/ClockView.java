@@ -8,6 +8,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import com.google.inject.Inject;
+
 import jchess.model.IModel;
 import jchess.model.gamewindow.IClockModel;
 
@@ -22,11 +24,17 @@ public class ClockView extends JPanel implements IClockView {
 	private IClockModel m_oData;
 	private Dimension m_oDimension;
 	
-    public ClockView() {
-        this.setDoubleBuffered(true);
+	@Inject
+    public ClockView(IClockModel oData) {
+    	m_oData = oData;
     }
     
-    public void setDimension(Dimension oDimension) {
+	public void init() {
+		this.setLayout(null);		
+		this.setDoubleBuffered(true);		
+	}
+
+	public void setDimension(Dimension oDimension) {
     	m_oDimension = oDimension;	
     }
     
@@ -46,12 +54,6 @@ public class ClockView extends JPanel implements IClockView {
     {
     	draw(oGraphics);
     }
-
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void drawView() {

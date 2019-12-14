@@ -1,4 +1,4 @@
-package jchess.common.enumerator;
+package jchess.util;
 /**
  * This datastructure is used for logging.
  * 
@@ -7,5 +7,6 @@ package jchess.common.enumerator;
  */
 public enum LogLevel {
 	INFO,
-	ERROR;
+	ERROR,
+	DETAILED
 }

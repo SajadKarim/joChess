@@ -94,4 +94,5 @@ public interface IBoard extends IBoardFactory {
 	 * @return IBoardData 
 	 */
 	public IBoardData getBoardData();
+	public String getRuleEngineName();
 }

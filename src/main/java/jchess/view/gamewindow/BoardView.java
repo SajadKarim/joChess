@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import com.google.inject.Inject;
+
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
 import jchess.gamelogic.PieceAgent;
@@ -30,10 +32,14 @@ public class BoardView extends JPanel implements IBoardView {
 	private IBoardModel m_oData;
 	private Dimension m_oDimension;
 	
-	public BoardView() {
+	@Inject
+	public BoardView(final IBoardModel oData) {
+		m_oData = oData;
+	}
+
+	public void init() {
 		this.setLayout(null);		
-		this.setLocation(new Point(0, 0));        
-		this.setDoubleBuffered(true);
+		this.setDoubleBuffered(false);
 	}
 
 	public void SetDimension(Dimension oDimension) {
@@ -136,12 +142,6 @@ public class BoardView extends JPanel implements IBoardView {
     	draw(oGraphics);
     }
 	
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void drawView() {
 		draw(this.getParent().getGraphics());		

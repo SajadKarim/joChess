@@ -61,7 +61,7 @@ public class GUI
         {
             String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             System.out.println(configFile.getProperty("THEME"));
-            url = JChessApp.class.getResource(imageLink);
+            url = Main.class.getResource(imageLink);
             img = tk.getImage(url);
 
         }

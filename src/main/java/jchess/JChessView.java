@@ -27,7 +27,12 @@ import jchess.dimodule.NewGameWndModule;
 import jchess.dimodule.GameWndModule;
 import jchess.model.newgamewindow.INewGameModel;
 import jchess.presenter.gamewindow.GamePresenter;
+import jchess.presenter.gamewindow.IGamePresenter;
+import jchess.presenter.newgamewindow.INewGamePresenter;
 import jchess.presenter.newgamewindow.NewGamePresenter;
+import jchess.util.AppLogger;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 import jchess.view.newgamewindow.*;
 
 import java.awt.event.ActionEvent;
@@ -40,65 +45,28 @@ import javax.swing.*;
 
 import java.awt.Point;
 import java.awt.event.*;
-import java.io.File;
 
 /**
  * The application's main frame.
  */
-public class JChessView extends FrameView implements ActionListener, ComponentListener, INewGame_Callback
+public class JChessView extends FrameView implements ActionListener, ComponentListener, INewGameListener
 {
-	Injector m_oGlobalModuleInjector;
+	private IMain m_oMainApplication;
+    private IAppLogger m_oLogger; 
+	private Injector m_oGlobalModuleInjector;
 	
-    static GUI gui = null;
-    GUI activeGUI;//in future it will be reference to active tab
-
-    public void actionPerformed(ActionEvent event)
-    {
-        Object target = event.getSource();
-        if (target == newGameItem)
-        {
-        	Injector injector = m_oGlobalModuleInjector.createChildInjector(new NewGameWndModule(	));
-
-        	NewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
-        	oPresenter.init();
-        	oPresenter.setCallback(this);
-        	
-        	JChessApp.getApplication().show((NewGameView)oPresenter.getView()); 
-        }
-        else if (target == saveGameItem)
-        { 
-        }
-        else if (target == loadGameItem)
-        { 
-        }
-        else if (target == this.themeSettingsMenu)
-        {
-            try
-            {
-                ThemeChooseWindow choose = new ThemeChooseWindow(this.getFrame());
-                JChessApp.getApplication().show(choose);
-            } 
-            catch(Exception exc)
-            {
-                JOptionPane.showMessageDialog(
-                    JChessApp.getApplication().getMainFrame(), 
-                    exc.getMessage()
-                );
-                System.out.println("Something wrong creating window - perhaps themeList is null");                
-            }
-        }
-    }
-
- 
-    ///--endOf- don't delete, becouse they're interfaces for MouseEvent
+    public JChessView(IMain oMainApplication, Injector oGlobalModuleInjector) {
+        super((SingleFrameApplication)oMainApplication);
         
-
-    public JChessView(SingleFrameApplication app, Injector oGlobalModuleInjector) {
-        super(app);
+        m_oMainApplication = oMainApplication;
         m_oGlobalModuleInjector = oGlobalModuleInjector;
+        
+    	// Acquiring AppLogger.
+    	m_oLogger = m_oGlobalModuleInjector.getInstance(AppLogger.class);    	
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Game startup.");
 
         initComponents();
-        // status bar initialization - message timeout, idle icon and busy animation, etc
+        
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
@@ -154,14 +122,56 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         
     }
 
+    public void actionPerformed(ActionEvent event)
+    {
+        Object target = event.getSource();
+        if (target == newGameItem)
+        {
+        	Injector injector = m_oGlobalModuleInjector.createChildInjector(new NewGameWndModule(m_oGlobalModuleInjector));
+
+        	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching NewGameWindow", "actionPerformed", "JChessView");
+        	        	
+        	INewGamePresenter oPresenter = injector.getInstance(NewGamePresenter.class);
+        	oPresenter.addListener(this);
+        	oPresenter.init();
+        	
+        	m_oMainApplication.showDialog(oPresenter.getViewJDialog()); 
+        }
+        else if (target == saveGameItem)
+        { 
+        }
+        else if (target == loadGameItem)
+        { 
+        }
+        else if (target == this.themeSettingsMenu)
+        {
+            try
+            {
+                ThemeChooseWindow choose = new ThemeChooseWindow(this.getFrame());
+                m_oMainApplication.showDialog(choose);
+            } 
+            catch(Exception exc)
+            {
+                JOptionPane.showMessageDialog(
+                		m_oMainApplication.getAppMainFrame(), 
+                    exc.getMessage()
+                );
+                System.out.println("Something wrong creating window - perhaps themeList is null");                
+            }
+        }
+    }
+
+ 
+    ///--endOf- don't delete, becouse they're interfaces for MouseEvent
+        
     @Action
     public void showAboutBox() {
         if (aboutBox == null) {
-            JFrame mainFrame = JChessApp.getApplication().getMainFrame();
+            JFrame mainFrame = m_oMainApplication.getAppMainFrame();
             aboutBox = new JChessAboutBox(mainFrame);
             aboutBox.setLocationRelativeTo(mainFrame);
         }
-        JChessApp.getApplication().show(aboutBox);
+        m_oMainApplication.showDialog(aboutBox);
     }
 
     public String showPawnPromotionBox(String color) {
@@ -179,9 +189,12 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        mainPanel = new javax.swing.JPanel();
-        gamesPane = new jchess.JChessTabbedPane(m_oGlobalModuleInjector);
+    	m_oLogger.writeLog(LogLevel.ERROR, "Initializing components.", "initComponents", "JChessView");
+        
+    	this.getFrame().setTitle("N-Players Chess Game!");
+    	
+    	mainPanel = new javax.swing.JPanel();
+        gamesPane = new jchess.JChessTabbedPane(m_oMainApplication, m_oGlobalModuleInjector);
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         newGameItem = new javax.swing.JMenuItem();
@@ -228,7 +241,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
         menuBar.setName("menuBar"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(jchess.JChessApp.class).getContext().getResourceMap(JChessView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(jchess.Main.class).getContext().getResourceMap(JChessView.class);
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
@@ -250,7 +263,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         fileMenu.add(saveGameItem);
         saveGameItem.addActionListener(this);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(jchess.JChessApp.class).getContext().getActionMap(JChessView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(jchess.Main.class).getContext().getActionMap(JChessView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -457,12 +470,14 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-	@Override
-	public void launchNewGame(INewGameModel oData) {
-		Injector injector = m_oGlobalModuleInjector.createChildInjector(new GameWndModule(m_oGlobalModuleInjector));
-		GamePresenter oPresenter = injector.getInstance(GamePresenter.class);
+	public void onNewGameLaunchRequest(INewGameModel oData) {
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching New game.", "launchNewGame", "JChessView");
 
-		oPresenter.init(oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
+		Injector injector = m_oGlobalModuleInjector.createChildInjector(
+				new GameWndModule(m_oGlobalModuleInjector, oData.getSelectedBoardName(), oData.getSelectedBoardFileName()));
+		IGamePresenter oPresenter = injector.getInstance(GamePresenter.class);
+
+		oPresenter.init();
 		
 		oPresenter.getViewComponent().setLocation(new Point(0, 0));
 		this.gamesPane.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());

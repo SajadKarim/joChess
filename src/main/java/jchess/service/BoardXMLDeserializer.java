@@ -173,6 +173,7 @@ class BoardXMLDeserializer {
 		String stMoveCandidateImage = oRootElement.getAttributes().getNamedItem("MarkedCellImage").getNodeValue();
 		int nWidth = Integer.parseInt( oRootElement.getAttributes().getNamedItem("Width").getNodeValue());
 		int nHeight = Integer.parseInt( oRootElement.getAttributes().getNamedItem("Height").getNodeValue());
+		String stRuleEngine = oRootElement.getAttributes().getNamedItem("RuleEngine").getNodeValue();
 		
 		oBoard.getBoardData().setName(stName);
 		oBoard.getBoardData().setBoardImagePath(stBoardImage);
@@ -180,6 +181,7 @@ class BoardXMLDeserializer {
 		oBoard.getBoardData().setMarkedCellImagePath(stMoveCandidateImage);
 		oBoard.getBoardData().setBoardWidth(nWidth);
 		oBoard.getBoardData().setBoardHeight(nHeight);
+		oBoard.getBoardData().setRuleEngineName(stRuleEngine);
 	}
 
 	private static void populatePositions(IBoard oBoard, Element oRootElement){

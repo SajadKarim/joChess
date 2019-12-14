@@ -8,6 +8,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import com.google.inject.Inject;
+
 import jchess.model.IModel;
 import jchess.model.gamewindow.IPlayerModel;
 
@@ -22,12 +24,18 @@ public class PlayerView extends JPanel implements IPlayerView {
 	private IPlayerModel m_oData;
 	private Dimension m_oDimension; 
 
-    public PlayerView()
+	@Inject
+    public PlayerView(IPlayerModel oData)
     {
-        setDoubleBuffered(true);
+		m_oData = oData;
     }
     
-    public void setDimension(Dimension oDimension) {
+	public void init() {
+		this.setLayout(null);		
+		setDoubleBuffered(true);
+	}
+
+	public void setDimension(Dimension oDimension) {
     	m_oDimension = oDimension;	
     }
     
@@ -60,12 +68,6 @@ public class PlayerView extends JPanel implements IPlayerView {
     {
     	draw(oGraphics);
     }
-
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void drawView() {

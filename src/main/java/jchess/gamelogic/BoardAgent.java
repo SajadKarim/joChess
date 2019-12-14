@@ -211,4 +211,12 @@ public class BoardAgent implements IBoardAgent {
 		return (Map<String, IPieceAgent>)(Object)getPieces();
 	}
 	//endregion
+	
+	public String getRuleEngineName() {
+		return m_oBoard.getRuleEngineName();
+	}
+
+	public void setRuleEngineName(String stName) {
+		m_oBoard.setRuleEngineName(stName);
+	}
 }

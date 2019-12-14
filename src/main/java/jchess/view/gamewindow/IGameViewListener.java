@@ -9,6 +9,6 @@ import jchess.common.IPositionAgent;
  * @since	7 Dec 2019
  */
 
-public interface IGameView_Callback {
+public interface IGameViewListener {
     public void onPositionClicked(IPositionAgent oPosition);
 }

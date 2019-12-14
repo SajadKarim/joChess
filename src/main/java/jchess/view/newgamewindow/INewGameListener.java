@@ -8,6 +8,6 @@ import jchess.model.newgamewindow.INewGameModel;
  * @since	7 Dec 2019
  */
 
-public interface INewGame_Callback {
-    public void launchNewGame(INewGameModel oData);
+public interface INewGameListener {
+    public void onNewGameLaunchRequest(INewGameModel oData);
 }

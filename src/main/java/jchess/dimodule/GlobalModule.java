@@ -6,6 +6,8 @@ import com.google.inject.Singleton;
 
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
+import jchess.util.AppLogger;
+import jchess.util.IAppLogger;
 
 /**
  * This class binds all the dependencies that are share across the project,
@@ -23,7 +25,13 @@ public class GlobalModule extends AbstractModule {
 	
 	@Provides @Singleton
 	ICacheManager provideCacheManager() {
-		CacheManager oManager = new CacheManager();
-		return oManager;
+		ICacheManager oCacheManager = new CacheManager();
+		return oCacheManager;
+	}
+
+	@Provides @Singleton
+	IAppLogger provideAppLogger() {
+		IAppLogger oLogger = new AppLogger();
+		return oLogger;
 	}
 }

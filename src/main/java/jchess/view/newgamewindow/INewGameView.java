@@ -1,5 +1,7 @@
 package jchess.view.newgamewindow;
 
+import javax.swing.JDialog;
+
 import jchess.view.IView;
 
 /**
@@ -10,5 +12,6 @@ import jchess.view.IView;
  */
 
 public interface INewGameView extends IView {  
-	public void setCallback(INewGame_Callback oCallback);
+	public JDialog getJDialog();
+	public void addListener(INewGameListener oListener);
 }
