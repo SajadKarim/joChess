@@ -23,7 +23,8 @@ public class BoardData implements IBoardData {
 	private String m_stName;
 	private String m_stBoardImagePath;
 	private String m_stActiveCellImagePath;
-	private String m_stMarkedCellImagePath;	
+	private String m_stMarkedCellImagePath;
+	private String m_stRuleEngineName;	
     private Map<String, IPosition> m_mpPosition;
     private Map<String, IPlayer > m_mpPlayers;
     private Map<String, IPiece > m_mpPieces;
@@ -172,4 +173,12 @@ public class BoardData implements IBoardData {
     	m_mpMapping.get(stPlayer).put(stPosition, stPiece);
     }
 	//endregion
+	
+	public String getRuleEngineName() {
+		return m_stRuleEngineName;
+	}
+
+	public void setRuleEngineName(String stName) {
+		m_stRuleEngineName = stName;
+	}
 }

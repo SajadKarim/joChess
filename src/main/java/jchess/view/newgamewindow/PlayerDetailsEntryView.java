@@ -24,7 +24,7 @@ import jchess.model.newgamewindow.INewGameModel;
 public class PlayerDetailsEntryView extends JPanel implements IPlayerDetailsEntryView {
 
 	private INewGameModel m_oData;
-	private INewGame_Callback m_oCallback;
+	private INewGameListener m_oCallback;
 	
     Container cont;
     JSeparator sep;

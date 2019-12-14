@@ -7,9 +7,14 @@ import com.google.inject.Inject;
 
 import jchess.cache.ICacheManager;
 import jchess.common.IPlayer;
+import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.gamelogic.Game;
+import jchess.gamelogic.IGame;
+import jchess.gamelogic.IGameListener;
 import jchess.model.gamewindow.*;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 import jchess.view.gamewindow.*;
 
 /**
@@ -19,32 +24,32 @@ import jchess.view.gamewindow.*;
  * @since	7 Dec 2019
  */
 
-public class GamePresenter extends AbstractModule implements IGameView_Callback, IGamePresenter_Callback{
-    private Game m_oGame;
-    private IGameView m_oView;
-    private IGameModel m_oModel;
+public class GamePresenter extends AbstractModule implements IGamePresenter{
+    private IGame m_oGame;
+    private final IGameView m_oView;
+    private final IGameModel m_oModel;
     private final ICacheManager m_oCacheManager;
+    private final IAppLogger m_oAppLogger;
     
     @Inject
-    public GamePresenter(final ICacheManager oCacheManager) {
-        m_oModel = new GameModel();
+    public GamePresenter(final IGame oGame, final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager, final IAppLogger oAppLogger) {
+        m_oGame = oGame;
+    	m_oView = oView;
+    	m_oModel = oModel;
+        m_oAppLogger  = oAppLogger;
         m_oCacheManager = oCacheManager;
     }
 
-    public void init(String stBoardName, String stBoardFilePath) {   	
-    	loadModel(stBoardName, stBoardFilePath);
-    	
-        m_oView = new GameView(this, m_oModel);
+    public void init() {     	
+    	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing Game presenter.", "init", "GamePresenter");
+
+    	m_oView.addListener(this);
         m_oView.init();
         
-    	m_oGame = new Game(this, m_oModel.getBoard());
+    	m_oGame.addListener(this);
+    	m_oGame.init(m_oModel.getBoard());
     }
-    
-    private void loadModel(String stBoardName, String stBoardFilePath) {
-    	m_oCacheManager.loadBoardFromFile(stBoardName, stBoardFilePath);
-    	m_oModel.setBoard(m_oCacheManager.getBoard(stBoardName));
-    }
-    
+        
     public void showView() {
     	m_oView.drawView();
     }
@@ -69,15 +74,15 @@ public class GamePresenter extends AbstractModule implements IGameView_Callback,
 		m_oView.repaintClockView();
 	}
 	
-	public void onTimerUpdate_TimerElapsed(IPlayer oPlayer) {
+	public void onTimerUpdate_TimerElapsed(IPlayerAgent oPlayer) {
 		m_oModel.setClockText("--:--");
 		m_oModel.setPlayer(oPlayer);
 		m_oView.repaintClockView();
 	}
-	
-	public void updateCurrentPlayer(IPlayer oPlayer) {
+
+	public void onCurrentPlayerChanged(IPlayerAgent oPlayer) {
 		m_oModel.setPlayer(oPlayer);
 		m_oView.repaintPlayerView();
-	} 
+	}
 	//endregion
 }

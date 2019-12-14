@@ -2,15 +2,18 @@ package jchess.view.gamewindow;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+
+import com.google.inject.Inject;
 
 import jchess.model.IModel;
 import jchess.model.gamewindow.IGameModel;
@@ -26,94 +29,64 @@ import jchess.common.IPositionAgent;
 
 public class GameView extends JPanel implements IGameView, MouseListener, ComponentListener {
 	private IGameModel m_oData;
-    
-	private IPlayerView m_oPlayerView;
-	private IClockView m_oClockView;
-	private IBoardView m_oBoardView;
-    private IMoveHistoryView m_oMoveHistoryView;	
+	private final IClockView m_oClockView;
+	private final IBoardView m_oBoardView;    
+	private final IPlayerView m_oPlayerView;
+    private final IMoveHistoryView m_oMoveHistoryView;	
 
-	private Dimension m_oPlayerViewDimensions;        
-	private Dimension m_oBoardViewDimensions;        
-	private Dimension m_oClockViewDimensions;
-	private Dimension m_oHistoryViewDimensions;
-
-	private Point m_oPlayerViewStartLocation;
-	private Point m_oBoardViewStartLocation;
-	private Point m_oClockViewStartLocation;
-	private Point m_oHistoryViewStartLocation;
-
-	private IGameView_Callback m_oCallback;
+	private final ArrayList<IGameViewListener> m_lstListener;
 	
-	public GameView(IGameView_Callback oCallback, IGameModel oData) {
-		m_oCallback = oCallback;
+	@Inject
+	public GameView(IGameModel oData, final IBoardView oBoardView, final IPlayerView oPlayerView, final IClockView oClockView, final IMoveHistoryView oMoveHistoryView) {
 		m_oData = oData;
+		m_oBoardView = oBoardView;
+		m_oPlayerView = oPlayerView;
+		m_oClockView = oClockView;
+		m_oMoveHistoryView = oMoveHistoryView;
+		m_lstListener = new ArrayList<IGameViewListener>();
 	}
 	
 	public void init() {
 		this.setLayout(null);
+        this.setDoubleBuffered(true);
 		this.setLocation(new Point(0, 0));        
         
-		initPositionsAndDimensions();
-		
 		initSubViews();
 		
 		addMouseListener(this);		
         addComponentListener(this);
-
-        this.setDoubleBuffered(true);
 	}
-	
-	public void setCallback() {
-	}
-	
-	public void initPositionsAndDimensions() {
-		m_oBoardViewDimensions = new Dimension(m_oData.getBoard().getBoardWidth(), m_oData.getBoard().getBoardHeight());        
-		m_oPlayerViewDimensions = new Dimension(180, 60);
-        m_oClockViewDimensions = new Dimension(180, 60);
-        m_oHistoryViewDimensions = new Dimension(180, 500);
-
-        m_oBoardViewStartLocation = new Point(0, 0);
-        m_oPlayerViewStartLocation = new Point(m_oData.getBoard().getBoardWidth() + 20, 0);
-        m_oClockViewStartLocation = new Point(m_oData.getBoard().getBoardWidth() + 20, 60);
-        m_oHistoryViewStartLocation = new Point(m_oData.getBoard().getBoardWidth() + 20, 120);
-	}
-	
+		
 	public void initSubViews() {
-        m_oBoardView = new BoardView();
-        m_oBoardView.setViewData(m_oData);
-        m_oBoardView.SetDimension(m_oBoardViewDimensions);
-        Component oBoardComponent = m_oBoardView.getViewComponent();
-        oBoardComponent.setSize(m_oBoardViewDimensions);
-        oBoardComponent.setLocation(m_oBoardViewStartLocation);
-        this.add(oBoardComponent);
-
-        m_oPlayerView = new PlayerView();
-        m_oPlayerView.setViewData(m_oData);
-        m_oPlayerView.setDimension( m_oPlayerViewDimensions);
-        Component oPlayerComponent = m_oPlayerView.getViewComponent();
-        oPlayerComponent .setSize(m_oPlayerViewDimensions);
-        oPlayerComponent .setLocation(m_oPlayerViewStartLocation);
-        this.add(oPlayerComponent );
-
-        m_oClockView = new ClockView();
-        m_oClockView.setViewData(m_oData);
-        m_oClockView.setDimension( m_oClockViewDimensions);
-        Component oClockComponent = m_oClockView.getViewComponent();
-        oClockComponent.setSize(m_oClockViewDimensions);
-        oClockComponent.setLocation(m_oClockViewStartLocation);
-        this.add(oClockComponent);
-
-        m_oMoveHistoryView = new MoveHistoryView();
-        JScrollPane oMoveHistory = m_oMoveHistoryView.getScrollPane();
-        oMoveHistory.setSize(m_oHistoryViewDimensions);
-        oMoveHistory.setLocation(m_oHistoryViewStartLocation);
-        this.add(oMoveHistory);
+		Dimension oDimension = new Dimension(m_oData.getBoard().getBoardWidth(), m_oData.getBoard().getBoardHeight());        
+        m_oBoardView.SetDimension(oDimension);
+        m_oBoardView.getViewComponent().setSize(oDimension);
+        m_oBoardView.getViewComponent().setLocation(new Point(0, 0));
+        this.add(m_oBoardView.getViewComponent());
+        m_oBoardView.init();
         
-	}
+		oDimension = new Dimension(180, 60);        
+        m_oPlayerView.setDimension( oDimension);
+        m_oPlayerView.getViewComponent().setSize(oDimension);
+        m_oPlayerView.getViewComponent().setLocation(new Point(m_oData.getBoard().getBoardWidth() + 20, 0));
+        this.add(m_oPlayerView.getViewComponent());
+        m_oPlayerView.init();
+        
+        oDimension = new Dimension(180, 60);
+        m_oClockView.setDimension(oDimension);
+        m_oClockView.getViewComponent().setSize(oDimension);
+        m_oClockView.getViewComponent().setLocation(new Point(m_oData.getBoard().getBoardWidth() + 20, 60));
+        this.add(m_oClockView.getViewComponent());
+        m_oClockView.init();
+        
+        oDimension = new Dimension(180, 500);
+        m_oMoveHistoryView.getScrollPane().setSize(oDimension);
+        m_oMoveHistoryView.getScrollPane().setLocation(new Point(m_oData.getBoard().getBoardWidth() + 20, 120));
+        this.add(m_oMoveHistoryView.getScrollPane());
+        m_oMoveHistoryView.init();	}
 	
     public void mouseClicked(MouseEvent event)
     {
-    
     	switch(event.getButton() ) {
     		case MouseEvent.BUTTON1:{
                 int x = event.getX();
@@ -122,7 +95,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
                 IPositionAgent oPosition = getPosition(x, y);
                 
                 if( oPosition != null) {
-                	m_oCallback.onPositionClicked(oPosition);
+                	notifyListenersOnPositionClicked(oPosition);
                 }
     		}
     		break;
@@ -202,11 +175,15 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     	catch(java.lang.Exception e) {
     	}
     }
+    @Override
+    public void paintComponent(Graphics oGraphics)
+    {
+    	super.paintComponent(oGraphics);
+    	//drawView();
+    }
 
 	@Override
 	public void drawView() {
-		//this.repaint();
-		//this.revalidate();
 		m_oBoardView.drawView();
 		m_oPlayerView.drawView();
 		m_oClockView.drawView();
@@ -219,13 +196,16 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 
 	@Override
 	public void setViewData(IModel oData) {
-		// TODO Auto-generated method stub
-		
+		m_oData = (IGameModel)oData;
 	}
 
-	@Override
-	public void setCallback(IGameView_Callback oCallback) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void addListener(final IGameViewListener oListener) {
+        m_lstListener.add(oListener);
+    }
+	
+	private void notifyListenersOnPositionClicked(IPositionAgent oPosition) {
+        for (final IGameViewListener oListener : m_lstListener) {
+            oListener.onPositionClicked(oPosition);
+        }
+    }
 }

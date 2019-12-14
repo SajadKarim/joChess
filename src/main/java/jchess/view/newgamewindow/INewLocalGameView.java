@@ -12,5 +12,5 @@ import jchess.view.IView;
 
 public interface INewLocalGameView extends IView {
     public void setParent(JDialog parent);
-    public void setCallback(INewGame_Callback oCallback);
+	public void addListener(final INewGameListener oListener);
 }

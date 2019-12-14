@@ -2,6 +2,8 @@ package jchess.util;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
+
 /**
  * This class is responsible to launch Timer and notify others.
  * 
@@ -20,7 +22,13 @@ public class Timer implements ITimer {
 	
     private final ArrayList<ITimerListener> lstLiteners;
 
-	public Timer(int nTimerLengthInSeconds, 
+    @Inject
+	public Timer() {
+        m_oThread = new Thread(this);        
+        lstLiteners = new ArrayList<ITimerListener>();
+	}
+	
+    public void start(int nTimerLengthInSeconds, 
 			int nTimerRecurrenceCount, 
 			int nPauseTimerBeforeNextRecurrence, 
 			Boolean bNotifyEverySecond, 
@@ -29,15 +37,8 @@ public class Timer implements ITimer {
 		m_nTimerRecurrenceCount = nTimerRecurrenceCount;
 		m_nPauseTimerBeforeNextRecurrence = nPauseTimerBeforeNextRecurrence;
 		m_bNotifyEverySecond = bNotifyEverySecond;
-		m_bNotifyWhenTimerEnds = bNotifyWhenTimerEnds;	
-
-        m_oThread = new Thread(this);
-        
-        lstLiteners = new ArrayList<ITimerListener>();
-	}
-	
-    public void start()
-    {
+		m_bNotifyWhenTimerEnds = bNotifyWhenTimerEnds;
+		
         m_oThread.start();
     }
 
@@ -69,7 +70,7 @@ public class Timer implements ITimer {
 			while (m_nTimerRemainingSeconds > 0)
 	        {	        	
 	        	if( m_bNotifyEverySecond) {
-	        		notifyListeners_onSecondElapsed(m_nTimerRemainingSeconds);
+	        		notifyListenersOnSecondElapsed(m_nTimerRemainingSeconds);
 	        	}
 	        	
 	            try
@@ -85,7 +86,7 @@ public class Timer implements ITimer {
 	        }
 
         	if( m_bNotifyEverySecond) {
-        		notifyListeners_onTimerEnds();
+        		notifyListenersOnTimerEnds();
         	}
         	
         	m_nTimerRemainingSeconds = m_nTimerLengthInSeconds;
@@ -100,13 +101,13 @@ public class Timer implements ITimer {
     {
     }
     
-    private void notifyListeners_onSecondElapsed(int nRemainingSeconds) {
+    private void notifyListenersOnSecondElapsed(int nRemainingSeconds) {
         for (final ITimerListener listener : lstLiteners) {
             listener.onSecondElapsed(nRemainingSeconds);
         }
     }
 
-    private void notifyListeners_onTimerEnds() {
+    private void notifyListenersOnTimerEnds() {
         for (final ITimerListener listener : lstLiteners) {
             listener.onTimerElapsed();
         }

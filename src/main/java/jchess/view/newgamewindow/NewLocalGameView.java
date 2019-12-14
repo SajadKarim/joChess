@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,9 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
+import com.google.inject.Inject;
+
 import jchess.Settings;
 import jchess.model.IModel;
 import jchess.model.newgamewindow.INewGameModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * 
@@ -30,7 +35,7 @@ import jchess.model.newgamewindow.INewGameModel;
 public class NewLocalGameView extends JPanel implements ActionListener, INewLocalGameView {
 
 	INewGameModel m_oData;
-	INewGame_Callback m_oCallback;
+	INewGameListener m_oCallback;
     	
     JDialog parent;
     JSeparator sep;
@@ -41,6 +46,10 @@ public class NewLocalGameView extends JPanel implements ActionListener, INewLoca
     GridBagConstraints gbc;
 	JComboBox cmboxBoardTypes;
     IPlayerDetailsEntryView m_oPlayerDetailsEntryView;
+
+    private IAppLogger m_oAppLogger;
+    
+	private ArrayList<INewGameListener> m_lstListener;
 
     public void actionPerformed(ActionEvent e)
     {
@@ -56,22 +65,29 @@ public class NewLocalGameView extends JPanel implements ActionListener, INewLoca
         			m_oData.updatePlayerDetails(controls[i].getName(), ((JTextField)controls[i]).getText(), "", null);
         		}
         	m_oData.setSelectedBoardName( (String)cmboxBoardTypes.getSelectedItem());
-            m_oCallback.launchNewGame(m_oData);
+            notifyListenersOnNewGameLaunchRequest(m_oData);
         }
      }
 
-    public NewLocalGameView() {
+    @Inject
+    public NewLocalGameView(final IAppLogger oAppLogger) {
     	super();
     	
 		this.setLayout(null);
-		this.setLocation(new Point(0, 0));        
+		this.setLocation(new Point(0, 0));
+		
+		m_oAppLogger = oAppLogger;
+		
+    	m_lstListener = new ArrayList<INewGameListener>();
     }
     
     public void setParent(JDialog parent) {
         this.parent = parent;
     }
     
-    public void initComponenets() {        
+    public void initComponenets() {    
+    	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing components.", "initComponents", "NewLocalGameView");
+
     	this.gbl = new GridBagLayout();
         this.gbc = new GridBagConstraints();
     	this.cmboxBoardTypes = new JComboBox(m_oData.getAllBoardNames());
@@ -134,8 +150,14 @@ public class NewLocalGameView extends JPanel implements ActionListener, INewLoca
 		m_oData = (INewGameModel)oData;
 	}
 
-	@Override
-	public void setCallback(INewGame_Callback oCallback) {
-		m_oCallback = oCallback;
-	}
+	
+	public void addListener(final INewGameListener oListener) {
+        m_lstListener.add(oListener);
+    }
+	
+	private void notifyListenersOnNewGameLaunchRequest(INewGameModel oData) {
+        for (final INewGameListener oListener : m_lstListener) {
+            oListener.onNewGameLaunchRequest(oData);
+        }
+    }
 }

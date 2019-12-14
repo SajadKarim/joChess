@@ -2,13 +2,20 @@ package jchess.view.newgamewindow;
 
 import java.awt.Component;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import com.google.inject.Inject;
+
 import jchess.Settings;
+import jchess.common.IPositionAgent;
 import jchess.model.IModel;
 import jchess.model.newgamewindow.INewGameModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
+import jchess.view.gamewindow.IGameViewListener;
 
 /**
  * 
@@ -16,26 +23,33 @@ import jchess.model.newgamewindow.INewGameModel;
  * @since	7 Dec 2019
  */
 
-public class NewGameView extends JDialog implements INewGameView, INewGame_Callback {
+public class NewGameView extends JDialog implements INewGameView, INewGameListener {
     private INewGameModel m_oData;
     private INewLocalGameView m_NewLocalGameView;
     private javax.swing.JTabbedPane m_oJTabbedPanel;
 	
-    private INewGame_Callback m_oCallback;
+	private ArrayList<INewGameListener> m_lstListener;
 
-    public NewGameView() {
+    private IAppLogger m_oAppLogger;
+    
+    @Inject
+    public NewGameView(final IAppLogger oAppLogger, final INewLocalGameView oNewLocalGameView) {
+    	m_oAppLogger = oAppLogger;
+    	m_NewLocalGameView = oNewLocalGameView;
+    	m_lstListener = new ArrayList<INewGameListener>();
     }
     
     public void init() {
+    	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing new game view.", "init", "NewGameView");
+
         initComponents();
 
         this.setSize(400, 700);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         
-        m_NewLocalGameView = new NewLocalGameView();
         m_NewLocalGameView.setParent(this);
         m_NewLocalGameView.setViewData(m_oData);
-        m_NewLocalGameView.setCallback(this);
+        m_NewLocalGameView.addListener(this);
         m_NewLocalGameView.init();
         this.m_oJTabbedPanel.addTab(Settings.lang("local_game"), m_NewLocalGameView.getViewComponent());
     }
@@ -84,10 +98,6 @@ public class NewGameView extends JDialog implements INewGameView, INewGame_Callb
 		m_NewLocalGameView.drawView();
     }
     
-    public void launchNewGame(INewGameModel oModel) {
-    	m_oCallback.launchNewGame(oModel);
-    }
-
 	@Override
 	public void drawView() {
 		this.repaint();
@@ -103,8 +113,22 @@ public class NewGameView extends JDialog implements INewGameView, INewGame_Callb
 		m_oData = (INewGameModel)oData;
 	}
 
+	public JDialog getJDialog() {
+		return this;
+	}
+	
+	public void addListener(INewGameListener oListener) {
+        m_lstListener.add(oListener);
+    }
+	
+	private void notifyListenersOnNewGameLaunchRequest(INewGameModel oData) {
+        for (final INewGameListener oListener : m_lstListener) {
+            oListener.onNewGameLaunchRequest(oData);
+        }
+    }
+
 	@Override
-	public void setCallback(INewGame_Callback oCallback) {
-		m_oCallback = oCallback;
+	public void onNewGameLaunchRequest(INewGameModel oData) {
+		notifyListenersOnNewGameLaunchRequest(oData);
 	}
 }
