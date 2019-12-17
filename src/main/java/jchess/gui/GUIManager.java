@@ -13,7 +13,6 @@ import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.gui.presenter.gamewindow.GamePresenter;
 import jchess.gui.presenter.gamewindow.IGamePresenter;
 import jchess.gui.presenter.mainwindow.IMainPresenter;
-import jchess.gui.presenter.mainwindow.MainPresenter;
 import jchess.gui.presenter.newgamewindow.INewGamePresenter;
 import jchess.gui.presenter.newgamewindow.NewGamePresenter;
 import jchess.util.IAppLogger;
@@ -42,7 +41,7 @@ public class GUIManager implements IGUIManager{
     	m_oApplication = oApplication;
     	m_oDIManager = oDIManager;
     	m_oCacheManager = oCacheManager;
-		m_oMainPresenter = oMainPresenter; //new MainPresenter(m_oApplication, this, m_oLogger);
+		m_oMainPresenter = oMainPresenter;
 	}
 	
 	public void showMainWindow() {
