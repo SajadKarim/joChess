@@ -42,7 +42,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     JButton themePreviewButton;
     JButton okButton;
 
-    ThemeChooseWindow(Frame parent) throws Exception
+    public ThemeChooseWindow(Frame parent) throws Exception
     {
         super(parent);
 
