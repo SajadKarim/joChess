@@ -29,9 +29,13 @@ public class PieceAgent implements IPieceAgent {
 		m_oPiece = new PieceData();
 	}
 	
-	public PieceAgent(IPieceData oPiece, IPlayerAgent oPlayer){
-		m_oPiece = oPiece;
-		m_oPlayer = oPlayer;
+	public PieceAgent(PieceAgent oPiece) {
+		m_oPiece = new PieceData( (PieceData)oPiece.m_oPiece);
+		m_oPlayer = oPiece.m_oPlayer;
+		m_oImage = oPiece.m_oImage;
+	}
+
+	public void init(){
 		m_oImage = GUI.loadImage(getImagePath());
 	}
 	
@@ -56,6 +60,9 @@ public class PieceAgent implements IPieceAgent {
 	}
 
 	public Image getImage() {
+		if( m_oImage == null)			
+			m_oImage = GUI.loadImage(getImagePath());
+
 		return m_oImage;
 	}
 
@@ -77,5 +84,13 @@ public class PieceAgent implements IPieceAgent {
 
 	public void recordPeiceFirstMove() {
 		m_bFirstMove = true;
+	}
+	
+	public String getFamily() {
+		return m_oPiece.getFamily();
+	}
+	
+	public IPieceAgent clone() {
+		return new PieceAgent(this);
 	}
 }

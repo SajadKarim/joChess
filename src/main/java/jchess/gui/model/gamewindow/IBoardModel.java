@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.util.Map;
 
 import jchess.common.IPositionAgent;
-import jchess.gui.model.IModel;
+import jchess.common.gui.IModel;
 
 /**
  * 

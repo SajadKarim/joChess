@@ -2,16 +2,16 @@ package jchess.gui.presenter.gamewindow;
 
 import java.awt.Component;
 
+import javax.swing.JDialog;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 import jchess.cache.ICacheManager;
-import jchess.common.IPlayer;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.gamelogic.Game;
+import jchess.common.gui.DialogResult;
 import jchess.gamelogic.IGame;
-import jchess.gamelogic.IGameListener;
 import jchess.gui.model.gamewindow.*;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -51,7 +51,7 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
     }
         
     public void showView() {
-    	m_oView.drawView();
+    	m_oView.drawComponents();
     }
     
     public Component getViewComponent() {
@@ -85,4 +85,22 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 		m_oView.repaintPlayerView();
 	}
 	//endregion
+
+	@Override
+	public void getView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public JDialog tryGetViewJDialog() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onViewClosed(DialogResult oFormAction, Object oData) {
+		// TODO Auto-generated method stub
+		
+	}
 }

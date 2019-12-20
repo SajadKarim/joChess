@@ -6,7 +6,7 @@ import java.util.Map;
 import org.javatuples.Pair;
 
 import jchess.common.IPlayerAgent;
-import jchess.gui.model.IModel;
+import jchess.common.gui.IModel;
 
 public interface INewGameModel extends IModel {
 	public Map<String, IPlayerAgent> getPlayers();

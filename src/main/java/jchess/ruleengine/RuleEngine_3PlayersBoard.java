@@ -15,18 +15,23 @@ import jchess.common.IRuleAgent;
  * @since	7 Dec 2019
  */
 
-class RuleEngine_3PlayersBoard extends DefaultRuleEngine {
+class RuleEngine_3PlayersBoard extends ExtendedRuleEngine {
+	
+	public RuleEngine_3PlayersBoard(IRuleProcessor oRuleProcessor) {
+		super(oRuleProcessor);
+	}
+	
 	@Override
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition) {		
-		Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions = super.tryFindPossibleCandidateMovePositions(oBoard, oPosition);
+	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition) {		
+		Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oPosition);
 		
 		tryMakePiecePeculiarMoves(oBoard, oPosition, mpCandidateMovePositions);
 		
 		return mpCandidateMovePositions;
 	}
 	@Override
-	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
-		super.tryMakeMove(oSourcePosition, oDestinationPositionAndRule);
+	public void tryExecuteRule(IBoardAgent oBoard, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
+		super.tryExecuteRule(oBoard, oSourcePosition, oDestinationPositionAndRule);
 		
 		if( oDestinationPositionAndRule.getValue0().getPiece() != null) {
 			if( oDestinationPositionAndRule.getValue0().getPiece().getName().startsWith("Pawn")) {
@@ -38,12 +43,5 @@ class RuleEngine_3PlayersBoard extends DefaultRuleEngine {
 	}
 	
 	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
-		if( oPosition.getPiece() != null) {
-			if( oPosition.getPiece().getName().startsWith("Pawn")) {
-				if(!oPosition.getPiece().hasPieceAlreadyMadeMove() ) { 
-					SharedEngine.tryPawnFirstMove(oBoard, oPosition, mpCandidateMovePositions);
-				}
-			}
-		}
 	}
 }

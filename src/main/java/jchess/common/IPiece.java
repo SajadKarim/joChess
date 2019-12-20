@@ -12,7 +12,10 @@ package jchess.common;
  */
 
 public interface IPiece {
+	public void init();
 	public String getName();	
-	public String getImagePath();	
+	public String getImagePath();
+	public String getFamily();
 	public IPieceData getPieceData();
+	public IPiece clone();
 }

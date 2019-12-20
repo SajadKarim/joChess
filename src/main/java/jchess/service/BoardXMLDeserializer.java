@@ -346,11 +346,13 @@ class BoardXMLDeserializer {
 			
 			String stName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
 			String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
+			String stFamily = oPieceNode.getAttributes().getNamedItem("Family").getNodeValue();
 			
 			IPiece oPiece = oBoard.createPiece();
 			
 			oPiece.getPieceData().setName(stName);
 			oPiece.getPieceData().setImagePath(stImage);
+			oPiece.getPieceData().setFamily(stFamily);
 
 			NodeList lstRuleNodes = ((Element)oPieceNode.getElementsByTagName("AllowedMoves").item(0)).getElementsByTagName("Rule");
 			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
@@ -360,7 +362,8 @@ class BoardXMLDeserializer {
 				
 				oPiece.getPieceData().addRule(oBoard.getRule(stRule));
 			}   
-
+			oPiece.init();
+			
 			oBoard.getBoardData().addPiece( oPiece);
 		}
 		}
@@ -415,11 +418,7 @@ class BoardXMLDeserializer {
 				catch(java.lang.Exception e) {
 					System.out.println(e);
 				}
-				/*if( oPlayer.getName().equals("P2"))
-					populateCustomBoardMapping2( oPlayer.getPlayerData().getBoardMapping());
-				if( oPlayer.getName().equals("P3"))
-					populateCustomBoardMapping3( oPlayer.getPlayerData().getBoardMapping());
-	*/
+
 				oBoard.getBoardData().addPlayer( oPlayer);
 			}
 		}

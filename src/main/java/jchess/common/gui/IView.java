@@ -1,8 +1,6 @@
-package jchess.gui.view;
+package jchess.common.gui;
 
 import java.awt.Component;
-
-import jchess.gui.model.IModel;
 
 /**
  * This interfaces exposes some generic and important methods that all the views
@@ -14,8 +12,8 @@ import jchess.gui.model.IModel;
 
 public interface IView {
 	public void init();
-    public void drawView();
-    public void refreshView();
-    public Component getViewComponent();
+    public void refresh();
+    public void drawComponents();
 	public void setViewData(IModel oData);
+    public Component getViewComponent();
 }

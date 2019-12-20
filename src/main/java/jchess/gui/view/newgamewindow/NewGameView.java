@@ -10,12 +10,11 @@ import javax.swing.JFrame;
 import com.google.inject.Inject;
 
 import jchess.Settings;
-import jchess.common.IPositionAgent;
-import jchess.gui.model.IModel;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
-import jchess.gui.view.gamewindow.IGameViewListener;
 
 /**
  * 
@@ -95,16 +94,16 @@ public class NewGameView extends JDialog implements INewGameView, INewGameListen
 	@Override
     public void paint(Graphics g)
     {
-		m_NewLocalGameView.drawView();
+		m_NewLocalGameView.drawComponents();
     }
     
 	@Override
-	public void drawView() {
+	public void drawComponents() {
 		this.repaint();
 	}
 
 	@Override
-	public void refreshView() {
+	public void refresh() {
 		this.repaint();
 	}
 

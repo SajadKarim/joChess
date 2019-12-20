@@ -2,12 +2,15 @@ package jchess.gui;
 
 import java.awt.Point;
 
+import javax.swing.JFrame;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import jchess.IMain;
 import jchess.cache.ICacheManager;
+import jchess.common.gui.IPresenter;
 import jchess.dimodule.IDIManager;
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.gui.presenter.gamewindow.GamePresenter;
@@ -27,7 +30,7 @@ import jchess.util.LogLevel;
  */
 
 @Singleton
-public class GUIManager implements IGUIManager{
+public class GUIManager implements IGUIManager, IGUIHandle {
 	private IAppLogger m_oLogger;
 	private IMain m_oApplication;
 	private IDIManager m_oDIManager;
@@ -80,5 +83,18 @@ public class GUIManager implements IGUIManager{
 	@Override
 	public void onNewGameLaunchRequest(INewGameModel oData) {
 		showGameWindow( oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
+	}
+	
+	public void showDialog(IPresenter oPresenter) {
+		oPresenter.init();
+		m_oApplication.showDialog(oPresenter.tryGetViewJDialog());
+	}
+	
+	public JFrame getGUIMainFrame() {
+		return m_oApplication.getAppMainFrame();
+	}
+	
+	public IGUIHandle getGUIHandle() {
+		return (IGUIHandle)((GUIManager)this);
 	}
 }

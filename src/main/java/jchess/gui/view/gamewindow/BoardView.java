@@ -17,8 +17,9 @@ import com.google.inject.Inject;
 
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 import jchess.gamelogic.PieceAgent;
-import jchess.gui.model.IModel;
 import jchess.gui.model.gamewindow.IBoardModel;
 
 /**
@@ -143,12 +144,12 @@ public class BoardView extends JPanel implements IBoardView {
     }
 	
 	@Override
-	public void drawView() {
+	public void drawComponents() {
 		draw(this.getParent().getGraphics());		
 	}
 
 	@Override
-	public void refreshView() {
+	public void refresh() {
 		draw(this.getParent().getGraphics());		
 	}
 

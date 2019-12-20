@@ -1,4 +1,4 @@
-package jchess.gui.model;
+package jchess.common.gui;
 
 /**
  * This interfaces defines a fews important and common methods that

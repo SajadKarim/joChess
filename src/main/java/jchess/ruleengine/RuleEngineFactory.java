@@ -15,17 +15,17 @@ public class RuleEngineFactory {
 		IRuleEngine oProcessor;
 		switch(enRuleEngine) {
 			case RULEENGINE_2PLAYER:{
-				oProcessor = new DefaultRuleEngine(); 
+				oProcessor = new ExtendedRuleEngine(new ExtendedRuleProcessor()); 
 			}
 				break;
 			case RULEENGINE_3PLAYER:{
-				oProcessor = new RuleEngine_3PlayersBoard(); 
+				oProcessor = new ExtendedRuleEngine(new ExtendedRuleProcessor()); 
 			}
 				break;
 			case RULEENGINE_DEFAULT:
 			default:
 			{
-				oProcessor = new DefaultRuleEngine(); 
+				oProcessor = new ExtendedRuleEngine(new ExtendedRuleProcessor()); 
 			}
 				break;
 		}

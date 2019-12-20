@@ -1,4 +1,4 @@
-<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700" RuleEngine="RULEENGINE_3PLAYER">
+<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700" RuleEngine="RULEENGINE_DEFAULT">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />
@@ -3713,73 +3713,73 @@
     </Rule>
   </Rules>
   <Pieces>
-    <Piece Name="KingWhite" Image="King-W.png">
+    <Piece Name="KingWhite" Image="King-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Edgewise_1</Rule>
         <Rule>Move_Diagonally_1</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KingBlack" Image="King-B.png">
+    <Piece Name="KingBlack" Image="King-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Edgewise_1</Rule>
         <Rule>Move_Diagonally_1</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KingRed" Image="King-R.png">
+    <Piece Name="KingRed" Image="King-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Edgewise_1</Rule>
         <Rule>Move_Diagonally_1</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="QueenWhite" Image="Queen-W.png">
+    <Piece Name="QueenWhite" Image="Queen-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="QueenBlack" Image="Queen-B.png">
+    <Piece Name="QueenBlack" Image="Queen-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="QueenRed" Image="Queen-R.png">
+    <Piece Name="QueenRed" Image="Queen-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="RookWhite" Image="Rook-W.png">
+    <Piece Name="RookWhite" Image="Rook-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="RookBlack" Image="Rook-B.png">
+    <Piece Name="RookBlack" Image="Rook-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="RookRed" Image="Rook-R.png">
+    <Piece Name="RookRed" Image="Rook-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="BishopWhite" Image="Bishop-W.png">
+    <Piece Name="BishopWhite" Image="Bishop-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="BishopBlack" Image="Bishop-B.png">
+    <Piece Name="BishopBlack" Image="Bishop-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="BishopRed" Image="Bishop-R.png">
+    <Piece Name="BishopRed" Image="Bishop-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KnightWhite" Image="Knight-W.png">
+    <Piece Name="KnightWhite" Image="Knight-W.png" Family="White">
       <AllowedMoves>
         <Rule>Knight_Move_1</Rule>
         <Rule>Knight_Move_2</Rule>
@@ -3787,7 +3787,7 @@
         <Rule>Knight_Move_4</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KnightBlack" Image="Knight-B.png">
+    <Piece Name="KnightBlack" Image="Knight-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Knight_Move_1</Rule>
         <Rule>Knight_Move_2</Rule>
@@ -3795,7 +3795,7 @@
         <Rule>Knight_Move_4</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KnightRed" Image="Knight-R.png">
+    <Piece Name="KnightRed" Image="Knight-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Knight_Move_1</Rule>
         <Rule>Knight_Move_2</Rule>
@@ -3803,19 +3803,19 @@
         <Rule>Knight_Move_4</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="PawnWhite" Image="Pawn-W.png">
+    <Piece Name="PawnWhite" Image="Pawn-W.png" Family="White">
       <AllowedMoves>
         <Rule>Pawn_Move</Rule>
         <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="PawnBlack" Image="Pawn-B.png">
+    <Piece Name="PawnBlack" Image="Pawn-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Pawn_Move</Rule>
         <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="PawnRed" Image="Pawn-R.png">
+    <Piece Name="PawnRed" Image="Pawn-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Pawn_Move</Rule>
         <Rule>Pawn_Capture</Rule>
@@ -3836,7 +3836,7 @@
         <Piece Name="PawnWhite" Position="a2" />
         <Piece Name="PawnWhite" Position="b2" />
         <Piece Name="PawnWhite" Position="c2" />
-        <Piece Name="PawnWhite" Position="d2" />
+        <Piece Name="PawnWhite" Position="d7" />
         <Piece Name="PawnWhite" Position="e2" />
         <Piece Name="PawnWhite" Position="f2" />
         <Piece Name="PawnWhite" Position="g2" />
@@ -3848,7 +3848,7 @@
     <Player Name="P2">
       <Pieces>
         <Piece Name="KingBlack" Position="i8" />
-        <Piece Name="QueenBlack" Position="d8" />
+        <!--Piece Name="QueenBlack" Position="d8" /-->
         <Piece Name="BishopBlack" Position="j8" />
         <Piece Name="BishopBlack" Position="c8" />
         <Piece Name="KnightBlack" Position="k8" />
@@ -3858,7 +3858,7 @@
         <Piece Name="PawnBlack" Position="a7" />
         <Piece Name="PawnBlack" Position="b7" />
         <Piece Name="PawnBlack" Position="c7" />
-        <Piece Name="PawnBlack" Position="d7" />
+        <!---Piece Name="PawnBlack" Position="d7" /-->
         <Piece Name="PawnBlack" Position="i7" />
         <Piece Name="PawnBlack" Position="j7" />
         <Piece Name="PawnBlack" Position="k7" />

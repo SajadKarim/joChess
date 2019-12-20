@@ -7,6 +7,7 @@ import org.javatuples.Pair;
 import jchess.common.IBoardAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
+import jchess.gui.IGUIHandle;
 
 /**
  * This interface provides abstraction to different RuleProcessors.
@@ -18,6 +19,8 @@ import jchess.common.IRuleAgent;
  */
 
 public interface IRuleEngine {
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition);
-	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule);
+	public void setGUIHandle(IGUIHandle oGUIHandle);
+	public void setRuleProcessor(IRuleProcessor oRuleProcessor);
+	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition);
+	public void tryExecuteRule(IBoardAgent oBoard, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule);
 }

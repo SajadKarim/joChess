@@ -1,6 +1,7 @@
 package jchess.gui.view.newgamewindow;
 
-import jchess.gui.view.IView;
+import jchess.common.gui.IPanelView;
+import jchess.common.gui.IView;
 
 /**
  * 
@@ -8,6 +9,6 @@ import jchess.gui.view.IView;
  * @since	7 Dec 2019
  */
 
-public interface IPlayerDetailsEntryView extends IView {
+public interface IPlayerDetailsEntryView extends IPanelView {
     public void setPlayersCount(int nPlayerCount);
 }

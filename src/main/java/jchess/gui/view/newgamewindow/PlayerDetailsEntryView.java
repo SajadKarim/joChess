@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-import jchess.gui.model.IModel;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 import jchess.gui.model.newgamewindow.INewGameModel;
 
 /**
@@ -72,7 +73,7 @@ public class PlayerDetailsEntryView extends JPanel implements IPlayerDetailsEntr
 	}
 
 	@Override
-	public void drawView() {
+	public void drawComponents() {
 		this.removeAll();
 		initComponenets();
 		this.revalidate();
@@ -80,7 +81,7 @@ public class PlayerDetailsEntryView extends JPanel implements IPlayerDetailsEntr
 	}
 
 	@Override
-	public void refreshView() {
+	public void refresh() {
 		this.repaint();
 	}
 

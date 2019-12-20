@@ -19,25 +19,29 @@ import jchess.common.IRule;
 public class PieceData implements IPieceData {
 	String m_stName;
 	String m_stImagePath;
+	String m_stFamily;
 	Map<String, IRule > m_mpRules;
 	
 	public PieceData() {
 		m_mpRules = new HashMap<String, IRule >();
 	}
 	
-	public PieceData(String stName, String stImagePath) {
+	public void init() {		
+	}
+	
+	public PieceData(String stName, String stImagePath, String stFamily) {
 		m_stName = stName;
-		m_stImagePath = stImagePath;		
+		m_stImagePath = stImagePath;
+		m_stFamily = stFamily;
 		m_mpRules = new HashMap<String, IRule >();
 	}
 	
-/*	public PieceData(PieceData oPiece) {
-		this.m_stName = oPiece.m_stName;
-		this.m_stImagePath = oPiece.m_stImagePath;
-		
-		this.m_mpRules = new HashMap<String, IRuleData>(oPiece.m_mpRules);
+	public PieceData(PieceData oPiece) {
+		m_stName = oPiece.m_stName;
+		m_stImagePath = oPiece.m_stImagePath;
+		m_stFamily = oPiece.m_stFamily;
+		m_mpRules = new HashMap<String, IRule>(oPiece.m_mpRules);
 	}
-*/
 	
 	// region: Implements IPiece
 	public String getName() {
@@ -69,4 +73,16 @@ public class PieceData implements IPieceData {
 		m_mpRules.put(oRule.getName(), oRule);
 	}
 	// endregion
+	
+	public void setFamily(String stFamily) {
+		m_stFamily = stFamily;
+	}
+
+	public String getFamily() {
+		return m_stFamily;
+	}
+	
+	public IPieceData clone() {
+		return new PieceData(this);
+	}
 }
