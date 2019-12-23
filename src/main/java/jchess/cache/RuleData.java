@@ -32,7 +32,7 @@ public class RuleData implements IRuleData {
 	private Manoeuvre m_enManoeuvreStratgy;
 	private int	m_nMaxRecurrenceAllowed;
 	private Map<String, IRule> m_mpRule;
-		
+	private String m_stCustomName;
 	public RuleData() {
 		m_mpRule = new HashMap<String, IRule>();
 	}
@@ -48,6 +48,7 @@ public class RuleData implements IRuleData {
 		m_nMaxRecurrenceAllowed = oRule.m_nMaxRecurrenceAllowed;
 		m_enManoeuvreStratgy = oRule.m_enManoeuvreStratgy;
 		m_mpRule = new HashMap<String, IRule>(oRule.m_mpRule);
+		m_stCustomName = oRule.m_stCustomName;
 	}
 	
 	// region: Implements IRule
@@ -133,4 +134,11 @@ public class RuleData implements IRuleData {
 		return new RuleData(this);
 	}
 
+	public String getCustomName() {
+		return m_stCustomName;
+	}
+	
+	public void setCustomName(String stName) {
+		m_stCustomName = stName;
+	}
 }

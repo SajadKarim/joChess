@@ -21,7 +21,8 @@ import javax.swing.JTextField;
 import com.google.inject.Inject;
 
 import jchess.Settings;
-import jchess.gui.model.IModel;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -57,7 +58,7 @@ public class NewLocalGameView extends JPanel implements ActionListener, INewLoca
         if( target == cmboxBoardTypes) {
         	String stSelectedItem = (String)cmboxBoardTypes.getSelectedItem();
         	m_oPlayerDetailsEntryView.setPlayersCount(m_oData.getPlayersAllowedInBoard(stSelectedItem));
-        	m_oPlayerDetailsEntryView.drawView();
+        	m_oPlayerDetailsEntryView.drawComponents();
         } else if (target == this.okButton) {
         	Component[] controls = ((PlayerDetailsEntryView) m_oPlayerDetailsEntryView).getComponents();
         	for( int i=0;i<controls.length; i++) {
@@ -131,12 +132,12 @@ public class NewLocalGameView extends JPanel implements ActionListener, INewLoca
 	}
 
 	@Override
-	public void drawView() {
+	public void drawComponents() {
 		this.repaint();
 	}
 
 	@Override
-	public void refreshView() {
+	public void refresh() {
 		this.repaint();
 	}
 

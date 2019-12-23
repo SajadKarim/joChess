@@ -1,6 +1,6 @@
 package jchess.gui.model.gamewindow;
 
-import jchess.gui.model.IModel;
+import jchess.common.gui.IModel;
 
 /**
  * 

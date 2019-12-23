@@ -10,7 +10,8 @@ import javax.swing.JPanel;
 
 import com.google.inject.Inject;
 
-import jchess.gui.model.IModel;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 import jchess.gui.model.gamewindow.IClockModel;
 
 /**
@@ -56,12 +57,12 @@ public class ClockView extends JPanel implements IClockView {
     }
 
 	@Override
-	public void drawView() {
+	public void drawComponents() {
 		draw(this.getParent().getGraphics());
 	}
 
 	@Override
-	public void refreshView() {
+	public void refresh() {
 		// TODO Auto-generated method stub
 		
 	}

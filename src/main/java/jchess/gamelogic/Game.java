@@ -9,6 +9,8 @@ import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.common.enumerator.RuleEngineType;
+import jchess.gui.IGUIHandle;
+import jchess.gui.IGUIManager;
 import jchess.ruleengine.IRuleEngine;
 import jchess.ruleengine.RuleEngineFactory;
 import jchess.util.ITimer;
@@ -35,10 +37,12 @@ public class Game implements IGame, ITimerListener{
 	private IGameState m_oGameState;
 	private IRuleEngine m_oRuleProcessor;
 	private final ArrayList<IGameListener> m_lstListener;
-
+	private IGUIManager m_oGUIManager;
+	
 	@Inject
-	public Game(ITimer oTimer){
+	public Game(ITimer oTimer, IGUIManager oGUIManager){
 		m_oTimer = oTimer;
+		m_oGUIManager = oGUIManager;
 		m_lstListener = new ArrayList<IGameListener>(); 
 	}
 	
@@ -47,7 +51,8 @@ public class Game implements IGame, ITimerListener{
 		m_oGameState = new GameState(m_oBoard.getAllPlayerAgents());
 
 		m_oRuleProcessor = RuleEngineFactory.getRuleEngine(RuleEngineType.convertStringToEnum(oBoard.getRuleEngineName()));
-
+		m_oRuleProcessor.setGUIHandle(m_oGUIManager.getGUIHandle());
+		
 		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());		
 		
 		m_oTimer.addListener(this);		
@@ -90,7 +95,7 @@ public class Game implements IGame, ITimerListener{
 		
 			Pair<IPositionAgent, IRuleAgent> oData =m_oGameState.doesPositionExistsInMoveCandidates(oPosition); 
 			if( oData != null) {
-				m_oRuleProcessor.tryMakeMove(m_oGameState.getActivePosition(), oData);
+				m_oRuleProcessor.tryExecuteRule(m_oBoard, m_oGameState.getActivePosition(), oData);
 				deselectedActivePosition();
 				m_oGameState.switchPlayTurn();
 				notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
@@ -124,7 +129,7 @@ public class Game implements IGame, ITimerListener{
 		
 		deselectedActivePosition();
 		
-		Map<String,Pair<IPositionAgent, IRuleAgent>> lstPosition = m_oRuleProcessor.tryFindPossibleCandidateMovePositions(m_oBoard, oPosition);
+		Map<String,Pair<IPositionAgent, IRuleAgent>> lstPosition = m_oRuleProcessor.tryEvaluateAllRules(m_oBoard, oPosition);
 		
 		for (Map.Entry<String,Pair<IPositionAgent, IRuleAgent>> entry : lstPosition.entrySet()) {
 			entry.getValue().getValue0().setMoveCandidacy(true);

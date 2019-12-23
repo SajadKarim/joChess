@@ -31,5 +31,5 @@ public interface IRule {
 	public Family getFamily();
 	public IRuleData getRuleData();
 	public List<IRule> getAllRules();
-
+	public String getCustomName();
 }

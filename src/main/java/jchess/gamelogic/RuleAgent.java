@@ -128,5 +128,9 @@ public class RuleAgent implements IRuleAgent {
 	public IRuleAgent clone() {
 		return new RuleAgent(this);
 	}
+	
+	public String getCustomName() {
+		return m_oRule.getCustomName();
+	}
 //endregion
 }

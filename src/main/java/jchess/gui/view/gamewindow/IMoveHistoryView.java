@@ -2,7 +2,8 @@ package jchess.gui.view.gamewindow;
 
 import javax.swing.JScrollPane;
 
-import jchess.gui.view.IView;
+import jchess.common.gui.IPanelView;
+import jchess.common.gui.IView;
 
 /**
  * 
@@ -10,6 +11,6 @@ import jchess.gui.view.IView;
  * @since	7 Dec 2019
  */
 
-public interface IMoveHistoryView extends IView {
+public interface IMoveHistoryView extends IPanelView {
 	   public JScrollPane getScrollPane();	   
 }

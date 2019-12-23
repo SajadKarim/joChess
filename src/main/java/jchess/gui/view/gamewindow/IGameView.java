@@ -1,6 +1,7 @@
 package jchess.gui.view.gamewindow;
 
-import jchess.gui.view.IView;
+import jchess.common.gui.IPanelView;
+import jchess.common.gui.IView;
 
 /**
  * 
@@ -8,7 +9,7 @@ import jchess.gui.view.IView;
  * @since	7 Dec 2019
  */
 
-public interface IGameView extends IView {
+public interface IGameView extends IPanelView {
     public void repaintClockView();
     public void repaintBoardView();
     public void repaintPlayerView();

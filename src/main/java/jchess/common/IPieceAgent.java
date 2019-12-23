@@ -1,5 +1,6 @@
 package jchess.common;
 
+import java.awt.Image;
 import java.util.List;
 
 /**
@@ -14,6 +15,8 @@ import java.util.List;
 public interface IPieceAgent extends IPiece {
 	public List<IRuleAgent> getRules();
 	public IPlayerAgent getPlayer();
+	public void setPlayer(IPlayerAgent oPlayer);
 	public Boolean hasPieceAlreadyMadeMove();
 	public void recordPeiceFirstMove();
+	public Image getImage();
 }

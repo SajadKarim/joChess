@@ -22,21 +22,13 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
-import jchess.dimodule.NewGameWndModule;
 import jchess.IMain;
 import jchess.JChessAboutBox;
 import jchess.ThemeChooseWindow;
-import jchess.dimodule.GameWndModule;
 import jchess.gui.IGUIManager;
 import jchess.gui.model.newgamewindow.INewGameModel;
-import jchess.gui.presenter.gamewindow.GamePresenter;
-import jchess.gui.presenter.gamewindow.IGamePresenter;
-import jchess.gui.presenter.newgamewindow.INewGamePresenter;
-import jchess.gui.presenter.newgamewindow.NewGamePresenter;
-import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 import jchess.gui.view.newgamewindow.*;
@@ -52,7 +44,6 @@ import javax.swing.JFrame;
 import javax.swing.*;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.*;
 
 /**

@@ -141,15 +141,17 @@ public class BoardAgent implements IBoardAgent {
 	
     public void mapPieces() {
     	try {
-    	for(Map.Entry<String, IPlayerAgent> entry: getPlayers().entrySet()) {
-    	//Iterator<IPlayerAgent> it = this.getPlayers().iterator();
-    	//while( it.hasNext()){
-    		IPlayerAgent o = entry.getValue();// it.next();
-    		for (Map.Entry<String, String> entry2 : m_oBoard.getPlayerMapping(o.getName()).entrySet()) {
-    			IPieceAgent oo = new PieceAgent(m_oBoard.getPiece(entry2.getValue()).getPieceData(), o);
-    			((PositionAgent)getPosition(entry2.getKey())).setPiece(oo);
-    		}
-    	}    
+	    	for(Map.Entry<String, IPlayerAgent> itPlayers: getPlayers().entrySet()) {
+	    		IPlayerAgent oPlayer = itPlayers.getValue();
+	    		
+	    		for (Map.Entry<String, String> itPlayerPieceMapping : m_oBoard.getPlayerMapping(oPlayer.getName()).entrySet()) {
+	    			
+	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getPiece(itPlayerPieceMapping.getValue()).clone();
+	    			oPiece.setPlayer(oPlayer);
+	    			
+	    			getPositionAgent(itPlayerPieceMapping.getKey()).setPiece(oPiece);
+	    		}
+	    	}    
     	}catch(java.lang.Exception e) {
 			System.out.println(e);
     }}

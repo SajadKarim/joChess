@@ -10,7 +10,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 import jchess.Settings;
-import jchess.gui.model.IModel;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 
 /**
  * This class is responsible to draw Move History related controls on GUI.
@@ -165,13 +166,13 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
 	}
 
 	@Override
-	public void drawView() {
+	public void drawComponents() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void refreshView() {
+	public void refresh() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -187,7 +188,6 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
 		// TODO Auto-generated method stub
 		
 	}
-
 }
 /*
  * Overriding DefaultTableModel and  isCellEditable method

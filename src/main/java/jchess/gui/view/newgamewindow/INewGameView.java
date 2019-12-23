@@ -2,7 +2,8 @@ package jchess.gui.view.newgamewindow;
 
 import javax.swing.JDialog;
 
-import jchess.gui.view.IView;
+import jchess.common.gui.IPanelView;
+import jchess.common.gui.IView;
 
 /**
  * Interface for new game window.
@@ -11,7 +12,7 @@ import jchess.gui.view.IView;
  * @since	7 Dec 2019
  */
 
-public interface INewGameView extends IView {  
+public interface INewGameView extends IPanelView {  
 	public JDialog getJDialog();
 	public void addListener(INewGameListener oListener);
 }

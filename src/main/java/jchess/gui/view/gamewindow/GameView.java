@@ -15,10 +15,11 @@ import javax.swing.JPanel;
 
 import com.google.inject.Inject;
 
-import jchess.gui.model.IModel;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
+import jchess.common.gui.IViewClosedListener;
+import jchess.common.gui.IModel;
 
 /**
  * This class with the help of custom control (child view) draws Chessboard, Clock, etc.
@@ -183,15 +184,15 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     }
 
 	@Override
-	public void drawView() {
-		m_oBoardView.drawView();
-		m_oPlayerView.drawView();
-		m_oClockView.drawView();
+	public void drawComponents() {
+		m_oBoardView.drawComponents();
+		m_oPlayerView.drawComponents();
+		m_oClockView.drawComponents();
 	}
 
 	@Override
-	public void refreshView() {
-		drawView();
+	public void refresh() {
+		drawComponents();
 	}
 
 	@Override

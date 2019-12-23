@@ -2,7 +2,7 @@ package jchess.gui.model.gamewindow;
 
 import jchess.common.IBoardAgent;
 import jchess.common.IPlayer;
-import jchess.gui.model.IModel;
+import jchess.common.gui.IModel;
 
 /**
  * 
