@@ -8,9 +8,11 @@ import org.javatuples.Pair;
 
 import com.google.inject.Inject;
 
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
+import jchess.gui.model.gamewindow.IGameModel;
 
 /**
  * This class is container to hold current state of the Board.
@@ -22,13 +24,14 @@ import jchess.common.IRuleAgent;
 public class GameState implements IGameState {
 	private IPlayerAgent m_oActivePlayer;
 	private IPositionAgent m_oSelectedPiece;
-	private Map<String, Pair<IPositionAgent, IRuleAgent>> m_lstPossibleMovePositionsForSelectedPiece;
+	private Map<String, IMoveCandidacy> m_lstPossibleMovePositionsForSelectedPiece;
 	private Queue<IPlayerAgent> m_qPlayersInQueue;
 	
-	public GameState(Map<String, IPlayerAgent> lstPlayers) {
+	@Inject
+	public GameState(IGameModel oGameModel) {
 		m_qPlayersInQueue = new LinkedList<IPlayerAgent>();
 		
-		for (Map.Entry<String,IPlayerAgent> entry : lstPlayers.entrySet()) {
+		for (Map.Entry<String,IPlayerAgent> entry : oGameModel.getAllPlayerAgents().entrySet()) {
 			m_qPlayersInQueue.add(entry.getValue());
 		}
 		
@@ -60,17 +63,31 @@ public class GameState implements IGameState {
 		m_lstPossibleMovePositionsForSelectedPiece = null;
 	}
 
-	public Map<String, Pair<IPositionAgent, IRuleAgent>> getPossibleMovesForActivePosition() {
+	public Map<String, IMoveCandidacy> getPossibleMovesForActivePosition() {
 		return m_lstPossibleMovePositionsForSelectedPiece;
 	}
 
-	public void setPossibleMovesForActivePosition(Map<String, Pair<IPositionAgent, IRuleAgent>> lstPositions) {
+	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidacy> lstPositions) {
 		m_lstPossibleMovePositionsForSelectedPiece = lstPositions;
 	}
 
-	public Pair<IPositionAgent, IRuleAgent> doesPositionExistsInMoveCandidates(IPositionAgent oPosition) {
+	public IMoveCandidacy doesPositionExistsInMoveCandidates(IPositionAgent oPosition) {
 		if( m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
 		return null;
+	}
+	
+	public Boolean isThisActivePlayer(String stPlayerName) {
+		return m_oActivePlayer.getName().equals(stPlayerName);
+	}
+	
+	public Boolean isThisActivePosition(String stPositionName) {
+		return m_oSelectedPiece.getName().equals(stPositionName);
+	}
+	
+	public void makeLastPlayerAsCurrentPlayer(IPlayerAgent oPlayer) {
+		while( !m_qPlayersInQueue.peek().equals(oPlayer)) {
+			switchPlayTurn();
+		}
 	}
 }

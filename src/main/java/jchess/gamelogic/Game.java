@@ -5,12 +5,15 @@ import org.javatuples.Pair;
 import com.google.inject.Inject;
 
 import jchess.common.IBoardAgent;
+import jchess.common.IMove;
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.common.enumerator.RuleEngineType;
 import jchess.gui.IGUIHandle;
 import jchess.gui.IGUIManager;
+import jchess.gui.model.gamewindow.IGameModel;
 import jchess.ruleengine.IRuleEngine;
 import jchess.ruleengine.RuleEngineFactory;
 import jchess.util.ITimer;
@@ -33,26 +36,26 @@ import java.util.Map;
 
 public class Game implements IGame, ITimerListener{
 	private ITimer m_oTimer;
-	private IBoardAgent m_oBoard;
+	private IGameModel m_oGameModel;
 	private IGameState m_oGameState;
 	private IRuleEngine m_oRuleProcessor;
-	private final ArrayList<IGameListener> m_lstListener;
-	private IGUIManager m_oGUIManager;
+	private ArrayList<IGameListener> m_lstListener;
+	private IGUIHandle m_oGUIHandle;
 	
 	@Inject
-	public Game(ITimer oTimer, IGUIManager oGUIManager){
+	public Game(IGameState oGameState, IGameModel oGameModel, ITimer oTimer, IGUIHandle oGUIHandle){
 		m_oTimer = oTimer;
-		m_oGUIManager = oGUIManager;
+		m_oGUIHandle = oGUIHandle;
 		m_lstListener = new ArrayList<IGameListener>(); 
+		
+		m_oGameState = oGameState;
+		m_oGameModel = oGameModel;
+
+		m_oRuleProcessor = RuleEngineFactory.getRuleEngine(RuleEngineType.convertStringToEnum(m_oGameModel.getRuleEngineName()));
+		m_oRuleProcessor.setGUIHandle(m_oGUIHandle);
 	}
 	
-	public void init(IBoardAgent oBoard) {
-		m_oBoard = oBoard;
-		m_oGameState = new GameState(m_oBoard.getAllPlayerAgents());
-
-		m_oRuleProcessor = RuleEngineFactory.getRuleEngine(RuleEngineType.convertStringToEnum(oBoard.getRuleEngineName()));
-		m_oRuleProcessor.setGUIHandle(m_oGUIManager.getGUIHandle());
-		
+	public void init() {		
 		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());		
 		
 		m_oTimer.addListener(this);		
@@ -78,37 +81,45 @@ public class Game implements IGame, ITimerListener{
 
 		
 		if( m_oGameState.getActivePosition() == null) {
-			if( m_oGameState.getActivePlayer().getName().equals(oPosition.getPiece().getPlayer().getName())) {
+			if( m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				trySelectPossibleMoveCandidates(oPosition);
 				return;
 			}
 		} else {	
-			if( m_oGameState.getActivePosition() == oPosition) {
+			if( m_oGameState.isThisActivePosition(oPosition.getName())) {
 				deselectedActivePosition();
 				return;
 			}
 
-			if( oPosition.getPiece() != null && m_oGameState.getActivePlayer().getName().equals(oPosition.getPiece().getPlayer().getName())) {
+			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				trySelectPossibleMoveCandidates(oPosition);
 				return;
 			}
 		
-			Pair<IPositionAgent, IRuleAgent> oData =m_oGameState.doesPositionExistsInMoveCandidates(oPosition); 
-			if( oData != null) {
-				m_oRuleProcessor.tryExecuteRule(m_oBoard, m_oGameState.getActivePosition(), oData);
-				deselectedActivePosition();
-				m_oGameState.switchPlayTurn();
-				notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+			IMoveCandidacy oMoveCandidate =m_oGameState.doesPositionExistsInMoveCandidates(oPosition); 
+			if( oMoveCandidate != null) {
+				oMoveCandidate.setSourcePosition(m_oGameState.getActivePosition());
+				tryExecuteRule(oMoveCandidate);
 				return;
-			}
+			} 
+			
+			deselectedActivePosition();
 		}		
 	}
 		
+	public void tryExecuteRule(IMoveCandidacy oMoveCandidate) {
+		IMove oMove = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
+		deselectedActivePosition();
+		m_oGameState.switchPlayTurn();
+		notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oMove);
+		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+	}
+	
 	public void deselectedActivePosition() {
 		if( m_oGameState.getPossibleMovesForActivePosition() != null) {
 
-			for (Map.Entry<String,Pair<IPositionAgent, IRuleAgent>> entry : m_oGameState.getPossibleMovesForActivePosition().entrySet()) {
-				entry.getValue().getValue0().setMoveCandidacy(false);
+			for (Map.Entry<String, IMoveCandidacy> entry : m_oGameState.getPossibleMovesForActivePosition().entrySet()) {
+				entry.getValue().getCandidatePosition().setMoveCandidacy(false);
 	    	}		
 		}
 
@@ -129,16 +140,16 @@ public class Game implements IGame, ITimerListener{
 		
 		deselectedActivePosition();
 		
-		Map<String,Pair<IPositionAgent, IRuleAgent>> lstPosition = m_oRuleProcessor.tryEvaluateAllRules(m_oBoard, oPosition);
+		Map<String, IMoveCandidacy> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPosition);
 		
-		for (Map.Entry<String,Pair<IPositionAgent, IRuleAgent>> entry : lstPosition.entrySet()) {
-			entry.getValue().getValue0().setMoveCandidacy(true);
+		for (Map.Entry<String, IMoveCandidacy> itCandidateMovePosition : mpCandidateMovePosition.entrySet()) {
+			itCandidateMovePosition.getValue().getCandidatePosition().setMoveCandidacy(true);
     	}
 
     	oPosition.setSelectState(true);
     	
     	m_oGameState.setActivePosition(oPosition);
-    	m_oGameState.setPossibleMovesForActivePosition( lstPosition);
+    	m_oGameState.setPossibleMovesForActivePosition( mpCandidateMovePosition);
 	}
 	
 	public void addListener(final IGameListener oListener) {
@@ -161,5 +172,30 @@ public class Game implements IGame, ITimerListener{
         for (final IGameListener oListener : m_lstListener) {
             oListener.onCurrentPlayerChanged(oPlayer);
         }	
+	}
+
+	public void notifyListenersOnMoveMadeByPlayer(IPlayerAgent oPlayer, IMove oMove) {		
+        for (final IGameListener oListener : m_lstListener) {
+            oListener.onMoveMadeByPlayer(oPlayer, oMove);
+        }	
+	}
+
+	public void tryUndoMove(IPlayerAgent oPlayer) {
+		deselectedActivePosition();
+		while( !m_oGameState.getActivePlayer().equals(oPlayer)) {
+			m_oGameState.switchPlayTurn();
+		}			
+		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+	}
+
+	public void tryRedoMove(IPlayerAgent oPlayer) {
+		deselectedActivePosition();
+		while( !m_oGameState.getActivePlayer().equals(oPlayer)) {
+			m_oGameState.switchPlayTurn();
+		}
+			
+		m_oGameState.switchPlayTurn();
+
+		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
 	}
 }

@@ -22,4 +22,5 @@ public interface IPosition {
 	public IPositionData getPosition();
 	public IPath getPath(String stName);
 	public Map<String, IPath> getAllPaths();
+	public IPosition clone();
 }

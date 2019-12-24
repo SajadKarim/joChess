@@ -25,6 +25,9 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import jchess.util.GUI;
+
 import javax.swing.event.ListSelectionEvent;
 import java.io.File;
 import java.util.Properties;

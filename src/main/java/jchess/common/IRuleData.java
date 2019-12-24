@@ -24,6 +24,6 @@ public interface IRuleData extends IRule {
 	public void setRank(Rank enRank);
 	public List<IRule> getAllRules();
 	public void addRule(IRule oRule);
-	public IRuleData clone();	
 	public void setCustomName(String stName);
+	public void setLifespan(int nLifespan);
 }

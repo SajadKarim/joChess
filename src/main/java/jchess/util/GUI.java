@@ -18,18 +18,17 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess;
+package jchess.util;
 
 import java.awt.*;
 import java.net.*;
+import java.nio.file.Paths;
 import java.io.*;
-import java.io.InputStreamReader;
-import javax.swing.*;
-import javax.swing.JPanel;
-import java.io.IOException;
+
+import jchess.Main;
+
 import java.util.Properties;
 import java.io.FileOutputStream;
-import java.util.logging.Logger;
 
 /** Class representing the game interface which is seen by a player and
  * where are lockated available for player opptions, current games and where
@@ -38,10 +37,6 @@ import java.util.logging.Logger;
 public class GUI
 {
     static final public Properties configFile = GUI.getConfigFile();
-
-    public GUI()
-    {
-    }/*--endOf-GUI--*/
 
     /*Method load image by a given name with extension
      * @name     : string of image to load for ex. "chessboard.jpg"
@@ -74,12 +69,12 @@ public class GUI
     }/*--endOf-loadImage--*/
 
 
-    static boolean themeIsValid(String name)
+    public static boolean themeIsValid(String name)
     {
         return true;
     }
 
-    static String getJarPath()
+    public static String getJarPath()
     {
         String path = GUI.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar", "");
@@ -92,37 +87,20 @@ public class GUI
         return path;
     }
 
-    static Properties getConfigFile()
-    {
-        Properties defConfFile = new Properties();
-        Properties confFile = new Properties();
-        File outFile = new File(GUI.getJarPath() + File.separator+"jchess"+File.separator + "config.txt");
-        try
-        {
-            defConfFile.load(GUI.class.getResourceAsStream("config.txt"));
+    public static Properties getConfigFile() {
+        Properties configFile= new Properties();
+        File fsConfigFile = new File(GUI.getJarPath() + File.separator+"jchess"+File.separator + "config.txt");
+
+        try {
+        	if (!fsConfigFile.exists()) {
+            	configFile.store(new FileOutputStream(fsConfigFile), null);
+        	}
+
+        	configFile.load(new FileInputStream(fsConfigFile.getPath()));
         }
-        catch (java.io.IOException exc)
-        {
-            System.out.println("some error loading image! what goes: " + exc);
-            exc.printStackTrace();
+        catch (java.io.IOException exc) {
         }
-        if (!outFile.exists())
-        {
-            try
-            {
-                defConfFile.store(new FileOutputStream(outFile), null);
-            }
-            catch (java.io.IOException exc)
-            {
-            }
-        }
-        //try
-        //{   
-        //    confFile.load(new FileInputStream("config.txt"));
-       // }
-        //catch (java.io.IOException exc)
-        //{
-        //}
-        return defConfFile;
+
+        return configFile;
     }
 }

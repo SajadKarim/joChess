@@ -16,7 +16,7 @@ import jchess.common.IBoardAgent;
 
 public interface ICacheManager {
 	public Boolean init();
-    public IBoardAgent getBoard(String stName);
-    public void loadBoardFromFile(String stName, String stFilePath);
+    public IBoardAgent getBoard(String stGameId);
+    public void loadBoardFromFile(String stGameId, String stBoardName);
     public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard();
 }

@@ -10,7 +10,10 @@ import jchess.IMain;
 import jchess.Main;
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
+import jchess.gamelogic.GameState;
+import jchess.gamelogic.IGameState;
 import jchess.gui.GUIManager;
+import jchess.gui.IGUIHandle;
 import jchess.gui.IGUIManager;
 import jchess.gui.presenter.mainwindow.IMainPresenter;
 import jchess.gui.presenter.mainwindow.MainPresenter;
@@ -27,13 +30,7 @@ import jchess.util.IAppLogger;
  * @since	7 Dec 2019
  */
 
-public class GlobalModule extends AbstractModule {
-	/*private IMain m_oApplication;
-	
-	public GlobalModule(IMain oApplication) {
-		m_oApplication = oApplication;
-	}*/
-	
+public class GlobalModule extends AbstractModule {	
 	@Override 
 	protected void configure() {
 		bind(IDIManager.class).to(DIManager.class).in(Singleton.class);
@@ -42,34 +39,11 @@ public class GlobalModule extends AbstractModule {
 		bind(IGUIManager.class).to(GUIManager.class).in(Singleton.class);
 		
 		bind(IMainPresenter.class).to(MainPresenter.class).in(Singleton.class);
-		bind(IJChessView.class).to(JChessView.class).in(Singleton.class);
+		bind(IJChessView.class).to(JChessView.class).in(Singleton.class);		
 	}
 	
 	@Provides @Singleton
 	IMain provideApplication() {
 		return Application.getInstance(Main.class);
-	}
-	
-	/*@Provides @Singleton
-	IDIManager provideDIManager() {
-		IDIManager oDIManager = new DIManager();
-		return oDIManager;
-	}*/
-
-	/*@Provides @Singleton
-	ICacheManager provideCacheManager() {
-		ICacheManager oCacheManager = new CacheManager();
-		return oCacheManager;
-	}*/
-
-	/*@Provides @Singleton
-	IAppLogger provideAppLogger() {
-		IAppLogger oLogger = new AppLogger();
-		return oLogger;
-	}*/
-
-	/*@Provides @Singleton
-	IGUIManager provideGUIManager(IMain oApplication, IDIManager oDIManager, ICacheManager oCacheManager, IAppLogger oAppLogger) {
-		return new GUIManager(oApplication, oDIManager, oCacheManager, oAppLogger);
-	}*/
+	}	
 }

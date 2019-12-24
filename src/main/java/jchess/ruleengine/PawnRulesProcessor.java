@@ -7,6 +7,8 @@ import java.util.Queue;
 import org.javatuples.Pair;
 
 import jchess.common.IBoardAgent;
+import jchess.common.IMove;
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
@@ -19,6 +21,8 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 import jchess.common.gui.IPresenter;
+import jchess.gamelogic.Move;
+import jchess.gamelogic.MoveCandidacy;
 import jchess.gui.IGUIHandle;
 import jchess.ruleengine.gui.IPawnPromotionDialogView;
 import jchess.ruleengine.gui.IPawnPromotionModel;
@@ -27,12 +31,12 @@ import jchess.ruleengine.gui.PawnPromotionModel;
 import jchess.ruleengine.gui.PawnPromotionPresenter;
 
 public class PawnRulesProcessor {
-	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
+	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {
 		tryPawnPromotionRuleForEdge(oBoard, oSelectedPosition, mpCandidateMovePositions);
 		tryPawnPromotionRuleForVertex(oBoard, oSelectedPosition, mpCandidateMovePositions);
 	}
 
-	static void tryPawnPromotionRuleForEdge(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
+	static void tryPawnPromotionRuleForEdge(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {
 		IPieceAgent oPiece = oSelectedPosition.getPiece();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 
@@ -47,14 +51,14 @@ public class PawnRulesProcessor {
 			if( mpNextPosition.size() == 0) {
 				IRuleAgent oRule = (IRuleAgent)oBoard.createRule();
 	        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
-	        	oRule.getRuleData().setCustomName("PAWN_MOVE_PROMOTION");
+	        	oRule.getRuleData().setCustomName("MOVE_AND_CAPTURE[PAWN_PROMOTION]");
 	        	    		
-	        	mpCandidateMovePositions.put(it.getValue().getName(), new Pair<IPositionAgent, IRuleAgent>(it.getValue(), oRule));
+	        	mpCandidateMovePositions.put(it.getValue().getName(), new MoveCandidacy(oSelectedPosition, it.getValue(), oRule));
 			}
 		}
 	}
 
-	static void tryPawnPromotionRuleForVertex(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
+	static void tryPawnPromotionRuleForVertex(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {
 		IPieceAgent oPiece = oSelectedPosition.getPiece();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 
@@ -65,62 +69,49 @@ public class PawnRulesProcessor {
 			if( mpNextPosition.size() == 0) {
 				IRuleAgent oRule = (IRuleAgent)oBoard.createRule();
 	        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
-	        	oRule.getRuleData().setCustomName("PAWN_CAPTURE_PROMOTION");
+	        	oRule.getRuleData().setCustomName("MOVE_AND_CAPTURE[PAWN_PROMOTION]");
 	        	    		
-	        	mpCandidateMovePositions.put(it.getValue().getName(), new Pair<IPositionAgent, IRuleAgent>(it.getValue(), oRule));
+	        	mpCandidateMovePositions.put(it.getValue().getName(), new MoveCandidacy(oSelectedPosition, it.getValue(), oRule));
 			}
 		}
 	}
 
-	public static void tryExecutePawnPromotionRule(IBoardAgent oBoard, IGUIHandle oGUIHandle, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> prPositionAndRule) {
-		switch( prPositionAndRule.getValue1().getCustomName()) {
-		case "PAWN_MOVE_PROMOTION":{
-			PawnRulesProcessor.tryExecutePawnPromotionRuleForEdge(oBoard, oGUIHandle, oSourcePosition, prPositionAndRule);
-		}
-			break;
-		case "PAWN_CAPTURE_PROMOTION":{
-			PawnRulesProcessor.tryExecutePawnPromotionRuleForVertex(oBoard, oGUIHandle, oSourcePosition, prPositionAndRule);
-		}
-			break;
-		default:
-			break;
-		}
-	}
+	public static IMove tryExecutePawnPromotionRule(IBoardAgent oBoard, IGUIHandle oGUIHandle, IMoveCandidacy oMoveCandidate) {
+		IMove oMove = new Move(oMoveCandidate);
+		
+		IPieceAgent oSourcePiecePriorMove = oMoveCandidate.getSourcePosition().getPiece();
+		IPieceAgent oDestinationPiecePriorMove = oMoveCandidate.getCandidatePosition().getPiece();
 
-	static void tryExecutePawnPromotionRuleForEdge(IBoardAgent oBoard, IGUIHandle oGUIHandle, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> prPositionAndRule) {
-		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllPieceAgents(), oSourcePosition.getPiece());
+		IPlayerAgent oPlayer = oSourcePiecePriorMove.getPlayer();
+		
+		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllPieceAgents(), oSourcePiecePriorMove);
 		IPawnPromotionDialogView oView = new PawnPromotionDialogView(oGUIHandle.getGUIMainFrame(), oData.getViewData());
 		IPresenter oPresenter = new PawnPromotionPresenter(oView, oData, null);		
 		oGUIHandle.showDialog(oPresenter);
 		
 		if( oData.getSelectedPiece() == null)
-			return;
+			return oMove;
 		
-		IPieceAgent oPiece = (IPieceAgent)oData.getSelectedPiece().clone();
-		oPiece.setPlayer(oSourcePosition.getPiece().getPlayer()); 
+		IPieceAgent oSourcePieceAfterMove = (IPieceAgent)oData.getSelectedPiece().clone();
+		oSourcePieceAfterMove.setPlayer(oPlayer); 
 		
-		oSourcePosition.setPiece(null);
-		prPositionAndRule.getValue0().setPiece(oPiece);
+		oMoveCandidate.getSourcePosition().setPiece(null);
+		oMoveCandidate.getCandidatePosition().setPiece(oSourcePieceAfterMove);
+		
+		oSourcePieceAfterMove.markRun();
+		
+		oMove.setMoveSuccessState(true);
+		oMove.addPriorMoveEntry(oMoveCandidate.getSourcePosition().getName(), oSourcePiecePriorMove);
+		oMove.addPriorMoveEntry(oMoveCandidate.getCandidatePosition().getName(), oDestinationPiecePriorMove);
+		oMove.addPostMoveEntry(oMoveCandidate.getSourcePosition().getName(), null);
+		oMove.addPostMoveEntry(oMoveCandidate.getCandidatePosition().getName(), oSourcePieceAfterMove);
+		oMove.setPlayer(oPlayer);
+
+		return oMove;
 	}	
 
-	static void tryExecutePawnPromotionRuleForVertex(IBoardAgent oBoard, IGUIHandle oGUIHandle, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> prPositionAndRule) {
-		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllPieceAgents(), oSourcePosition.getPiece());
-		IPawnPromotionDialogView oView = new PawnPromotionDialogView(oGUIHandle.getGUIMainFrame(), oData.getViewData());
-		IPresenter oPresenter = new PawnPromotionPresenter(oView, oData, null);		
-		oGUIHandle.showDialog(oPresenter);
-		
-		if( oData.getSelectedPiece() == null)
-			return;
-		
-		IPieceAgent oPiece = (IPieceAgent)oData.getSelectedPiece().clone();
-		oPiece.setPlayer(oSourcePosition.getPiece().getPlayer()); 
-		
-		oSourcePosition.setPiece(null);
-		prPositionAndRule.getValue0().setPiece(oPiece);
-	}	
-
-	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
-		if( oPosition.getPiece().hasPieceAlreadyMadeMove())
+	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {		
+		if( oSelectedPosition.getPiece().getRuns() > 0)
 			return;
 		
 		IRule oRule = oBoard.createRule();		
@@ -149,19 +140,28 @@ public class PawnRulesProcessor {
 		((IRuleAgent)oRule).reset();
 		
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
-		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPosition, null));
-		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPosition.getPiece().getPlayer(), oPosition.getPiece(), qData , mpCandidateMovePositions);
-	}
+		qData.add(new RuleProcessorData((IRuleAgent)oRule, oSelectedPosition, null));
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oSelectedPosition.getPiece().getPlayer(), qData , mpCandidateMovePositions);
+}
 	
-	public static void tryExecutePawnFirstMoveException(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
-		if( oDestinationPositionAndRule.getValue0().getPiece() == null) {
-			jchess.common.IPieceAgent oPiece = oSourcePosition.getPiece();
-			oDestinationPositionAndRule.getValue0().setPiece((jchess.gamelogic.PieceAgent)oPiece);
-			oSourcePosition.setPiece(null);
+	public static IMove tryExecutePawnFirstMoveException(IMoveCandidacy oMoveCandidate) {
+		IMove oMove = new Move(oMoveCandidate);
+		
+		if( oMoveCandidate.getCandidatePosition().getPiece() == null) {
+			IPieceAgent oPiece = oMoveCandidate.getSourcePosition().getPiece();
+			oMoveCandidate.getCandidatePosition().setPiece((jchess.gamelogic.PieceAgent)oPiece);
+			oMoveCandidate.getSourcePosition().setPiece(null);
+
+			oPiece.markRun();
+			
+			oMove.setMoveSuccessState(true);
+			oMove.addPriorMoveEntry(oMoveCandidate.getSourcePosition().getName(), oPiece);
+			oMove.addPriorMoveEntry(oMoveCandidate.getCandidatePosition().getName(), null);
+			oMove.addPostMoveEntry(oMoveCandidate.getSourcePosition().getName(), null);
+			oMove.addPostMoveEntry(oMoveCandidate.getCandidatePosition().getName(), oPiece);
+			oMove.setPlayer(oPiece.getPlayer());
 		}
 		
-		if(!oDestinationPositionAndRule.getValue0().getPiece().hasPieceAlreadyMadeMove() ) { 
-			oDestinationPositionAndRule.getValue0().getPiece().recordPeiceFirstMove();
-		}
+		return oMove;
 	}
 }

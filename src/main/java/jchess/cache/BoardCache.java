@@ -12,16 +12,16 @@ import jchess.common.IBoardAgent;
 
 public class BoardCache
 {
-	private String m_stName;
+	private String m_stBoardName;
 	private IBoardAgent m_oBoard;
 	
-    public BoardCache(String stName, IBoardAgent oBoard) {
-    	m_stName = stName;
+    public BoardCache(String stBoardName, IBoardAgent oBoard) {
+    	m_stBoardName = stBoardName;
     	m_oBoard = oBoard;
     }
 
-    public String getName() {
-    	return m_stName;
+    public String getBoardName() {
+    	return m_stBoardName;
     }
     
     public IBoardAgent getBoard() {

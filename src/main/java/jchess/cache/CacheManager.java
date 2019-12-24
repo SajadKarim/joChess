@@ -1,5 +1,6 @@
 package jchess.cache;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,9 @@ import com.google.inject.Singleton;
 
 import jchess.common.IBoardAgent;
 import jchess.service.StorageType;
+import jchess.util.GUI;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 import jchess.service.StorageService;
 
 /**
@@ -22,24 +26,27 @@ import jchess.service.StorageService;
 
 @Singleton
 public class CacheManager implements ICacheManager{
-    private static String BOARDLAYOUTS_DIRECTORY = "D:\\git\\repositories\\joChess\\src\\main\\resources\\boardlayout\\"; 
-
-    //private static CacheManager m_oInstance = null; 
-
+    private static String BOARDLAYOUTS_DIRECTORY = GUI.getJarPath() + "boardlayout" + File.separator;
+    
     private Map<String, BoardCache> m_mpBoardCache;
     private Map<String, Pair<String, Integer>> m_mpPlayerAllowedInBoard;
     
+    private IAppLogger m_oLogger;
+    
     @Inject
-    public CacheManager() {
-    	System.out.println("Cache manager new instance.");
+    public CacheManager(IAppLogger oLogger) {
+    	m_oLogger = oLogger;
     	m_mpBoardCache = new HashMap<String, BoardCache>();
     	m_mpPlayerAllowedInBoard = new HashMap<String, Pair<String, Integer>>();
+    
+    	m_oLogger.writeLog(LogLevel.INFO, "Instantiating CacheManager.", "CacheManager", "CacheManager");
+
     	init();
     } 
   
-    public IBoardAgent getBoard(String stName) {
-    	if( m_mpBoardCache.containsKey(stName))
-    		return m_mpBoardCache.get(stName).getBoard();
+    public IBoardAgent getBoard(String stGameId) {
+    	if( m_mpBoardCache.containsKey(stGameId))
+    		return m_mpBoardCache.get(stGameId).getBoard();
     	
     	return null;
     }
@@ -54,11 +61,11 @@ public class CacheManager implements ICacheManager{
     	return false;
     }
     
-    public void loadBoardFromFile(String stName, String stFilePath) {
+    public void loadBoardFromFile(String stGameId, String stBoardName) {
     	StorageService oStorageService = StorageService.create(StorageType.FBDB);
-    	IBoardAgent oBoard = oStorageService.getBoardAgent(BOARDLAYOUTS_DIRECTORY + stFilePath);
+    	IBoardAgent oBoard = oStorageService.getBoardAgent(BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
     	
-    	m_mpBoardCache.put(stName, new BoardCache(stName, oBoard));
+    	m_mpBoardCache.put(stGameId, new BoardCache(stBoardName, oBoard));
     }
     
     public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(){

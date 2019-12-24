@@ -5,6 +5,8 @@ import java.util.Map;
 import org.javatuples.Pair;
 
 import jchess.common.IBoardAgent;
+import jchess.common.IMove;
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 
@@ -22,26 +24,18 @@ class RuleEngine_3PlayersBoard extends ExtendedRuleEngine {
 	}
 	
 	@Override
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition) {		
-		Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oPosition);
+	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition) {		
+		Map<String, IMoveCandidacy> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oPosition);
 		
 		tryMakePiecePeculiarMoves(oBoard, oPosition, mpCandidateMovePositions);
 		
 		return mpCandidateMovePositions;
 	}
 	@Override
-	public void tryExecuteRule(IBoardAgent oBoard, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
-		super.tryExecuteRule(oBoard, oSourcePosition, oDestinationPositionAndRule);
-		
-		if( oDestinationPositionAndRule.getValue0().getPiece() != null) {
-			if( oDestinationPositionAndRule.getValue0().getPiece().getName().startsWith("Pawn")) {
-				if(!oDestinationPositionAndRule.getValue0().getPiece().hasPieceAlreadyMadeMove() ) { 
-					oDestinationPositionAndRule.getValue0().getPiece().recordPeiceFirstMove();
-				}
-			}
-		}
+	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oDestinationPositionAndRule) {
+		return super.tryExecuteRule(oBoard, oDestinationPositionAndRule);
 	}
 	
-	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
+	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {
 	}
 }

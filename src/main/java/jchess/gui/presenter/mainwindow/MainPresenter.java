@@ -11,6 +11,7 @@ import jchess.IMain;
 import jchess.gui.IGUIManager;
 import jchess.gui.view.mainwindow.IJChessView;
 import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 @Singleton
 public class MainPresenter implements IMainPresenter{
@@ -37,6 +38,8 @@ public class MainPresenter implements IMainPresenter{
 	}
 	
 	public void addTab(Component oComponent, String stName) {
+     	m_oLogger.writeLog(LogLevel.INFO, "Adding a new game.", "addTab", "MainPresenter");
+
 		m_oJChessView.addTab(oComponent, stName);
 	}
 }

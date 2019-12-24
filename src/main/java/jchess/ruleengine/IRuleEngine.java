@@ -5,6 +5,8 @@ import java.util.Map;
 import org.javatuples.Pair;
 
 import jchess.common.IBoardAgent;
+import jchess.common.IMove;
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.gui.IGUIHandle;
@@ -21,6 +23,6 @@ import jchess.gui.IGUIHandle;
 public interface IRuleEngine {
 	public void setGUIHandle(IGUIHandle oGUIHandle);
 	public void setRuleProcessor(IRuleProcessor oRuleProcessor);
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition);
-	public void tryExecuteRule(IBoardAgent oBoard, IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule);
+	public Map<String,IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition);
+	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate);
 }

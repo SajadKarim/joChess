@@ -10,4 +10,5 @@ import jchess.common.gui.IModel;
 
 public interface IPlayerModel extends IModel{
 	public String getPlayerName();
+	public String getPlayerFirstName();
 }

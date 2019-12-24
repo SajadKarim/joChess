@@ -3,13 +3,13 @@ package jchess.gamelogic;
 import java.awt.Image;
 import java.util.List;
 
-import jchess.GUI;
 import jchess.cache.PieceData;
 import jchess.common.IPieceAgent;
 import jchess.common.IPieceData;
 import jchess.common.IPlayerAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
+import jchess.util.GUI;
 
 /**
  * This class is responsible to manage underlying "Piece" (only) related data.
@@ -23,16 +23,18 @@ public class PieceAgent implements IPieceAgent {
 	private IPieceData m_oPiece;
 	private IPlayerAgent m_oPlayer;
 	private Image m_oImage;
-	private Boolean m_bFirstMove = false;	// Temporary variable to try Pawn first move. Need to do it proper way through move history.
+	private int m_nRuns;
 	
 	public PieceAgent() {
+		m_nRuns = 0;
 		m_oPiece = new PieceData();
 	}
 	
 	public PieceAgent(PieceAgent oPiece) {
-		m_oPiece = new PieceData( (PieceData)oPiece.m_oPiece);
-		m_oPlayer = oPiece.m_oPlayer;
+		m_nRuns = oPiece.m_nRuns;
 		m_oImage = oPiece.m_oImage;
+		m_oPlayer = oPiece.m_oPlayer;
+		m_oPiece = new PieceData( (PieceData)oPiece.m_oPiece);
 	}
 
 	public void init(){
@@ -78,18 +80,19 @@ public class PieceAgent implements IPieceAgent {
 		return (List<IRuleAgent>)(Object)m_oPiece.getAllRules();
 	}
 	
-	public Boolean hasPieceAlreadyMadeMove() {
-		return m_bFirstMove;
+	public int getRuns() {
+		return m_nRuns;
 	}
 
-	public void recordPeiceFirstMove() {
-		m_bFirstMove = true;
+	public void markRun() {
+		m_nRuns++;
 	}
 	
 	public String getFamily() {
 		return m_oPiece.getFamily();
 	}
 	
+	@Override
 	public IPieceAgent clone() {
 		return new PieceAgent(this);
 	}

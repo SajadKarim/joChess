@@ -44,6 +44,13 @@ public class PositionAgent implements IPositionAgent {
 		m_oPosition = new PositionData();
 	}
 	
+	PositionAgent(PositionAgent oPosition) {
+		m_bSelected = oPosition.m_bSelected;
+		m_bMoveCandidacy = oPosition.m_bMoveCandidacy;	
+		m_oPosition = new PositionData((PositionData)oPosition.m_oPosition);
+		m_oPiece = new PieceAgent((PieceAgent)oPosition.m_oPiece);
+	}
+	
 	//region	
 	public int getFile() {
 		return m_oPosition.getFile();
@@ -265,4 +272,7 @@ public class PositionAgent implements IPositionAgent {
 		return true;
 	}
 
+	public IPosition clone() {
+		return new PositionAgent(this);
+	}
 }

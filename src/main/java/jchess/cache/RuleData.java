@@ -33,6 +33,8 @@ public class RuleData implements IRuleData {
 	private int	m_nMaxRecurrenceAllowed;
 	private Map<String, IRule> m_mpRule;
 	private String m_stCustomName;
+	private int m_nLifespan;
+	
 	public RuleData() {
 		m_mpRule = new HashMap<String, IRule>();
 	}
@@ -43,12 +45,19 @@ public class RuleData implements IRuleData {
 		m_enRank = oRule.m_enRank;
 		m_mpRule = oRule.m_mpRule;
 		m_enFamily = oRule.m_enFamily;
+		m_nLifespan = oRule.m_nLifespan;
 		m_enRuleType = oRule.m_enRuleType;
 		m_enDirection = oRule.m_enDirection;
-		m_nMaxRecurrenceAllowed = oRule.m_nMaxRecurrenceAllowed;
-		m_enManoeuvreStratgy = oRule.m_enManoeuvreStratgy;
-		m_mpRule = new HashMap<String, IRule>(oRule.m_mpRule);
 		m_stCustomName = oRule.m_stCustomName;
+		m_enManoeuvreStratgy = oRule.m_enManoeuvreStratgy;
+		m_nMaxRecurrenceAllowed = oRule.m_nMaxRecurrenceAllowed;
+
+		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
+		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
+		m_mpRule = new HashMap<String, IRule>();
+		for(Map.Entry<String, IRule> it : oRule.m_mpRule.entrySet()) {
+			m_mpRule.put( it.getKey(), it.getValue().clone());
+		}
 	}
 	
 	// region: Implements IRule
@@ -130,6 +139,7 @@ public class RuleData implements IRuleData {
 		m_mpRule.put(oRule.getName(), oRule);
 	}
 		
+	@Override
 	public IRuleData clone() {
 		return new RuleData(this);
 	}
@@ -140,5 +150,17 @@ public class RuleData implements IRuleData {
 	
 	public void setCustomName(String stName) {
 		m_stCustomName = stName;
+	}
+	
+	public int getLifespan() {
+		return m_nLifespan;
+	}
+	
+	public void setLifespan(int nLifespan) {
+		m_nLifespan = nLifespan;
+	}
+	
+	public void markUsage() {
+		m_nLifespan++;
 	}
 }
