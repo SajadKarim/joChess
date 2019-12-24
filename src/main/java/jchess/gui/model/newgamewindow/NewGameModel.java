@@ -28,7 +28,7 @@ public class NewGameModel implements INewGameModel {
 		m_mpPlayer = new HashMap<String, IPlayerAgent>();
 
 		for( Map.Entry<String, Pair<String, Integer>> entry : mpPlayersBoardMapping.entrySet()) {
-			for(int i=m_mpPlayer.size(); i< entry.getValue().getSize(); i++ ) {
+			for(int i=m_mpPlayer.size(); i< entry.getValue().getValue1(); i++ ) {
 				IPlayerAgent oPlayer = new PlayerAgent();
 				oPlayer.getPlayerData().setName("P"+(i+1));
 				m_mpPlayer.put(oPlayer.getName(), oPlayer);
@@ -73,9 +73,5 @@ public class NewGameModel implements INewGameModel {
 
 	public String getSelectedBoardName() {
 		return m_stBoardName;
-	}
-
-	public String getSelectedBoardFileName() {
-		return m_mpPlayersBoardMapping.get(m_stBoardName).getValue0();
 	}
 }

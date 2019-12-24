@@ -209,4 +209,24 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
             oListener.onPositionClicked(oPosition);
         }
     }
+	
+    public void addMove(String stMoveString) {
+    	m_oMoveHistoryView.addMove(stMoveString);
+    }
+    
+    public void removeMove(String stMoveString) {
+    	m_oMoveHistoryView.removeMove(stMoveString);
+    }
+
+    public void tryUndoMove() {
+        for (final IGameViewListener oListener : m_lstListener) {
+            oListener.onPlayerRequestForUndoMove();
+        }
+	}
+
+	public void tryRedoMove() {
+        for (final IGameViewListener oListener : m_lstListener) {
+            oListener.onPlayerRequestForRedoMove();
+        }
+	}
 }

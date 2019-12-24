@@ -1,5 +1,6 @@
 package jchess.gui;
 
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JFrame;
@@ -18,12 +19,13 @@ import jchess.gui.presenter.gamewindow.IGamePresenter;
 import jchess.gui.presenter.mainwindow.IMainPresenter;
 import jchess.gui.presenter.newgamewindow.INewGamePresenter;
 import jchess.gui.presenter.newgamewindow.NewGamePresenter;
+import jchess.gui.view.gamewindow.IGameView;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 /**
  * Implements IGUIManager.
- * Its main responsibility is to manage GUI related operationss.
+ * Its main responsibility is to manage GUI related operations.
  * 
  * @author	Sajad Karim
  * @since	14  Dec 2019
@@ -35,8 +37,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	private IMain m_oApplication;
 	private IDIManager m_oDIManager;
 	private ICacheManager m_oCacheManager;
-
 	private IMainPresenter m_oMainPresenter;
+	
+	private int m_nGameCounter;	//TODO: need to replace it with better logic.
 	
 	@Inject
     public GUIManager(IMain oApplication, IDIManager oDIManager, ICacheManager oCacheManager, IAppLogger oLogger, IMainPresenter oMainPresenter) {
@@ -45,15 +48,21 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	m_oDIManager = oDIManager;
     	m_oCacheManager = oCacheManager;
 		m_oMainPresenter = oMainPresenter;
+		
+		m_nGameCounter = 1;
+		
+     	m_oLogger.writeLog(LogLevel.INFO, "Instantiating GUIManager.", "GUIManager", "GUIManager");
 	}
 	
 	public void showMainWindow() {
-		m_oMainPresenter.init();
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Launching main window.", "showMainWindow", "GUIManager");
+
+     	m_oMainPresenter.init();
     	m_oApplication.showView(m_oMainPresenter.getView());
 	}
 	
 	public void showNewGameWindow() {
-    	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching NewGameWindow", "actionPerformed", "JChessView");
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching NewGameWindow.", "showNewGameWindow", "GUIManager");
 
     	Injector injector = m_oDIManager.createChildInjectorForNewGameModule();
     	        	
@@ -62,31 +71,39 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	oPresenter.init();
     	
     	m_oApplication.showDialog(oPresenter.getViewJDialog()); 
-
 	}
 	
-	public void showGameWindow(String stBoardName, String stBoardFilePath) {
-    	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching New game.", "launchNewGame", "JChessView");
+	public void showGameWindow(INewGameModel oData) {
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching New game.", "showGameWindow", "GUIManager");
 
-		Injector injector = m_oDIManager.createChildInjectorForGameModule(stBoardName, stBoardFilePath);
+    	String stGameId = "Game#" + m_nGameCounter;
+		Injector injector = m_oDIManager.createChildInjectorForGameModule(stGameId, oData.getSelectedBoardName());
 		
 		IGamePresenter oPresenter = injector.getInstance(GamePresenter.class);
 
-		oPresenter.init();		
+		oPresenter.updatePlayerNames(oData.getPlayers());
+		
+		oPresenter.init();
 		oPresenter.getViewComponent().setLocation(new Point(0, 0));
 		
-		m_oMainPresenter.addTab(oPresenter.getViewComponent(), stBoardName);
+		m_oMainPresenter.addTab(oPresenter.getViewComponent(), stGameId);
 		
 		oPresenter.showView();
+		
+		m_nGameCounter++;
 	}
 
 	@Override
 	public void onNewGameLaunchRequest(INewGameModel oData) {
-		showGameWindow( oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to launch a fresh game.", "onNewGameLaunchRequest", "GUIManager");
+
+    	showGameWindow( oData);
 	}
 	
 	public void showDialog(IPresenter oPresenter) {
-		oPresenter.init();
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Launching dialog window.", "showDialog", "GUIManager");
+
+    	oPresenter.init();
 		m_oApplication.showDialog(oPresenter.tryGetViewJDialog());
 	}
 	
@@ -96,5 +113,29 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	
 	public IGUIHandle getGUIHandle() {
 		return (IGUIHandle)((GUIManager)this);
+	}
+	
+	public void onPlayerRequestForUndoMove(Component oSelectedGame) {
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Undo the move.", "onPlayerRequestForUndoMove", "GUIManager");
+
+		if( oSelectedGame == null) {
+	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForUndoMove", "GUIManager");
+			return;
+		}
+		
+		IGameView oGameView = (IGameView)oSelectedGame;
+		oGameView.tryUndoMove();
+	}
+
+	public void onPlayerRequestForRedoMove(Component oSelectedGame) {
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Redo the move.", "onPlayerRequestForRedoMove", "GUIManager");
+
+		if( oSelectedGame == null) {
+	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForRedoMove", "GUIManager");
+			return;
+		}
+		
+		IGameView oGameView = (IGameView)oSelectedGame;
+		oGameView.tryRedoMove();		
 	}
 }

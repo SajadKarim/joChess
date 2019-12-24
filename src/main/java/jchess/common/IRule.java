@@ -32,4 +32,6 @@ public interface IRule {
 	public IRuleData getRuleData();
 	public List<IRule> getAllRules();
 	public String getCustomName();
+	public int getLifespan();
+	public IRule clone();
 }

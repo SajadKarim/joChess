@@ -16,7 +16,7 @@ public interface IPieceAgent extends IPiece {
 	public List<IRuleAgent> getRules();
 	public IPlayerAgent getPlayer();
 	public void setPlayer(IPlayerAgent oPlayer);
-	public Boolean hasPieceAlreadyMadeMove();
-	public void recordPeiceFirstMove();
+	public int getRuns();
+	public void markRun();
 	public Image getImage();
 }

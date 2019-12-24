@@ -3,6 +3,7 @@ package jchess.gamelogic;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,20 +28,30 @@ import jchess.common.enumerator.RuleType;
  */
 
 public class RuleAgent implements IRuleAgent {
+	private int m_nAge;
 	private IRuleData m_oRule;
 	private int m_nRepeatCount;
 	private Queue<IRuleAgent> m_qRules;
-
+	
 	RuleAgent() {
+		m_nAge = 0;
 		m_nRepeatCount = 0;
 		m_oRule = new RuleData();	
 		m_qRules = new LinkedList<IRuleAgent>();
 	}
 	
 	RuleAgent(RuleAgent oRuleAgent) {
-		m_oRule = oRuleAgent.m_oRule.clone();		
+		m_nAge = oRuleAgent.m_nAge;
 		m_nRepeatCount = oRuleAgent.m_nRepeatCount;
+		m_oRule = new RuleData( (RuleData)oRuleAgent.m_oRule);		
 		m_qRules = new LinkedList<IRuleAgent>(oRuleAgent.m_qRules);
+		
+		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
+		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
+		m_qRules = new LinkedList<IRuleAgent>();
+		for(IRuleAgent oRule: oRuleAgent.m_qRules) {
+			m_qRules.add(oRule.clone());
+		}
 	}
 
 	// region: Implements IRule
@@ -125,6 +136,7 @@ public class RuleAgent implements IRuleAgent {
     	}
 	}
 		
+	@Override
 	public IRuleAgent clone() {
 		return new RuleAgent(this);
 	}
@@ -133,4 +145,16 @@ public class RuleAgent implements IRuleAgent {
 		return m_oRule.getCustomName();
 	}
 //endregion
+
+	public int getLifespan() {
+		return m_oRule.getLifespan();
+	}
+	
+	public void markUsage() {
+		m_nAge++;
+	}
+	
+	public Boolean isAlive() {
+		return m_nAge < m_oRule.getLifespan();
+	}
 }

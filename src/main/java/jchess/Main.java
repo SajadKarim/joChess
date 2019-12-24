@@ -47,7 +47,7 @@ public class Main extends SingleFrameApplication implements IMain{
      */
     @Override 
     protected void startup() {
-     	m_oLogger.writeLog(LogLevel.INFO, "Launching main window.");
+     	m_oLogger.writeLog(LogLevel.INFO, "Launching main window.", "startup", "Main");
 
     	// Initializing and launching main window.
     	m_oGUIManager.showMainWindow();
@@ -83,12 +83,12 @@ public class Main extends SingleFrameApplication implements IMain{
     	IDIManager m_oDIManager = m_oGlobalModuleInjector.getInstance(DIManager.class);
     	m_oDIManager.setGlobalInjector(m_oGlobalModuleInjector);
     	
-    	m_oGUIManager = m_oGlobalModuleInjector.getInstance(GUIManager.class);    	
-
     	// Acquiring AppLogger.
     	m_oLogger = m_oGlobalModuleInjector.getInstance(AppLogger.class);    	
     	m_oLogger.writeLog(LogLevel.INFO, "Game startup.");
     	
+    	m_oGUIManager = m_oGlobalModuleInjector.getInstance(GUIManager.class);    	
+
     	// **IMPORTANT
     	// TODO: before launching main window, we need to call CacheManager and load cache with preliminary details about all the boards available.
     	

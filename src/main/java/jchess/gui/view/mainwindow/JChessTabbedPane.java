@@ -24,7 +24,6 @@ import javax.swing.*;
 
 import com.google.inject.Injector;
 
-import jchess.GUI;
 import jchess.IMain;
 import jchess.dimodule.GameWndModule;
 import jchess.dimodule.NewGameWndModule;
@@ -35,6 +34,7 @@ import jchess.gui.presenter.gamewindow.IGamePresenter;
 import jchess.gui.presenter.newgamewindow.INewGamePresenter;
 import jchess.gui.presenter.newgamewindow.NewGamePresenter;
 import jchess.gui.view.newgamewindow.INewGameListener;
+import jchess.util.GUI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -170,16 +170,7 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
     }
 
 	public void onNewGameLaunchRequest(INewGameModel oData) {
-		Injector injector = m_oGlobalModuleInjector.createChildInjector(
-				new GameWndModule(m_oGlobalModuleInjector, oData.getSelectedBoardName(), oData.getSelectedBoardFileName()));
-		IGamePresenter oPresenter = injector.getInstance(GamePresenter.class);
-
-		oPresenter.init();
-		
-		oPresenter.getViewComponent().setLocation(new Point(0, 0));
-		this.addTab(oData.getSelectedBoardName(), oPresenter.getViewComponent());
-		this.setSelectedComponent(oPresenter.getViewComponent());
-		oPresenter.showView();
+		m_oGUIManager.onNewGameLaunchRequest(oData);
 	}
 }
 

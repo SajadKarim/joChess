@@ -2,15 +2,12 @@ package jchess.gui.view.gamewindow;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
-import jchess.Settings;
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 
 /**
@@ -22,151 +19,42 @@ import jchess.common.gui.IModel;
 
 public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryView
 {
-    private ArrayList<String> move = new ArrayList<String>();
-    private int columnsNum = 3;
-    private int rowsNum = 0;
-    private String[] names = new String[]
-    {
-        Settings.lang("white"), Settings.lang("black")
-    };
-    private MyDefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private JScrollPane scrollPane;
     private JTable table;
-    private boolean enterBlack = false;
-    //private Game game;
-
-    enum castling
-    {
-        none, shortCastling, longCastling
-    }
 
     public MoveHistoryView()
     {
-        this.tableModel = new MyDefaultTableModel();
+        this.tableModel = new DefaultTableModel();
         this.table = new JTable(this.tableModel);
         this.scrollPane = new JScrollPane(this.table);
         this.scrollPane.setMaximumSize(new Dimension(100, 100));
         this.table.setMinimumSize(new Dimension(100, 100));
-       //this.game = game;
 
-        this.tableModel.addColumn("Moves History");
-        //this.tableModel.addColumn(this.names[1]);
+        this.tableModel.addColumn("Moves' History");
         this.addTableModelListener(null);
         this.tableModel.addTableModelListener(null);
         this.scrollPane.setAutoscrolls(true);
     }
 
-    public void draw()
-    {
-    }
-
-    @Override
-    public String getValueAt(int x, int y)
-    {
-        return this.move.get((y * 2) - 1 + (x - 1));
-    }
-
-    @Override
-    public int getRowCount()
-    {
-        return this.rowsNum;
-    }
-
-    @Override
-    public int getColumnCount()
-    {
-        return this.columnsNum;
-    }
-
-    protected void addRow()
-    {
-        this.tableModel.addRow(new String[2]);
-    }
-
-    protected void addCastling(String move)
-    {
-        this.move.remove(this.move.size() - 1);//remove last element (move of Rook)
-        if (!this.enterBlack)
-        {
-            this.tableModel.setValueAt(move, this.tableModel.getRowCount() - 1, 1);//replace last value
-        }
-        else
-        {
-            this.tableModel.setValueAt(move, this.tableModel.getRowCount() - 1, 0);//replace last value
-        }
-        this.move.add(move);//add new move (O-O or O-O-O)
-    }
-
-    @Override
-    public boolean isCellEditable(int a, int b)
-    {
-        return false;
-    }
-
-    /** Method of adding new moves to the table
-     * @param str String which in is saved player move
-     */
-    protected void addMove2Table(String str)
-    {
-        try
-        {
-            if (!this.enterBlack)
-            {
-                this.addRow();
-                this.rowsNum = this.tableModel.getRowCount() - 1;
-                this.tableModel.setValueAt(str, rowsNum, 0);
-            }
-            else
-            {
-                this.tableModel.setValueAt(str, rowsNum, 1);
-                this.rowsNum = this.tableModel.getRowCount() - 1;
-            }
-            this.enterBlack = !this.enterBlack;
-            this.table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));//scroll to down
-
-        }
-        catch (java.lang.ArrayIndexOutOfBoundsException exc)
-        {
-            if (this.rowsNum > 0)
-            {
-                this.rowsNum--;
-                addMove2Table(str);
-            }
-        }
-    }
-
     /** Method of adding new move
      * @param move String which in is capt player move
      */
-    public void addMove(String move)
+    public void addMove(String stMoveString)
     {
-       
-
+    	String[] oRow = {stMoveString};
+    	tableModel.addRow(oRow);
     }
 
-    public void clearMoveForwardStack()
+    public void removeMove(String stMoveString)
     {
-        //this.moveForwardStack.clear();
+    	String stValueToCompare = (String)tableModel.getValueAt(tableModel.getRowCount()- 1, 0);
+    	if( stValueToCompare.equals(stMoveString))
+    		tableModel.removeRow(tableModel.getRowCount()- 1);
     }
 
-    public JScrollPane getScrollPane()
-    {
-        return this.scrollPane;
-    }
-
-    public ArrayList<String> getMoves()
-    {
-        return this.move;
-    }
-
-	@Override
+    @Override
 	public void init() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void drawComponents() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -178,9 +66,9 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
 	}
 
 	@Override
-	public Component getViewComponent() {
+	public void drawComponents() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
@@ -188,23 +76,31 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
 		// TODO Auto-generated method stub
 		
 	}
-}
-/*
- * Overriding DefaultTableModel and  isCellEditable method
- * (history cannot be edited by player)
- */
 
-class MyDefaultTableModel extends DefaultTableModel
-{
+	@Override
+	public Component getViewComponent() {
+		return null;
+	}
 
-    MyDefaultTableModel()
-    {
-        super();
-    }
+	@Override
+	public int getRowCount() {
+		return tableModel.getRowCount();
+	}
 
-    @Override
-    public boolean isCellEditable(int a, int b)
-    {
-        return false;
-    }
+	@Override
+	public int getColumnCount() {
+		// TODO Auto-generated method stub
+		return tableModel.getColumnCount();
+	}
+
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+        return null;
+	}
+
+	@Override
+	public JScrollPane getScrollPane() {
+		return this.scrollPane;
+	}
+
 }

@@ -311,6 +311,14 @@ class BoardXMLDeserializer {
 				Rank enRank = StringToEnum.convertStringToRank( oRuleNode.getAttributes().getNamedItem("Rank").getNodeValue());
 				Family enFamily = StringToEnum.convertStringToFamily( oRuleNode.getAttributes().getNamedItem("Family").getNodeValue());
 				
+				int nLifespan = Integer.MAX_VALUE;
+				Node ndLifespan = oRuleNode.getAttributes().getNamedItem("Lifespan");
+				if( ndLifespan != null ) {
+					nLifespan = tryParseInt(ndLifespan.getNodeValue());
+					if( nLifespan == -1)
+						nLifespan = Integer.MAX_VALUE;
+				}
+
 				IRule oRule = oBoard.createRule();
 				
 				oRule.getRuleData().setName(stName);
@@ -321,6 +329,7 @@ class BoardXMLDeserializer {
 				oRule.getRuleData().setFamily(enFamily);
 				oRule.getRuleData().setFile(enFile);
 				oRule.getRuleData().setRank(enRank);
+				oRule.getRuleData().setLifespan(nLifespan);
 				
 				if( oParentRule != null)
 					oParentRule.getRuleData().addRule( oRule);

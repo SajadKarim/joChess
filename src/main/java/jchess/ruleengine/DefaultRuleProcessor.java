@@ -10,15 +10,17 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.javatuples.Pair;
 
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPathAgent;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
+import jchess.gamelogic.MoveCandidacy;
 
 public class DefaultRuleProcessor implements IRuleProcessor {
-	public void tryEvaluateAllRules(IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidatePositions) {
+	public void tryEvaluateAllRules(IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		IPieceAgent oPiece = oPosition.getPiece();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 		
@@ -38,10 +40,10 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     		qData.add(new RuleProcessorData(oRule, oPosition, null));
     	}
     	
-		tryFindPossibleCandidateMovePositions(oPlayer, oPiece, qData, mpCandidatePositions);
+		tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
     }
 
-	public void tryFindPossibleCandidateMovePositions(IPlayerAgent oPlayer, IPieceAgent oPiece, Queue<RuleProcessorData> qData, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidatePositions) {		
+	public void tryFindPossibleCandidateMovePositions(IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {		
 		RuleProcessorData oData = null;		
 		while( (oData = qData.poll()) != null) {
 			IRuleAgent oCurrentRule = oData.getRule();			
@@ -50,18 +52,18 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 			
 			switch( oCurrentRule.getManoeuvreStrategy()) {
 			case BLINKER:
-				tryFindCandidateMovesForBlinkerStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPlayer, oPiece, qData, mpCandidatePositions);
+				tryFindCandidateMovesForBlinkerStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPlayer, qData, mpCandidatePositions);
 				break;
 			case FILE_AND_RANK:
-				tryFindCandidateMovesForFileAndRankStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPlayer, oPiece, qData, mpCandidatePositions);
+				tryFindCandidateMovesForFileAndRankStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPlayer, qData, mpCandidatePositions);
 				break;
 			default:
 				break;
-			}
+			}			
 		}
 	}
 	
-	private void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, IPieceAgent oPiece, Queue<RuleProcessorData> qData, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidatePositions) {
+	private void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		List<IPositionAgent> lstPosition = null;
 		
 		if( oLastPosition == null) {
@@ -91,10 +93,10 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     		AtomicReference<Boolean> bIsValidMode = new AtomicReference<Boolean>(false);
     		AtomicReference<Boolean> bCanContinue = new AtomicReference<Boolean>(false);
     		
-    		checkForPositionMoveCandidacyAndContinuity(oPlayer, oPiece, oCurrentRule, oNextPosition, bIsValidMode, bCanContinue);
+    		checkForPositionMoveCandidacyAndContinuity(oPlayer, oCurrentRule, oNextPosition, bIsValidMode, bCanContinue);
     		
     		if( bIsValidMode.get())
-    			mpCandidatePositions.put(oNextPosition.getName(), new Pair<IPositionAgent, IRuleAgent>(oNextPosition, oCurrentRule));
+    			mpCandidatePositions.put(oNextPosition.getName(), new MoveCandidacy(null, oNextPosition, oCurrentRule));
     				
     		if( !bCanContinue.get())
     			continue;
@@ -107,7 +109,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		}
 	}
 	
-	private void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, IPieceAgent oPiece, Queue<RuleProcessorData> qData, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidatePositions) {
+	private void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		for( Map.Entry<String, IPathAgent> entry: oCurrentPosition.getAllPathAgents().entrySet()) {
 			IPathAgent oPath = entry.getValue();
         	if( oPath.getDirection() != oCurrentRule.getDirection())
@@ -123,10 +125,10 @@ public class DefaultRuleProcessor implements IRuleProcessor {
         		AtomicReference<Boolean> bIsValidMode = new AtomicReference<Boolean>(false);
         		AtomicReference<Boolean> bCanContinue = new AtomicReference<Boolean>(false);
         		
-        		checkForPositionMoveCandidacyAndContinuity(oPlayer, oPiece, oCurrentRule, oNextPosition, bIsValidMode, bCanContinue);
+        		checkForPositionMoveCandidacyAndContinuity(oPlayer, oCurrentRule, oNextPosition, bIsValidMode, bCanContinue);
         		
         		if( bIsValidMode.get())
-        			mpCandidatePositions.put(oNextPosition.getName(), new Pair<IPositionAgent, IRuleAgent>(oNextPosition, oCurrentRule));
+        			mpCandidatePositions.put(oNextPosition.getName(), new MoveCandidacy(null, oNextPosition, oCurrentRule));
         				
         		if( !bCanContinue.get())
         			continue;
@@ -140,7 +142,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		}
 	}
 
-	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IPieceAgent oPiece, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
+	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		bIsValidMode.set(false);
 		bCanContinue.set(false);
 		

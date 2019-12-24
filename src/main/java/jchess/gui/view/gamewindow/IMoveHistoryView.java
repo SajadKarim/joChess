@@ -12,5 +12,7 @@ import jchess.common.gui.IView;
  */
 
 public interface IMoveHistoryView extends IPanelView {
-	   public JScrollPane getScrollPane();	   
+	public JScrollPane getScrollPane();
+    public void addMove(String stMoveString);
+    public void removeMove(String stMoveString);
 }

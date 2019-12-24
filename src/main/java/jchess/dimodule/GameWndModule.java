@@ -7,7 +7,11 @@ import com.google.inject.Singleton;
 
 import jchess.cache.ICacheManager;
 import jchess.gamelogic.Game;
+import jchess.gamelogic.GameState;
 import jchess.gamelogic.IGame;
+import jchess.gamelogic.IGameState;
+import jchess.gui.GUIManager;
+import jchess.gui.IGUIHandle;
 import jchess.gui.model.gamewindow.GameModel;
 import jchess.gui.model.gamewindow.IBoardModel;
 import jchess.gui.model.gamewindow.IClockModel;
@@ -35,12 +39,12 @@ import jchess.gui.view.gamewindow.PlayerView;
 public class GameWndModule extends AbstractModule {
 	private Injector m_oGlobalInjector = null;
 	private String m_stBoardName;
-	private String m_stBoardFilePath;
+	private String m_stGameId;
 	
-	public GameWndModule(Injector oGlobalInjector, String stBoardName, String stBoardFilePath) {
+	public GameWndModule(Injector oGlobalInjector, String stGameId, String stBoardName) {
 		m_oGlobalInjector = oGlobalInjector;
 		m_stBoardName = stBoardName;
-		m_stBoardFilePath = stBoardFilePath;
+		m_stGameId = stGameId;
 	}
 	
 	@Override 
@@ -60,17 +64,20 @@ public class GameWndModule extends AbstractModule {
 		bind(IMoveHistoryView.class).to(MoveHistoryView.class);
 
 		bind(IGame.class).to(Game.class);
+		bind(IGameState.class).to(GameState.class);
 
 		bind(ITimer.class).to(jchess.util.Timer.class);
+
+		bind(IGUIHandle.class).to(GUIManager.class).in(Singleton.class);
 	}
 	
 	@Provides @Singleton
 	GameModel provideGameModel() {
 		ICacheManager oCacheManager = m_oGlobalInjector.getInstance(ICacheManager.class);
-		oCacheManager.loadBoardFromFile(m_stBoardName, m_stBoardFilePath);
+		oCacheManager.loadBoardFromFile(m_stGameId, m_stBoardName);
 		
 		GameModel oGameModel = new GameModel();
-		oGameModel.setBoard( oCacheManager.getBoard(m_stBoardName));
+		oGameModel.setBoard( oCacheManager.getBoard(m_stGameId));
 		return oGameModel;
 	}
 

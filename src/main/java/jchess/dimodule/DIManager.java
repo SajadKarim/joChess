@@ -21,7 +21,7 @@ public class DIManager implements IDIManager {
     	return m_oGlobalInjector.createChildInjector(new NewGameWndModule(m_oGlobalInjector));
 	}
 
-	public Injector createChildInjectorForGameModule(String stBoardName, String stBoardFilePath) {
-    	return m_oGlobalInjector.createChildInjector(new GameWndModule(m_oGlobalInjector, stBoardName, stBoardFilePath));
+	public Injector createChildInjectorForGameModule(String stGameId, String stBoardName) {
+    	return m_oGlobalInjector.createChildInjector(new GameWndModule(m_oGlobalInjector, stGameId, stBoardName));
 	}
 }

@@ -8,8 +8,8 @@ import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 
 public class ExtendedRuleProcessor extends DefaultRuleProcessor {
-	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IPieceAgent oPiece, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
-		super.checkForPositionMoveCandidacyAndContinuity(oPlayer, oPiece, oRule, oCandidacyPosition, bIsValidMode, bCanContinue);		
+	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
+		super.checkForPositionMoveCandidacyAndContinuity(oPlayer, oRule, oCandidacyPosition, bIsValidMode, bCanContinue);		
 
 		switch(oRule.getRuleType()) {
 			case CUSTOM: {

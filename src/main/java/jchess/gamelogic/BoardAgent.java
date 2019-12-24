@@ -3,7 +3,6 @@ package jchess.gamelogic;
 import java.awt.Image;
 import java.util.Map;
 
-import jchess.GUI;
 import jchess.cache.BoardData;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardData;
@@ -15,6 +14,7 @@ import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
+import jchess.util.GUI;
 
 /**
  * This class is responsible to manage underlying "Board" (only) related data.
@@ -146,10 +146,13 @@ public class BoardAgent implements IBoardAgent {
 	    		
 	    		for (Map.Entry<String, String> itPlayerPieceMapping : m_oBoard.getPlayerMapping(oPlayer.getName()).entrySet()) {
 	    			
-	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getPiece(itPlayerPieceMapping.getValue()).clone();
-	    			oPiece.setPlayer(oPlayer);
+	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getPiece(itPlayerPieceMapping.getValue());
 	    			
-	    			getPositionAgent(itPlayerPieceMapping.getKey()).setPiece(oPiece);
+	    			IPieceAgent oPieceCopy = (IPieceAgent) oPiece.clone();
+
+	    			oPieceCopy.setPlayer(oPlayer);
+	    			
+	    			getPositionAgent(itPlayerPieceMapping.getKey()).setPiece(oPieceCopy);
 	    		}
 	    	}    
     	}catch(java.lang.Exception e) {

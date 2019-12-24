@@ -51,7 +51,7 @@ import java.awt.event.*;
  */
 
 @Singleton
-public class JChessView extends FrameView implements IJChessView, ActionListener, ComponentListener, INewGameListener
+public class JChessView extends FrameView implements IJChessView, ActionListener, ComponentListener
 {
 	private IMain m_oMainApplication;
     private IAppLogger m_oLogger; 
@@ -385,7 +385,9 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void moveBackItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
-    {    }//GEN-LAST:event_moveBackItemActionPerformed
+    {    
+    	m_oGUIManager.onPlayerRequestForUndoMove(gamesPane.getSelectedComponent());
+    }//GEN-LAST:event_moveBackItemActionPerformed
 
     private void moveBackItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
     {//GEN-HEADEREND:event_moveBackItemMouseClicked
@@ -400,7 +402,9 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
     }//GEN-LAST:event_moveForwardItemMouseClicked
 
     private void moveForwardItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveForwardItemActionPerformed
-    {    }//GEN-LAST:event_moveForwardItemActionPerformed
+    {    
+    	m_oGUIManager.onPlayerRequestForRedoMove(gamesPane.getSelectedComponent());
+    }//GEN-LAST:event_moveForwardItemActionPerformed
 
     private void rewindToBeginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToBeginActionPerformed
     {//GEN-HEADEREND:event_rewindToBeginActionPerformed
@@ -446,11 +450,6 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    protected JPanel getActiveTabGame() throws ArrayIndexOutOfBoundsException
-    {
-        return null;
-    }
-    
     public int getNumberOfOpenedTabs()
     {
         return this.gamesPane.getTabCount();
@@ -468,10 +467,6 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-	public void onNewGameLaunchRequest(INewGameModel oData) {
-		m_oGUIManager.showGameWindow(oData.getSelectedBoardName(), oData.getSelectedBoardFileName());
-   	}
- 
 	public void addTab(Component oComponent, String stName) {
 		this.gamesPane.addTab(stName, oComponent);
 		this.gamesPane.setSelectedComponent(oComponent);		

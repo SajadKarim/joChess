@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
+import jchess.common.IMoveCandidacy;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
@@ -20,7 +21,10 @@ public interface IGameState {
 	public IPlayerAgent getActivePlayer();
 	public void setActivePosition(IPositionAgent oSelectedPiece);
 	public void switchPlayTurn();
-	public Map<String, Pair<IPositionAgent, IRuleAgent>> getPossibleMovesForActivePosition();
-	public Pair<IPositionAgent, IRuleAgent> doesPositionExistsInMoveCandidates(IPositionAgent oPosition);
-	public void setPossibleMovesForActivePosition(Map<String, Pair<IPositionAgent, IRuleAgent>> lstPositions);
+	public Map<String, IMoveCandidacy> getPossibleMovesForActivePosition();
+	public IMoveCandidacy doesPositionExistsInMoveCandidates(IPositionAgent oPosition);
+	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidacy> lstPositions);
+	public Boolean isThisActivePlayer(String stPlayerName);
+	public Boolean isThisActivePosition(String stPositionName);
+	public void makeLastPlayerAsCurrentPlayer(IPlayerAgent oPlayer);
 }

@@ -11,4 +11,6 @@ import jchess.common.IPositionAgent;
 
 public interface IGameViewListener {
     public void onPositionClicked(IPositionAgent oPosition);
+	public void onPlayerRequestForUndoMove();
+	public void onPlayerRequestForRedoMove();
 }

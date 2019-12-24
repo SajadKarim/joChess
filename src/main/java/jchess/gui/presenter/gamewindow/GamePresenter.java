@@ -1,6 +1,7 @@
 package jchess.gui.presenter.gamewindow;
 
 import java.awt.Component;
+import java.util.Map;
 
 import javax.swing.JDialog;
 
@@ -8,6 +9,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 import jchess.cache.ICacheManager;
+import jchess.common.IMove;
+import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.DialogResult;
@@ -40,6 +43,10 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
         m_oCacheManager = oCacheManager;
     }
 
+	public void updatePlayerNames(Map<String, IPlayerAgent> mpPlayer) {
+		m_oModel.updatePlayerNames(mpPlayer);
+	}
+
     public void init() {     	
     	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing Game presenter.", "init", "GamePresenter");
 
@@ -47,7 +54,7 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
         m_oView.init();
         
     	m_oGame.addListener(this);
-    	m_oGame.init(m_oModel.getBoard());
+    	m_oGame.init();
     }
         
     public void showView() {
@@ -102,5 +109,40 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 	public void onViewClosed(DialogResult oFormAction, Object oData) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void onMoveMadeByPlayer(IPlayerAgent oPlayer, IMove oMove) {
+		m_oModel.addMove(oMove);
+		m_oView.addMove(oMove.toString());
+	}
+
+	@Override
+	public void onPlayerRequestForUndoMove() {
+		IMove oMove = m_oModel.tryUndoMove();
+		if( oMove != null) {
+			m_oGame.tryUndoMove(oMove.getPlayer());
+			m_oView.removeMove(oMove.toString());
+			
+			for(Map.Entry<String, IPieceAgent> it: oMove.getPriorMoveDetails().entrySet()) {
+				IPositionAgent oPosition = m_oModel.getBoard().getPositionAgent(it.getKey());
+				oPosition.setPiece(it.getValue());
+			}
+			m_oView.repaintBoardView();
+		}
+	}
+
+	@Override
+	public void onPlayerRequestForRedoMove() {
+		IMove oMove = m_oModel.tryRedoMove();
+		if( oMove != null) {
+			m_oGame.tryRedoMove(oMove.getPlayer());
+			m_oView.addMove(oMove.toString());
+
+			for(Map.Entry<String, IPieceAgent> it: oMove.getPostMoveDetails().entrySet()) {
+				IPositionAgent oPosition = m_oModel.getBoard().getPositionAgent(it.getKey());
+				oPosition.setPiece(it.getValue());
+			}
+			m_oView.repaintBoardView();
+		}
 	}
 }

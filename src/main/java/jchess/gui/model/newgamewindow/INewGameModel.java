@@ -16,5 +16,4 @@ public interface INewGameModel extends IModel {
 	public int getPlayersAllowedInBoard(String stBoardName);
 	public void setSelectedBoardName(String stBoardName);
 	public String getSelectedBoardName();
-	public String getSelectedBoardFileName();
 }

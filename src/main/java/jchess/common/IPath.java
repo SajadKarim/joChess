@@ -22,4 +22,5 @@ public interface IPath {
 	public List<IPath> getAllNeighbors();
 	public List<IPosition> getAllPositions();
 	public IPathData getPathData();
+	public IPath clone();
 }
