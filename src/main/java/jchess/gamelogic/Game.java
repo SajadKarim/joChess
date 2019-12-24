@@ -1,21 +1,14 @@
 package jchess.gamelogic;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
-import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.common.enumerator.RuleEngineType;
 import jchess.gui.IGUIHandle;
-import jchess.gui.IGUIManager;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.ruleengine.IRuleEngine;
-import jchess.ruleengine.RuleEngineFactory;
 import jchess.util.IAppLogger;
 import jchess.util.ITimer;
 import jchess.util.ITimerListener;
@@ -40,11 +33,21 @@ public class Game implements IGame, ITimerListener{
 	private ITimer m_oTimer;
 	private IGameModel m_oGameModel;
 	private IGameState m_oGameState;
-	private IRuleEngine m_oRuleProcessor;
+	private IRuleEngine m_oRuleEngine;
 	private ArrayList<IGameListener> m_lstListener;
 	private IGUIHandle m_oGUIHandle;
 	private IAppLogger m_oLogger;
 	
+	/**
+	 * Constructor for Game.
+	 * 
+	 * @param oGameModel
+	 * @param oTimer
+	 * @param oGUIHandle
+	 * @param oLogger
+	 * @param oGameState
+	 * @param oRuleEngine
+	 */
 	@Inject
 	public Game(IGameModel oGameModel, ITimer oTimer, IGUIHandle oGUIHandle, IAppLogger oLogger, IGameState oGameState, IRuleEngine oRuleEngine){
 		m_oLogger = oLogger;
@@ -58,7 +61,7 @@ public class Game implements IGame, ITimerListener{
 		m_oGameState = oGameState;
 		m_oGameModel = oGameModel;
 
-		m_oRuleProcessor  = oRuleEngine;
+		m_oRuleEngine  = oRuleEngine;
 	}
 	
 	public void init() {
@@ -84,33 +87,42 @@ public class Game implements IGame, ITimerListener{
 		notifyListenersOnTimerUpdate_TimerElapsed(m_oGameState.getActivePlayer());		
 	}
 	
+	/**
+	 * This method is called when user makes a click on the Board.
+	 */
 	public void onBoardActivity(IPositionAgent oPosition) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Activity on board has been observed.", "onBoardActivity", "Game");
 
+		// This checks if there is any Player who is assigned turn to make a move.
 		if( m_oGameState.getActivePlayer() == null) {
-			m_oLogger.writeLog(LogLevel.DETAILED, "There is not Active player.", "onBoardActivity", "Game");
+			m_oLogger.writeLog(LogLevel.ERROR, "There is not Active player.", "onBoardActivity", "Game");
 			return;
 		}
 		
 		if( m_oGameState.getActivePosition() == null) {
+			// Following code finds and marks all the possible candidate positions that the selected Piece can take.			
 			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player selected a new Position.", "onBoardActivity", "Game");
 				tryFinalAllPossibleMoveCandidates(oPosition);
 				return;
 			}
 		} else {	
+			// Following code deselected the currently marked candidate moves as user clicked on a different location than the marked ones.
 			if( m_oGameState.isThisActivePosition(oPosition.getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on the selected Position.", "onBoardActivity", "Game");
 				deselectedActivePosition();
 				return;
 			}
 
+			// User selected a different piece than the one it made last time and following code finds and marks all the possible 
+			// candidate positions that the selected Piece can take.			
 			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on some other Piece.", "onBoardActivity", "Game");
 				tryFinalAllPossibleMoveCandidates(oPosition);
 				return;
 			}
 		
+			// User selected one of the marked candidate positions and hence triggered Rule execution logic.
 			IMoveCandidacy oMoveCandidate =m_oGameState.getMoveCandidate(oPosition); 
 			if( oMoveCandidate != null) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on one of the Move candidancies.", "onBoardActivity", "Game");
@@ -119,22 +131,31 @@ public class Game implements IGame, ITimerListener{
 				return;
 			} 
 			
+			// User click on some inactive location.
 			m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on some inactive Position.", "onBoardActivity", "Game");
 			deselectedActivePosition();
 		}		
 	}
 		
+	/**
+	 * Following method triggers Rule execution code.
+	 * 
+	 * @param oMoveCandidate - Details about the candidate position user selected to proceed with.
+	 */
 	public void tryExecuteRule(IMoveCandidacy oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Trying to make move." + oMoveCandidate.toLog(), "tryExecuteRule", "Game");
 
 		deselectedActivePosition();
-		IMove oMove = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
+		IMove oMove = m_oRuleEngine.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
 
 		m_oGameState.switchPlayTurn();
 		notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oMove);
 		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
 	}
 	
+	/**
+	 * Deselects all the currently marked positions.
+	 */
 	public void deselectedActivePosition() {
 		m_oLogger.writeLog(LogLevel.INFO, "Deslecting all the move candidancies.", "deselectedActivePosition", "Game");
 
@@ -153,6 +174,11 @@ public class Game implements IGame, ITimerListener{
     	m_oGameState.setActivePosition(null);
 	}
 
+	/**
+	 * Finds all the possible positions that the Piece can make.
+	 * 
+	 * @param oPosition - It holds Piece and Rule information that is required to find out possible positions.
+	 */
 	public void tryFinalAllPossibleMoveCandidates(IPositionAgent oPosition){
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Finding all the possible moves for Position=[%s]", oPosition.toLog()), "tryFinalAllPossibleMoveCandidates", "Game");
 
@@ -168,7 +194,7 @@ public class Game implements IGame, ITimerListener{
 		
 		deselectedActivePosition();
 		
-		Map<String, IMoveCandidacy> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPosition);
+		Map<String, IMoveCandidacy> mpCandidateMovePosition = m_oRuleEngine.tryEvaluateAllRules(m_oGameModel.getBoard(), oPosition);
 		// TODO: log mpCandidateMovePosition 
 		
 		for (Map.Entry<String, IMoveCandidacy> itCandidateMovePosition : mpCandidateMovePosition.entrySet()) {

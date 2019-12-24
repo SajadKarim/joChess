@@ -7,9 +7,14 @@ import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
-import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.ruleengine.PawnRulesProcessor;
+
+/**
+ * This class holds the information regarding a move.
+ * It helps Game in performing Redo and Undo operations.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class Move implements IMove {
 	private IMoveCandidacy m_oMoveCandidacy;

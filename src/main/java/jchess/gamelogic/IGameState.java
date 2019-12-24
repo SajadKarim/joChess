@@ -2,12 +2,9 @@ package jchess.gamelogic;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
 
 /**
  * This provides abstraction to the current state of the data.

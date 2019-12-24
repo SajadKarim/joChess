@@ -4,6 +4,14 @@ import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 
+/**
+ * This class holds the information regarding a candidate move.
+ * It helps Game in displaying data regarding move candidates.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class MoveCandidacy implements IMoveCandidacy {
 	private IPositionAgent m_oSourcePosition;
 	private IPositionAgent m_oCandidatePosition;

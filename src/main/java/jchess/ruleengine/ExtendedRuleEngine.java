@@ -2,19 +2,24 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.gamelogic.Move;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
+
+/**
+ * This class provides functionality to process extended (custom) rules.
+ * It evaluates the possible move candidates using the Rules acceptable in XML.
+ * It also facilitate in executing the Rules.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class ExtendedRuleEngine extends DefaultRuleEngine {	
 	@Inject
@@ -24,6 +29,10 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating ExtendedRuleEngine.", "ExtendedRuleEngine", "ExtendedRuleEngine");
 	}
 
+	/**
+	 * This method is an extension to one defined in DefaultRuleEngine.
+	 * It entertains custom Rules and adds further move candidates in addition to those that DefaultRuleEngine provides.
+	 */
 	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition) {	
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating rules attaches to the Position [%s].", oSelectedPosition.toLog()), "tryEvaluateAllRules", "ExtendedRuleEngine");
 
@@ -34,17 +43,19 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 		case "PawnBlack":
 		case "PawnRed": {
 			PawnRulesProcessor.tryPawnPromotionRule(oBoard, oSelectedPosition, mpCandidateMovePositions);
-
 			PawnRulesProcessor.tryPawnFirstMoveException(m_oRuleProcessor, oBoard, oSelectedPosition, mpCandidateMovePositions);
 		}
 			break;
 		default:
-			break;
+			m_oLogger.writeLog(LogLevel.ERROR, "Invalid Rule Type.", "tryEvaluateAllRules", "ExtendedRuleEngine");
 		}
 		
 		return mpCandidateMovePositions;
 	}
 
+	/**
+	 * This method executes custom (user defined) rules.
+	 */	
 	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected move candidate.", "tryExecuteRule", "ExtendedRuleEngine");
 
@@ -54,7 +65,7 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 				oMove = tryExecuteCustomRules(oBoard, oMoveCandidate);
 			}
 			default:
-				break;
+				m_oLogger.writeLog(LogLevel.ERROR, "Invalid Rule Type.", "tryExecuteRule", "ExtendedRuleEngine");
 		}
 		
 		return oMove;
@@ -73,7 +84,7 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 			oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oMoveCandidate);
 			break;
 		default:
-			break;
+			m_oLogger.writeLog(LogLevel.ERROR, "Invalid Rule Type.", "tryExecuteCustomRules", "ExtendedRuleEngine");
 		}
 		
 		return oMove;

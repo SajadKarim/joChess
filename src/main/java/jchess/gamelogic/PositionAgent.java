@@ -14,7 +14,6 @@ import jchess.common.IPieceAgent;
 import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.common.IPositionData;
-import jchess.common.IRuleAgent;
 import jchess.common.IShape;
 import jchess.common.enumerator.Direction;
 import jchess.common.enumerator.Family;
@@ -86,12 +85,22 @@ public class PositionAgent implements IPositionAgent {
 	}
 	
 	// region: Implements IPositionAgent
+	/**
+	 * This method returns the opposite Position against the provided one.
+	 * 
+	 *  NW	N	NE
+	 * 	W	*	E
+	 *  SW	S	WE
+	 *  
+	 * Consider * is the current Position. 
+	 * The Position provided in the argument is the one linked to SW.
+	 * This method would return the Position that is linked to NE location (if any).
+	 * 
+	 */	
 	public List<IPositionAgent> tryGetOppositePath( IPositionAgent oPosition) {	
 		String stInitiator = null;
 		
 		for( Map.Entry<String, IPath> entry: m_oPosition.getAllPaths().entrySet()) {
-		//Iterator<IPath> it = m_oPosition.getAllPaths().iterator(); 
-	    //while( it.hasNext()) {
 	    	IPath oPath = entry.getValue();// it.next();
 	    	if( oPath.doesPositionExist(oPosition.getName())) {
 		        stInitiator = oPath.getName();

@@ -24,8 +24,7 @@ public class NewGameWndModule extends AbstractModule {
 	@Override 
 	protected void configure() {
 		bind(INewGameView.class).to(NewGameView.class);
-		bind(INewGameModel.class).to(NewGameModel.class);
-		
+		bind(INewGameModel.class).to(NewGameModel.class);		
 		bind(INewLocalGameView.class).to(NewLocalGameView.class);
 	}
 }

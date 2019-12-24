@@ -6,14 +6,17 @@ import javax.swing.JDialog;
 
 import org.jdesktop.application.View;
 
-import jchess.common.IPieceAgent;
 import jchess.common.gui.DialogResult;
-import jchess.common.gui.IModel;
 import jchess.common.gui.IPresenter;
-import jchess.common.gui.IView;
-import jchess.gui.view.gamewindow.IGameViewListener;
 import jchess.util.IAppLogger;
-import jchess.util.LogLevel;
+
+/**
+ * PawnPromotionPresenter 
+ * 
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class PawnPromotionPresenter implements IPresenter {
     private final IPawnPromotionDialogView m_oView;

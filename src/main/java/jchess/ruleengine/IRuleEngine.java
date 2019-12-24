@@ -2,17 +2,13 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.gui.IGUIHandle;
 
 /**
- * This interface provides abstraction to different RuleProcessors.
+ * This interface provides abstraction to different RuleEngines.
  * It is designed to keep Rule loosely coupled of the main game logic
  * and developer can create different code files for different boards.
  * 

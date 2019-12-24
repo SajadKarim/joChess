@@ -3,12 +3,9 @@ package jchess.gamelogic;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicReference;
 
 import jchess.cache.RuleData;
-import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
 import jchess.common.IRuleData;

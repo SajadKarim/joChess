@@ -4,6 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
+/**
+ * This is the manager class to handle all the dependency modules.
+ * Its goal is to hold all the dependency related modules and provide it to others when necessary.
+ * 
+ * @author  Sajad Karim
+ * @since	14 Dec 2019
+ */
+
 @Singleton
 public class DIManager implements IDIManager {
 	private Injector m_oGlobalInjector;

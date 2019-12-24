@@ -1,8 +1,14 @@
 package jchess.gamelogic;
 
-import jchess.common.IBoardAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
+
+/**
+ * This provides abstraction to the Game class.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public interface IGame {
 	public void init();

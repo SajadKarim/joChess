@@ -2,6 +2,13 @@ package jchess.common;
 
 import java.util.Map;
 
+/**
+ * IMove
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public interface IMove {
 	public Boolean IsMoveSuccessful();
 	public void setMoveSuccessState(Boolean bIsMoveSuccessful);

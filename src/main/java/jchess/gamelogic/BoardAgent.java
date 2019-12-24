@@ -3,8 +3,6 @@ package jchess.gamelogic;
 import java.awt.Image;
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import jchess.cache.BoardData;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardData;

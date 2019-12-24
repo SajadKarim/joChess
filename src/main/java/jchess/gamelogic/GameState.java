@@ -4,14 +4,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;

@@ -1,11 +1,14 @@
 package jchess.ruleengine.gui;
 
-import java.awt.Image;
-
-import javax.swing.JDialog;
-
 import jchess.common.gui.IDialogView;
-import jchess.common.gui.IView;
+
+/**
+ * IPawnPromotionDialogView 
+ * 
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public interface IPawnPromotionDialogView extends IDialogView {
 }

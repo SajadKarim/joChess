@@ -33,8 +33,7 @@ public class GlobalModule extends AbstractModule {
 		bind(IDIManager.class).to(DIManager.class).in(Singleton.class);
 		bind(ICacheManager.class).to(CacheManager.class).in(Singleton.class);
 		bind(IAppLogger.class).to(AppLogger.class).in(Singleton.class);
-		bind(IGUIManager.class).to(GUIManager.class).in(Singleton.class);
-		
+		bind(IGUIManager.class).to(GUIManager.class).in(Singleton.class);		
 		bind(IMainPresenter.class).to(MainPresenter.class).in(Singleton.class);
 		bind(IJChessView.class).to(JChessView.class).in(Singleton.class);		
 	}

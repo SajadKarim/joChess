@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import org.javatuples.Pair;
-
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
@@ -29,6 +27,14 @@ import jchess.ruleengine.gui.IPawnPromotionModel;
 import jchess.ruleengine.gui.PawnPromotionDialogView;
 import jchess.ruleengine.gui.PawnPromotionModel;
 import jchess.ruleengine.gui.PawnPromotionPresenter;
+
+/**
+ * This is a custom class specific to Pawn piece.
+ * This class defines all the custom rules that at the moments are not supportable in XML.
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class PawnRulesProcessor {
 	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPositionAgent oSelectedPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {

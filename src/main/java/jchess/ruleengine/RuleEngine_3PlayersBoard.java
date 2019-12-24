@@ -2,15 +2,12 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
 
