@@ -13,6 +13,8 @@ import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.gui.model.gamewindow.IGameModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class is container to hold current state of the Board.
@@ -26,9 +28,14 @@ public class GameState implements IGameState {
 	private IPositionAgent m_oSelectedPiece;
 	private Map<String, IMoveCandidacy> m_lstPossibleMovePositionsForSelectedPiece;
 	private Queue<IPlayerAgent> m_qPlayersInQueue;
-	
+	private IAppLogger m_oLogger;
+
 	@Inject
-	public GameState(IGameModel oGameModel) {
+	public GameState(IGameModel oGameModel, IAppLogger oLogger) {
+		m_oLogger = oLogger;
+		
+		m_oLogger.writeLog(LogLevel.INFO, "Instantiating GameState.", "GameState", "GameState");
+
 		m_qPlayersInQueue = new LinkedList<IPlayerAgent>();
 		
 		for (Map.Entry<String,IPlayerAgent> entry : oGameModel.getAllPlayerAgents().entrySet()) {
@@ -45,6 +52,7 @@ public class GameState implements IGameState {
 	public void setActivePosition(IPositionAgent oSelectedPiece) {
 		m_oSelectedPiece = oSelectedPiece;
 	}
+
 	/**
 	 * Get the player that is currently active
 	 * @return the active player
@@ -52,15 +60,20 @@ public class GameState implements IGameState {
 	public IPlayerAgent getActivePlayer() {
 		return m_oActivePlayer;
 	}
+	
 	/**
 	 * Switch the turn of the player
 	 */
 	public void switchPlayTurn() {
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Switching player. Old player=[%s]", m_oActivePlayer == null ? "NULL" : m_oActivePlayer.getName()), "switchPlayTurn", "GameState");
+		
 		m_oActivePlayer = m_qPlayersInQueue.poll();
 		m_qPlayersInQueue.add(m_oActivePlayer);
 		
 		m_oSelectedPiece = null;
 		m_lstPossibleMovePositionsForSelectedPiece = null;
+
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Switching player. New player=[%s]", m_oActivePlayer == null ? "NULL" : m_oActivePlayer.getName()), "switchPlayTurn", "GameState");
 	}
 
 	public Map<String, IMoveCandidacy> getPossibleMovesForActivePosition() {
@@ -71,9 +84,10 @@ public class GameState implements IGameState {
 		m_lstPossibleMovePositionsForSelectedPiece = lstPositions;
 	}
 
-	public IMoveCandidacy doesPositionExistsInMoveCandidates(IPositionAgent oPosition) {
+	public IMoveCandidacy getMoveCandidate(IPositionAgent oPosition) {
 		if( m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
+
 		return null;
 	}
 	

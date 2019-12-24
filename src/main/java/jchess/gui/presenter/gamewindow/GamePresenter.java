@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.swing.JDialog;
 
+import org.jdesktop.application.View;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
@@ -14,6 +16,7 @@ import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.DialogResult;
+import jchess.common.gui.IView;
 import jchess.gamelogic.IGame;
 import jchess.gui.model.gamewindow.*;
 import jchess.util.IAppLogger;
@@ -32,23 +35,27 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
     private final IGameView m_oView;
     private final IGameModel m_oModel;
     private final ICacheManager m_oCacheManager;
-    private final IAppLogger m_oAppLogger;
+    private final IAppLogger m_oLogger;
     
     @Inject
-    public GamePresenter(final IGame oGame, final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager, final IAppLogger oAppLogger) {
+    public GamePresenter(final IGame oGame, final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager, final IAppLogger oLogger) {
         m_oGame = oGame;
     	m_oView = oView;
     	m_oModel = oModel;
-        m_oAppLogger  = oAppLogger;
+        m_oLogger  = oLogger;
         m_oCacheManager = oCacheManager;
+        
+     	m_oLogger.writeLog(LogLevel.INFO, "Instantiating GamePresenter.", "GamePresenter", "GamePresenter");
     }
 
 	public void updatePlayerNames(Map<String, IPlayerAgent> mpPlayer) {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Updating player names.", "updatePlayerNames", "GamePresenter");
+
 		m_oModel.updatePlayerNames(mpPlayer);
 	}
 
     public void init() {     	
-    	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing Game presenter.", "init", "GamePresenter");
+    	m_oLogger.writeLog(LogLevel.INFO, "Initializing Game presenter.", "init", "GamePresenter");
 
     	m_oView.addListener(this);
         m_oView.init();
@@ -58,22 +65,28 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
     }
         
     public void showView() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Displaying view.", "showView", "GamePresenter");
+
     	m_oView.drawComponents();
     }
     
-    public Component getViewComponent() {
+    public Component tryGetViewComponent() {
     	return m_oView.getViewComponent();
     }
     
     //region: Notifications from GameView
     public void onPositionClicked(IPositionAgent oPosition) {
-    	m_oGame.onBoardActivity(oPosition);
+     	m_oLogger.writeLog(LogLevel.DETAILED, "User clicked on a position.", "onPositionClicked", "GamePresenter");
+
+     	m_oGame.onBoardActivity(oPosition);
     	m_oView.repaintBoardView();
     }
     //endregion
     
     //region: Notifications from Game
 	public void onTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Timer notification for seconds elapse.", "onTimerUpdate_SecondsElapsed", "GamePresenter");
+
         int nMintues = (nRemainingSeconds / 60) % 60;
         int nSeconds = nRemainingSeconds  % 60;
 		m_oModel.setClockText(String.format("%02d", nMintues) + ":" + String.format("%02d", nSeconds));
@@ -82,21 +95,24 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 	}
 	
 	public void onTimerUpdate_TimerElapsed(IPlayerAgent oPlayer) {
-		m_oModel.setClockText("--:--");
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Timer notification for exhausting all the time.", "onTimerUpdate_TimerElapsed", "GamePresenter");
+
+     	m_oModel.setClockText("--:--");
 		m_oModel.setPlayer(oPlayer);
 		m_oView.repaintClockView();
 	}
 
 	public void onCurrentPlayerChanged(IPlayerAgent oPlayer) {
-		m_oModel.setPlayer(oPlayer);
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Player turn changes. Player=" + oPlayer.getName(), "onCurrentPlayerChanged", "GamePresenter");
+
+     	m_oModel.setPlayer(oPlayer);
 		m_oView.repaintPlayerView();
 	}
 	//endregion
 
 	@Override
-	public void getView() {
-		// TODO Auto-generated method stub
-		
+	public View tryGetJDesktopView() {
+		return null;
 	}
 
 	@Override
@@ -112,12 +128,16 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 	}
 
 	public void onMoveMadeByPlayer(IPlayerAgent oPlayer, IMove oMove) {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "A move made by plyaer. Player=" + oPlayer.getName(), "onMoveMadeByPlayer", "GamePresenter");
+
 		m_oModel.addMove(oMove);
 		m_oView.addMove(oMove.toString());
 	}
 
 	@Override
 	public void onPlayerRequestForUndoMove() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Undoing last move.", "onPlayerRequestForUndoMove", "GamePresenter");
+
 		IMove oMove = m_oModel.tryUndoMove();
 		if( oMove != null) {
 			m_oGame.tryUndoMove(oMove.getPlayer());
@@ -133,7 +153,9 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 
 	@Override
 	public void onPlayerRequestForRedoMove() {
-		IMove oMove = m_oModel.tryRedoMove();
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Redoing last move.", "onPlayerRequestForRedoMove", "GamePresenter");
+
+     	IMove oMove = m_oModel.tryRedoMove();
 		if( oMove != null) {
 			m_oGame.tryRedoMove(oMove.getPlayer());
 			m_oView.addMove(oMove.toString());

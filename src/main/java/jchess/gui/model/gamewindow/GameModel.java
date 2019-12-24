@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.util.LinkedList;
 import java.util.Map;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import jchess.common.IBoardAgent;
@@ -11,6 +12,8 @@ import jchess.common.IMove;
 import jchess.common.IPlayer;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class hold all the data that is required to draw Game in whole.
@@ -28,11 +31,18 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	int m_nCurrentIndex;
 	LinkedList<IMove> m_llMoves;
 	
-	public GameModel() {
+	IAppLogger m_oLogger;
+	
+	@Inject
+	public GameModel(IAppLogger oLogger) {
+		m_oLogger = oLogger;
+		
 		m_stClockText = "--:--";
 		
 		m_nCurrentIndex = -1;
 		m_llMoves = new LinkedList<IMove>();
+		
+     	//m_oLogger.writeLog(LogLevel.DETAILED, "Instantiating GameModel.", "GameModel", "GameModel");
 	}
 
 	//region:  IGameModel
@@ -103,6 +113,8 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	}
 	
 	public void addMove(IMove oMove) {
+     	//m_oLogger.writeLog(LogLevel.DETAILED, String.format("Adding a move. Total Moves= %d. CurrentIndex=%d.", m_nCurrentIndex, m_llMoves.size() ), "addMove", "GameModel");
+
 		if( m_nCurrentIndex != m_llMoves.size() - 1) {
 			for(int nIndex = m_llMoves.size() - 1; nIndex > m_nCurrentIndex; nIndex--) {
 				m_llMoves.remove(nIndex);
@@ -114,6 +126,8 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	}
 
 	public IMove tryUndoMove() {
+     	//m_oLogger.writeLog(LogLevel.DETAILED, String.format("Undoing last move. Total Moves= %d. CurrentIndex=%d.", m_nCurrentIndex, m_llMoves.size() ), "tryUndoMove", "GameModel");
+
 		IMove oMove = null;
 		
 		if( m_nCurrentIndex >= 0) {
@@ -125,7 +139,9 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	}
 
 	public IMove tryRedoMove() {
-		IMove oMove = null;
+     	//m_oLogger.writeLog(LogLevel.DETAILED, String.format("Redoing last move. Total Moves= %d. CurrentIndex=%d.", m_nCurrentIndex, m_llMoves.size() ), "tryUndoMove", "GameModel");
+
+     	IMove oMove = null;
 		
 		if( m_nCurrentIndex < m_llMoves.size() -1) {
 			m_nCurrentIndex++;
@@ -136,6 +152,8 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	}
 	
 	public void updatePlayerNames(Map<String, IPlayerAgent> mpPlayer) {
+     	//m_oLogger.writeLog(LogLevel.DETAILED, "Updating player's name.", "updatePlayerNames", "GameModel");
+
 		for(Map.Entry<String, IPlayerAgent> itPlayer: m_oBoard.getAllPlayerAgents().entrySet()) {
 			itPlayer.getValue().setFirstName(mpPlayer.get(itPlayer.getKey()).getFirstName());
 		}

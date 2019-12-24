@@ -8,7 +8,11 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
+import com.google.inject.Inject;
+
 import jchess.common.gui.IModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class is responsible to draw Move History related controls on GUI.
@@ -22,8 +26,10 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
     private DefaultTableModel tableModel;
     private JScrollPane scrollPane;
     private JTable table;
+	private IAppLogger m_oLogger;
 
-    public MoveHistoryView()
+	@Inject
+    public MoveHistoryView(IAppLogger oLogger)
     {
         this.tableModel = new DefaultTableModel();
         this.table = new JTable(this.tableModel);
@@ -35,6 +41,9 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
         this.addTableModelListener(null);
         this.tableModel.addTableModelListener(null);
         this.scrollPane.setAutoscrolls(true);
+
+        m_oLogger = oLogger;
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Instantiating MoveHistoryView.", "MoveHistoryView", "MoveHistoryView");
     }
 
     /** Method of adding new move

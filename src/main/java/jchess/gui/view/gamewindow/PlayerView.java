@@ -13,6 +13,8 @@ import com.google.inject.Inject;
 import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gui.model.gamewindow.IPlayerModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class is responsible to draw Username and other related details on GUI.
@@ -24,11 +26,15 @@ import jchess.gui.model.gamewindow.IPlayerModel;
 public class PlayerView extends JPanel implements IPlayerView {
 	private IPlayerModel m_oData;
 	private Dimension m_oDimension; 
-
+	private IAppLogger m_oLogger;
+	
 	@Inject
-    public PlayerView(IPlayerModel oData)
+    public PlayerView(IPlayerModel oData, IAppLogger oLogger)
     {
 		m_oData = oData;
+    	m_oLogger = oLogger;
+    	
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Instantiating PlayerView.", "PlayerView", "PlayerView");
     }
     
 	public void init() {

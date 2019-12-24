@@ -58,7 +58,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
      	m_oLogger.writeLog(LogLevel.DETAILED, "Launching main window.", "showMainWindow", "GUIManager");
 
      	m_oMainPresenter.init();
-    	m_oApplication.showView(m_oMainPresenter.getView());
+    	m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
 	}
 	
 	public void showNewGameWindow() {
@@ -70,7 +70,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	oPresenter.addListener(this);
     	oPresenter.init();
     	
-    	m_oApplication.showDialog(oPresenter.getViewJDialog()); 
+    	m_oApplication.showDialog(oPresenter.tryGetViewJDialog()); 
 	}
 	
 	public void showGameWindow(INewGameModel oData) {
@@ -84,9 +84,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 		oPresenter.updatePlayerNames(oData.getPlayers());
 		
 		oPresenter.init();
-		oPresenter.getViewComponent().setLocation(new Point(0, 0));
+		oPresenter.tryGetViewComponent().setLocation(new Point(0, 0));
 		
-		m_oMainPresenter.addTab(oPresenter.getViewComponent(), stGameId);
+		m_oMainPresenter.addTab(oPresenter.tryGetViewComponent(), stGameId);
 		
 		oPresenter.showView();
 		

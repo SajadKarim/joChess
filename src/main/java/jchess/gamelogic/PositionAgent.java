@@ -275,4 +275,10 @@ public class PositionAgent implements IPositionAgent {
 	public IPosition clone() {
 		return new PositionAgent(this);
 	}
+	
+	public String toLog() {
+		return String.format("Id=%s, Piece=%s"
+				, getName()
+				, m_oPiece == null ? "<no piece attached>" : m_oPiece.getName());
+	}
 }

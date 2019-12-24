@@ -5,4 +5,5 @@ public interface IMoveCandidacy {
 	public void setSourcePosition(IPositionAgent oPosition);
 	public IPositionAgent getCandidatePosition();
 	public IRuleAgent getRule();
+	public String toLog();
 }

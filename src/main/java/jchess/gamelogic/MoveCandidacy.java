@@ -30,4 +30,11 @@ public class MoveCandidacy implements IMoveCandidacy {
 	public IRuleAgent getRule() {
 		return m_oRule;
 	}
+	
+	public String toLog() {
+		return String.format("SourcePosition=%s, DestinationPosition=%s, RuleType=%s"
+				, m_oSourcePosition.getName()
+				, m_oCandidatePosition.getName()
+				, m_oRule.getRuleType().toString());
+	}
 }

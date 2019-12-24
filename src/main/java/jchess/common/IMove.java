@@ -13,4 +13,5 @@ public interface IMove {
 	public void addPriorMoveEntry(String stPositionId, IPieceAgent oPiece);
 	public Map<String, IPieceAgent> getPostMoveDetails();
 	public void addPostMoveEntry(String stPositionId, IPieceAgent oPiece);
+	public String toLog();
 }

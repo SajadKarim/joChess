@@ -19,4 +19,5 @@ public interface ICacheManager {
     public IBoardAgent getBoard(String stGameId);
     public void loadBoardFromFile(String stGameId, String stBoardName);
     public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard();
+    public Pair<String, String> getRuleEngineInfo(String stBoardName);
 }

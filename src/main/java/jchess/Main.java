@@ -38,11 +38,20 @@ import jchess.util.LogLevel;
  * The main class of the application.
  */
 public class Main extends SingleFrameApplication implements IMain{
+	/**
+	 * Class responsible to handle logging related functionality.
+	 */
 	private static IAppLogger m_oLogger; 
+	/**
+	 * Manager class to handle all the GUI related operations.
+	 */
+ 	private static IGUIManager m_oGUIManager;
+ 	/**
+ 	 * Reference to global module that keeps references to the classes the should be instantiated once in the Application.
+ 	 */
  	private static Injector m_oGlobalModuleInjector;
 
- 	private static IGUIManager m_oGUIManager;
-     /**
+ 	/**
      * At startup create and show the main frame of the application.
      */
     @Override 
@@ -53,14 +62,6 @@ public class Main extends SingleFrameApplication implements IMain{
     	m_oGUIManager.showMainWindow();
     }
     
-    /**
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override protected void configureWindow(java.awt.Window root) {
-    }
-
     public void showView(View oView) {
     	this.show(oView);
     }

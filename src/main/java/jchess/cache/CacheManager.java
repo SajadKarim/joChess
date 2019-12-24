@@ -52,7 +52,7 @@ public class CacheManager implements ICacheManager{
     }
     
     public Boolean init() {
-    	StorageService oStorageService = StorageService.create(StorageType.FBDB);
+    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
     	m_mpPlayerAllowedInBoard = oStorageService.getPossiblePlayerInEachBoard(BOARDLAYOUTS_DIRECTORY);
 
     	if( m_mpPlayerAllowedInBoard == null)
@@ -62,7 +62,7 @@ public class CacheManager implements ICacheManager{
     }
     
     public void loadBoardFromFile(String stGameId, String stBoardName) {
-    	StorageService oStorageService = StorageService.create(StorageType.FBDB);
+    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
     	IBoardAgent oBoard = oStorageService.getBoardAgent(BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
     	
     	m_mpBoardCache.put(stGameId, new BoardCache(stBoardName, oBoard));
@@ -72,4 +72,8 @@ public class CacheManager implements ICacheManager{
     	return new HashMap<String, Pair<String, Integer>>(m_mpPlayerAllowedInBoard);
     }
 
+    public Pair<String, String> getRuleEngineInfo(String stBoardName){
+    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
+    	return oStorageService.getRuleEngineInfo(BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
+    }
 }

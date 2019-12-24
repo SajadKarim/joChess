@@ -22,7 +22,7 @@ public interface IGameState {
 	public void setActivePosition(IPositionAgent oSelectedPiece);
 	public void switchPlayTurn();
 	public Map<String, IMoveCandidacy> getPossibleMovesForActivePosition();
-	public IMoveCandidacy doesPositionExistsInMoveCandidates(IPositionAgent oPosition);
+	public IMoveCandidacy getMoveCandidate(IPositionAgent oPosition);
 	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidacy> lstPositions);
 	public Boolean isThisActivePlayer(String stPlayerName);
 	public Boolean isThisActivePosition(String stPositionName);

@@ -3,6 +3,8 @@ package jchess.gamelogic;
 import java.awt.Image;
 import java.util.Map;
 
+import org.javatuples.Pair;
+
 import jchess.cache.BoardData;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardData;
@@ -223,5 +225,9 @@ public class BoardAgent implements IBoardAgent {
 
 	public void setRuleEngineName(String stName) {
 		m_oBoard.setRuleEngineName(stName);
+	}
+
+	public String getRuleProcessorName() {
+		return m_oBoard.getRuleProcessorName();
 	}
 }

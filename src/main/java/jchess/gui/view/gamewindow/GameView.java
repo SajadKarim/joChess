@@ -16,6 +16,9 @@ import javax.swing.JPanel;
 import com.google.inject.Inject;
 
 import jchess.gui.model.gamewindow.IGameModel;
+import jchess.util.AppLogger;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.IViewClosedListener;
@@ -30,24 +33,29 @@ import jchess.common.gui.IModel;
 
 public class GameView extends JPanel implements IGameView, MouseListener, ComponentListener {
 	private IGameModel m_oData;
-	private final IClockView m_oClockView;
-	private final IBoardView m_oBoardView;    
-	private final IPlayerView m_oPlayerView;
-    private final IMoveHistoryView m_oMoveHistoryView;	
-
-	private final ArrayList<IGameViewListener> m_lstListener;
+	private IClockView m_oClockView;
+	private IBoardView m_oBoardView;    
+	private IPlayerView m_oPlayerView;
+    private IMoveHistoryView m_oMoveHistoryView;	
+    private IAppLogger m_oLogger;
+	private ArrayList<IGameViewListener> m_lstListener;
 	
 	@Inject
-	public GameView(IGameModel oData, final IBoardView oBoardView, final IPlayerView oPlayerView, final IClockView oClockView, final IMoveHistoryView oMoveHistoryView) {
+	public GameView(IGameModel oData, IBoardView oBoardView, IPlayerView oPlayerView, IClockView oClockView, IMoveHistoryView oMoveHistoryView, IAppLogger oLogger) {
 		m_oData = oData;
 		m_oBoardView = oBoardView;
 		m_oPlayerView = oPlayerView;
 		m_oClockView = oClockView;
 		m_oMoveHistoryView = oMoveHistoryView;
 		m_lstListener = new ArrayList<IGameViewListener>();
+		m_oLogger = oLogger;
+		
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Instantiating GameView.", "GameView", "GameView");
 	}
 	
 	public void init() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing GameView.", "init", "GameView");
+
 		this.setLayout(null);
         this.setDoubleBuffered(true);
 		this.setLocation(new Point(0, 0));        
@@ -59,6 +67,8 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 	}
 		
 	public void initSubViews() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing sub views.", "initSubViews", "GameView");
+
 		Dimension oDimension = new Dimension(m_oData.getBoard().getBoardWidth(), m_oData.getBoard().getBoardHeight());        
         m_oBoardView.SetDimension(oDimension);
         m_oBoardView.getViewComponent().setSize(oDimension);
@@ -96,6 +106,8 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
                 IPositionAgent oPosition = getPosition(x, y);
                 
                 if( oPosition != null) {
+                 	m_oLogger.writeLog(LogLevel.INFO, String.format("User clicked on Position=%s.", oPosition.getName()), "mouseClicked", "GameView");
+
                 	notifyListenersOnPositionClicked(oPosition);
                 }
     		}
@@ -104,6 +116,8 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     }
 
     public IPositionAgent getPosition(int x, int y) {
+     	m_oLogger.writeLog(LogLevel.DETAILED, String.format("Extracting Position for x=%d, y=%d",x ,y), "getPosition", "GameView");
+
     	for (Map.Entry<String, IPositionAgent> entry : m_oData.getBoard().getAllPositionAgents().entrySet()) {
 			IPositionAgent oPosition = entry.getValue();
 			if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y))) {
@@ -115,22 +129,18 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     }
     
     public void mousePressed(MouseEvent event) {
-    	System.out.println("mouse pressed!");
     }
     
     public void mouseReleased(MouseEvent arg0)
     {
-    	System.out.println("mouse released!");
     }
 
     public void mouseEntered(MouseEvent arg0)
     {
-    	System.out.println("mouse entered!");
     }
 
     public void mouseExited(MouseEvent arg0)
     {
-    	System.out.println("mouse exited!");
     }
 
     public void componentResized(ComponentEvent e)
@@ -157,7 +167,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     	try {
     		m_oClockView.getViewComponent().repaint();
     	}catch(java.lang.Exception e) {
-    		
+         	m_oLogger.writeLog(LogLevel.ERROR, String.format("Unhandled exception occured. %s", e.toString()), "repaintClockView", "GameView");
     	}
     }
     
@@ -166,6 +176,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     		m_oBoardView.getViewComponent().repaint();
     	}
     	catch(java.lang.Exception e) {
+         	m_oLogger.writeLog(LogLevel.ERROR, String.format("Unhandled exception occured. %s", e.toString()), "repaintBoardView", "GameView");
     	}
     }
     
@@ -174,24 +185,28 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     		m_oPlayerView.getViewComponent().repaint();
     	}
     	catch(java.lang.Exception e) {
+         	m_oLogger.writeLog(LogLevel.ERROR, String.format("Unhandled exception occured. %s", e.toString()), "repaintPlayerView", "GameView");
     	}
     }
     @Override
     public void paintComponent(Graphics oGraphics)
     {
     	super.paintComponent(oGraphics);
-    	//drawView();
     }
 
 	@Override
 	public void drawComponents() {
-		m_oBoardView.drawComponents();
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Drawing sub components", "drawComponents", "GameView");
+
+     	m_oBoardView.drawComponents();
 		m_oPlayerView.drawComponents();
 		m_oClockView.drawComponents();
 	}
 
 	@Override
 	public void refresh() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Call for refresh.", "refresh", "GameView");
+
 		drawComponents();
 	}
 
@@ -205,7 +220,9 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     }
 	
 	private void notifyListenersOnPositionClicked(IPositionAgent oPosition) {
-        for (final IGameViewListener oListener : m_lstListener) {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Notifying all the listeners about the selected Position.", "notifyListenersOnPositionClicked", "GameView");
+
+     	for (final IGameViewListener oListener : m_lstListener) {
             oListener.onPositionClicked(oPosition);
         }
     }
