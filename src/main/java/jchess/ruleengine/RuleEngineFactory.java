@@ -11,25 +11,4 @@ import jchess.common.enumerator.RuleEngineType;
  */
 
 public class RuleEngineFactory {
-	public static IRuleEngine getRuleEngine(RuleEngineType enRuleEngine) {
-		IRuleEngine oProcessor;
-		switch(enRuleEngine) {
-			case RULEENGINE_2PLAYER:{
-				oProcessor = new ExtendedRuleEngine(new ExtendedRuleProcessor()); 
-			}
-				break;
-			case RULEENGINE_3PLAYER:{
-				oProcessor = new ExtendedRuleEngine(new ExtendedRuleProcessor()); 
-			}
-				break;
-			case RULEENGINE_DEFAULT:
-			default:
-			{
-				oProcessor = new ExtendedRuleEngine(new ExtendedRuleProcessor()); 
-			}
-				break;
-		}
-		
-		return oProcessor;
-	}
 }

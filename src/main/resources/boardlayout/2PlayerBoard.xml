@@ -1,4 +1,4 @@
-<Board Name="2PlayerBoard" BoardImage="chessboard_2players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="480" Height="480" RuleEngine="RULEENGINE_DEFAULT">
+<Board Name="2PlayerBoard" BoardImage="chessboard_2players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="480" Height="480"  RuleEngine="DefaultRuleEngine" RuleProcessor="DefaultRuleProcessor">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />

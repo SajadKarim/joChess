@@ -10,10 +10,7 @@ import jchess.IMain;
 import jchess.Main;
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
-import jchess.gamelogic.GameState;
-import jchess.gamelogic.IGameState;
 import jchess.gui.GUIManager;
-import jchess.gui.IGUIHandle;
 import jchess.gui.IGUIManager;
 import jchess.gui.presenter.mainwindow.IMainPresenter;
 import jchess.gui.presenter.mainwindow.MainPresenter;
@@ -23,7 +20,7 @@ import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
 /**
- * This class binds all the dependencies that are share across the project,
+ * This class binds all the dependencies that are shared across the project,
  * and requires single instantiation (Singleton).
  * 
  * @author  Sajad Karim

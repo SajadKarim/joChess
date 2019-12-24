@@ -95,4 +95,5 @@ public interface IBoard extends IBoardFactory {
 	 */
 	public IBoardData getBoardData();
 	public String getRuleEngineName();
+	public String getRuleProcessorName();
 }

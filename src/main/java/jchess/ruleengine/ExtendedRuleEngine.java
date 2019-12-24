@@ -4,20 +4,29 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
+import com.google.inject.Inject;
+
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.gamelogic.Move;
+import jchess.gui.IGUIHandle;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
-public class ExtendedRuleEngine extends DefaultRuleEngine {
-	
-	public ExtendedRuleEngine(IRuleProcessor oRuleProcessor) {
-		super(oRuleProcessor);
+public class ExtendedRuleEngine extends DefaultRuleEngine {	
+	@Inject
+	public ExtendedRuleEngine(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
+		super(oRuleProcessor, oGUIHandler, oLogger);
+		
+		m_oLogger.writeLog(LogLevel.INFO, "Instantiating ExtendedRuleEngine.", "ExtendedRuleEngine", "ExtendedRuleEngine");
 	}
 
 	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition) {	
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating rules attaches to the Position [%s].", oSelectedPosition.toLog()), "tryEvaluateAllRules", "ExtendedRuleEngine");
+
 		Map<String, IMoveCandidacy> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oSelectedPosition);
 		
 		switch(oSelectedPosition.getPiece().getName()) {
@@ -37,6 +46,8 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	}
 
 	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
+		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected move candidate.", "tryExecuteRule", "ExtendedRuleEngine");
+
 		IMove oMove = super.tryExecuteRule(oBoard, oMoveCandidate);
 		switch( oMoveCandidate.getRule().getRuleType()) {
 			case CUSTOM: {
@@ -50,6 +61,8 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	}
 
 	private IMove tryExecuteCustomRules(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
+		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected custom move candidate.", "tryExecuteCustomRules", "ExtendedRuleEngine");
+
 		IMove oMove = null;
 		 
 		switch( oMoveCandidate.getRule().getCustomName()) {

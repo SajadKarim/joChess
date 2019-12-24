@@ -4,10 +4,12 @@ import java.awt.Component;
 
 import javax.swing.JDialog;
 
+import org.jdesktop.application.View;
+
 public interface IPresenter extends IViewClosedListener{
     public void init();
     public void showView();
-    public void getView();
-    public Component getViewComponent();
+    public View tryGetJDesktopView();
     public JDialog tryGetViewJDialog();
+    public Component tryGetViewComponent();
 }

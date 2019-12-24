@@ -6,9 +6,13 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
+import com.google.inject.Inject;
+
 import jchess.common.*;
 import jchess.gamelogic.Move;
 import jchess.gui.IGUIHandle;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * The default logic to execute a Rule.
@@ -17,23 +21,23 @@ import jchess.gui.IGUIHandle;
  * @since	7 Dec 2019
  */
 
-class DefaultRuleEngine implements IRuleEngine{
+public class DefaultRuleEngine implements IRuleEngine{
 	protected IRuleProcessor m_oRuleProcessor;
 	protected IGUIHandle m_oGUIHandler;
+	protected IAppLogger m_oLogger;
 	
-	public DefaultRuleEngine(IRuleProcessor oRuleProcessor) {
+	@Inject
+	public DefaultRuleEngine(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
 		m_oRuleProcessor = oRuleProcessor;
-	}
-	
-	public void setGUIHandle(IGUIHandle oGUIHandler) {
 		m_oGUIHandler = oGUIHandler;
+		m_oLogger = oLogger;
+		
+		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleEngine.", "DefaultRuleEngine", "DefaultRuleEngine");
 	}
-	
-	public void setRuleProcessor(IRuleProcessor oRuleProcessor) {
-		m_oRuleProcessor = oRuleProcessor;
-	}
-	
+		
 	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition) {	
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating move candidates for selected position [%s].", oSelectedPosition.toLog()), "tryEvaluateAllRules", "DefaultRuleEngine");
+
 		Map<String, IMoveCandidacy> mpCandidateMovePositions = new HashMap<String, IMoveCandidacy>();
 
 		m_oRuleProcessor.tryEvaluateAllRules(oSelectedPosition, mpCandidateMovePositions);
@@ -42,6 +46,8 @@ class DefaultRuleEngine implements IRuleEngine{
     }
 
 	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Executing the rule for move candidate [%s].", oMoveCandidate.toLog()), "tryExecuteRule", "DefaultRuleEngine");
+
 		IMove oMove = new Move(oMoveCandidate);
 		
 		switch( oMoveCandidate.getRule().getRuleType()) {
@@ -101,6 +107,8 @@ class DefaultRuleEngine implements IRuleEngine{
 				break;
 		}
 		
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Returning.. [%s].", oMove.toLog()), "tryExecuteRule", "DefaultRuleEngine");
+
 		return oMove;
 	}
 }

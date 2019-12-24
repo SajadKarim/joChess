@@ -21,6 +21,8 @@ import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gamelogic.PieceAgent;
 import jchess.gui.model.gamewindow.IBoardModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class is responsible to draw Chessboard and related operations regarding GUI.
@@ -32,10 +34,13 @@ import jchess.gui.model.gamewindow.IBoardModel;
 public class BoardView extends JPanel implements IBoardView {
 	private IBoardModel m_oData;
 	private Dimension m_oDimension;
+	private IAppLogger m_oLogger;
 	
 	@Inject
-	public BoardView(final IBoardModel oData) {
+	public BoardView(final IBoardModel oData, IAppLogger oLogger) {
 		m_oData = oData;
+    	m_oLogger = oLogger;
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Instantiating BoardView.", "BoardView", "BoardView");
 	}
 
 	public void init() {

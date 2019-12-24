@@ -4,6 +4,8 @@ import java.awt.Component;
 
 import javax.swing.JDialog;
 
+import org.jdesktop.application.View;
+
 import jchess.common.IPieceAgent;
 import jchess.common.gui.DialogResult;
 import jchess.common.gui.IModel;
@@ -43,13 +45,12 @@ public class PawnPromotionPresenter implements IPresenter {
 	}
 	
 	@Override
-	public void getView() {
-		// TODO Auto-generated method stub
-		
+	public View tryGetJDesktopView() {
+		return null;
 	}
 
 	@Override
-	public Component getViewComponent() {
+	public Component tryGetViewComponent() {
 		return m_oView.getViewComponent();
 	}
 

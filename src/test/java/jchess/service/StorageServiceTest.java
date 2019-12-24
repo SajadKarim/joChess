@@ -28,7 +28,7 @@ class StorageServiceTest {
 
 	@Test
 	void testCreate() {
-		Object actual = StorageService.create(StorageType.FBDB).getClass();
+		Object actual = StorageService.create(StorageType.FBDB, null).getClass();
 		Object expected = FBDBService.class;
 		assertEquals(expected, actual);
 	}

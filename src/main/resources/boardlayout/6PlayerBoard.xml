@@ -1,4 +1,4 @@
-<Board Name="6PlayerBoard" BoardImage="chessboard_6players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="856" Height="808" RuleEngine="RULEENGINE_DEFAULT">
+<Board Name="6PlayerBoard" BoardImage="chessboard_6players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="856" Height="808"  RuleEngine="DefaultRuleEngine" RuleProcessor="DefaultRuleProcessor">
   <Positions/>
   <Rules/>
   <Pieces/>

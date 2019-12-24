@@ -25,6 +25,7 @@ public class BoardData implements IBoardData {
 	private String m_stActiveCellImagePath;
 	private String m_stMarkedCellImagePath;
 	private String m_stRuleEngineName;	
+	private String m_stRuleProcessorName;	
     private Map<String, IPosition> m_mpPosition;
     private Map<String, IPlayer > m_mpPlayers;
     private Map<String, IPiece > m_mpPieces;
@@ -180,5 +181,13 @@ public class BoardData implements IBoardData {
 
 	public void setRuleEngineName(String stName) {
 		m_stRuleEngineName = stName;
+	}
+
+	public void setRuleProcessorName(String stName) {
+		m_stRuleProcessorName = stName;
+	}
+
+	public String getRuleProcessorName() {
+		return m_stRuleProcessorName;
 	}
 }

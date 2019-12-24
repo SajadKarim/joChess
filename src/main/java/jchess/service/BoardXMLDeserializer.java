@@ -29,6 +29,8 @@ import jchess.common.enumerator.Family;
 import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class loads data from XML file.
@@ -95,7 +97,7 @@ class BoardXMLDeserializer {
 		}
 	}
 	
-	static void populateBoard(String stFilePath, IBoard oBoard) {
+	static void populateBoard(String stFilePath, IBoard oBoard, IAppLogger oLogger) {
 		
 		try
 		{
@@ -113,15 +115,15 @@ class BoardXMLDeserializer {
 	
 			Element oRootElement = m_oDocument.getDocumentElement();
 	
-			populateBoardAttributes(oBoard, oRootElement);
+			populateBoardAttributes(oBoard, oRootElement, oLogger);
 			
-			populatePositions(oBoard, oRootElement);
+			populatePositions(oBoard, oRootElement, oLogger);
 			
-			loadRules(oBoard, oRootElement);
+			loadRules(oBoard, oRootElement, oLogger);
 			
-			loadPieces(oBoard, oRootElement);
+			loadPieces(oBoard, oRootElement, oLogger);
 			
-			loadPlayers(oBoard, oRootElement);
+			loadPlayers(oBoard, oRootElement, oLogger);
 			
 			oBoard.init();
 		}
@@ -130,7 +132,7 @@ class BoardXMLDeserializer {
 		}
 	}	
 	
-	static void populateBoardPlayerDetailsOnly(String stFilePath, IBoard oBoard) {
+	static void populateBoardPlayerDetailsOnly(String stFilePath, IBoard oBoard, IAppLogger oLogger) {
 		
 		try
 		{
@@ -148,24 +150,41 @@ class BoardXMLDeserializer {
 	
 			Element oRootElement = m_oDocument.getDocumentElement();
 	
-			populateBoardAttributes(oBoard, oRootElement);
+			populateBoardAttributes(oBoard, oRootElement, oLogger);
 			
-			//populatePositions(oBoard, oRootElement);
-			
-			//loadRules(oBoard, oRootElement);
-			
-			//loadPieces(oBoard, oRootElement);
-			
-			loadPlayers(oBoard, oRootElement);
-			
-			//oBoard.init();
+			loadPlayers(oBoard, oRootElement, oLogger);
 		}
 		catch(java.lang.Exception e) {
-			System.out.println(e);
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 	}	
 	
-	private static void populateBoardAttributes(IBoard oBoard, Element oRootElement) {
+	static void populateBoardEngineDetailsOnly(String stFilePath, IBoard oBoard, IAppLogger oLogger) {
+		
+		try
+		{
+			Document m_oDocument;
+			DocumentBuilder m_oBuilder;	
+			DocumentBuilderFactory m_oFactory;	
+
+			m_oFactory = DocumentBuilderFactory.newInstance();
+
+			m_oBuilder = m_oFactory.newDocumentBuilder();
+			
+			m_oDocument = m_oBuilder.parse(new File(stFilePath));
+	
+			m_oDocument.getDocumentElement().normalize();
+	
+			Element oRootElement = m_oDocument.getDocumentElement();
+	
+			populateBoardAttributes(oBoard, oRootElement, oLogger);
+		}
+		catch(java.lang.Exception e) {
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+		}
+	}	
+
+	private static void populateBoardAttributes(IBoard oBoard, Element oRootElement, IAppLogger oLogger) {
 		
 		String stName = oRootElement.getAttributes().getNamedItem("Name").getNodeValue();
 		String stBoardImage = oRootElement.getAttributes().getNamedItem("BoardImage").getNodeValue();
@@ -174,6 +193,7 @@ class BoardXMLDeserializer {
 		int nWidth = Integer.parseInt( oRootElement.getAttributes().getNamedItem("Width").getNodeValue());
 		int nHeight = Integer.parseInt( oRootElement.getAttributes().getNamedItem("Height").getNodeValue());
 		String stRuleEngine = oRootElement.getAttributes().getNamedItem("RuleEngine").getNodeValue();
+		String stRuleProcessor = oRootElement.getAttributes().getNamedItem("RuleProcessor").getNodeValue();
 		
 		oBoard.getBoardData().setName(stName);
 		oBoard.getBoardData().setBoardImagePath(stBoardImage);
@@ -182,16 +202,17 @@ class BoardXMLDeserializer {
 		oBoard.getBoardData().setBoardWidth(nWidth);
 		oBoard.getBoardData().setBoardHeight(nHeight);
 		oBoard.getBoardData().setRuleEngineName(stRuleEngine);
+		oBoard.getBoardData().setRuleProcessorName(stRuleProcessor);
 	}
 
-	private static void populatePositions(IBoard oBoard, Element oRootElement){
+	private static void populatePositions(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
 		
-		loadPositionsBasicDetails(oBoard, oRootElement);
+		loadPositionsBasicDetails(oBoard, oRootElement, oLogger);
 		
-		loadPositionsConnectionDetails(oBoard, oRootElement);
+		loadPositionsConnectionDetails(oBoard, oRootElement, oLogger);
 	}
 
-	private static void loadPositionsBasicDetails(IBoard oBoard, Element oRootElement){
+	private static void loadPositionsBasicDetails(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
 
 		try
 		{
@@ -236,12 +257,12 @@ class BoardXMLDeserializer {
 		}
 		}
 		catch(java.lang.Exception e) {
-			System.out.println(e);
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 
 	}
 
-	private static void loadPositionsConnectionDetails(IBoard oBoard, Element oRootElement){
+	private static void loadPositionsConnectionDetails(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
 
 		try
 		{
@@ -286,17 +307,17 @@ class BoardXMLDeserializer {
 			}
 		}
 		catch(java.lang.Exception e) {
-			System.out.println(e);
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 
 	}
 
 	
-	private static void loadRules(IBoard oBoard, Element oRootElement){
-		populateRule(oBoard, oRootElement, null);
+	private static void loadRules(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
+		populateRule(oBoard, oRootElement, null, oLogger);
 	}
 	
-	private static void populateRule(IBoard oBoard, Element oRootElement, IRule oParentRule) {
+	private static void populateRule(IBoard oBoard, Element oRootElement, IRule oParentRule, IAppLogger oLogger) {
 		try{			
 			NodeList lstRuleNodes = ((Element)oRootElement.getElementsByTagName("Rules").item(0)).getElementsByTagName("Rule");
 			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
@@ -336,15 +357,15 @@ class BoardXMLDeserializer {
 				else
 					oBoard.getBoardData().addRule( oRule);
 				
-				populateRule(oBoard, oRuleNode, oRule);
+				populateRule(oBoard, oRuleNode, oRule, oLogger);
 			}
 		}
 		catch(java.lang.Exception e) {
-			System.out.println(e);
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 	}
 	
-	private static void loadPieces(IBoard oBoard, Element oRootElement){
+	private static void loadPieces(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
 
 		try
 		{
@@ -377,12 +398,12 @@ class BoardXMLDeserializer {
 		}
 		}
 		catch(java.lang.Exception e) {
-			System.out.println(e);
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 
 	}
 
-	private static void loadPlayers(IBoard oBoard, Element oRootElement){
+	private static void loadPlayers(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
 
 		try{
 			NodeList lstPlayerNodes = ((Element)oRootElement.getElementsByTagName("Players").item(0)).getElementsByTagName("Player");
@@ -394,7 +415,6 @@ class BoardXMLDeserializer {
 							
 				IPlayer oPlayer = oBoard.createPlayer();
 				oPlayer.getPlayerData().setName(stName);
-				//oPlayer.getPlayerData().setColor("white");
 	
 				try {
 					NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
@@ -403,9 +423,7 @@ class BoardXMLDeserializer {
 		
 						String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
 						String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
-		
-						//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
-						
+								
 						oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
 					}   
 					
@@ -419,20 +437,18 @@ class BoardXMLDeserializer {
 						int nTo = tryParseInt(stTo);
 						int nFrom = tryParseInt(stFrom);
 						
-						//oPlayer.getPlayerData().addRule(oBoard.getBoardData().getRule(stRule));
-						
 						oPlayer.getPlayerData().addBoardMapping(nFrom, nTo);
 					}   
 				}
 				catch(java.lang.Exception e) {
-					System.out.println(e);
+					oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 				}
 
 				oBoard.getBoardData().addPlayer( oPlayer);
 			}
 		}
 		catch(java.lang.Exception e) {
-			System.out.println(e);
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 	}
 	

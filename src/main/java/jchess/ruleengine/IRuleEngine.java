@@ -21,8 +21,6 @@ import jchess.gui.IGUIHandle;
  */
 
 public interface IRuleEngine {
-	public void setGUIHandle(IGUIHandle oGUIHandle);
-	public void setRuleProcessor(IRuleProcessor oRuleProcessor);
 	public Map<String,IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition);
 	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate);
 }

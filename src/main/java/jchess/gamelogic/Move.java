@@ -127,4 +127,12 @@ public class Move implements IMove {
 		}
 		return stReturnValue;
 	}
+	
+	// TODO: Include other details in the following log infomation.
+	public String toLog() {
+		return String.format("IsSusseccul=%s, MoveCandidate=%s, Player=%s"
+				, m_bIsMoveSuccessful
+				, m_oMoveCandidacy.toLog()
+				, m_oPlayer == null ? "NULL" : m_oPlayer.getName());
+	}
 }

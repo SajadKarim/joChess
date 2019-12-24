@@ -29,4 +29,5 @@ public interface IPositionAgent extends IPosition {
 	public List<IPositionAgent> tryGetOppositePath( IPositionAgent oPosition);	
 	public Map<String, IPositionAgent> getAllPathAgents(IBoardMapping oBoardMapping, Direction enDirection, Family enFamily, File enFile, Rank enRank);
 	public Boolean tryValidateRuleApplicability(IBoardMapping oBoardMapping, Family enFamily, File enFile, Rank enRank, IPositionAgent oNextPosition);	
+	public String toLog();
 }

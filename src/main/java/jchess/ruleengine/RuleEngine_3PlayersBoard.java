@@ -4,11 +4,15 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
+import com.google.inject.Inject;
+
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
+import jchess.gui.IGUIHandle;
+import jchess.util.IAppLogger;
 
 /**
  * Extended logic to execute a Rule for 3 Player board.
@@ -17,10 +21,10 @@ import jchess.common.IRuleAgent;
  * @since	7 Dec 2019
  */
 
-class RuleEngine_3PlayersBoard extends ExtendedRuleEngine {
-	
-	public RuleEngine_3PlayersBoard(IRuleProcessor oRuleProcessor) {
-		super(oRuleProcessor);
+class RuleEngine_3PlayersBoard extends ExtendedRuleEngine {	
+	@Inject
+	public RuleEngine_3PlayersBoard(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
+		super(oRuleProcessor, oGUIHandler, oLogger);
 	}
 	
 	@Override

@@ -5,10 +5,13 @@ import java.util.ArrayList;
 
 import javax.swing.JDialog;
 
+import org.jdesktop.application.View;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 import jchess.cache.ICacheManager;
+import jchess.common.gui.DialogResult;
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -41,23 +44,8 @@ public class NewGamePresenter extends AbstractModule implements INewGamePresente
     	m_oView.setViewData(m_oModel);
     	m_oView.init();
     }
-    
-    public INewGameView getView() {
-    	return m_oView;
-    }
 
-    public JDialog getViewJDialog() {
-    	return m_oView.getJDialog();
-    }
-
-    public Component getViewComponent() {
-    	return m_oView.getViewComponent();
-    }
-
-	public void onRequestForNewGame(INewGameModel oModel) {
-	}
-
-	public void onNewGameLaunchRequest(INewGameModel oData) {
+   	public void onNewGameLaunchRequest(INewGameModel oData) {
     	m_oAppLogger.writeLog(LogLevel.DETAILED, "Launching new game.", "launchNewGame", "NewGamePresenter");
 
 		m_oView.getViewComponent().setVisible(false);
@@ -73,5 +61,33 @@ public class NewGamePresenter extends AbstractModule implements INewGamePresente
             oListener.onNewGameLaunchRequest(oData);
         }
     }
+
+	@Override
+	public void showView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public View tryGetJDesktopView() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JDialog tryGetViewJDialog() {
+    	return m_oView.getJDialog();
+	}
+
+	@Override
+	public Component tryGetViewComponent() {
+    	return m_oView.getViewComponent();
+	}
+
+	@Override
+	public void onViewClosed(DialogResult oFormAction, Object oData) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
