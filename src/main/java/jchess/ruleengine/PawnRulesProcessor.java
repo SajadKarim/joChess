@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import org.javatuples.Pair;
-
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
@@ -43,8 +41,8 @@ public class PawnRulesProcessor {
 		Map<String, IPositionAgent> mpPosition = oSelectedPosition.getAllPathAgents(oPlayer.getBoardMapping(), Direction.EDGE, Family.IGNORE, File.SAME, Rank.FORWARD);
 		for( Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
 			
-			if( it.getValue().getPiece() != null)
-				continue;
+			//if( it.getValue().getPiece() != null)
+			//	continue;
 			
 			Map<String, IPositionAgent> mpNextPosition = it.getValue().getAllPathAgents(oPlayer.getBoardMapping(), Direction.EDGE, Family.DIFFERENT, File.SAME, Rank.FORWARD);
 
@@ -83,7 +81,10 @@ public class PawnRulesProcessor {
 		IPieceAgent oDestinationPiecePriorMove = oMoveCandidate.getCandidatePosition().getPiece();
 
 		IPlayerAgent oPlayer = oSourcePiecePriorMove.getPlayer();
-		
+	
+		// TODO: For the time being I am skipping unit test for the following code.
+		// How To: Need to move the following window launching code to a separate file, so that we can extend it for unittest and
+		// pass a default piece to be selected to continue with the unit test.
 		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllPieceAgents(), oSourcePiecePriorMove);
 		IPawnPromotionDialogView oView = new PawnPromotionDialogView(oGUIHandle.getGUIMainFrame(), oData.getViewData());
 		IPresenter oPresenter = new PawnPromotionPresenter(oView, oData, null);		

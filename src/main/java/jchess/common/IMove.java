@@ -3,6 +3,7 @@ package jchess.common;
 import java.util.Map;
 
 public interface IMove {
+	public IRuleAgent getRule();
 	public Boolean IsMoveSuccessful();
 	public void setMoveSuccessState(Boolean bIsMoveSuccessful);
 	//public String getMoveDisplayString();

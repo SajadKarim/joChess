@@ -1,6 +1,7 @@
 package jchess.cache;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import jchess.service.StorageService;
 
 @Singleton
 public class CacheManager implements ICacheManager{
-    private static String BOARDLAYOUTS_DIRECTORY = GUI.getJarPath() + "boardlayout" + File.separator;
+    private String BOARDLAYOUTS_DIRECTORY;
     
     private Map<String, BoardCache> m_mpBoardCache;
     private Map<String, Pair<String, Integer>> m_mpPlayerAllowedInBoard;
@@ -41,9 +42,12 @@ public class CacheManager implements ICacheManager{
     
     	m_oLogger.writeLog(LogLevel.INFO, "Instantiating CacheManager.", "CacheManager", "CacheManager");
 
-    	init();
+    	BOARDLAYOUTS_DIRECTORY = getClass().getClassLoader().getResource("boardlayout").getPath() + File.separator;
+
+        init();
     } 
   
+    
     public IBoardAgent getBoard(String stGameId) {
     	if( m_mpBoardCache.containsKey(stGameId))
     		return m_mpBoardCache.get(stGameId).getBoard();

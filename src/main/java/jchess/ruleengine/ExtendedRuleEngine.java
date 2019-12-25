@@ -2,16 +2,12 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
 import jchess.common.IBoardAgent;
 import jchess.common.IMove;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.gamelogic.Move;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -27,34 +23,22 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition) {	
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating rules attaches to the Position [%s].", oSelectedPosition.toLog()), "tryEvaluateAllRules", "ExtendedRuleEngine");
 
-		Map<String, IMoveCandidacy> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oSelectedPosition);
-		
-		switch(oSelectedPosition.getPiece().getName()) {
-		case "PawnWhite":
-		case "PawnBlack":
-		case "PawnRed": {
-			PawnRulesProcessor.tryPawnPromotionRule(oBoard, oSelectedPosition, mpCandidateMovePositions);
-
-			PawnRulesProcessor.tryPawnFirstMoveException(m_oRuleProcessor, oBoard, oSelectedPosition, mpCandidateMovePositions);
-		}
-			break;
-		default:
-			break;
-		}
-		
-		return mpCandidateMovePositions;
+		return super.tryEvaluateAllRules(oBoard, oSelectedPosition);
 	}
 
 	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected move candidate.", "tryExecuteRule", "ExtendedRuleEngine");
 
 		IMove oMove = super.tryExecuteRule(oBoard, oMoveCandidate);
-		switch( oMoveCandidate.getRule().getRuleType()) {
-			case CUSTOM: {
-				oMove = tryExecuteCustomRules(oBoard, oMoveCandidate);
+		
+		if( !oMove.IsMoveSuccessful()) {
+			switch( oMoveCandidate.getRule().getRuleType()) {
+				case CUSTOM: {
+					oMove = tryExecuteCustomRules(oBoard, oMoveCandidate);
+				}
+				default:
+					break;
 			}
-			default:
-				break;
 		}
 		
 		return oMove;
@@ -78,5 +62,4 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 		
 		return oMove;
 	}
-
 }

@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
 import jchess.common.*;
@@ -40,7 +38,7 @@ public class DefaultRuleEngine implements IRuleEngine{
 
 		Map<String, IMoveCandidacy> mpCandidateMovePositions = new HashMap<String, IMoveCandidacy>();
 
-		m_oRuleProcessor.tryEvaluateAllRules(oSelectedPosition, mpCandidateMovePositions);
+		m_oRuleProcessor.tryEvaluateAllRules(oBoard, oSelectedPosition, mpCandidateMovePositions);
 		
 		return mpCandidateMovePositions;
     }

@@ -1,0 +1,13 @@
+<Board Name="6PlayerBoard" BoardImage="chessboard_6players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="856" Height="808"  RuleEngine="DefaultRuleEngine" RuleProcessor="DefaultRuleProcessor">
+  <Positions/>
+  <Rules/>
+  <Pieces/>
+  <Players>
+    <Player Name="P1" />
+    <Player Name="P2" />
+    <Player Name="P3" />
+    <Player Name="P4" />
+    <Player Name="P5" />
+    <Player Name="P6" />
+  </Players>
+</Board>

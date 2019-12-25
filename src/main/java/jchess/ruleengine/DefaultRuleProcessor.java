@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.javatuples.Pair;
-
+import jchess.common.IBoardAgent;
 import jchess.common.IMoveCandidacy;
 import jchess.common.IPathAgent;
 import jchess.common.IPieceAgent;
@@ -30,7 +29,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleProcessor.", "DefaultRuleProcessor", "DefaultRuleProcessor");
 	}
 	
-	public void tryEvaluateAllRules(IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	public void tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "DefaultRuleProcessor");
 
 		IPieceAgent oPiece = oPosition.getPiece();
@@ -79,7 +78,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		}
 	}
 	
-	private void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForBlinkerStrategy", "DefaultRuleProcessor");
 
 		List<IPositionAgent> lstPosition = null;
@@ -127,7 +126,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		}
 	}
 	
-	private void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForFileAndRankStrategy", "DefaultRuleProcessor");
 
 		for( Map.Entry<String, IPathAgent> entry: oCurrentPosition.getAllPathAgents().entrySet()) {
