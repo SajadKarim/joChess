@@ -135,4 +135,9 @@ public class Move implements IMove {
 				, m_oMoveCandidacy.toLog()
 				, m_oPlayer == null ? "NULL" : m_oPlayer.getName());
 	}
+	
+	public IRuleAgent getRule() {
+		return m_oMoveCandidacy.getRule();
+	}
+
 }
