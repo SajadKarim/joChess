@@ -94,6 +94,30 @@ public class RuleAgent implements IRuleAgent {
 	//endregion
 	
 	//region: IRuleAgent Implementation
+	public void markRuleUsage() {
+		m_nRepeatCount++;
+	}
+	
+	public Boolean canProceedWithThisRule() {
+		if( m_oRule.getMaxRecurrenceCount() > 0 && ++m_nRepeatCount < m_oRule.getMaxRecurrenceCount()) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public IRuleAgent getNextChildRule() {
+		if( m_qRules.size() <= 0)
+			return null;
+
+		IRule oRule = m_qRules.remove(); 
+		if( oRule != null) {
+			return (RuleAgent)(oRule);
+		}
+		
+		return null;
+	}
+
 	public IRuleAgent getNextRule() {
 		if( m_oRule.getMaxRecurrenceCount() > 0 && ++m_nRepeatCount < m_oRule.getMaxRecurrenceCount()) {
 			return this;
