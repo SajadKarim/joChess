@@ -3,7 +3,6 @@ package jchess.gui.view.newgamewindow;
 import javax.swing.JDialog;
 
 import jchess.common.gui.IPanelView;
-import jchess.common.gui.IView;
 
 /**
  * Interface for new game window.

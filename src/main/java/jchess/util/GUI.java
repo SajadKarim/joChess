@@ -22,7 +22,6 @@ package jchess.util;
 
 import java.awt.*;
 import java.net.*;
-import java.nio.file.Paths;
 import java.io.*;
 
 import jchess.Main;

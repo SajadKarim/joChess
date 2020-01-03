@@ -26,9 +26,9 @@ dependencies {
 
 
 jar {
-    manifest {
-        attributes 'Main-Class': 'jchess.JChessApp'
-    }
+  manifest { 
+    attributes "Main-Class": "jchess.Main"
+  }  
 }
 
 test {

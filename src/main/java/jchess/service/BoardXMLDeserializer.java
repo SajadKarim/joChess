@@ -17,7 +17,7 @@ import jchess.cache.BoardData;
 import jchess.cache.Path;
 import jchess.cache.Quadrilateral;
 import jchess.common.IBoard;
-import jchess.common.IBoardMapping;
+import jchess.common.IBoardFactory;
 import jchess.common.IPath;
 import jchess.common.IPathData;
 import jchess.common.IPiece;
@@ -97,7 +97,7 @@ class BoardXMLDeserializer {
 		}
 	}
 	
-	static void populateBoard(String stFilePath, IBoard oBoard, IAppLogger oLogger) {
+	static IBoard getBoard(String stFilePath, IBoardFactory oBoardFactory, IAppLogger oLogger) {
 		
 		try
 		{
@@ -115,24 +115,30 @@ class BoardXMLDeserializer {
 	
 			Element oRootElement = m_oDocument.getDocumentElement();
 	
+			IBoard oBoard = oBoardFactory.createBoard();
+			
 			populateBoardAttributes(oBoard, oRootElement, oLogger);
 			
-			populatePositions(oBoard, oRootElement, oLogger);
+			populatePositions(oBoard, oBoardFactory, oRootElement, oLogger);
 			
-			loadRules(oBoard, oRootElement, oLogger);
+			loadRules(oBoard, oBoardFactory, oRootElement, oLogger);
 			
-			loadPieces(oBoard, oRootElement, oLogger);
+			loadPieces(oBoard, oBoardFactory, oRootElement, oLogger);
 			
-			loadPlayers(oBoard, oRootElement, oLogger);
+			loadPlayers(oBoard, oBoardFactory, oRootElement, oLogger);
 			
 			oBoard.init();
+			
+			return oBoard;
 		}
 		catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
+		
+		return null;
 	}	
 	
-	static void populateBoardPlayerDetailsOnly(String stFilePath, IBoard oBoard, IAppLogger oLogger) {
+	static IBoard getBoardWithPlayerDetailsOnly(String stFilePath, IBoardFactory oBoardFactory, IAppLogger oLogger) {
 		
 		try
 		{
@@ -150,16 +156,22 @@ class BoardXMLDeserializer {
 	
 			Element oRootElement = m_oDocument.getDocumentElement();
 	
+			IBoard oBoard = oBoardFactory.createBoard();
+
 			populateBoardAttributes(oBoard, oRootElement, oLogger);
 			
-			loadPlayers(oBoard, oRootElement, oLogger);
+			loadPlayers(oBoard, oBoardFactory, oRootElement, oLogger);
+			
+			return oBoard;
 		}
 		catch(java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
+		
+		return null;
 	}	
 	
-	static void populateBoardEngineDetailsOnly(String stFilePath, IBoard oBoard, IAppLogger oLogger) {
+	static IBoard getBoardWithPrimaryDetailsOnly(String stFilePath, IBoardFactory oBoardFactory, IAppLogger oLogger) {
 		
 		try
 		{
@@ -177,11 +189,16 @@ class BoardXMLDeserializer {
 	
 			Element oRootElement = m_oDocument.getDocumentElement();
 	
+			IBoard oBoard = oBoardFactory.createBoard();
+
 			populateBoardAttributes(oBoard, oRootElement, oLogger);
+			
+			return oBoard;
 		}
 		catch(java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
+		return null;
 	}	
 
 	private static void populateBoardAttributes(IBoard oBoard, Element oRootElement, IAppLogger oLogger) {
@@ -205,21 +222,21 @@ class BoardXMLDeserializer {
 		oBoard.getBoardData().setRuleProcessorName(stRuleProcessor);
 	}
 
-	private static void populatePositions(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
+	private static void populatePositions(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
 		
-		loadPositionsBasicDetails(oBoard, oRootElement, oLogger);
+		loadPositionsBasicDetails(oBoard, oBoardFactory, oRootElement, oLogger);
 		
-		loadPositionsConnectionDetails(oBoard, oRootElement, oLogger);
+		loadPositionsConnectionDetails(oBoard, oBoardFactory, oRootElement, oLogger);
 	}
 
-	private static void loadPositionsBasicDetails(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
+	private static void loadPositionsBasicDetails(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
 
 		try
 		{
 		NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
 		for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
 		
-			IPosition oPosition = oBoard.createPosition();
+			IPosition oPosition = oBoardFactory.createPosition();
 
 			Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
 			
@@ -262,7 +279,7 @@ class BoardXMLDeserializer {
 
 	}
 
-	private static void loadPositionsConnectionDetails(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
+	private static void loadPositionsConnectionDetails(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
 
 		try
 		{
@@ -313,11 +330,11 @@ class BoardXMLDeserializer {
 	}
 
 	
-	private static void loadRules(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
-		populateRule(oBoard, oRootElement, null, oLogger);
+	private static void loadRules(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
+		populateRule(oBoard, oBoardFactory, oRootElement, null, oLogger);
 	}
 	
-	private static void populateRule(IBoard oBoard, Element oRootElement, IRule oParentRule, IAppLogger oLogger) {
+	private static void populateRule(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IRule oParentRule, IAppLogger oLogger) {
 		try{			
 			NodeList lstRuleNodes = ((Element)oRootElement.getElementsByTagName("Rules").item(0)).getElementsByTagName("Rule");
 			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
@@ -340,7 +357,7 @@ class BoardXMLDeserializer {
 						nLifespan = Integer.MAX_VALUE;
 				}
 
-				IRule oRule = oBoard.createRule();
+				IRule oRule = oBoardFactory.createRule();
 				
 				oRule.getRuleData().setName(stName);
 				oRule.getRuleData().setRuleType(enRuleType);
@@ -357,7 +374,7 @@ class BoardXMLDeserializer {
 				else
 					oBoard.getBoardData().addRule( oRule);
 				
-				populateRule(oBoard, oRuleNode, oRule, oLogger);
+				populateRule(oBoard, oBoardFactory, oRuleNode, oRule, oLogger);
 			}
 		}
 		catch(java.lang.Exception e) {
@@ -365,7 +382,7 @@ class BoardXMLDeserializer {
 		}
 	}
 	
-	private static void loadPieces(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
+	private static void loadPieces(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
 
 		try
 		{
@@ -378,7 +395,7 @@ class BoardXMLDeserializer {
 			String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
 			String stFamily = oPieceNode.getAttributes().getNamedItem("Family").getNodeValue();
 			
-			IPiece oPiece = oBoard.createPiece();
+			IPiece oPiece = oBoardFactory.createPiece();
 			
 			oPiece.getPieceData().setName(stName);
 			oPiece.getPieceData().setImagePath(stImage);
@@ -403,7 +420,7 @@ class BoardXMLDeserializer {
 
 	}
 
-	private static void loadPlayers(IBoard oBoard, Element oRootElement, IAppLogger oLogger){
+	private static void loadPlayers(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
 
 		try{
 			NodeList lstPlayerNodes = ((Element)oRootElement.getElementsByTagName("Players").item(0)).getElementsByTagName("Player");
@@ -413,7 +430,7 @@ class BoardXMLDeserializer {
 				
 				String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
 							
-				IPlayer oPlayer = oBoard.createPlayer();
+				IPlayer oPlayer = oBoardFactory.createPlayer();
 				oPlayer.getPlayerData().setName(stName);
 	
 				try {

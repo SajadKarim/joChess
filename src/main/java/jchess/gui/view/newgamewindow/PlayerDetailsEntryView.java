@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gui.model.newgamewindow.INewGameModel;
 

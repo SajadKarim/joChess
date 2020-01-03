@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import com.google.inject.Inject;
 
 import jchess.Settings;
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.util.IAppLogger;

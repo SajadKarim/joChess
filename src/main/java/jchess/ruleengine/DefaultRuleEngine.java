@@ -7,7 +7,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 
 import jchess.common.*;
-import jchess.gamelogic.Move;
+import jchess.gamelogic.BoardActivity;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -33,68 +33,86 @@ public class DefaultRuleEngine implements IRuleEngine{
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleEngine.", "DefaultRuleEngine", "DefaultRuleEngine");
 	}
 		
-	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition) {	
-		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating move candidates for selected position [%s].", oSelectedPosition.toLog()), "tryEvaluateAllRules", "DefaultRuleEngine");
+	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating move candidates for selected position [%s].", oPiece.toLog()), "tryEvaluateAllRules", "DefaultRuleEngine");
 
-		Map<String, IMoveCandidacy> mpCandidateMovePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidateMovePositions = new HashMap<String, IMoveCandidate>();
 
-		m_oRuleProcessor.tryEvaluateAllRules(oBoard, oSelectedPosition, mpCandidateMovePositions);
+		m_oRuleProcessor.tryEvaluateAllRules(oBoard, oPiece, mpCandidateMovePositions);
 		
 		return mpCandidateMovePositions;
     }
 
-	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
+	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Executing the rule for move candidate [%s].", oMoveCandidate.toLog()), "tryExecuteRule", "DefaultRuleEngine");
 
-		IMove oMove = new Move(oMoveCandidate);
+		IBoardActivity oActivity = null;
 		
 		switch( oMoveCandidate.getRule().getRuleType()) {
 			case MOVE:{
 				if( oMoveCandidate.getCandidatePosition().getPiece() != null)
 					break;
-								
-				IPieceAgent oPiece = oMoveCandidate.getSourcePosition().getPiece();
-				oMoveCandidate.getCandidatePosition().setPiece(oPiece);
-				oMoveCandidate.getSourcePosition().setPiece(null);
+
+				oActivity = new BoardActivity(oMoveCandidate);
 				
-				oPiece.markRun();
+				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
+				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
+				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
+				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
 				
-				oMove.addPriorMoveEntry(oMoveCandidate.getSourcePosition().getName(), oPiece);
-				oMove.addPriorMoveEntry(oMoveCandidate.getCandidatePosition().getName(), null);
-				oMove.addPostMoveEntry(oMoveCandidate.getSourcePosition().getName(), null);
-				oMove.addPostMoveEntry(oMoveCandidate.getCandidatePosition().getName(), oPiece);
-				oMove.setPlayer(oPiece.getPlayer());
-				oMove.setMoveSuccessState(true);
+				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
+				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
+				oCurrentPosition.setPiece(null);
+				
+				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+				
+				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
+				oActivity.addPostMoveEntry(oCurrentPosition, null );
+				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
+				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 			}
 				break;
 			case MOVE_AND_CAPTURE:{
-				IPieceAgent oPiece = oMoveCandidate.getSourcePosition().getPiece();
-				oMoveCandidate.getCandidatePosition().setPiece((jchess.gamelogic.PieceAgent)oPiece);
-				oMoveCandidate.getSourcePosition().setPiece(null);
+				oActivity = new BoardActivity(oMoveCandidate);
 
-				oPiece.markRun();
-
-				oMove.addPriorMoveEntry(oMoveCandidate.getSourcePosition().getName(), oPiece);
-				oMove.addPriorMoveEntry(oMoveCandidate.getCandidatePosition().getName(), null);
-				oMove.addPostMoveEntry(oMoveCandidate.getSourcePosition().getName(), null);
-				oMove.addPostMoveEntry(oMoveCandidate.getCandidatePosition().getName(), oPiece);
-				oMove.setPlayer(oPiece.getPlayer());
-				oMove.setMoveSuccessState(true);
+				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
+				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
+				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
+				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
+				
+				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
+				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
+				oCurrentPosition.setPiece(null);
+				
+				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+				
+				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
+				oActivity.addPostMoveEntry(oCurrentPosition, null );
+				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
+				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 			}
 				break;
 			case MOVE_IFF_CAPTURE_POSSIBLE:{
-				IPieceAgent oPiece = oMoveCandidate.getSourcePosition().getPiece();
-				oMoveCandidate.getCandidatePosition().setPiece((jchess.gamelogic.PieceAgent)oPiece);
-				oMoveCandidate.getSourcePosition().setPiece(null);				
+				oActivity = new BoardActivity(oMoveCandidate);
 
-				oPiece.markRun();
-
-				oMove.addPriorMoveEntry(oMoveCandidate.getSourcePosition().getName(), oPiece);
-				oMove.addPriorMoveEntry(oMoveCandidate.getCandidatePosition().getName(), null);
-				oMove.addPostMoveEntry(oMoveCandidate.getSourcePosition().getName(), null);
-				oMove.addPostMoveEntry(oMoveCandidate.getCandidatePosition().getName(), oPiece);
-				oMove.setPlayer(oPiece.getPlayer());
-				oMove.setMoveSuccessState(true);
+				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
+				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
+				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
+				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
+				
+				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
+				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
+				oCurrentPosition.setPiece(null);
+				
+				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+				
+				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
+				oActivity.addPostMoveEntry(oCurrentPosition, null );
+				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
+				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 			}
 				break;
 			case MOVE_TRANSIENT:{
@@ -105,8 +123,9 @@ public class DefaultRuleEngine implements IRuleEngine{
 				break;
 		}
 		
-		m_oLogger.writeLog(LogLevel.INFO, String.format("Returning.. [%s].", oMove.toLog()), "tryExecuteRule", "DefaultRuleEngine");
+		if( oActivity != null)
+			m_oLogger.writeLog(LogLevel.INFO, String.format("Returning.. [%s].", oActivity.toLog()), "tryExecuteRule", "DefaultRuleEngine");
 
-		return oMove;
+		return oActivity;
 	}
 }

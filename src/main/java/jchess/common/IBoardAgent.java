@@ -3,8 +3,6 @@ package jchess.common;
 import java.awt.Image;
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 /**
  * IBoardAgent provides interface for the module where the
  * all the decisions (game) are taken. It ensures that user
@@ -30,4 +28,8 @@ public interface IBoardAgent extends IBoard {
 	
 	public IPieceAgent getPieceAgent(String stName);
 	public  Map<String, IPieceAgent>  getAllPieceAgents();
+	
+	public void addActivity(IBoardActivity oActivity);
+	public IBoardActivity undoLastActivity();
+	public IBoardActivity redoLastActivity();
 }

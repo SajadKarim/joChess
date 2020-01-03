@@ -1,21 +1,15 @@
 package jchess.gamelogic;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
-import jchess.common.IBoardAgent;
-import jchess.common.IMove;
-import jchess.common.IMoveCandidacy;
+import jchess.common.IBoardActivity;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.common.enumerator.RuleEngineType;
 import jchess.gui.IGUIHandle;
-import jchess.gui.IGUIManager;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.ruleengine.IRuleEngine;
-import jchess.ruleengine.RuleEngineFactory;
 import jchess.util.IAppLogger;
 import jchess.util.ITimer;
 import jchess.util.ITimerListener;
@@ -95,7 +89,7 @@ public class Game implements IGame, ITimerListener{
 		if( m_oGameState.getActivePosition() == null) {
 			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player selected a new Position.", "onBoardActivity", "Game");
-				tryFinalAllPossibleMoveCandidates(oPosition);
+				tryFinalAllPossibleMoveCandidates(oPosition.getPiece());
 				return;
 			}
 		} else {	
@@ -107,14 +101,14 @@ public class Game implements IGame, ITimerListener{
 
 			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on some other Piece.", "onBoardActivity", "Game");
-				tryFinalAllPossibleMoveCandidates(oPosition);
+				tryFinalAllPossibleMoveCandidates(oPosition.getPiece());
 				return;
 			}
 		
-			IMoveCandidacy oMoveCandidate =m_oGameState.getMoveCandidate(oPosition); 
+			IMoveCandidate oMoveCandidate =m_oGameState.getMoveCandidate(oPosition); 
 			if( oMoveCandidate != null) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on one of the Move candidancies.", "onBoardActivity", "Game");
-				oMoveCandidate.setSourcePosition(m_oGameState.getActivePosition());
+				//oMoveCandidate.setSourcePosition(m_oGameState.getActivePosition());
 				tryExecuteRule(oMoveCandidate);
 				return;
 			} 
@@ -124,15 +118,18 @@ public class Game implements IGame, ITimerListener{
 		}		
 	}
 		
-	public void tryExecuteRule(IMoveCandidacy oMoveCandidate) {
+	public void tryExecuteRule(IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Trying to make move." + oMoveCandidate.toLog(), "tryExecuteRule", "Game");
 
 		deselectedActivePosition();
-		IMove oMove = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
+		IBoardActivity oActivity = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
 
-		m_oGameState.switchPlayTurn();
-		notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oMove);
-		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+		if( oActivity != null) {
+			m_oGameModel.addBoardActivity(oActivity);
+			m_oGameState.switchPlayTurn();
+			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
+			notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+		}
 	}
 	
 	public void deselectedActivePosition() {
@@ -140,7 +137,7 @@ public class Game implements IGame, ITimerListener{
 
 		if( m_oGameState.getPossibleMovesForActivePosition() != null) {
 
-			for (Map.Entry<String, IMoveCandidacy> entry : m_oGameState.getPossibleMovesForActivePosition().entrySet()) {
+			for (Map.Entry<String, IMoveCandidate> entry : m_oGameState.getPossibleMovesForActivePosition().entrySet()) {
 				entry.getValue().getCandidatePosition().setMoveCandidacy(false);
 	    	}		
 		}
@@ -153,25 +150,26 @@ public class Game implements IGame, ITimerListener{
     	m_oGameState.setActivePosition(null);
 	}
 
-	public void tryFinalAllPossibleMoveCandidates(IPositionAgent oPosition){
-		m_oLogger.writeLog(LogLevel.INFO, String.format("Finding all the possible moves for Position=[%s]", oPosition.toLog()), "tryFinalAllPossibleMoveCandidates", "Game");
+	private void tryFinalAllPossibleMoveCandidates(IPieceAgent oPiece){
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Finding all the possible moves for Position=[%s]", oPiece.toLog()), "tryFinalAllPossibleMoveCandidates", "Game");
 
-		if( oPosition.getPiece() == null) {
+		IPositionAgent oPosition = oPiece.getPosition();
+		if( oPosition == null) {
 			m_oLogger.writeLog(LogLevel.INFO, "No piece attached.", "tryFinalAllPossibleMoveCandidates", "Game");
 			return;
 		}
 		
-		if (!oPosition.getPiece().getPlayer().getName().equals(m_oGameState.getActivePlayer().getName())) {
+		if (!oPiece.getPlayer().getName().equals(m_oGameState.getActivePlayer().getName())) {
 			m_oLogger.writeLog(LogLevel.INFO, "Piece belongs to some other player.", "tryFinalAllPossibleMoveCandidates", "Game");
 			return;
 		}
 		
 		deselectedActivePosition();
 		
-		Map<String, IMoveCandidacy> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPosition);
+		Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPiece);
 		// TODO: log mpCandidateMovePosition 
 		
-		for (Map.Entry<String, IMoveCandidacy> itCandidateMovePosition : mpCandidateMovePosition.entrySet()) {
+		for (Map.Entry<String, IMoveCandidate> itCandidateMovePosition : mpCandidateMovePosition.entrySet()) {
 			itCandidateMovePosition.getValue().getCandidatePosition().setMoveCandidacy(true);
     	}
 
@@ -209,7 +207,7 @@ public class Game implements IGame, ITimerListener{
         }	
 	}
 
-	public void notifyListenersOnMoveMadeByPlayer(IPlayerAgent oPlayer, IMove oMove) {		
+	public void notifyListenersOnMoveMadeByPlayer(IPlayerAgent oPlayer, IBoardActivity oMove) {		
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about move made by player.", "notifyListenersOnMoveMadeByPlayer", "Game");
 
 		for (final IGameListener oListener : m_lstListener) {
@@ -217,8 +215,8 @@ public class Game implements IGame, ITimerListener{
         }	
 	}
 
-	public void tryUndoMove(IPlayerAgent oPlayer) {
-		m_oLogger.writeLog(LogLevel.DETAILED, "Undoing move.", "tryUndoMove", "Game");
+	public void setPlayerAsActivePlayer(IPlayerAgent oPlayer) {
+		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player as active one.", "setPlayerAsActivePlayer", "Game");
 
 		deselectedActivePosition();
 		while( !m_oGameState.getActivePlayer().equals(oPlayer)) {
@@ -227,8 +225,8 @@ public class Game implements IGame, ITimerListener{
 		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
 	}
 
-	public void tryRedoMove(IPlayerAgent oPlayer) {
-		m_oLogger.writeLog(LogLevel.DETAILED, "Redoing move.", "tryRedoMove", "Game");
+	public void setPlayerTurnAsLast(IPlayerAgent oPlayer) {
+		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player's turn as last.", "setPlayerTurnAsLast", "Game");
 
 		deselectedActivePosition();
 		while( !m_oGameState.getActivePlayer().equals(oPlayer)) {

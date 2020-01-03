@@ -13,9 +13,10 @@ import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IMove;
-import jchess.common.IMoveCandidacy;
+import jchess.common.IBoardFactory;
+import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
@@ -25,7 +26,8 @@ import jchess.common.enumerator.File;
 import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
-import jchess.gamelogic.MoveCandidacy;
+import jchess.gamelogic.BoardAgentFactory;
+import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
@@ -33,6 +35,7 @@ class PawnRulesProcessorTest {
 	static IAppLogger m_oLogger;
 	static IBoardAgent m_oBoard;
 	static IRuleProcessor m_oRuleProcessor ;
+	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -60,9 +63,9 @@ class PawnRulesProcessorTest {
 	void testTryPawnPromotionRuleForEdge_FailureCase() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
 
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();		
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		PawnRulesProcessor.tryPawnPromotionRuleForEdge(m_oBoard, oCurrentPosition, mpCandidatePositions);
+		PawnRulesProcessor.tryPawnPromotionRuleForEdge(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 0;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -77,10 +80,11 @@ class PawnRulesProcessorTest {
 		// This change is made to create a scenarios where White Pawn has reached d7 position and wants to promote itself.
 		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("d2").getPiece();
 		oCurrentPosition.setPiece(oPawnPiece); 
+		oPawnPiece.setPosition(oCurrentPosition);
 
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();		
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		PawnRulesProcessor.tryPawnPromotionRuleForEdge(m_oBoard, oCurrentPosition, mpCandidatePositions);
+		PawnRulesProcessor.tryPawnPromotionRuleForEdge(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -97,9 +101,9 @@ class PawnRulesProcessorTest {
 	void testTryPawnPromotionRuleForVertex_FailureCase() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
 
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();		
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		PawnRulesProcessor.tryPawnPromotionRuleForVertex(m_oBoard, oCurrentPosition, mpCandidatePositions);
+		PawnRulesProcessor.tryPawnPromotionRuleForVertex(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 0;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -114,10 +118,11 @@ class PawnRulesProcessorTest {
 		// This change is made to create a scenarios where White Pawn has reached d7 position and wants to promote itself.
 		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("d2").getPiece();
 		oCurrentPosition.setPiece(oPawnPiece); 
+		oPawnPiece.setPosition(oCurrentPosition);
 
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();		
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		PawnRulesProcessor.tryPawnPromotionRuleForVertex(m_oBoard, oCurrentPosition, mpCandidatePositions);
+		PawnRulesProcessor.tryPawnPromotionRuleForVertex(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -143,9 +148,9 @@ class PawnRulesProcessorTest {
 	void testTryPawnFirstMoveException() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();		
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		PawnRulesProcessor.tryPawnFirstMoveException(m_oRuleProcessor, m_oBoard, oCurrentPosition, mpCandidatePositions);
+		PawnRulesProcessor.tryPawnFirstMoveException(m_oRuleProcessor, m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -166,7 +171,7 @@ class PawnRulesProcessorTest {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d4");
 
-		IRuleAgent oRule= (IRuleAgent)m_oBoard.createRule();		
+		IRuleAgent oRule= (IRuleAgent)m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.CUSTOM);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(1);
@@ -177,7 +182,7 @@ class PawnRulesProcessorTest {
 		oRule.getRuleData().setName("PawnFirstMoveException_InnerRule");
 		oRule.getRuleData().setCustomName("MOVE[PAWN_FIRST_MOVE_EXCEPTION]");
 				
-		IMoveCandidacy oMoveCandidate = new MoveCandidacy(oSourcePosition, oCandidatePosition, oRule);
+		IMoveCandidate oMoveCandidate = new MoveCandidate(oRule, oSourcePosition.getPiece(), oSourcePosition, oCandidatePosition);
 
 		// Following Asset validates the existence of Pawn prior execution of the Rule.
 		String oExpectedPieceString  = oSourcePosition.getPiece().getName();
@@ -185,7 +190,7 @@ class PawnRulesProcessorTest {
 
 		assertEquals(oExpectedPieceString, oActualPieceString);
 
-		IMove oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oMoveCandidate);
+		IBoardActivity oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(m_oBoard, oMoveCandidate);
 
 		// Following Asset validates the Pawn piece has moved after execution of the Rule.
 		IPieceAgent oExpectedPiece  = oSourcePosition.getPiece();

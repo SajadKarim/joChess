@@ -1,7 +1,5 @@
 package jchess.ruleengine;
 
-import jchess.common.enumerator.RuleEngineType;
-
 /**
  * This class acts as Factory Pattern which gives instance of
  * a RuleProcessor depending on the type of the Board passed.

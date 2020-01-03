@@ -6,9 +6,8 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
-import jchess.cache.BoardData;
 import jchess.common.*;
-import jchess.gamelogic.BoardAgent;
+import jchess.gamelogic.BoardAgentFactory;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
@@ -28,19 +27,13 @@ class FBDBService extends StorageService {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating FBDBService.", "FBDBService", "FBDBService");
 	}
 	
-	public IBoardData getBoardData(String stFilePath) {
-		IBoardData oBoard = new BoardData();
-		BoardXMLDeserializer.populateBoard(stFilePath, oBoard, m_oLogger);
-		return oBoard;
+	public IBoard getBoard(IBoardFactory oBoardFactory, String stFilePath) {
+		return BoardXMLDeserializer.getBoard(stFilePath, oBoardFactory, m_oLogger);
 	}	
 
-	public IBoardAgent getBoardAgent(String stFilePath) {
-		IBoardAgent oBoard = new BoardAgent();
-		BoardXMLDeserializer.populateBoard(stFilePath, oBoard, m_oLogger);
-		return oBoard;
-	}	
-	
-	public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(String stFolderPath){
+	public Map<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath){
+		m_oLogger.writeLog(LogLevel.INFO, stFolderPath, "getPossiblePlayerInEachBoard", "FBDBService");
+		
 		Map<String, Pair<String, Integer>> mpData = new HashMap<String, Pair<String, Integer>>();
 		
 		File oFolder = new File(stFolderPath);
@@ -50,8 +43,7 @@ class FBDBService extends StorageService {
 			if (arFiles[i].isFile() && arFiles[i].getName().endsWith(".xml")) {
 				String stBoardFilePath = stFolderPath + arFiles[i].getName();
 				
-				IBoardAgent oBoard = new BoardAgent();
-				BoardXMLDeserializer.populateBoardPlayerDetailsOnly(stBoardFilePath, oBoard, m_oLogger);
+				IBoard oBoard = BoardXMLDeserializer.getBoardWithPlayerDetailsOnly(stBoardFilePath, new BoardAgentFactory(), m_oLogger);
 
 				if( oBoard != null) {
 					mpData.put(oBoard.getName(), new Pair<String, Integer>(arFiles[i].getName(), oBoard.getAllPlayers().size()));
@@ -63,8 +55,7 @@ class FBDBService extends StorageService {
 	}
 	
 	public Pair<String, String> getRuleEngineInfo(String stBoardFilePath){
-		IBoardAgent oBoard = new BoardAgent();
-		BoardXMLDeserializer.populateBoardEngineDetailsOnly(stBoardFilePath, oBoard, m_oLogger);
+		IBoard oBoard = BoardXMLDeserializer.getBoardWithPrimaryDetailsOnly(stBoardFilePath, new BoardAgentFactory(), m_oLogger);
 
 		return new Pair<String, String>(oBoard.getRuleEngineName(), oBoard.getRuleProcessorName());
 	}

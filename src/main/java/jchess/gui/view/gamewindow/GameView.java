@@ -16,12 +16,10 @@ import javax.swing.JPanel;
 import com.google.inject.Inject;
 
 import jchess.gui.model.gamewindow.IGameModel;
-import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 
 /**
@@ -57,7 +55,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
      	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing GameView.", "init", "GameView");
 
 		this.setLayout(null);
-        this.setDoubleBuffered(true);
+        //this.setDoubleBuffered(false);
 		this.setLocation(new Point(0, 0));        
         
 		initSubViews();
@@ -198,9 +196,9 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 	public void drawComponents() {
      	m_oLogger.writeLog(LogLevel.DETAILED, "Drawing sub components", "drawComponents", "GameView");
 
-     	m_oBoardView.drawComponents();
-		m_oPlayerView.drawComponents();
-		m_oClockView.drawComponents();
+     	//m_oBoardView.drawComponents();
+		//m_oPlayerView.drawComponents();
+		//m_oClockView.drawComponents();		
 	}
 
 	@Override
@@ -227,23 +225,23 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         }
     }
 	
-    public void addMove(String stMoveString) {
-    	m_oMoveHistoryView.addMove(stMoveString);
+    public void addBoardActivity(String stActivity) {
+    	m_oMoveHistoryView.addMove(stActivity);
     }
     
-    public void removeMove(String stMoveString) {
-    	m_oMoveHistoryView.removeMove(stMoveString);
+    public void removeBoardActivity(String stActivity) {
+    	m_oMoveHistoryView.removeMove(stActivity);
     }
 
-    public void tryUndoMove() {
+    public void tryUndoBoardActivity() {
         for (final IGameViewListener oListener : m_lstListener) {
-            oListener.onPlayerRequestForUndoMove();
+            oListener.onPlayerRequestForUndoBoardActivity();
         }
 	}
 
-	public void tryRedoMove() {
+	public void tryRedoBoardActivity() {
         for (final IGameViewListener oListener : m_lstListener) {
-            oListener.onPlayerRequestForRedoMove();
+            oListener.onPlayerRequestForRedoBoardActivity();
         }
 	}
 }

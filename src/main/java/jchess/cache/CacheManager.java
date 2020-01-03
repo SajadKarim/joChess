@@ -1,7 +1,6 @@
 package jchess.cache;
 
 import java.io.File;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +10,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import jchess.common.IBoardAgent;
+import jchess.gamelogic.BoardAgentFactory;
 import jchess.service.StorageType;
-import jchess.util.GUI;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 import jchess.service.StorageService;
@@ -56,18 +55,21 @@ public class CacheManager implements ICacheManager{
     }
     
     public Boolean init() {
-    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
-    	m_mpPlayerAllowedInBoard = oStorageService.getPossiblePlayerInEachBoard(BOARDLAYOUTS_DIRECTORY);
-
-    	if( m_mpPlayerAllowedInBoard == null)
-    		return false;
-    	
+    	try {
+	    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
+	    	m_mpPlayerAllowedInBoard = oStorageService.getPlayersInEachBoard(BOARDLAYOUTS_DIRECTORY);
+	
+	    	if( m_mpPlayerAllowedInBoard == null)
+	    		return false;
+    	} catch(java.lang.Exception ex) {
+    		m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "init", "CacheManager");
+    	}
     	return false;
     }
     
     public void loadBoardFromFile(String stGameId, String stBoardName) {
     	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
-    	IBoardAgent oBoard = oStorageService.getBoardAgent(BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
+    	IBoardAgent oBoard = (IBoardAgent) oStorageService.getBoard(new BoardAgentFactory(), BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
     	
     	m_mpBoardCache.put(stGameId, new BoardCache(stBoardName, oBoard));
     }

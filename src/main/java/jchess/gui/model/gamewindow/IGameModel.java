@@ -2,8 +2,8 @@ package jchess.gui.model.gamewindow;
 
 import java.util.Map;
 
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IMove;
 import jchess.common.IPlayer;
 import jchess.common.IPlayerAgent;
 import jchess.common.gui.IModel;
@@ -23,10 +23,10 @@ public interface IGameModel extends IModel  {
 	public void setPlayer(IPlayerAgent oPlayer);
 	public Map<String, IPlayerAgent > getAllPlayerAgents();
 	public String getRuleEngineName();
-	
-	public void addMove(IMove oMove);
-	public IMove tryUndoMove();
-	public IMove tryRedoMove();
+
+	public void addBoardActivity(IBoardActivity oActivity);
+	public IBoardActivity tryUndoBoardActivity();
+	public IBoardActivity tryRedoBoardActivity();
 	
 	public void updatePlayerNames(Map<String, IPlayerAgent> mpPlayer);		
 }

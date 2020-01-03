@@ -2,14 +2,10 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IMove;
-import jchess.common.IMoveCandidacy;
-import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.gui.IGUIHandle;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
 
 /**
  * This interface provides abstraction to different RuleProcessors.
@@ -21,6 +17,6 @@ import jchess.gui.IGUIHandle;
  */
 
 public interface IRuleEngine {
-	public Map<String,IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition);
-	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate);
+	public Map<String,IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece);
+	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate);
 }

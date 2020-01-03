@@ -1,7 +1,5 @@
 package jchess.dimodule;
 
-import java.lang.reflect.Constructor;
-
 import org.javatuples.Pair;
 
 import com.google.inject.AbstractModule;
@@ -35,10 +33,6 @@ import jchess.gui.view.gamewindow.IMoveHistoryView;
 import jchess.gui.view.gamewindow.IPlayerView;
 import jchess.gui.view.gamewindow.MoveHistoryView;
 import jchess.gui.view.gamewindow.PlayerView;
-import jchess.ruleengine.DefaultRuleEngine;
-import jchess.ruleengine.DefaultRuleProcessor;
-import jchess.ruleengine.ExtendedRuleEngine;
-import jchess.ruleengine.ExtendedRuleProcessor;
 import jchess.ruleengine.IRuleEngine;
 import jchess.ruleengine.IRuleProcessor;
 

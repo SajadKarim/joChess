@@ -11,12 +11,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 import jchess.cache.ICacheManager;
-import jchess.common.IMove;
-import jchess.common.IPieceAgent;
+import jchess.common.IBoardActivity;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.DialogResult;
-import jchess.common.gui.IView;
 import jchess.gamelogic.IGame;
 import jchess.gui.model.gamewindow.*;
 import jchess.util.IAppLogger;
@@ -87,6 +85,7 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 	public void onTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
      	m_oLogger.writeLog(LogLevel.DETAILED, "Timer notification for seconds elapse.", "onTimerUpdate_SecondsElapsed", "GamePresenter");
 
+     	// TODO: Move following logic to respective View
         int nMintues = (nRemainingSeconds / 60) % 60;
         int nSeconds = nRemainingSeconds  % 60;
 		m_oModel.setClockText(String.format("%02d", nMintues) + ":" + String.format("%02d", nSeconds));
@@ -127,43 +126,34 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
 		
 	}
 
-	public void onMoveMadeByPlayer(IPlayerAgent oPlayer, IMove oMove) {
+	public void onMoveMadeByPlayer(IPlayerAgent oPlayer, IBoardActivity oMove) {
      	m_oLogger.writeLog(LogLevel.DETAILED, "A move made by plyaer. Player=" + oPlayer.getName(), "onMoveMadeByPlayer", "GamePresenter");
 
-		m_oModel.addMove(oMove);
-		m_oView.addMove(oMove.toString());
+		m_oView.addBoardActivity(oMove.toString());
 	}
 
 	@Override
-	public void onPlayerRequestForUndoMove() {
-     	m_oLogger.writeLog(LogLevel.DETAILED, "Undoing last move.", "onPlayerRequestForUndoMove", "GamePresenter");
+	public void onPlayerRequestForUndoBoardActivity() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Undoing last move.", "onPlayerRequestForUndoBoardActivity", "GamePresenter");
 
-		IMove oMove = m_oModel.tryUndoMove();
-		if( oMove != null) {
-			m_oGame.tryUndoMove(oMove.getPlayer());
-			m_oView.removeMove(oMove.toString());
+     	IBoardActivity oActivity = m_oModel.tryUndoBoardActivity();
+		if( oActivity != null) {
+			m_oGame.setPlayerAsActivePlayer(oActivity.getPlayer());
+			m_oView.removeBoardActivity(oActivity.toString());
 			
-			for(Map.Entry<String, IPieceAgent> it: oMove.getPriorMoveDetails().entrySet()) {
-				IPositionAgent oPosition = m_oModel.getBoard().getPositionAgent(it.getKey());
-				oPosition.setPiece(it.getValue());
-			}
 			m_oView.repaintBoardView();
 		}
 	}
 
 	@Override
-	public void onPlayerRequestForRedoMove() {
-     	m_oLogger.writeLog(LogLevel.DETAILED, "Redoing last move.", "onPlayerRequestForRedoMove", "GamePresenter");
+	public void onPlayerRequestForRedoBoardActivity() {
+     	m_oLogger.writeLog(LogLevel.DETAILED, "Redoing last move.", "onPlayerRequestForRedoBoardActivity", "GamePresenter");
 
-     	IMove oMove = m_oModel.tryRedoMove();
-		if( oMove != null) {
-			m_oGame.tryRedoMove(oMove.getPlayer());
-			m_oView.addMove(oMove.toString());
+     	IBoardActivity oActivity = m_oModel.tryRedoBoardActivity();
+		if( oActivity != null) {
+			m_oGame.setPlayerTurnAsLast(oActivity.getPlayer());
+			m_oView.addBoardActivity(oActivity.toString());
 
-			for(Map.Entry<String, IPieceAgent> it: oMove.getPostMoveDetails().entrySet()) {
-				IPositionAgent oPosition = m_oModel.getBoard().getPositionAgent(it.getKey());
-				oPosition.setPiece(it.getValue());
-			}
 			m_oView.repaintBoardView();
 		}
 	}

@@ -1,7 +1,6 @@
 package jchess.gui.view.gamewindow;
 
 import jchess.common.gui.IPanelView;
-import jchess.common.gui.IView;
 
 /**
  * 
@@ -13,9 +12,9 @@ public interface IGameView extends IPanelView {
     public void repaintClockView();
     public void repaintBoardView();
     public void repaintPlayerView();
-    public void addMove(String stMoveString);
-    public void removeMove(String stMoveString);
+    public void addBoardActivity(String stActivity);
+    public void removeBoardActivity(String stActivity);
 	public void addListener(IGameViewListener oListener);
-	public void tryUndoMove();
-	public void tryRedoMove();
+	public void tryUndoBoardActivity();
+	public void tryRedoBoardActivity();
 }

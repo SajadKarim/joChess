@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 
 import com.google.inject.Inject;
 
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gui.model.gamewindow.IClockModel;
 import jchess.util.IAppLogger;
@@ -36,8 +35,8 @@ public class ClockView extends JPanel implements IClockView {
     }
     
 	public void init() {
-		this.setLayout(null);		
-		this.setDoubleBuffered(true);		
+		//this.setLayout(null);		
+		//this.setDoubleBuffered(true);		
 	}
 
 	public void setDimension(Dimension oDimension) {
@@ -63,7 +62,7 @@ public class ClockView extends JPanel implements IClockView {
 
 	@Override
 	public void drawComponents() {
-		draw(this.getParent().getGraphics());
+		//draw(this.getParent().getGraphics());
 	}
 
 	@Override
