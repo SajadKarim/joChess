@@ -102,6 +102,7 @@ public class PawnRulesProcessor {
 			return null;
 		
 		IPieceAgent oSourcePieceAfterMove = (IPieceAgent)oData.getSelectedPiece().clone();
+		oSourcePieceAfterMove.setPosition(oMoveCandidate.getCandidatePosition());
 		oSourcePieceAfterMove.setPlayer(oPlayer); 
 		
 		oMoveCandidate.getSourcePosition().setPiece(null);

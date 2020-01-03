@@ -16,4 +16,7 @@ public interface IRuleAgent extends IRule {
 	public IRuleAgent clone();
 	public void markUsage();	
 	public Boolean isAlive();
+	public void markRuleUsage();
+	public Boolean canProceedWithThisRule();
+	public IRuleAgent getNextChildRule();
 }

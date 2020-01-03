@@ -125,11 +125,16 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     		if( !bCanContinue.get())
     			continue;
 
-    		IRuleAgent oNextRule = oCurrentRule.clone().getNextRule();
-    		if( oNextRule == null)
-    			continue;
-    		
-    		qData.add(new RuleProcessorData(oNextRule, oNextPosition, oCurrentPosition));
+			IRuleAgent oDuplicateRule = oCurrentRule.clone();
+    		if( oDuplicateRule.canProceedWithThisRule()) {
+    			qData.add(new RuleProcessorData(oDuplicateRule, oNextPosition, oCurrentPosition));
+    		}
+    		else {
+    			IRuleAgent oChildRule = null;
+        		while( (oChildRule = oDuplicateRule.getNextChildRule()) != null){
+            		qData.add(new RuleProcessorData(oChildRule, oNextPosition, oCurrentPosition));
+        		}
+    		}        		
 		}
 	}
 	
@@ -159,11 +164,16 @@ public class DefaultRuleProcessor implements IRuleProcessor {
         		if( !bCanContinue.get())
         			continue;
 
-        		IRuleAgent oNextRule = oCurrentRule.clone().getNextRule();
-        		if( oNextRule == null)
-        			continue;
-        		
-        		qData.add(new RuleProcessorData(oNextRule, oNextPosition, null));
+    			IRuleAgent oDuplicateRule = oCurrentRule.clone();
+        		if( oDuplicateRule.canProceedWithThisRule()) {
+        			qData.add(new RuleProcessorData(oDuplicateRule, oNextPosition, null));
+        		}
+        		else {
+        			IRuleAgent oChildRule = null;
+            		while( (oChildRule = oDuplicateRule.getNextChildRule()) != null){
+                		qData.add(new RuleProcessorData(oChildRule, oNextPosition, null));
+            		}
+        		}        		
         	}
 		}
 	}
