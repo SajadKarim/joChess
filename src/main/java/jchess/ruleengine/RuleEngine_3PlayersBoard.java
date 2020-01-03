@@ -2,15 +2,12 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IMove;
-import jchess.common.IMoveCandidacy;
-import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
 
@@ -28,18 +25,18 @@ class RuleEngine_3PlayersBoard extends ExtendedRuleEngine {
 	}
 	
 	@Override
-	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition) {		
-		Map<String, IMoveCandidacy> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oPosition);
+	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {		
+		Map<String, IMoveCandidate> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oPiece);
 		
-		tryMakePiecePeculiarMoves(oBoard, oPosition, mpCandidateMovePositions);
+		tryMakePiecePeculiarMoves(oBoard, oPiece, mpCandidateMovePositions);
 		
 		return mpCandidateMovePositions;
 	}
 	@Override
-	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oDestinationPositionAndRule) {
+	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oDestinationPositionAndRule) {
 		return super.tryExecuteRule(oBoard, oDestinationPositionAndRule);
 	}
 	
-	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidateMovePositions) {
+	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 	}
 }

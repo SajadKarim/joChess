@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 
 import com.google.inject.Inject;
 
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gui.model.gamewindow.IPlayerModel;
 import jchess.util.IAppLogger;
@@ -38,8 +37,8 @@ public class PlayerView extends JPanel implements IPlayerView {
     }
     
 	public void init() {
-		this.setLayout(null);		
-		setDoubleBuffered(true);
+		//this.setLayout(null);		
+		//setDoubleBuffered(true);
 	}
 
 	public void setDimension(Dimension oDimension) {
@@ -78,7 +77,7 @@ public class PlayerView extends JPanel implements IPlayerView {
 
 	@Override
 	public void drawComponents() {
-		draw( this.getParent().getGraphics());
+		//draw( this.getParent().getGraphics());
 	}
 
 	@Override

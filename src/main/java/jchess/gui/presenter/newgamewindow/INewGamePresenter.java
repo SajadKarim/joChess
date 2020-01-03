@@ -1,7 +1,5 @@
 package jchess.gui.presenter.newgamewindow;
 
-import javax.swing.JDialog;
-
 import jchess.common.gui.IPresenter;
 import jchess.gui.view.newgamewindow.INewGameListener;
 

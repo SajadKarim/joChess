@@ -4,14 +4,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
-import jchess.common.IMoveCandidacy;
+import jchess.common.IMoveCandidate;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -26,7 +23,7 @@ import jchess.util.LogLevel;
 public class GameState implements IGameState {
 	private IPlayerAgent m_oActivePlayer;
 	private IPositionAgent m_oSelectedPiece;
-	private Map<String, IMoveCandidacy> m_lstPossibleMovePositionsForSelectedPiece;
+	private Map<String, IMoveCandidate> m_lstPossibleMovePositionsForSelectedPiece;
 	private Queue<IPlayerAgent> m_qPlayersInQueue;
 	private IAppLogger m_oLogger;
 
@@ -76,15 +73,15 @@ public class GameState implements IGameState {
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Switching player. New player=[%s]", m_oActivePlayer == null ? "NULL" : m_oActivePlayer.getName()), "switchPlayTurn", "GameState");
 	}
 
-	public Map<String, IMoveCandidacy> getPossibleMovesForActivePosition() {
+	public Map<String, IMoveCandidate> getPossibleMovesForActivePosition() {
 		return m_lstPossibleMovePositionsForSelectedPiece;
 	}
 
-	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidacy> lstPositions) {
+	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidate> lstPositions) {
 		m_lstPossibleMovePositionsForSelectedPiece = lstPositions;
 	}
 
-	public IMoveCandidacy getMoveCandidate(IPositionAgent oPosition) {
+	public IMoveCandidate getMoveCandidate(IPositionAgent oPosition) {
 		if( m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
 

@@ -24,15 +24,8 @@ import javax.swing.*;
 
 import com.google.inject.Injector;
 
-import jchess.IMain;
-import jchess.dimodule.GameWndModule;
-import jchess.dimodule.NewGameWndModule;
 import jchess.gui.IGUIManager;
 import jchess.gui.model.newgamewindow.INewGameModel;
-import jchess.gui.presenter.gamewindow.GamePresenter;
-import jchess.gui.presenter.gamewindow.IGamePresenter;
-import jchess.gui.presenter.newgamewindow.INewGamePresenter;
-import jchess.gui.presenter.newgamewindow.NewGamePresenter;
 import jchess.gui.view.newgamewindow.INewGameListener;
 import jchess.util.GUI;
 

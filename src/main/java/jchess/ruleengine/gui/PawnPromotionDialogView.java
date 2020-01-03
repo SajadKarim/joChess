@@ -26,9 +26,6 @@ import jchess.common.IPieceAgent;
 import jchess.common.gui.DialogResult;
 import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
-import jchess.common.gui.IView;
-import jchess.gui.view.gamewindow.IGameViewListener;
-import jchess.util.GUI;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -40,7 +37,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 
 /** Class responsible for promotion of a pawn.

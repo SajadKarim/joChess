@@ -4,12 +4,20 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import jchess.common.IBoardAgent;
-import jchess.common.IMoveCandidacy;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
+
+/**
+ * DefaultRuleProcessor
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	public ExtendedRuleProcessor(IAppLogger oLogger) {
@@ -19,18 +27,20 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	}
 
 	@Override
-	public void tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "ExtendedRuleProcessor");
 
-		super.tryEvaluateAllRules(oBoard, oPosition, mpCandidatePositions);
+		super.tryEvaluateAllRules(oBoard, oPiece, mpCandidatePositions);
 
-		switch(oPosition.getPiece().getName()) {
+		switch(oPiece.getName()) {
 		case "PawnWhite":
 		case "PawnBlack":
 		case "PawnRed": {
-			PawnRulesProcessor.tryPawnPromotionRule(oBoard, oPosition, mpCandidatePositions);
+			PawnRulesProcessor.tryPawnPromotionRule(oBoard, oPiece, mpCandidatePositions);
 
-			PawnRulesProcessor.tryPawnFirstMoveException(this, oBoard, oPosition, mpCandidatePositions);
+			PawnRulesProcessor.tryPawnFirstMoveException(this, oBoard, oPiece, mpCandidatePositions);
+
+			PawnRulesProcessor.tryPawnEnPassantRule(oBoard, oPiece, mpCandidatePositions);
 		}
 			break;
 		default:
@@ -59,6 +69,11 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 							bIsValidMode.set(true);
 							bCanContinue.set(true);
 						}
+					}
+					break;					
+					case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":{
+						bIsValidMode.set(true);
+						bCanContinue.set(false);
 					}
 					break;
 				}

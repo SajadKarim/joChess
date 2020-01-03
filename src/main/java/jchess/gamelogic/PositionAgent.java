@@ -14,7 +14,6 @@ import jchess.common.IPieceAgent;
 import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.common.IPositionData;
-import jchess.common.IRuleAgent;
 import jchess.common.IShape;
 import jchess.common.enumerator.Direction;
 import jchess.common.enumerator.Family;

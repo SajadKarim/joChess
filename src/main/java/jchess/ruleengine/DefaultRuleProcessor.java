@@ -9,16 +9,23 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
 import jchess.common.IBoardAgent;
-import jchess.common.IMoveCandidacy;
+import jchess.common.IMoveCandidate;
 import jchess.common.IPathAgent;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
-import jchess.gamelogic.MoveCandidacy;
+import jchess.gamelogic.MoveCandidate;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
+
+/**
+ * DefaultRuleProcessor
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class DefaultRuleProcessor implements IRuleProcessor {
 	protected IAppLogger m_oLogger;
@@ -29,13 +36,13 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleProcessor.", "DefaultRuleProcessor", "DefaultRuleProcessor");
 	}
 	
-	public void tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "DefaultRuleProcessor");
 
-		IPieceAgent oPiece = oPosition.getPiece();
+		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 		
-		if( oPiece == null) {
+		if( oPosition == null) {
 			m_oLogger.writeLog(LogLevel.ERROR, "Piece is not attached to the Position.", "tryEvaluateAllRules", "DefaultRuleProcessor");
 			return;
 		}
@@ -53,10 +60,10 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     		qData.add(new RuleProcessorData(oRule, oPosition, null));
     	}
     	
-		tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		tryFindPossibleCandidateMovePositions(oPiece, oPosition, oPlayer, qData, mpCandidatePositions);
     }
 
-	public void tryFindPossibleCandidateMovePositions(IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {		
+	public void tryFindPossibleCandidateMovePositions(IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {		
 		m_oLogger.writeLog(LogLevel.INFO, "Finding candidate move positions.", "tryFindPossibleCandidateMovePositions", "DefaultRuleProcessor");
 
 		RuleProcessorData oData = null;		
@@ -67,10 +74,10 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 			
 			switch( oCurrentRule.getManoeuvreStrategy()) {
 			case BLINKER:
-				tryFindCandidateMovesForBlinkerStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPlayer, qData, mpCandidatePositions);
+				tryFindCandidateMovesForBlinkerStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPieceToMove, oSourcePosition, oPlayer, qData, mpCandidatePositions);
 				break;
 			case FILE_AND_RANK:
-				tryFindCandidateMovesForFileAndRankStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPlayer, qData, mpCandidatePositions);
+				tryFindCandidateMovesForFileAndRankStrategy(oCurrentRule, oCurrentPosition, oLastPosition, oPieceToMove, oSourcePosition, oPlayer, qData, mpCandidatePositions);
 				break;
 			default:
 				break;
@@ -78,7 +85,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		}
 	}
 	
-	void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForBlinkerStrategy", "DefaultRuleProcessor");
 
 		List<IPositionAgent> lstPosition = null;
@@ -113,7 +120,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     		checkForPositionMoveCandidacyAndContinuity(oPlayer, oCurrentRule, oNextPosition, bIsValidMode, bCanContinue);
     		
     		if( bIsValidMode.get())
-    			mpCandidatePositions.put(oNextPosition.getName(), new MoveCandidacy(null, oNextPosition, oCurrentRule));
+    			mpCandidatePositions.put(oNextPosition.getName(), new MoveCandidate(oCurrentRule, oPieceToMove, oSourcePosition, oNextPosition));
     				
     		if( !bCanContinue.get())
     			continue;
@@ -126,7 +133,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		}
 	}
 	
-	void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
+	void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForFileAndRankStrategy", "DefaultRuleProcessor");
 
 		for( Map.Entry<String, IPathAgent> entry: oCurrentPosition.getAllPathAgents().entrySet()) {
@@ -147,7 +154,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
         		checkForPositionMoveCandidacyAndContinuity(oPlayer, oCurrentRule, oNextPosition, bIsValidMode, bCanContinue);
         		
         		if( bIsValidMode.get())
-        			mpCandidatePositions.put(oNextPosition.getName(), new MoveCandidacy(null, oNextPosition, oCurrentRule));
+        			mpCandidatePositions.put(oNextPosition.getName(), new MoveCandidate(oCurrentRule, oPieceToMove, oSourcePosition, oNextPosition));
         				
         		if( !bCanContinue.get())
         			continue;

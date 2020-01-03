@@ -1,7 +1,6 @@
 package jchess.ruleengine.gui;
 
 import java.util.List;
-import java.util.Map;
 
 import jchess.common.IPieceAgent;
 import jchess.common.gui.IModel;

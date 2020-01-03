@@ -10,9 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IMove;
-import jchess.common.IMoveCandidacy;
+import jchess.common.IBoardFactory;
+import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
@@ -22,13 +23,15 @@ import jchess.common.enumerator.File;
 import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
-import jchess.gamelogic.MoveCandidacy;
+import jchess.gamelogic.BoardAgentFactory;
+import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
 class DefaultRuleEngineTest {
 	static IBoardAgent m_oBoard;
 	static IRuleEngine m_oRuleEngine;
+	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -58,7 +61,7 @@ class DefaultRuleEngineTest {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d3");
 
-		IRuleAgent oRule= (IRuleAgent)m_oBoard.createRule();		
+		IRuleAgent oRule= (IRuleAgent)m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(1);
@@ -69,7 +72,7 @@ class DefaultRuleEngineTest {
 		oRule.getRuleData().setName("MOVE");
 		oRule.getRuleData().setCustomName("");
 				
-		IMoveCandidacy oMoveCandidate = new MoveCandidacy(oSourcePosition, oCandidatePosition, oRule);
+		IMoveCandidate oMoveCandidate = new MoveCandidate(oRule, oSourcePosition.getPiece(), oSourcePosition, oCandidatePosition);
 		
 		// Following Asset validates the existence of Pawn prior execution of the Rule.
 		String oExpectedPieceString  = oSourcePosition.getPiece().getName();
@@ -77,7 +80,7 @@ class DefaultRuleEngineTest {
 
 		assertEquals(oExpectedPieceString, oActualPieceString);
 
-		IMove oMove = m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidate);
+		IBoardActivity oMove = m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidate);
 
 		// Following Asset validates the Pawn piece has moved after execution of the Rule.
 		IPieceAgent oExpectedPiece  = oSourcePosition.getPiece();
@@ -91,7 +94,7 @@ class DefaultRuleEngineTest {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d7");
 
-		IRuleAgent oRule= (IRuleAgent)m_oBoard.createRule();		
+		IRuleAgent oRule= (IRuleAgent)m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -102,7 +105,7 @@ class DefaultRuleEngineTest {
 		oRule.getRuleData().setName("MOVE");
 		oRule.getRuleData().setCustomName("");
 				
-		IMoveCandidacy oMoveCandidate = new MoveCandidacy(oSourcePosition, oCandidatePosition, oRule);
+		IMoveCandidate oMoveCandidate = new MoveCandidate(oRule, oSourcePosition.getPiece(), oSourcePosition, oCandidatePosition);
 		
 		// Following Asset validates the existence of Pawn prior execution of the Rule.
 		String oExpectedPieceString  = oSourcePosition.getPiece().getName();
@@ -110,7 +113,7 @@ class DefaultRuleEngineTest {
 
 		assertEquals(oExpectedPieceString, oActualPieceString);
 
-		IMove oMove = m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidate);
+		IBoardActivity oMove = m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidate);
 
 		// Following Asset validates the Pawn piece has moved after execution of the Rule.
 		IPieceAgent oExpectedPiece  = oSourcePosition.getPiece();

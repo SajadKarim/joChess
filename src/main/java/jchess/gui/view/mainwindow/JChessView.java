@@ -28,14 +28,11 @@ import jchess.IMain;
 import jchess.JChessAboutBox;
 import jchess.ThemeChooseWindow;
 import jchess.gui.IGUIManager;
-import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
-import jchess.gui.view.newgamewindow.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.Timer;
 import javax.swing.Icon;
@@ -56,14 +53,11 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
 	private IMain m_oMainApplication;
     private IAppLogger m_oLogger; 
     private IGUIManager m_oGUIManager;
-	private ArrayList<IJChessViewListener> m_lstListeners;
 	
 	@Inject
     public JChessView(IMain oMainApplication, IAppLogger oLogger, IGUIManager oGUIManager) {
         super((SingleFrameApplication)oMainApplication);
-        
-        m_lstListeners = new ArrayList<IJChessViewListener>();
-        
+                
         m_oLogger = oLogger;
         m_oGUIManager = oGUIManager;
         m_oMainApplication = oMainApplication;
@@ -386,7 +380,7 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
 
     private void moveBackItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
     {    
-    	m_oGUIManager.onPlayerRequestForUndoMove(gamesPane.getSelectedComponent());
+    	m_oGUIManager.onPlayerRequestForUndoBoardActivity(gamesPane.getSelectedComponent());
     }//GEN-LAST:event_moveBackItemActionPerformed
 
     private void moveBackItemMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
@@ -403,7 +397,7 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
 
     private void moveForwardItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_moveForwardItemActionPerformed
     {    
-    	m_oGUIManager.onPlayerRequestForRedoMove(gamesPane.getSelectedComponent());
+    	m_oGUIManager.onPlayerRequestForRedoBoardActivity(gamesPane.getSelectedComponent());
     }//GEN-LAST:event_moveForwardItemActionPerformed
 
     private void rewindToBeginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rewindToBeginActionPerformed
@@ -469,6 +463,6 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
 
 	public void addTab(Component oComponent, String stName) {
 		this.gamesPane.addTab(stName, oComponent);
-		this.gamesPane.setSelectedComponent(oComponent);		
+		this.gamesPane.setSelectedComponent(oComponent);
 	}
 }

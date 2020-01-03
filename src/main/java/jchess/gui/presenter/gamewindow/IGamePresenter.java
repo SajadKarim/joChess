@@ -1,6 +1,5 @@
 package jchess.gui.presenter.gamewindow;
 
-import java.awt.Component;
 import java.util.Map;
 
 import jchess.common.IPlayerAgent;

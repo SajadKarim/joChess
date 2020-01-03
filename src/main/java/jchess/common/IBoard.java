@@ -12,7 +12,7 @@ import java.util.Map;
  *
  */
 
-public interface IBoard extends IBoardFactory {
+public interface IBoard {
 	/**
 	 * Returns name of the Board.
 	 * 

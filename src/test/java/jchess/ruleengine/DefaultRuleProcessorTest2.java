@@ -16,7 +16,8 @@ import org.junit.jupiter.api.Test;
 import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
 import jchess.common.IBoardAgent;
-import jchess.common.IMoveCandidacy;
+import jchess.common.IBoardFactory;
+import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
@@ -27,6 +28,7 @@ import jchess.common.enumerator.File;
 import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
+import jchess.gamelogic.BoardAgentFactory;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
@@ -41,6 +43,7 @@ import jchess.util.IAppLogger;
 class DefaultRuleProcessorTest2 {
 	static IBoardAgent m_oBoard;
 	static DefaultRuleProcessor m_oRuleProcessor;
+	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -67,7 +70,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryEvaluateAllRules_FileAndRankStrategy() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTH_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -81,7 +84,7 @@ class DefaultRuleProcessorTest2 {
 
 		IPlayerAgent oPlayer = m_oBoard.getPlayerAgent("P1");
 
-		IPieceAgent oPiece = (IPieceAgent) m_oBoard.createPiece();
+		IPieceAgent oPiece = (IPieceAgent) m_oBoardFactory.createPiece();
 		oPiece.getPieceData().setFamily("");
 		oPiece.getPieceData().setImagePath("");
 		oPiece.getPieceData().setName("Test_Piece");
@@ -90,10 +93,11 @@ class DefaultRuleProcessorTest2 {
 		
 		IPositionAgent oPosition = m_oBoard.getPositionAgent("d4");
 		oPosition.setPiece(oPiece);
+		oPiece.setPosition(oPosition);
+
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
-		
-		m_oRuleProcessor.tryEvaluateAllRules(m_oBoard, oPosition, mpCandidatePositions);
+		m_oRuleProcessor.tryEvaluateAllRules(m_oBoard, oPiece, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -111,7 +115,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryEvaluateAllRules_BlinkerStrategy() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_DIAGNOAL_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -125,7 +129,7 @@ class DefaultRuleProcessorTest2 {
 
 		IPlayerAgent oPlayer = m_oBoard.getPlayerAgent("P1");
 
-		IPieceAgent oPiece = (IPieceAgent) m_oBoard.createPiece();
+		IPieceAgent oPiece = (IPieceAgent) m_oBoardFactory.createPiece();
 		oPiece.getPieceData().setFamily("");
 		oPiece.getPieceData().setImagePath("");
 		oPiece.getPieceData().setName("Test_Piece");
@@ -134,10 +138,11 @@ class DefaultRuleProcessorTest2 {
 		
 		IPositionAgent oPosition = m_oBoard.getPositionAgent("d4");
 		oPosition.setPiece(oPiece);
+		oPiece.setPosition(oPosition);
+
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
-		
-		m_oRuleProcessor.tryEvaluateAllRules(m_oBoard, oPosition, mpCandidatePositions);
+		m_oRuleProcessor.tryEvaluateAllRules(m_oBoard, oPiece, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 6;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -155,7 +160,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_NORTH_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTH_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -176,9 +181,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -196,7 +201,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_NORTHWEST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTHWEST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -217,9 +222,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -237,7 +242,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_WEST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_WEST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -258,9 +263,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 3;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -278,7 +283,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_SOUTHWEST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_SOUTHWEST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -299,9 +304,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -316,7 +321,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_SOUTH_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_SOUTH_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -337,9 +342,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -354,7 +359,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_SOUTHEAST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_SOUTHEAST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -375,9 +380,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -392,7 +397,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_EAST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_EAST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -413,9 +418,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 4;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -433,7 +438,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_NORTHEAST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTHEAST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -454,9 +459,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -474,7 +479,7 @@ class DefaultRuleProcessorTest2 {
 	
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_NORTH_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTH_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -495,9 +500,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -515,7 +520,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_NORTHWEST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTHWEST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -536,9 +541,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -556,7 +561,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_WEST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_WEST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -577,9 +582,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 3;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -597,7 +602,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_SOUTHWEST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_SOUTHWEST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -618,9 +623,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -635,7 +640,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_SOUTH_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_SOUTH_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -656,9 +661,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -673,7 +678,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_SOUTHEAST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_SOUTHEAST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -694,9 +699,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 1;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -711,7 +716,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_EAST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_EAST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -732,9 +737,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 4;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -752,7 +757,7 @@ class DefaultRuleProcessorTest2 {
 
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_NORTHEAST_BY_INF() {
-		IRuleAgent oRule = (IRuleAgent)m_oBoard.createRule();
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		oRule.getRuleData().setName("MOVE_NORTHEAST_BY_*");
 		oRule.getRuleData().setCustomName("");
 		oRule.getRuleData().setRuleType(RuleType.MOVE);		
@@ -773,9 +778,9 @@ class DefaultRuleProcessorTest2 {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData(oRule, oCurrentPosition, oLastPosition));
 		
-		Map<String, IMoveCandidacy> mpCandidatePositions = new HashMap<String, IMoveCandidacy>();
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
 		
-		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
+		m_oRuleProcessor.tryFindPossibleCandidateMovePositions(oCurrentPosition.getPiece(), oCurrentPosition, oPlayer, qData, mpCandidatePositions);
 
 		int nExpectedValuesInMap = 2;
 		int nActualValuesInMap = mpCandidatePositions.size();

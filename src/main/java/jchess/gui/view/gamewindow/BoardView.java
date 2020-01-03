@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -17,7 +16,6 @@ import com.google.inject.Inject;
 
 import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
-import jchess.common.gui.IViewClosedListener;
 import jchess.common.gui.IModel;
 import jchess.gamelogic.PieceAgent;
 import jchess.gui.model.gamewindow.IBoardModel;
@@ -44,8 +42,8 @@ public class BoardView extends JPanel implements IBoardView {
 	}
 
 	public void init() {
-		this.setLayout(null);		
-		this.setDoubleBuffered(false);
+		//this.setLayout(null);		
+		//this.setDoubleBuffered(true);
 	}
 
 	public void SetDimension(Dimension oDimension) {
@@ -53,7 +51,7 @@ public class BoardView extends JPanel implements IBoardView {
 	}
 	
 	public void draw(Graphics oGraphics) {
-        oGraphics.drawImage(m_oData.getBoardImage(), 0, 0, null);        
+        oGraphics.drawImage(m_oData.getBoardImage(), 0, 0, this);        
 
         drawPositions(oGraphics);
     }
@@ -92,7 +90,7 @@ public class BoardView extends JPanel implements IBoardView {
         Image oResizedImage = resized.getScaledInstance(nWidth, nHeight, 0);
         
     	oGraphics.setClip(oPolygon);
-    	oGraphics.drawImage(oResizedImage, (int)oPolygon.getBounds2D().getMinX(), (int)oPolygon.getBounds2D().getMinY(), null);
+    	oGraphics.drawImage(oResizedImage, (int)oPolygon.getBounds2D().getMinX(), (int)oPolygon.getBounds2D().getMinY(), this);
         }
         catch (java.lang.NullPointerException exc)
         {
@@ -112,7 +110,7 @@ public class BoardView extends JPanel implements IBoardView {
 			Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
         	
 			oGraphics.setClip(oPolygon);
-			oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX()-20, (int)oPolygon.getBounds2D().getCenterY()-20, null);
+			oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX()-20, (int)oPolygon.getBounds2D().getCenterY()-20, this);
         }
         catch (java.lang.NullPointerException exc)
         {
@@ -133,7 +131,7 @@ public class BoardView extends JPanel implements IBoardView {
             oGraphics.drawImage(oPieceImage, 
             		(int)oPolygon.getBounds2D().getCenterX()-30, 
             		(int)oPolygon.getBounds2D().getCenterY()-30, 
-            		null);
+            		this);
         }
         catch (java.lang.NullPointerException exc)
         {
@@ -150,12 +148,13 @@ public class BoardView extends JPanel implements IBoardView {
 	
 	@Override
 	public void drawComponents() {
-		draw(this.getParent().getGraphics());		
+		//draw(this.getParent().getGraphics());
+		//this.repaint();
 	}
 
 	@Override
 	public void refresh() {
-		draw(this.getParent().getGraphics());		
+		//draw(this.getParent().getGraphics());		
 	}
 
 	@Override

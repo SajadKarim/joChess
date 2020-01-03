@@ -1,7 +1,6 @@
 package jchess.gui.view.newgamewindow;
 
 import jchess.common.gui.IPanelView;
-import jchess.common.gui.IView;
 
 /**
  * 

@@ -3,7 +3,6 @@ package jchess.gui.view.gamewindow;
 import javax.swing.JScrollPane;
 
 import jchess.common.gui.IPanelView;
-import jchess.common.gui.IView;
 
 /**
  * 

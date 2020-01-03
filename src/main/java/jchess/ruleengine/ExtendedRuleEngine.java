@@ -4,13 +4,20 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IMove;
-import jchess.common.IMoveCandidacy;
-import jchess.common.IPositionAgent;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
+
+/**
+ * ExtendedRuleEngine
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public class ExtendedRuleEngine extends DefaultRuleEngine {	
 	@Inject
@@ -20,41 +27,44 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating ExtendedRuleEngine.", "ExtendedRuleEngine", "ExtendedRuleEngine");
 	}
 
-	public Map<String, IMoveCandidacy> tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oSelectedPosition) {	
-		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating rules attaches to the Position [%s].", oSelectedPosition.toLog()), "tryEvaluateAllRules", "ExtendedRuleEngine");
+	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating rules attaches to the Position [%s].", oPiece.toLog()), "tryEvaluateAllRules", "ExtendedRuleEngine");
 
-		return super.tryEvaluateAllRules(oBoard, oSelectedPosition);
+		return super.tryEvaluateAllRules(oBoard, oPiece);
 	}
 
-	public IMove tryExecuteRule(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
+	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected move candidate.", "tryExecuteRule", "ExtendedRuleEngine");
 
-		IMove oMove = super.tryExecuteRule(oBoard, oMoveCandidate);
+		IBoardActivity oActivity = super.tryExecuteRule(oBoard, oMoveCandidate);
 		
-		if( !oMove.IsMoveSuccessful()) {
+		if( oActivity == null) {
 			switch( oMoveCandidate.getRule().getRuleType()) {
 				case CUSTOM: {
-					oMove = tryExecuteCustomRules(oBoard, oMoveCandidate);
+					oActivity = tryExecuteCustomRules(oBoard, oMoveCandidate);
 				}
 				default:
 					break;
 			}
 		}
 		
-		return oMove;
+		return oActivity;
 	}
 
-	private IMove tryExecuteCustomRules(IBoardAgent oBoard, IMoveCandidacy oMoveCandidate) {
+	private IBoardActivity tryExecuteCustomRules(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected custom move candidate.", "tryExecuteCustomRules", "ExtendedRuleEngine");
 
-		IMove oMove = null;
+		IBoardActivity oMove = null;
 		 
 		switch( oMoveCandidate.getRule().getCustomName()) {
 		case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
 			oMove = PawnRulesProcessor.tryExecutePawnPromotionRule(oBoard, m_oGUIHandler, oMoveCandidate);			
 			break;
 		case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]":
-			oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oMoveCandidate);
+			oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oBoard, oMoveCandidate);
+			break;
+		case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":
+			oMove = PawnRulesProcessor.tryExecutePawnEnPassantRule(oBoard, oMoveCandidate);
 			break;
 		default:
 			break;

@@ -115,27 +115,27 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 		return (IGUIHandle)((GUIManager)this);
 	}
 	
-	public void onPlayerRequestForUndoMove(Component oSelectedGame) {
-    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Undo the move.", "onPlayerRequestForUndoMove", "GUIManager");
+	public void onPlayerRequestForUndoBoardActivity(Component oSelectedGame) {
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Undo the move.", "onPlayerRequestForUndoBoardActivity", "GUIManager");
 
 		if( oSelectedGame == null) {
-	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForUndoMove", "GUIManager");
+	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForUndoBoardActivity", "GUIManager");
 			return;
 		}
 		
 		IGameView oGameView = (IGameView)oSelectedGame;
-		oGameView.tryUndoMove();
+		oGameView.tryUndoBoardActivity();
 	}
 
-	public void onPlayerRequestForRedoMove(Component oSelectedGame) {
-    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Redo the move.", "onPlayerRequestForRedoMove", "GUIManager");
+	public void onPlayerRequestForRedoBoardActivity(Component oSelectedGame) {
+    	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Redo the move.", "onPlayerRequestForRedoBoardActivity", "GUIManager");
 
 		if( oSelectedGame == null) {
-	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForRedoMove", "GUIManager");
+	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForRedoBoardActivity", "GUIManager");
 			return;
 		}
 		
 		IGameView oGameView = (IGameView)oSelectedGame;
-		oGameView.tryRedoMove();		
+		oGameView.tryRedoBoardActivity();		
 	}
 }

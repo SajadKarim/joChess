@@ -17,6 +17,13 @@ public interface IPieceAgent extends IPiece {
 	public IPlayerAgent getPlayer();
 	public void setPlayer(IPlayerAgent oPlayer);
 	public int getRuns();
-	public void markRun();
 	public Image getImage();
+	
+	public IPositionAgent getPosition();
+	public void setPosition(IPositionAgent oPosition);
+	public String toLog();
+	
+	public void enqueuePositionHistory(IPositionAgent oPosition);
+	public IPositionAgent dequeuePositionHistory();
+	public int getPositionHistoryCount();
 }

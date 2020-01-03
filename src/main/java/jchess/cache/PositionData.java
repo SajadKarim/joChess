@@ -7,7 +7,6 @@ import jchess.common.IPath;
 import jchess.common.IPathData;
 import jchess.common.IPosition;
 import jchess.common.IPositionData;
-import jchess.common.IRule;
 import jchess.common.IShape;
 
 /**
