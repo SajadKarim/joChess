@@ -1,13 +1,12 @@
 package jchess.dimodule;
 
-import org.javatuples.Pair;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import jchess.cache.ICacheManager;
+import jchess.common.IBoard;
 import jchess.gamelogic.Game;
 import jchess.gamelogic.GameState;
 import jchess.gamelogic.IGame;
@@ -45,11 +44,13 @@ import jchess.ruleengine.IRuleProcessor;
 
 public class GameWndModule extends AbstractModule {
 	private Injector m_oGlobalInjector = null;
+	private String m_stBoardFileName;
 	private String m_stBoardName;
 	private String m_stGameId;
 	
-	public GameWndModule(Injector oGlobalInjector, String stGameId, String stBoardName) {
+	public GameWndModule(Injector oGlobalInjector, String stGameId, String stBoardName, String stBoardFileName) {
 		m_oGlobalInjector = oGlobalInjector;
+		m_stBoardFileName = stBoardFileName;
 		m_stBoardName = stBoardName;
 		m_stGameId = stGameId;
 	}
@@ -81,7 +82,7 @@ public class GameWndModule extends AbstractModule {
 	@Provides @Singleton
 	GameModel provideGameModel() {
 		ICacheManager oCacheManager = m_oGlobalInjector.getInstance(ICacheManager.class);
-		oCacheManager.loadBoardFromFile(m_stGameId, m_stBoardName);
+		oCacheManager.loadBoardFromFile(m_stGameId, m_stBoardFileName);
 		
 		GameModel oGameModel = new GameModel(null);
 		oGameModel.setBoard( oCacheManager.getBoard(m_stGameId));
@@ -97,11 +98,11 @@ public class GameWndModule extends AbstractModule {
 		IGUIManager oGUIManager = m_oGlobalInjector.getInstance(IGUIManager.class);
 
 		ICacheManager oCacheManager = m_oGlobalInjector.getInstance(ICacheManager.class);
-		Pair<String, String> prRuleEngineDetails = oCacheManager.getRuleEngineInfo(m_stBoardName);
+		IBoard oBoard = oCacheManager.getBoard(m_stGameId);
 
 		try {			
-			oRuleProcessor = (IRuleProcessor)Class.forName("jchess.ruleengine." + prRuleEngineDetails.getValue1()).getConstructor(IAppLogger.class).newInstance(oAppLogger);
-			oRuleEngine= (IRuleEngine)Class.forName("jchess.ruleengine." + prRuleEngineDetails.getValue0()).getConstructor(IRuleProcessor.class, IGUIHandle.class, IAppLogger.class).newInstance(new Object[] {oRuleProcessor, oGUIManager.getGUIHandle() , oAppLogger});
+			oRuleProcessor = (IRuleProcessor)Class.forName("jchess.ruleengine." + oBoard.getRuleProcessorName()).getConstructor(IAppLogger.class).newInstance(oAppLogger);
+			oRuleEngine= (IRuleEngine)Class.forName("jchess.ruleengine." + oBoard.getRuleEngineName()).getConstructor(IRuleProcessor.class, IGUIHandle.class, IAppLogger.class).newInstance(new Object[] {oRuleProcessor, oGUIManager.getGUIHandle() , oAppLogger});
 		} catch(java.lang.Exception e) {
 			oAppLogger.writeLog(LogLevel.ERROR, "An unhandled exception has occured. Exception="+e.toString(), "provideRuleEngine", "GameWndModule");
 		}

@@ -1,6 +1,7 @@
 package jchess.cache;
 
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.javatuples.Pair;
 
@@ -18,6 +19,5 @@ public interface ICacheManager {
 	public Boolean init();
     public IBoardAgent getBoard(String stGameId);
     public void loadBoardFromFile(String stGameId, String stBoardName);
-    public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard();
-    public Pair<String, String> getRuleEngineInfo(String stBoardName);
+    public SortedMap<String, Pair<String, Integer>> getPossiblePlayerInEachBoard();
 }

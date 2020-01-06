@@ -37,7 +37,7 @@ public class NewGamePresenter extends AbstractModule implements INewGamePresente
     public void init() {
     	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing NewGameWindow presenter.", "init", "NewGamePresenter");
 
-    	m_oCacheManager.init();
+    	//m_oCacheManager.init();
     	m_oModel.setPlayerBoardMapping(m_oCacheManager.getPossiblePlayerInEachBoard());
 
         m_oView.addListener(this);

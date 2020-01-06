@@ -1,4 +1,4 @@
-		package jchess.gui.view.newgamewindow;
+package jchess.gui.view.newgamewindow;
 
 import java.awt.Component;
 import java.awt.Container;

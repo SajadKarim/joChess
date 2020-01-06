@@ -1,8 +1,8 @@
 package jchess.service;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.javatuples.Pair;
 
@@ -31,10 +31,10 @@ class FBDBService extends StorageService {
 		return BoardXMLDeserializer.getBoard(stFilePath, oBoardFactory, m_oLogger);
 	}	
 
-	public Map<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath){
+	public SortedMap<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath){
 		m_oLogger.writeLog(LogLevel.INFO, stFolderPath, "getPossiblePlayerInEachBoard", "FBDBService");
 		
-		Map<String, Pair<String, Integer>> mpData = new HashMap<String, Pair<String, Integer>>();
+		SortedMap<String, Pair<String, Integer>> mpData = new TreeMap<String, Pair<String, Integer>>();
 		
 		File oFolder = new File(stFolderPath);
 		File[] arFiles = oFolder.listFiles();
@@ -52,11 +52,5 @@ class FBDBService extends StorageService {
 		}
 		
 		return mpData;
-	}
-	
-	public Pair<String, String> getRuleEngineInfo(String stBoardFilePath){
-		IBoard oBoard = BoardXMLDeserializer.getBoardWithPrimaryDetailsOnly(stBoardFilePath, new BoardAgentFactory(), m_oLogger);
-
-		return new Pair<String, String>(oBoard.getRuleEngineName(), oBoard.getRuleProcessorName());
 	}
 }

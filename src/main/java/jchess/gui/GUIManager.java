@@ -77,7 +77,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching New game.", "showGameWindow", "GUIManager");
 
     	String stGameId = "Game#" + m_nGameCounter;
-		Injector injector = m_oDIManager.createChildInjectorForGameModule(stGameId, oData.getSelectedBoardName());
+		Injector injector = m_oDIManager.createChildInjectorForGameModule(stGameId, oData.getSelectedBoardName(),  oData.getSelectedBoardFileName());
 		
 		IGamePresenter oPresenter = injector.getInstance(GamePresenter.class);
 

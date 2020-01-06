@@ -18,8 +18,7 @@ import jchess.util.IAppLogger;
 public abstract class StorageService {
 	public abstract IBoard getBoard(IBoardFactory oBoardFactory, String stFilePath);
 	public abstract Map<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath);
-	public abstract Pair<String, String> getRuleEngineInfo(String stBoardFilePath);
-	
+
 	public static StorageService create(StorageType enStorageType, IAppLogger oLogger) {		
 		switch(enStorageType) {
 			case FBDB:{

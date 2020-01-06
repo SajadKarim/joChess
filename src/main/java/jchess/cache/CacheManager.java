@@ -3,6 +3,8 @@ package jchess.cache;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.javatuples.Pair;
 
@@ -69,17 +71,12 @@ public class CacheManager implements ICacheManager{
     
     public void loadBoardFromFile(String stGameId, String stBoardName) {
     	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
-    	IBoardAgent oBoard = (IBoardAgent) oStorageService.getBoard(new BoardAgentFactory(), BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
+    	IBoardAgent oBoard = (IBoardAgent) oStorageService.getBoard(new BoardAgentFactory(), BOARDLAYOUTS_DIRECTORY + stBoardName);
     	
     	m_mpBoardCache.put(stGameId, new BoardCache(stBoardName, oBoard));
     }
     
-    public Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(){
-    	return new HashMap<String, Pair<String, Integer>>(m_mpPlayerAllowedInBoard);
-    }
-
-    public Pair<String, String> getRuleEngineInfo(String stBoardName){
-    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
-    	return oStorageService.getRuleEngineInfo(BOARDLAYOUTS_DIRECTORY + stBoardName + ".xml");
+    public SortedMap<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(){
+    	return new TreeMap<String, Pair<String, Integer>>(m_mpPlayerAllowedInBoard);
     }
 }

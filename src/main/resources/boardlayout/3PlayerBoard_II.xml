@@ -1,4 +1,4 @@
-<Board Name="3PlayerBoard_Circle" BoardImage="chessboard_3players_II.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="840" Height="840" RuleEngine="ExtendedRuleEngine" RuleProcessor="ExtendedRuleProcessor">
+<Board Name="3PlayerBoard_II" BoardImage="chessboard_3players_II.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="840" Height="840" RuleEngine="ExtendedRuleEngine" RuleProcessor="ExtendedRuleProcessor">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />
@@ -5759,7 +5759,7 @@
     <Rule Name="Move_Diagonally_1" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Edgewise_*" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Diagonally_*" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1000" File="SAME" Rank="FORWARD" Family="DIFFERENT"/>
+    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="DIFFERENT"/>
     <Rule Name="Pawn_Jump" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1">
       <Rules>
         <Rule Name="Pawn_Jump_1" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1"/>

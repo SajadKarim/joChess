@@ -3,6 +3,7 @@ package jchess.gui.model.newgamewindow;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.javatuples.Pair;
 
@@ -10,7 +11,7 @@ import jchess.common.IPlayerAgent;
 import jchess.gamelogic.PlayerAgent;
 
 public class NewGameModel implements INewGameModel {
-	private Map<String, Pair<String, Integer>> m_mpPlayersBoardMapping; 
+	private SortedMap<String, Pair<String, Integer>> m_mpPlayersBoardMapping; 
 	
 	private Map<String, IPlayerAgent> m_mpPlayer;
 	
@@ -23,7 +24,7 @@ public class NewGameModel implements INewGameModel {
 		return m_mpPlayer;
 	}
 	
-	public void setPlayerBoardMapping(Map<String, Pair<String, Integer>> mpPlayersBoardMapping) {
+	public void setPlayerBoardMapping(SortedMap<String, Pair<String, Integer>> mpPlayersBoardMapping) {
 		m_mpPlayersBoardMapping = mpPlayersBoardMapping;
 		m_mpPlayer = new HashMap<String, IPlayerAgent>();
 
@@ -73,5 +74,9 @@ public class NewGameModel implements INewGameModel {
 
 	public String getSelectedBoardName() {
 		return m_stBoardName;
+	}
+
+	public String getSelectedBoardFileName() {
+		return m_mpPlayersBoardMapping.get(m_stBoardName).getValue0();
 	}
 }

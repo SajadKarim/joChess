@@ -7,9 +7,7 @@ import jchess.common.IBoardData;
 import jchess.common.IPiece;
 import jchess.common.IPlayer;
 import jchess.common.IPosition;
-import jchess.common.IPositionData;
 import jchess.common.IRule;
-import jchess.common.enumerator.Direction;
 
 /**
  * This is a container class to store "Board" related details in cache.
