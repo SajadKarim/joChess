@@ -46,15 +46,18 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
     	m_oLogger.writeLog(LogLevel.DETAILED, "Instantiating MoveHistoryView.", "MoveHistoryView", "MoveHistoryView");
     }
 
-    /** Method of adding new move
-     * @param move String which in is capt player move
+    /** Method of adding previous move into Move History
+     * @param stMoveString String player move
      */
     public void addMove(String stMoveString)
     {
     	String[] oRow = {stMoveString};
     	tableModel.addRow(oRow);
     }
-
+    /**
+     * Method of removing the latest move from Move History
+     * @param stMoveString String player move
+     */
     public void removeMove(String stMoveString)
     {
     	String stValueToCompare = (String)tableModel.getValueAt(tableModel.getRowCount()- 1, 0);

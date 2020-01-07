@@ -95,7 +95,10 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         m_oMoveHistoryView.getScrollPane().setLocation(new Point(m_oData.getBoard().getBoardWidth() + 20, 120));
         this.add(m_oMoveHistoryView.getScrollPane());
         m_oMoveHistoryView.init();	}
-	
+	/**
+	 * Notify when the mouse button has been clicked
+	 * @param event the event to be proceed
+	 */
     public void mouseClicked(MouseEvent event)
     {
     	switch(event.getButton() ) {

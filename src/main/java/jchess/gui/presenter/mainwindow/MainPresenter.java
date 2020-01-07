@@ -36,7 +36,11 @@ public class MainPresenter implements IMainPresenter{
 	
 	public void init() {
 	}
-		
+	/**
+	 * Create new tab
+	 * @param oComponent component of the new tab
+	 * @param stName name of the new tab
+	 */
 	public void addTab(Component oComponent, String stName) {
      	m_oLogger.writeLog(LogLevel.INFO, "Adding a new game.", "addTab", "MainPresenter");
 

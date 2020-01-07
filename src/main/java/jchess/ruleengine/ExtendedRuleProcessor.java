@@ -17,7 +17,12 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 		
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating ExtendedRuleProcessor.", "ExtendedRuleProcessor", "ExtendedRuleProcessor");
 	}
-
+	/**
+	 * try evaluate all the rules of the piece
+	 * @param oBoard the chess board
+	 * @param oPosition the position of the piece
+	 * @param mpCandidatePositions the candidate positions
+	 */
 	@Override
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "ExtendedRuleProcessor");
@@ -38,7 +43,14 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 		}
 		
     }
-
+	/**
+	 * Verifying if position can be a candidate move and the piece can continue to the next position
+	 * @param oPlayer the current player
+	 * @param oRule the rules of the piece
+	 * @param oCandidacyPosition the candidate position
+	 * @param bIsValidMode can capture or not
+	 * @param bCanContinue can continue or not
+	 */
 	@Override
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Verifying if position can be a candidate move and can continue as the next position.", "checkForPositionMoveCandidacyAndContinuity", "ExtendedRuleProcessor");

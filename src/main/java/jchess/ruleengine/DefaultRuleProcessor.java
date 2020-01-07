@@ -28,7 +28,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleProcessor.", "DefaultRuleProcessor", "DefaultRuleProcessor");
 	}
-	
+	/**
+	 * try evaluate all the rules of the piece
+	 * @param oBoard the chess board
+	 * @param oPosition the position of the piece
+	 * @param mpCandidatePositions the candidate positions
+	 */
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPositionAgent oPosition, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "DefaultRuleProcessor");
 
@@ -55,7 +60,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     	
 		tryFindPossibleCandidateMovePositions(oPlayer, qData, mpCandidatePositions);
     }
-
+	/**
+	 * Find the possible candidate move positions
+	 * @param oPlayer the current player
+	 * @param qData queue Data contains: the rule, the next position, the previous position
+	 * @param mpCandidatePositions the possible candidate positions
+	 */
 	public void tryFindPossibleCandidateMovePositions(IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {		
 		m_oLogger.writeLog(LogLevel.INFO, "Finding candidate move positions.", "tryFindPossibleCandidateMovePositions", "DefaultRuleProcessor");
 
@@ -125,7 +135,15 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     		qData.add(new RuleProcessorData(oNextRule, oNextPosition, oCurrentPosition));
 		}
 	}
-	
+	/**
+	 * 	Try the candidate move for column and row 
+	 * @param oCurrentRule the rule of the piece
+	 * @param oCurrentPosition the next position of the piece
+	 * @param oLastPosition the current of the piece
+	 * @param oPlayer the current player
+	 * @param qData the queue for next rule and next position
+	 * @param mpCandidatePositions the candidate positions
+	 */
 	void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidacy> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForFileAndRankStrategy", "DefaultRuleProcessor");
 
@@ -160,7 +178,14 @@ public class DefaultRuleProcessor implements IRuleProcessor {
         	}
 		}
 	}
-
+	/**
+	 * Check position move candidate continuity
+	 * @param oPlayer the current player
+	 * @param oRule the rule of the piece
+	 * @param oCandidacyPosition the candidate position for the piece
+	 * @param bIsValidMode can capture or not 
+	 * @param bCanContinue can continue or not
+	 */
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Verifying if position can be a candidate move and can continue as the next position.", "checkForPositionMoveCandidacyAndContinuity", "DefaultRuleProcessor");
 

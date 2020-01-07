@@ -1,3 +1,4 @@
+
 package jchess.ruleengine;
 
 import java.util.HashMap;

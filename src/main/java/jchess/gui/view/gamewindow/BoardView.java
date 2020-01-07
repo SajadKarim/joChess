@@ -47,17 +47,26 @@ public class BoardView extends JPanel implements IBoardView {
 		this.setLayout(null);		
 		this.setDoubleBuffered(false);
 	}
-
+	/**
+	 * Set dimension of the board in chess board
+	 * @param oDimension the dimension of chessboard
+	 */
 	public void SetDimension(Dimension oDimension) {
 		m_oDimension = oDimension;
 	}
-	
+	/**
+	 * Draw the board in chess board
+	 * @param oGraphics the chess board
+	 */
 	public void draw(Graphics oGraphics) {
         oGraphics.drawImage(m_oData.getBoardImage(), 0, 0, null);        
 
         drawPositions(oGraphics);
     }
-	
+	/**
+	 * Draw the position in chess board
+	 * @param oGraphics the chess board
+	 */
 	private void drawPositions(Graphics oGraphics) {
 		for (Map.Entry<String,IPositionAgent> entry : m_oData.getPositions().entrySet()) {
     		IPositionAgent oPosition = entry.getValue();

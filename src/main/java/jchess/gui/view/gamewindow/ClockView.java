@@ -39,11 +39,17 @@ public class ClockView extends JPanel implements IClockView {
 		this.setLayout(null);		
 		this.setDoubleBuffered(true);		
 	}
-
+	/**
+	 * set Dimension of Clock in chess board
+	 * @param oDimension dimension of Clock
+	 */
 	public void setDimension(Dimension oDimension) {
     	m_oDimension = oDimension;	
     }
-    
+    /**
+     * Draw Clock in chess board
+     * @param oGraphics the chess board
+     */
     void draw(Graphics oGraphics)
     {
          oGraphics.setColor(Color.BLACK);
