@@ -79,6 +79,10 @@ public class GameWndModule extends AbstractModule {
 		bind(IGUIHandle.class).to(GUIManager.class).in(Singleton.class);
 	}
 	
+	/**
+	 * The following methods initializes the GameModel instance.
+	 * @return GameModel 
+	 */
 	@Provides @Singleton
 	GameModel provideGameModel() {
 		ICacheManager oCacheManager = m_oGlobalInjector.getInstance(ICacheManager.class);
@@ -89,6 +93,10 @@ public class GameWndModule extends AbstractModule {
 		return oGameModel;
 	}
 
+	/**
+	 * The following methods initializes the configured RuleEngine and RuleProcesssing instances.
+	 * @return IRuleEngine
+	 */
 	@Provides @Singleton
 	IRuleEngine provideRuleEngine() {
 		IRuleEngine oRuleEngine = null;

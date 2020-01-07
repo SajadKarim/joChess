@@ -41,6 +41,14 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	
 	private int m_nGameCounter;	//TODO: need to replace it with better logic.
 	
+	/**
+	 * Constructor for GUIManager
+	 * @param oApplication Handle to main instance.
+	 * @param oDIManager Handle to Dependency Injection instance.
+	 * @param oCacheManager Handle to Cache Manager instance.
+	 * @param oLogger Handle to AppLogger instance.
+	 * @param oMainPresenter Handle to MainWindow instance.
+	 */
 	@Inject
     public GUIManager(IMain oApplication, IDIManager oDIManager, ICacheManager oCacheManager, IAppLogger oLogger, IMainPresenter oMainPresenter) {
     	m_oLogger = oLogger;
@@ -54,6 +62,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
      	m_oLogger.writeLog(LogLevel.INFO, "Instantiating GUIManager.", "GUIManager", "GUIManager");
 	}
 	
+	/**
+	 * To display Main window.
+	 */
 	public void showMainWindow() {
      	m_oLogger.writeLog(LogLevel.DETAILED, "Launching main window.", "showMainWindow", "GUIManager");
 
@@ -61,6 +72,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
 	}
 	
+	/**
+	 * To display NewGame window to let use enter players and other details.
+	 */
 	public void showNewGameWindow() {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching NewGameWindow.", "showNewGameWindow", "GUIManager");
 
@@ -73,6 +87,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	m_oApplication.showDialog(oPresenter.tryGetViewJDialog()); 
 	}
 	
+	/**
+	 * To display Game window.
+	 */
 	public void showGameWindow(INewGameModel oData) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Initializing and launching New game.", "showGameWindow", "GUIManager");
 
@@ -100,6 +117,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
     	showGameWindow( oData);
 	}
 	
+	/**
+	 * Implements IGUIHandle, that lets other modules to launch custom windows/dialogs.
+	 */
 	public void showDialog(IPresenter oPresenter) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Launching dialog window.", "showDialog", "GUIManager");
 

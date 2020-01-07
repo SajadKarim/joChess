@@ -10,6 +10,14 @@ import jchess.common.gui.DialogResult;
 import jchess.common.gui.IPresenter;
 import jchess.util.IAppLogger;
 
+/**
+ * PawnPromotionPresenter 
+ * 
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class PawnPromotionPresenter implements IPresenter {
     private final IPawnPromotionDialogView m_oView;
     private final IPawnPromotionModel m_oData;

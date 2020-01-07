@@ -13,7 +13,9 @@ import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 /**
- * DefaultRuleProcessor
+ * This class provides some extended (custom) functionality to process rules.
+ * It evaluates the possible move candidates using the Rules acceptable in XML.
+ * It also facilitate in executing the Rules.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019
@@ -26,6 +28,10 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating ExtendedRuleProcessor.", "ExtendedRuleProcessor", "ExtendedRuleProcessor");
 	}
 
+	/**
+	 * This method finds out whether the proivded Position can be a candidate to make a move, also it (with the help of Rule)
+	 * deduces whether algorithm should proceed with the Position to find out the next possible candidate moves.
+	 */
 	@Override
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "ExtendedRuleProcessor");

@@ -31,10 +31,11 @@ import jchess.ruleengine.gui.PawnPromotionModel;
 import jchess.ruleengine.gui.PawnPromotionPresenter;
 
 /**
- * This is an specialized class to handle custom rules (not handled in XML yet) related to Pawn piece.
+ * This is a custom class specific to Pawn piece.
+ * This class defines all the custom rules that at the moments are not supportable in XML.
  * 
- * @author Sajad Karim
- * @since  7th Dec 2019
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
  */
 
 public class PawnRulesProcessor {

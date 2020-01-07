@@ -6,6 +6,14 @@ import java.util.Map;
 
 import jchess.common.IPieceAgent;
 
+/**
+ * PawnPromotionModel- Model for PawnPromotion related functionality. 
+ * 
+ * 
+ * @author	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public class PawnPromotionModel implements IPawnPromotionModel {
 	IPieceAgent m_oSelectedPiece;
 	IPieceAgent m_oPieceToPromote;

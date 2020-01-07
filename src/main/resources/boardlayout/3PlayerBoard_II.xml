@@ -3623,15 +3623,9 @@
           <LinkedPosition>o1</LinkedPosition>
         </Direction>
         <Direction Name="E2" Type="EDGE"></Direction>
-        <Direction Name="D2" Type="VERTEX">
-          <LinkedPosition>q1</LinkedPosition>
-        </Direction>
-        <Direction Name="E3" Type="EDGE">
-          <LinkedPosition>q1</LinkedPosition>
-        </Direction>
-        <Direction Name="D3" Type="VERTEX">
-          <LinkedPosition>q2</LinkedPosition>
-        </Direction>
+        <Direction Name="D2" Type="VERTEX"/>
+        <Direction Name="E3" Type="EDGE"/>
+        <Direction Name="D3" Type="VERTEX"/>
         <Direction Name="E4" Type="EDGE">
           <LinkedPosition>p2</LinkedPosition>
         </Direction>
@@ -3664,15 +3658,9 @@
         <Direction Name="E2" Type="EDGE">
           <LinkedPosition>p1</LinkedPosition>
         </Direction>
-        <Direction Name="D2" Type="VERTEX">
-          <LinkedPosition>q1</LinkedPosition>
-        </Direction>
-        <Direction Name="E3" Type="EDGE">
-          <LinkedPosition>q2</LinkedPosition>
-        </Direction>
-        <Direction Name="D3" Type="VERTEX">
-          <LinkedPosition>q3</LinkedPosition>
-        </Direction>
+        <Direction Name="D2" Type="VERTEX"/>
+        <Direction Name="E3" Type="EDGE"/>
+        <Direction Name="D3" Type="VERTEX"/>
         <Direction Name="E4" Type="EDGE">
           <LinkedPosition>p3</LinkedPosition>
         </Direction>
@@ -3705,15 +3693,9 @@
         <Direction Name="E2" Type="EDGE">
           <LinkedPosition>p2</LinkedPosition>
         </Direction>
-        <Direction Name="D2" Type="VERTEX">
-          <LinkedPosition>q2</LinkedPosition>
-        </Direction>
-        <Direction Name="E3" Type="EDGE">
-          <LinkedPosition>q3</LinkedPosition>
-        </Direction>
-        <Direction Name="D3" Type="VERTEX">
-          <LinkedPosition>q4</LinkedPosition>
-        </Direction>
+        <Direction Name="D2" Type="VERTEX"/>
+        <Direction Name="E3" Type="EDGE"/>
+        <Direction Name="D3" Type="VERTEX"/>
         <Direction Name="E4" Type="EDGE">
           <LinkedPosition>p4</LinkedPosition>
         </Direction>
@@ -3857,19 +3839,19 @@
     </Position>
     <Position File="q" Rank="1" Family="Black">
       <Directions>
-        <Direction Name="D4" Type="VERTEX">
-          <LinkedPosition>p2</LinkedPosition>
-        </Direction>
-        <Direction Name="E1" Type="EDGE">
-          <LinkedPosition>p1</LinkedPosition>
-        </Direction>
-        <Direction Name="D1" Type="VERTEX">
-          <LinkedPosition>p1</LinkedPosition>
-        </Direction>
+        <Direction Name="D4" Type="VERTEX"/>
+        <Direction Name="E1" Type="EDGE"/>
+        <Direction Name="D1" Type="VERTEX"/>
         <Direction Name="E2" Type="EDGE"></Direction>
-        <Direction Name="D2" Type="VERTEX"></Direction>
-        <Direction Name="E3" Type="EDGE"></Direction>
-        <Direction Name="D3" Type="VERTEX"></Direction>
+        <Direction Name="D2" Type="VERTEX">
+          <LinkedPosition>r1</LinkedPosition>
+        </Direction>
+        <Direction Name="E3" Type="EDGE">
+          <LinkedPosition>r1</LinkedPosition>
+        </Direction>
+        <Direction Name="D3" Type="VERTEX">
+          <LinkedPosition>r2</LinkedPosition>
+        </Direction>
         <Direction Name="E4" Type="EDGE">
           <LinkedPosition>q2</LinkedPosition>
         </Direction>
@@ -3890,21 +3872,21 @@
     </Position>
     <Position File="q" Rank="2" Family="White">
       <Directions>
-        <Direction Name="D4" Type="VERTEX">
-          <LinkedPosition>p3</LinkedPosition>
-        </Direction>
-        <Direction Name="E1" Type="EDGE">
-          <LinkedPosition>p2</LinkedPosition>
-        </Direction>
-        <Direction Name="D1" Type="VERTEX">
-          <LinkedPosition>p1</LinkedPosition>
-        </Direction>
+        <Direction Name="D4" Type="VERTEX"/>
+        <Direction Name="E1" Type="EDGE"/>
+        <Direction Name="D1" Type="VERTEX"/>
         <Direction Name="E2" Type="EDGE">
           <LinkedPosition>q1</LinkedPosition>
         </Direction>
-        <Direction Name="D2" Type="VERTEX"></Direction>
-        <Direction Name="E3" Type="EDGE"></Direction>
-        <Direction Name="D3" Type="VERTEX"></Direction>
+        <Direction Name="D2" Type="VERTEX">
+          <LinkedPosition>r1</LinkedPosition>
+        </Direction>
+        <Direction Name="E3" Type="EDGE">
+          <LinkedPosition>r2</LinkedPosition>
+        </Direction>
+        <Direction Name="D3" Type="VERTEX">
+          <LinkedPosition>r3</LinkedPosition>
+        </Direction>
         <Direction Name="E4" Type="EDGE">
           <LinkedPosition>q3</LinkedPosition>
         </Direction>
@@ -3925,21 +3907,21 @@
     </Position>
     <Position File="q" Rank="3" Family="Black">
       <Directions>
-        <Direction Name="D4" Type="VERTEX">
-          <LinkedPosition>p4</LinkedPosition>
-        </Direction>
-        <Direction Name="E1" Type="EDGE">
-          <LinkedPosition>p3</LinkedPosition>
-        </Direction>
-        <Direction Name="D1" Type="VERTEX">
-          <LinkedPosition>p2</LinkedPosition>
-        </Direction>
+        <Direction Name="D4" Type="VERTEX"/>
+        <Direction Name="E1" Type="EDGE"/>
+        <Direction Name="D1" Type="VERTEX"/>
         <Direction Name="E2" Type="EDGE">
           <LinkedPosition>q2</LinkedPosition>
         </Direction>
-        <Direction Name="D2" Type="VERTEX"></Direction>
-        <Direction Name="E3" Type="EDGE"></Direction>
-        <Direction Name="D3" Type="VERTEX"></Direction>
+        <Direction Name="D2" Type="VERTEX">
+          <LinkedPosition>r2</LinkedPosition>
+        </Direction>
+        <Direction Name="E3" Type="EDGE">
+          <LinkedPosition>r3</LinkedPosition>
+        </Direction>
+        <Direction Name="D3" Type="VERTEX">
+          <LinkedPosition>r4</LinkedPosition>
+        </Direction>
         <Direction Name="E4" Type="EDGE">
           <LinkedPosition>q4</LinkedPosition>
         </Direction>
@@ -4083,9 +4065,15 @@
     </Position>
     <Position File="r" Rank="1" Family="White">
       <Directions>
-        <Direction Name="D4" Type="VERTEX"></Direction>
-        <Direction Name="E1" Type="EDGE"></Direction>
-        <Direction Name="D1" Type="VERTEX"></Direction>
+        <Direction Name="D4" Type="VERTEX">
+          <LinkedPosition>q2</LinkedPosition>
+        </Direction>
+        <Direction Name="E1" Type="EDGE">
+          <LinkedPosition>q1</LinkedPosition>
+        </Direction>
+        <Direction Name="D1" Type="VERTEX">
+          <LinkedPosition>q1</LinkedPosition>
+        </Direction>
         <Direction Name="E2" Type="EDGE"></Direction>
         <Direction Name="D2" Type="VERTEX">
           <LinkedPosition>s1</LinkedPosition>
@@ -4116,9 +4104,15 @@
     </Position>
     <Position File="r" Rank="2" Family="Black">
       <Directions>
-        <Direction Name="D4" Type="VERTEX"></Direction>
-        <Direction Name="E1" Type="EDGE"></Direction>
-        <Direction Name="D1" Type="VERTEX"></Direction>
+        <Direction Name="D4" Type="VERTEX">
+          <LinkedPosition>q3</LinkedPosition>
+        </Direction>
+        <Direction Name="E1" Type="EDGE">
+          <LinkedPosition>q2</LinkedPosition>
+        </Direction>
+        <Direction Name="D1" Type="VERTEX">
+          <LinkedPosition>q1</LinkedPosition>
+        </Direction>
         <Direction Name="E2" Type="EDGE">
           <LinkedPosition>r1</LinkedPosition>
         </Direction>
@@ -4151,9 +4145,15 @@
     </Position>
     <Position File="r" Rank="3" Family="White">
       <Directions>
-        <Direction Name="D4" Type="VERTEX"></Direction>
-        <Direction Name="E1" Type="EDGE"></Direction>
-        <Direction Name="D1" Type="VERTEX"></Direction>
+        <Direction Name="D4" Type="VERTEX">
+          <LinkedPosition>q4</LinkedPosition>
+        </Direction>
+        <Direction Name="E1" Type="EDGE">
+          <LinkedPosition>q3</LinkedPosition>
+        </Direction>
+        <Direction Name="D1" Type="VERTEX">
+          <LinkedPosition>q2</LinkedPosition>
+        </Direction>
         <Direction Name="E2" Type="EDGE">
           <LinkedPosition>r2</LinkedPosition>
         </Direction>
