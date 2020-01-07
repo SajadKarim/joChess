@@ -58,7 +58,7 @@ class DefaultRuleProcessorTest2 {
 		IAppLogger oLogger = new AppLogger();
 		ICacheManager oCacheManager = new CacheManager(oLogger);
 		
-		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "2PlayerBoard");
+		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "2PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleProcessorTest");
 
 		m_oRuleProcessor = new DefaultRuleProcessor(oLogger);

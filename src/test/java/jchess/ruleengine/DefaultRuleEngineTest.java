@@ -46,7 +46,7 @@ class DefaultRuleEngineTest {
 		IAppLogger oLogger = new AppLogger();
 		ICacheManager oCacheManager = new CacheManager(oLogger);
 		
-		oCacheManager.loadBoardFromFile("DefaultRuleEngineTest", "2PlayerBoard");
+		oCacheManager.loadBoardFromFile("DefaultRuleEngineTest", "2PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleEngineTest");
 
 		m_oRuleEngine = new DefaultRuleEngine(new DefaultRuleProcessor(oLogger), new GUIManagerTest(oLogger), oLogger);

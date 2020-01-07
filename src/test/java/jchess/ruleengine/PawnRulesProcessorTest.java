@@ -51,7 +51,7 @@ class PawnRulesProcessorTest {
 	void setUp() throws Exception {
 		ICacheManager oCacheManager = new CacheManager(m_oLogger);
 		
-		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "2PlayerBoard");
+		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "2PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleProcessorTest");
 	}
 
