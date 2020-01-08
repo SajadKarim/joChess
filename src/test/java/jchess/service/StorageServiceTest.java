@@ -8,6 +8,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import jchess.util.AppLogger;
+import jchess.util.IAppLogger;
+
 class StorageServiceTest {
 
 	@BeforeAll
@@ -28,7 +31,9 @@ class StorageServiceTest {
 
 	@Test
 	void testCreate() {
-		Object actual = StorageService.create(StorageType.FBDB).getClass();
+		IAppLogger oLogger = new AppLogger();
+		
+		Object actual = StorageService.create(StorageType.FBDB, oLogger).getClass();
 		Object expected = FBDBService.class;
 		assertEquals(expected, actual);
 	}

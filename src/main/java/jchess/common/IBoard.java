@@ -12,7 +12,7 @@ import java.util.Map;
  *
  */
 
-public interface IBoard extends IBoardFactory {
+public interface IBoard {
 	/**
 	 * Returns name of the Board.
 	 * 
@@ -94,4 +94,6 @@ public interface IBoard extends IBoardFactory {
 	 * @return IBoardData 
 	 */
 	public IBoardData getBoardData();
+	public String getRuleEngineName();
+	public String getRuleProcessorName();
 }

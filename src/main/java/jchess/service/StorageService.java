@@ -4,8 +4,9 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 
-import jchess.common.IBoardAgent;
-import jchess.common.IBoardData;
+import jchess.common.IBoard;
+import jchess.common.IBoardFactory;
+import jchess.util.IAppLogger;
 
 /**
  * This class provides abstraction to other modules and acts as Factory Pattern.
@@ -15,14 +16,13 @@ import jchess.common.IBoardData;
  */
 
 public abstract class StorageService {
-	public abstract IBoardData getBoardData(String stFilePath); 	
-	public abstract IBoardAgent getBoardAgent(String stFilePath); 	
-	public abstract Map<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(String stFolderPath);
-	
-	public static StorageService create(StorageType enStorageType) {
+	public abstract IBoard getBoard(IBoardFactory oBoardFactory, String stFilePath);
+	public abstract Map<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath);
+
+	public static StorageService create(StorageType enStorageType, IAppLogger oLogger) {		
 		switch(enStorageType) {
 			case FBDB:{
-				return new FBDBService();
+				return new FBDBService(oLogger);
 			}
 		}
 		return null;

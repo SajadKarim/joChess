@@ -36,6 +36,19 @@ public class Path implements IPathData, IPathAgent{
 			addPosition(oPosition);
 	}
 	
+	public Path(Path oPath) {
+		m_stName = oPath.m_stName;
+		m_enDirection = oPath.m_enDirection;		
+
+		m_lstNeighbour = new ArrayList<IPath>();
+		for(IPath oInnerPath : oPath.m_lstNeighbour)
+			m_lstNeighbour.add(oInnerPath);
+		
+		m_lstPosition = new ArrayList<IPosition >();
+		for(IPosition oPosition : oPath.m_lstPosition)
+			m_lstPosition.add(oPosition);
+	}
+
 	// region: Implements IPath
 	public String getName() {
 		return m_stName;
@@ -104,4 +117,8 @@ public class Path implements IPathData, IPathAgent{
 		return (List<IPositionAgent>)(Object)m_lstPosition;
 	}
 	// endregion
+
+	public IPath clone() {
+		return new Path(this);
+	}
 }

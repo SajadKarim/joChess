@@ -1,12 +1,14 @@
 package jchess.gamelogic;
 
 import java.awt.Image;
+import java.util.LinkedList;
 import java.util.Map;
 
-import jchess.GUI;
 import jchess.cache.BoardData;
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardData;
+import jchess.common.IMoveCandidate;
 import jchess.common.IPiece;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayer;
@@ -15,6 +17,7 @@ import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
+import jchess.util.GUI;
 
 /**
  * This class is responsible to manage underlying "Board" (only) related data.
@@ -30,13 +33,22 @@ public class BoardAgent implements IBoardAgent {
 	private Image m_oActivCellImage;
 	private Image m_oMarkedCellImage;
 
+	private int m_nActivityIndex;
+	private LinkedList<IBoardActivity> m_lstActivity;
+	
     public BoardAgent() {
     	m_oBoard = new BoardData();
+    	
+    	m_nActivityIndex = -1;
+    	m_lstActivity = new LinkedList<IBoardActivity>();
     }
     
 	public BoardAgent(BoardData oBoard) {
 		m_oBoard = oBoard;
-		
+
+    	m_nActivityIndex = -1;
+    	m_lstActivity = new LinkedList<IBoardActivity>();
+
     	init();
 	}
 	
@@ -97,22 +109,6 @@ public class BoardAgent implements IBoardAgent {
 		return m_oBoard.getAllPieces();
 	}
 
-	public IPosition createPosition() {
-		return new PositionAgent();
-	}	
-
-	public IPiece createPiece() {
-		return new PieceAgent();
-	}	
-
-	public IRule createRule() {
-		return new RuleAgent();
-	}	
-	
-	public IPlayer createPlayer() {
-		return new PlayerAgent();
-	}
-
 	public IBoardData getBoardData() {
 		return this.m_oBoard;
 	}
@@ -122,7 +118,7 @@ public class BoardAgent implements IBoardAgent {
 		m_oActivCellImage = GUI.loadImage(getActivCellImagePath());
 		m_oMarkedCellImage = GUI.loadImage(getMarkedCellImagePath());
 		
-		mapPieces();
+		updatePieceAndPositionReferences();
 	}
 	//endregion
 	
@@ -139,21 +135,25 @@ public class BoardAgent implements IBoardAgent {
 		return m_oMarkedCellImage;
 	}
 	
-    public void mapPieces() {
-    	try {
-    	for(Map.Entry<String, IPlayerAgent> entry: getPlayers().entrySet()) {
-    	//Iterator<IPlayerAgent> it = this.getPlayers().iterator();
-    	//while( it.hasNext()){
-    		IPlayerAgent o = entry.getValue();// it.next();
-    		for (Map.Entry<String, String> entry2 : m_oBoard.getPlayerMapping(o.getName()).entrySet()) {
-    			IPieceAgent oo = new PieceAgent(m_oBoard.getPiece(entry2.getValue()).getPieceData(), o);
-    			((PositionAgent)getPosition(entry2.getKey())).setPiece(oo);
+    private void updatePieceAndPositionReferences() {
+    	for(Map.Entry<String, IPlayerAgent> itPlayers: getPlayers().entrySet()) {
+    		IPlayerAgent oPlayer = itPlayers.getValue();
+
+    		for (Map.Entry<String, String> itPlayerPieceMapping : m_oBoard.getPlayerMapping(oPlayer.getName()).entrySet()) {
+    			IPositionAgent oPosition = getPositionAgent(itPlayerPieceMapping.getKey());
+    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getPiece(itPlayerPieceMapping.getValue()).clone();
+    			
+    			oPiece.setPlayer(oPlayer);
+    			
+    			linkPieceAndPosition(oPosition, oPiece);    			
     		}
     	}    
-    	}catch(java.lang.Exception e) {
-			System.out.println(e);
-    }}
+    }
     
+    private void linkPieceAndPosition(IPositionAgent oPosition, IPieceAgent oPiece) {
+    	oPosition.setPiece(oPiece);
+    	oPiece.setPosition(oPosition);
+    }
     
 	public IPositionAgent getPositionAgent(String stName) {
 		return (IPositionAgent)getPosition(stName);
@@ -211,4 +211,86 @@ public class BoardAgent implements IBoardAgent {
 		return (Map<String, IPieceAgent>)(Object)getPieces();
 	}
 	//endregion
+	
+	public String getRuleEngineName() {
+		return m_oBoard.getRuleEngineName();
+	}
+
+	public void setRuleEngineName(String stName) {
+		m_oBoard.setRuleEngineName(stName);
+	}
+
+	public String getRuleProcessorName() {
+		return m_oBoard.getRuleProcessorName();
+	}
+	
+	public void addActivity(IBoardActivity oActivity) {
+		if( m_nActivityIndex != m_lstActivity.size() - 1) {
+			for(int nIndex = m_lstActivity.size() - 1; nIndex > m_nActivityIndex; nIndex--) {
+				m_lstActivity.remove(nIndex);
+			}
+			//m_lstActivity.subList(m_nActivityIndex, m_lstActivity.size() - 1).clear();
+		}
+		
+		m_lstActivity.add(oActivity);
+		m_nActivityIndex = m_lstActivity.size() - 1;		
+	}
+
+	public IBoardActivity undoLastActivity() {
+		IBoardActivity oActivity = null;
+		
+		if( m_nActivityIndex >= 0) {
+			oActivity = m_lstActivity.get(m_nActivityIndex);
+			m_nActivityIndex--;
+		}
+		
+		if( oActivity != null) {
+			for(Map.Entry<IPositionAgent, IPieceAgent> it : oActivity.getPriorMoveDetails().entrySet()) {
+				IPositionAgent oPosition = it.getKey();
+				IPieceAgent oPiece = it.getValue();
+								
+				oPosition.setPiece(oPiece);
+				if( oPiece != null) {
+					IPositionAgent oPieceCurrentPosition = oPiece.getPosition();				
+
+					oPiece.setPosition(oPosition);
+					
+					if( oPieceCurrentPosition != oPosition) {
+						oPiece.dequeuePositionHistory();
+					}
+				}
+			}
+		}
+
+		return oActivity;
+	}
+	
+	public IBoardActivity redoLastActivity() {
+		IBoardActivity oActivity = null;
+		
+		if( m_nActivityIndex < m_lstActivity.size() -1) {
+			m_nActivityIndex++;
+			oActivity = m_lstActivity.get(m_nActivityIndex);			
+		}
+		
+		if( oActivity != null) {
+			for(Map.Entry<IPositionAgent, IPieceAgent> it : oActivity.getPostMoveDetails().entrySet()) {
+				IPositionAgent oPosition = it.getKey();
+				IPieceAgent oPiece = it.getValue();
+				
+				oPosition.setPiece(oPiece);
+				if( oPiece != null) {
+					IPositionAgent oPieceCurrentPosition = oPiece.getPosition();				
+
+					oPiece.setPosition(oPosition);
+
+					if( oPieceCurrentPosition != oPosition) {
+						oPiece.enqueuePositionHistory(oPosition);
+					}
+				}
+			}
+		}
+		
+		return oActivity;
+	}
 }

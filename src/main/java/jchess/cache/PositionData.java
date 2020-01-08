@@ -5,6 +5,7 @@ import java.util.Map;
 
 import jchess.common.IPath;
 import jchess.common.IPathData;
+import jchess.common.IPosition;
 import jchess.common.IPositionData;
 import jchess.common.IShape;
 
@@ -36,13 +37,19 @@ public class PositionData implements IPositionData {
 		m_mpPath = new HashMap<String, IPath>();
 	}
 	
-	PositionData( PositionData oPosition) {
+	public PositionData( PositionData oPosition) {
 		m_nFile = oPosition.m_nFile;
 		m_nRank = oPosition.m_nRank;
 		m_oShape = oPosition.m_oShape;		
 		m_stCategory = oPosition.m_stCategory;
 		
-		m_mpPath = new HashMap<String, IPath>(oPosition.m_mpPath);
+		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
+		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
+		m_mpPath  = new HashMap<String, IPath>();
+		for(Map.Entry<String, IPath> it : oPosition.m_mpPath .entrySet()) {
+			m_mpPath.put( it.getKey(), it.getValue().clone());
+		}
+		//m_mpPath = new HashMap<String, IPath>(oPosition.m_mpPath);
 	}
 
 	// region: Immplements IPosition
@@ -119,4 +126,8 @@ public class PositionData implements IPositionData {
 		oPathB.getPathData().addNeighbour(oPathA);
 	}
 	// endregion
+	
+	public IPosition clone() {
+		return new PositionData(this);
+	}
 }

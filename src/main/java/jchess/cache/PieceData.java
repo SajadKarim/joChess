@@ -19,25 +19,28 @@ import jchess.common.IRule;
 public class PieceData implements IPieceData {
 	String m_stName;
 	String m_stImagePath;
-	Map<String, IRule > m_mpRules;
+	String m_stFamily;
+	Map<String, IRule > m_mpRule;
 	
 	public PieceData() {
-		m_mpRules = new HashMap<String, IRule >();
+		m_mpRule = new HashMap<String, IRule >();
 	}
 	
-	public PieceData(String stName, String stImagePath) {
-		m_stName = stName;
-		m_stImagePath = stImagePath;		
-		m_mpRules = new HashMap<String, IRule >();
+	public void init() {		
 	}
 	
-/*	public PieceData(PieceData oPiece) {
-		this.m_stName = oPiece.m_stName;
-		this.m_stImagePath = oPiece.m_stImagePath;
+	public PieceData(PieceData oPiece) {
+		m_stName = oPiece.m_stName;
+		m_stImagePath = oPiece.m_stImagePath;
+		m_stFamily = oPiece.m_stFamily;
 		
-		this.m_mpRules = new HashMap<String, IRuleData>(oPiece.m_mpRules);
+		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
+		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
+		m_mpRule = new HashMap<String, IRule>();
+		for(Map.Entry<String, IRule> it : oPiece.m_mpRule.entrySet()) {
+			m_mpRule.put( it.getKey(), it.getValue().clone());
+		}
 	}
-*/
 	
 	// region: Implements IPiece
 	public String getName() {
@@ -58,7 +61,7 @@ public class PieceData implements IPieceData {
 		m_stImagePath = stImagePath;
 	}
 	public List<IRule> getAllRules(){
-		return new ArrayList<IRule >(m_mpRules.values());
+		return new ArrayList<IRule >(m_mpRule.values());
 	}
 	
 	public PieceData getPieceData() {
@@ -66,7 +69,20 @@ public class PieceData implements IPieceData {
 	}
 
 	public void addRule(IRule oRule) {
-		m_mpRules.put(oRule.getName(), oRule);
+		m_mpRule.put(oRule.getName(), oRule);
 	}
 	// endregion
+	
+	public void setFamily(String stFamily) {
+		m_stFamily = stFamily;
+	}
+
+	public String getFamily() {
+		return m_stFamily;
+	}
+	
+	@Override
+	public IPieceData clone() {
+		return new PieceData(this);
+	}
 }

@@ -1,4 +1,4 @@
-<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700">
+<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700" RuleEngine="ExtendedRuleEngine" RuleProcessor="ExtendedRuleProcessor">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />
@@ -3683,29 +3683,34 @@
     <Rule Name="Move_Diagonally_1" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Edgewise_*" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Diagonally_*" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
-    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="FORWARD" Family="SAME"/>
+    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="DIFFERENT"/>
+    <Rule Name="Pawn_Jump" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1">
+      <Rules>
+        <Rule Name="Pawn_Jump_1" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1"/>
+      </Rules>
+    </Rule>
+    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="IGNORE" Rank="FORWARD" Family="SAME"/>
     <Rule Name="Vertex_Traversal" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="SAME"/>
     <Rule Name="Edge_Traversal" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Knight_Move_1" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="FORWARD" Family="SAME">
+    <Rule Name="Knight_Move_1" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="FORWARD" Family="SAME">
       <Rules>        
         <Rule Name="Knight_Move_1_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_1_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_2" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="FORWARD" Rank="FORWARD" Family="SAME">
+    <Rule Name="Knight_Move_2" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="FORWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_2_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_2_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_3" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="BACKWARD" Family="SAME">
+    <Rule Name="Knight_Move_3" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="BACKWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_3_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_3_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_4" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="FORWARD" Rank="BACKWARD" Family="SAME">
+    <Rule Name="Knight_Move_4" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="BACKWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_4_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_4_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
@@ -3713,73 +3718,73 @@
     </Rule>
   </Rules>
   <Pieces>
-    <Piece Name="KingWhite" Image="King-W.png">
+    <Piece Name="KingWhite" Image="King-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Edgewise_1</Rule>
         <Rule>Move_Diagonally_1</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KingBlack" Image="King-B.png">
+    <Piece Name="KingBlack" Image="King-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Edgewise_1</Rule>
         <Rule>Move_Diagonally_1</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KingRed" Image="King-R.png">
+    <Piece Name="KingRed" Image="King-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Edgewise_1</Rule>
         <Rule>Move_Diagonally_1</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="QueenWhite" Image="Queen-W.png">
+    <Piece Name="QueenWhite" Image="Queen-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="QueenBlack" Image="Queen-B.png">
+    <Piece Name="QueenBlack" Image="Queen-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="QueenRed" Image="Queen-R.png">
+    <Piece Name="QueenRed" Image="Queen-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="RookWhite" Image="Rook-W.png">
+    <Piece Name="RookWhite" Image="Rook-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="RookBlack" Image="Rook-B.png">
+    <Piece Name="RookBlack" Image="Rook-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="RookRed" Image="Rook-R.png">
+    <Piece Name="RookRed" Image="Rook-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Edgewise_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="BishopWhite" Image="Bishop-W.png">
+    <Piece Name="BishopWhite" Image="Bishop-W.png" Family="White">
       <AllowedMoves>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="BishopBlack" Image="Bishop-B.png">
+    <Piece Name="BishopBlack" Image="Bishop-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="BishopRed" Image="Bishop-R.png">
+    <Piece Name="BishopRed" Image="Bishop-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Move_Diagonally_*</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KnightWhite" Image="Knight-W.png">
+    <Piece Name="KnightWhite" Image="Knight-W.png" Family="White">
       <AllowedMoves>
         <Rule>Knight_Move_1</Rule>
         <Rule>Knight_Move_2</Rule>
@@ -3787,7 +3792,7 @@
         <Rule>Knight_Move_4</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KnightBlack" Image="Knight-B.png">
+    <Piece Name="KnightBlack" Image="Knight-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Knight_Move_1</Rule>
         <Rule>Knight_Move_2</Rule>
@@ -3795,7 +3800,7 @@
         <Rule>Knight_Move_4</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="KnightRed" Image="Knight-R.png">
+    <Piece Name="KnightRed" Image="Knight-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Knight_Move_1</Rule>
         <Rule>Knight_Move_2</Rule>
@@ -3803,19 +3808,19 @@
         <Rule>Knight_Move_4</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="PawnWhite" Image="Pawn-W.png">
+    <Piece Name="PawnWhite" Image="Pawn-W.png" Family="White">
       <AllowedMoves>
         <Rule>Pawn_Move</Rule>
         <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="PawnBlack" Image="Pawn-B.png">
+    <Piece Name="PawnBlack" Image="Pawn-B.png" Family="Black">
       <AllowedMoves>
         <Rule>Pawn_Move</Rule>
         <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
-    <Piece Name="PawnRed" Image="Pawn-R.png">
+    <Piece Name="PawnRed" Image="Pawn-R.png" Family="Red">
       <AllowedMoves>
         <Rule>Pawn_Move</Rule>
         <Rule>Pawn_Capture</Rule>
@@ -3829,7 +3834,7 @@
         <Piece Name="QueenWhite" Position="d1" />
         <Piece Name="BishopWhite" Position="f1" />
         <Piece Name="BishopWhite" Position="c1" />
-        <Piece Name="KnightWhite" Position="d4" />
+        <Piece Name="KnightWhite" Position="g1" />
         <Piece Name="KnightWhite" Position="b1" />
         <Piece Name="RookWhite" Position="h1" />
         <Piece Name="RookWhite" Position="a1" />

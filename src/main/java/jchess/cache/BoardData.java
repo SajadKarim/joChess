@@ -23,19 +23,21 @@ public class BoardData implements IBoardData {
 	private String m_stName;
 	private String m_stBoardImagePath;
 	private String m_stActiveCellImagePath;
-	private String m_stMarkedCellImagePath;	
-    private Map<String, IPosition> m_mpPosition;
-    private Map<String, IPlayer > m_mpPlayers;
-    private Map<String, IPiece > m_mpPieces;
-    private Map<String, Map<String, String>> m_mpMapping;
+	private String m_stMarkedCellImagePath;
+	private String m_stRuleEngineName;	
+	private String m_stRuleProcessorName;
     private Map<String, IRule> m_mpRules;
+    private Map<String, IPiece > m_mpPieces;
+    private Map<String, IPlayer > m_mpPlayers;
+    private Map<String, IPosition> m_mpPosition;
+    private Map<String, Map<String, String>> m_mpMapping;
     
     public BoardData() {
-    	m_mpPosition = new HashMap<String, IPosition>();
-    	m_mpPlayers = new HashMap<String, IPlayer >();    	
-    	m_mpPieces = new HashMap<String, IPiece >();
-    	m_mpMapping = new HashMap<String, Map<String, String>>();    	
     	m_mpRules = new HashMap<String, IRule>();
+    	m_mpPieces = new HashMap<String, IPiece >();
+    	m_mpPlayers = new HashMap<String, IPlayer >();    	
+    	m_mpPosition = new HashMap<String, IPosition>();
+    	m_mpMapping = new HashMap<String, Map<String, String>>();    	
     }
     
     // region: Implements IBoard
@@ -96,29 +98,13 @@ public class BoardData implements IBoardData {
 		return m_mpPieces;
 	}
 
-	public IPosition createPosition() {
-		return new PositionData();
-	}	
-
-	public IPiece createPiece() {
-		return new PieceData();
-	}	
-
-	public IRule createRule() {
-		return new RuleData();
-	}
-
-	public IPlayer createPlayer() {
-		return new PlayerData();
-	}
-
 	public IBoardData getBoardData() {
 		return this;
 	}
 	
 	public void init() {
 		
-	}
+	}	
 	//endregion
 	
 	//region: Implement IBoardData
@@ -172,4 +158,20 @@ public class BoardData implements IBoardData {
     	m_mpMapping.get(stPlayer).put(stPosition, stPiece);
     }
 	//endregion
+	
+	public String getRuleEngineName() {
+		return m_stRuleEngineName;
+	}
+
+	public void setRuleEngineName(String stName) {
+		m_stRuleEngineName = stName;
+	}
+
+	public void setRuleProcessorName(String stName) {
+		m_stRuleProcessorName = stName;
+	}
+
+	public String getRuleProcessorName() {
+		return m_stRuleProcessorName;
+	}
 }

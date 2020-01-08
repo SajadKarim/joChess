@@ -28,4 +28,8 @@ public interface IBoardAgent extends IBoard {
 	
 	public IPieceAgent getPieceAgent(String stName);
 	public  Map<String, IPieceAgent>  getAllPieceAgents();
+	
+	public void addActivity(IBoardActivity oActivity);
+	public IBoardActivity undoLastActivity();
+	public IBoardActivity redoLastActivity();
 }

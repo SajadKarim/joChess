@@ -37,4 +37,6 @@ public interface IBoardFactory {
 	 * @return IPosition
 	 */
 	public IPosition createPosition();
+
+	public IBoard createBoard();
 }

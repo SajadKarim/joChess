@@ -3,6 +3,11 @@ package jchess.common;
 import java.util.List;
 import java.util.Map;
 
+import jchess.common.enumerator.Direction;
+import jchess.common.enumerator.Family;
+import jchess.common.enumerator.File;
+import jchess.common.enumerator.Rank;
+
 /**
  * IPositionAgent provides interface for the module where the
  * all the decisions (game) are taken. It ensures that user
@@ -22,4 +27,7 @@ public interface IPositionAgent extends IPosition {
 	public IPathAgent getPathByName(String stName);
 	public void setMoveCandidacy(Boolean bMoveCandidacy);
 	public List<IPositionAgent> tryGetOppositePath( IPositionAgent oPosition);	
+	public Map<String, IPositionAgent> getAllPathAgents(IBoardMapping oBoardMapping, Direction enDirection, Family enFamily, File enFile, Rank enRank);
+	public Boolean tryValidateRuleApplicability(IBoardMapping oBoardMapping, Family enFamily, File enFile, Rank enRank, IPositionAgent oNextPosition);	
+	public String toLog();
 }

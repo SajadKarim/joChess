@@ -18,6 +18,8 @@ public interface IBoardData extends IBoard {
 	public void setBoardImagePath(String stPath);
 	public void setActivCellImagePath(String stPath);
 	public void setMarkedCellImagePath(String stPath);
+	public void setRuleEngineName(String stName);
+	public void setRuleProcessorName(String stName);
 
 	public String getBoardImagePath();
 	public String getActivCellImagePath();

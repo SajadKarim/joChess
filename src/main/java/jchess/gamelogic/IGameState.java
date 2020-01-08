@@ -2,11 +2,9 @@ package jchess.gamelogic;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
-
+import jchess.common.IMoveCandidate;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
 
 /**
  * This provides abstraction to the current state of the data.
@@ -20,7 +18,10 @@ public interface IGameState {
 	public IPlayerAgent getActivePlayer();
 	public void setActivePosition(IPositionAgent oSelectedPiece);
 	public void switchPlayTurn();
-	public Map<String, Pair<IPositionAgent, IRuleAgent>> getPossibleMovesForActivePosition();
-	public Pair<IPositionAgent, IRuleAgent> doesPositionExistsInMoveCandidates(IPositionAgent oPosition);
-	public void setPossibleMovesForActivePosition(Map<String, Pair<IPositionAgent, IRuleAgent>> lstPositions);
+	public Map<String, IMoveCandidate> getPossibleMovesForActivePosition();
+	public IMoveCandidate getMoveCandidate(IPositionAgent oPosition);
+	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidate> lstPositions);
+	public Boolean isThisActivePlayer(String stPlayerName);
+	public Boolean isThisActivePosition(String stPositionName);
+	public void makeLastPlayerAsCurrentPlayer(IPlayerAgent oPlayer);
 }

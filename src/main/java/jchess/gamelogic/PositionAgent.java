@@ -1,17 +1,24 @@
 package jchess.gamelogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import jchess.cache.PositionData;
+import jchess.common.IBoardMapping;
 import jchess.common.IPath;
 import jchess.common.IPathAgent;
 import jchess.common.IPieceAgent;
+import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.common.IPositionData;
 import jchess.common.IShape;
+import jchess.common.enumerator.Direction;
+import jchess.common.enumerator.Family;
+import jchess.common.enumerator.File;
+import jchess.common.enumerator.Rank;
 
 /**
  * This class is responsible to manage underlying "Position" (only) related data.
@@ -34,6 +41,13 @@ public class PositionAgent implements IPositionAgent {
 		m_bSelected = false;
 		m_bMoveCandidacy = false;	
 		m_oPosition = new PositionData();
+	}
+	
+	PositionAgent(PositionAgent oPosition) {
+		m_bSelected = oPosition.m_bSelected;
+		m_bMoveCandidacy = oPosition.m_bMoveCandidacy;	
+		m_oPosition = new PositionData((PositionData)oPosition.m_oPosition);
+		m_oPiece = new PieceAgent((PieceAgent)oPosition.m_oPiece);
 	}
 	
 	//region	
@@ -71,12 +85,22 @@ public class PositionAgent implements IPositionAgent {
 	}
 	
 	// region: Implements IPositionAgent
+	/**
+	 * This method returns the opposite Position against the provided one.
+	 * 
+	 *  NW	N	NE
+	 * 	W	*	E
+	 *  SW	S	WE
+	 *  
+	 * Consider * is the current Position. 
+	 * The Position provided in the argument is the one linked to SW.
+	 * This method would return the Position that is linked to NE location (if any).
+	 * 
+	 */	
 	public List<IPositionAgent> tryGetOppositePath( IPositionAgent oPosition) {	
 		String stInitiator = null;
 		
 		for( Map.Entry<String, IPath> entry: m_oPosition.getAllPaths().entrySet()) {
-		//Iterator<IPath> it = m_oPosition.getAllPaths().iterator(); 
-	    //while( it.hasNext()) {
 	    	IPath oPath = entry.getValue();// it.next();
 	    	if( oPath.doesPositionExist(oPosition.getName())) {
 		        stInitiator = oPath.getName();
@@ -172,5 +196,98 @@ public class PositionAgent implements IPositionAgent {
 			return oPath.getAllNeighbors().get(1).getName();
 		
 		return null;
+	}
+
+	public Map<String, IPositionAgent> getAllPathAgents(IBoardMapping oBoardMapping, Direction enDirection, Family enFamily, File enFile, Rank enRank) {
+		Map<String, IPositionAgent> mpPaths = new HashMap<String, IPositionAgent>();
+		for( Map.Entry<String, IPath> itPath : m_oPosition.getAllPaths().entrySet()) {
+	    	IPath oPath = itPath.getValue();
+	    	
+	    	if( oPath.getDirection() != enDirection)
+	    		continue;
+	    	
+	    	Iterator<IPosition> itPosition = oPath.getAllPositions().iterator();
+	    	while( itPosition.hasNext()) {
+	    		IPositionAgent oNextPosition = (IPositionAgent)itPosition.next();
+		    	if( tryValidateRuleApplicability(oBoardMapping, enFamily, enFile, enRank, oNextPosition))
+		    		mpPaths.put(oNextPosition.getName(), oNextPosition);
+	    	}
+		}
+
+		return mpPaths;
+	}
+	
+	public Boolean tryValidateRuleApplicability(IBoardMapping oBoardMapping, Family enFamily, File enFile, Rank enRank, IPositionAgent oNextPosition) {				
+		String stCategorySource = this.getCategory().toUpperCase();
+		String stCategoryDestination = oNextPosition.getCategory().toUpperCase();
+
+		switch( enFamily) {
+		case DIFFERENT:
+			if( stCategorySource.equals(stCategoryDestination))
+				return false;
+			break;
+		case SAME:
+			if( !stCategorySource.equals(stCategoryDestination))
+				return false;
+			break;
+		case IGNORE:
+			break;
+		default:
+			return false;
+		}
+		
+		int nFileSource = oBoardMapping.getMapping(this.getFile() );
+		int nFileDestination = oBoardMapping.getMapping(oNextPosition.getFile() );
+		
+		switch( enFile) {
+		case SAME:
+			if( nFileSource != nFileDestination)
+				return false;
+			break;
+		case FORWARD:
+			if( nFileDestination <= nFileSource)
+				return false;
+			break;
+		case BACKWARD:
+			if( nFileDestination >= nFileSource)
+				return false;
+			break;
+		case IGNORE:
+		default:
+			break;
+		}
+
+		int nRankSource = oBoardMapping.getMapping(this.getRank() );
+		int nRankDestination = oBoardMapping.getMapping(oNextPosition.getRank() );
+
+		switch( enRank) {
+		case SAME:
+			if( nRankSource != nRankDestination)
+				return false;
+			break;
+		case FORWARD:
+			if( nRankDestination <= nRankSource)
+				return false;
+			break;
+		case BACKWARD:
+			if( nRankDestination >= nRankSource)
+				return false;
+			break;
+		case IGNORE:
+		default:
+			break;
+		}
+	
+		return true;
+	}
+
+	public IPosition clone() {
+		return new PositionAgent(this);
+	}
+	
+	public String toLog() {
+		return String.format("Id=%s, Piece=%s"
+				, getName()
+				, m_oPiece == null ? "<no piece attached>" : m_oPiece.getName());
 	}
 }

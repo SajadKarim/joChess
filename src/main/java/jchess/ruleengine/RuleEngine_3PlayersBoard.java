@@ -2,11 +2,14 @@ package jchess.ruleengine;
 
 import java.util.Map;
 
-import org.javatuples.Pair;
+import com.google.inject.Inject;
 
+import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
+import jchess.gui.IGUIHandle;
+import jchess.util.IAppLogger;
 
 /**
  * Extended logic to execute a Rule for 3 Player board.
@@ -15,35 +18,25 @@ import jchess.common.IRuleAgent;
  * @since	7 Dec 2019
  */
 
-class RuleEngine_3PlayersBoard extends DefaultRuleEngine {
+class RuleEngine_3PlayersBoard extends ExtendedRuleEngine {	
+	@Inject
+	public RuleEngine_3PlayersBoard(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
+		super(oRuleProcessor, oGUIHandler, oLogger);
+	}
+	
 	@Override
-	public Map<String,Pair<IPositionAgent, IRuleAgent>> tryFindPossibleCandidateMovePositions(IBoardAgent oBoard, IPositionAgent oPosition) {		
-		Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions = super.tryFindPossibleCandidateMovePositions(oBoard, oPosition);
+	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {		
+		Map<String, IMoveCandidate> mpCandidateMovePositions = super.tryEvaluateAllRules(oBoard, oPiece);
 		
-		tryMakePiecePeculiarMoves(oBoard, oPosition, mpCandidateMovePositions);
+		tryMakePiecePeculiarMoves(oBoard, oPiece, mpCandidateMovePositions);
 		
 		return mpCandidateMovePositions;
 	}
 	@Override
-	public void tryMakeMove(IPositionAgent oSourcePosition, Pair<IPositionAgent, IRuleAgent> oDestinationPositionAndRule) {
-		super.tryMakeMove(oSourcePosition, oDestinationPositionAndRule);
-		
-		if( oDestinationPositionAndRule.getValue0().getPiece() != null) {
-			if( oDestinationPositionAndRule.getValue0().getPiece().getName().startsWith("Pawn")) {
-				if(!oDestinationPositionAndRule.getValue0().getPiece().hasPieceAlreadyMadeMove() ) { 
-					oDestinationPositionAndRule.getValue0().getPiece().recordPeiceFirstMove();
-				}
-			}
-		}
+	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oDestinationPositionAndRule) {
+		return super.tryExecuteRule(oBoard, oDestinationPositionAndRule);
 	}
 	
-	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPositionAgent oPosition, Map<String,Pair<IPositionAgent, IRuleAgent>> mpCandidateMovePositions) {
-		if( oPosition.getPiece() != null) {
-			if( oPosition.getPiece().getName().startsWith("Pawn")) {
-				if(!oPosition.getPiece().hasPieceAlreadyMadeMove() ) { 
-					SharedEngine.tryPawnFirstMove(oBoard, oPosition, mpCandidateMovePositions);
-				}
-			}
-		}
+	private void tryMakePiecePeculiarMoves(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 	}
 }

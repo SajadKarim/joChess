@@ -4,13 +4,14 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import org.javatuples.Pair;
-
 import com.google.inject.Inject;
 
+import jchess.common.IMoveCandidate;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
+import jchess.gui.model.gamewindow.IGameModel;
+import jchess.util.IAppLogger;
+import jchess.util.LogLevel;
 
 /**
  * This class is container to hold current state of the Board.
@@ -20,16 +21,21 @@ import jchess.common.IRuleAgent;
  */
 
 public class GameState implements IGameState {
-
 	private IPlayerAgent m_oActivePlayer;
 	private IPositionAgent m_oSelectedPiece;
-	private Map<String, Pair<IPositionAgent, IRuleAgent>> m_lstPossibleMovePositionsForSelectedPiece;
+	private Map<String, IMoveCandidate> m_lstPossibleMovePositionsForSelectedPiece;
 	private Queue<IPlayerAgent> m_qPlayersInQueue;
-	
-	public GameState(Map<String, IPlayerAgent> lstPlayers) {
+	private IAppLogger m_oLogger;
+
+	@Inject
+	public GameState(IGameModel oGameModel, IAppLogger oLogger) {
+		m_oLogger = oLogger;
+		
+		m_oLogger.writeLog(LogLevel.INFO, "Instantiating GameState.", "GameState", "GameState");
+
 		m_qPlayersInQueue = new LinkedList<IPlayerAgent>();
 		
-		for (Map.Entry<String,IPlayerAgent> entry : lstPlayers.entrySet()) {
+		for (Map.Entry<String,IPlayerAgent> entry : oGameModel.getAllPlayerAgents().entrySet()) {
 			m_qPlayersInQueue.add(entry.getValue());
 		}
 		
@@ -43,6 +49,7 @@ public class GameState implements IGameState {
 	public void setActivePosition(IPositionAgent oSelectedPiece) {
 		m_oSelectedPiece = oSelectedPiece;
 	}
+
 	/**
 	 * Get the player that is currently active
 	 * @return the active player
@@ -50,28 +57,48 @@ public class GameState implements IGameState {
 	public IPlayerAgent getActivePlayer() {
 		return m_oActivePlayer;
 	}
+	
 	/**
 	 * Switch the turn of the player
 	 */
 	public void switchPlayTurn() {
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Switching player. Old player=[%s]", m_oActivePlayer == null ? "NULL" : m_oActivePlayer.getName()), "switchPlayTurn", "GameState");
+		
 		m_oActivePlayer = m_qPlayersInQueue.poll();
 		m_qPlayersInQueue.add(m_oActivePlayer);
 		
 		m_oSelectedPiece = null;
 		m_lstPossibleMovePositionsForSelectedPiece = null;
+
+		m_oLogger.writeLog(LogLevel.INFO, String.format("Switching player. New player=[%s]", m_oActivePlayer == null ? "NULL" : m_oActivePlayer.getName()), "switchPlayTurn", "GameState");
 	}
 
-	public Map<String, Pair<IPositionAgent, IRuleAgent>> getPossibleMovesForActivePosition() {
+	public Map<String, IMoveCandidate> getPossibleMovesForActivePosition() {
 		return m_lstPossibleMovePositionsForSelectedPiece;
 	}
 
-	public void setPossibleMovesForActivePosition(Map<String, Pair<IPositionAgent, IRuleAgent>> lstPositions) {
+	public void setPossibleMovesForActivePosition(Map<String, IMoveCandidate> lstPositions) {
 		m_lstPossibleMovePositionsForSelectedPiece = lstPositions;
 	}
 
-	public Pair<IPositionAgent, IRuleAgent> doesPositionExistsInMoveCandidates(IPositionAgent oPosition) {
+	public IMoveCandidate getMoveCandidate(IPositionAgent oPosition) {
 		if( m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
+
 		return null;
+	}
+	
+	public Boolean isThisActivePlayer(String stPlayerName) {
+		return m_oActivePlayer.getName().equals(stPlayerName);
+	}
+	
+	public Boolean isThisActivePosition(String stPositionName) {
+		return m_oSelectedPiece.getName().equals(stPositionName);
+	}
+	
+	public void makeLastPlayerAsCurrentPlayer(IPlayerAgent oPlayer) {
+		while( !m_qPlayersInQueue.peek().equals(oPlayer)) {
+			switchPlayTurn();
+		}
 	}
 }
