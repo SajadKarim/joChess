@@ -31,6 +31,10 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	/**
 	 * This method finds out whether the proivded Position can be a candidate to make a move, also it (with the help of Rule)
 	 * deduces whether algorithm should proceed with the Position to find out the next possible candidate moves.
+	 * 
+	 * @param oBoard the chess board
+	 * @param oPiece the selected piece
+	 * @param mpCandidatePositions the candidate positions
 	 */
 	@Override
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {

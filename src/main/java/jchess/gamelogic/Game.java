@@ -73,12 +73,16 @@ public class Game implements IGame, ITimerListener{
 		m_oTimer.addListener(this);		
 		m_oTimer.start(60*60, 10000, 0, true, true);
 	}
-	
+	/**
+	 * Keep track on the time. Notify when the second has been elapsed
+	 */
 	@Override
 	public void onSecondElapsed(int nRemainingSeconds) {
 		notifyListenersOnTimerUpdate_SecondsElapsed(nRemainingSeconds);
 	}
-
+	/**
+	 * Keep track on the time. Notify when all the time has been elapsed
+	 */
 	@Override
 	public void onTimerElapsed() {
 		m_oLogger.writeLog(LogLevel.DETAILED, "All the time has been elasped.", "onTimerElasped", "Game");
@@ -90,6 +94,7 @@ public class Game implements IGame, ITimerListener{
 	
 	/**
 	 * This method is called when user makes a click on the Board.
+	 * @param oPosition position the mouse clicked
 	 */
 	public void onBoardActivity(IPositionAgent oPosition) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Activity on board has been observed.", "onBoardActivity", "Game");
@@ -215,7 +220,10 @@ public class Game implements IGame, ITimerListener{
 	public void addListener(final IGameListener oListener) {
         m_lstListener.add(oListener);
     }
-
+	/**
+	 * Notify listener the second elapse from the clock
+	 * @param nRemainingSeconds the remaining second of the clock
+	 */
 	public void notifyListenersOnTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about second elapse.", "notifyListenersOnTimerUpdate_SecondsElapsed", "Game");
 
@@ -223,7 +231,10 @@ public class Game implements IGame, ITimerListener{
             oListener.onTimerUpdate_SecondsElapsed(nRemainingSeconds);
         }	
 	}
-	
+	/**
+	 * Notify listener the time has elapse
+	 * @param oPlayer player's time elapse
+	 */
 	public void notifyListenersOnTimerUpdate_TimerElapsed(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about timer elapse.", "notifyListenersOnTimerUpdate_TimerElapsed", "Game");
 
@@ -231,7 +242,10 @@ public class Game implements IGame, ITimerListener{
             oListener.onTimerUpdate_TimerElapsed(oPlayer);
         }	
 	}
-	
+	/**
+	 * Notify listener change current player to next player
+	 * @param oPlayer next player
+	 */
 	public void notifyListenersOnCurrentPlayerChanged(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about player change.", "notifyListenersOnCurrentPlayerChanged", "Game");
 
@@ -239,7 +253,11 @@ public class Game implements IGame, ITimerListener{
             oListener.onCurrentPlayerChanged(oPlayer);
         }	
 	}
-
+	/**
+	 * Notify listener the recent move of the current player
+	 * @param oPlayer current player
+	 * @param oMove recent move
+	 */
 	public void notifyListenersOnMoveMadeByPlayer(IPlayerAgent oPlayer, IBoardActivity oMove) {		
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about move made by player.", "notifyListenersOnMoveMadeByPlayer", "Game");
 

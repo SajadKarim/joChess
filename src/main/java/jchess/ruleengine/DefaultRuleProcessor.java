@@ -44,6 +44,9 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	
 	/**
 	 * This method tries to find all the possible candidate moves that the selected Piece can make.
+	 * @param oBoard the chess board
+	 * @param oPiece the piece
+	 * @param mpCandidatePositions the candidate positions
 	 */
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "DefaultRuleProcessor");
@@ -226,6 +229,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * 
 	 * Using above technique, any (even complex) manouevres can be made easily.
 	 * 
+	 * @param oCurrentRule the rule of the piece
+	 * @param oCurrentPosition the next position of the piece
+	 * @param oLastPosition the current of the piece
+	 * @param oPlayer the current player
+	 * @param qData the queue for next rule and next position
+	 * @param mpCandidatePositions the candidate positions
 	 */
 	void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForFileAndRankStrategy", "DefaultRuleProcessor");
@@ -274,6 +283,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	/**
 	 * This method finds out whether the proivded Position can be a candidate to make a move, also it (with the help of Rule)
 	 * deduces whether algorithm should proceed with the Position to find out the next possible candidate moves.
+	 * 
+	 * @param oPlayer the current player
+	 * @param oRule the rule of the piece
+	 * @param oCandidacyPosition the candidate position for the piece
+	 * @param bIsValidMode can capture or not 
+	 * @param bCanContinue can continue or not
 	 */
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Verifying if position can be a candidate move and can continue as the next position.", "checkForPositionMoveCandidacyAndContinuity", "DefaultRuleProcessor");
