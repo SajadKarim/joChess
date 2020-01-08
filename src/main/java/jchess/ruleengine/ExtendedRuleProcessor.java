@@ -41,7 +41,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 		default:
 			break;
 		}
-		
+			
     }
 	/**
 	 * Verifying if position can be a candidate move and the piece can continue to the next position
