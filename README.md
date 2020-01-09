@@ -7,11 +7,4 @@ Our core logic relies on XML. We have tried to make the game (to great extent) c
 The base code used in this project is taken from the following location;
 https://sourceforge.net/projects/javaopenchess/files/1.0.1/joChess-1.0.1-sources.zip/download
 
-Team:
-Sajad Karim (https://www.linkedin.com/in/sajadkarim/)
-Danny
-Savio Jojo
-Kenneth Allan
-
-
 ..more details shall be available soon..
