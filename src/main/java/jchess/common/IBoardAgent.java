@@ -26,10 +26,12 @@ public interface IBoardAgent extends IBoard {
 	public IRuleAgent getRuleAgent(String stName);
 	public  Map<String, IRuleAgent>  getAllRuleAgents();
 	
-	public IPieceAgent getPieceAgent(String stName);
-	public  Map<String, IPieceAgent>  getAllPieceAgents();
+	public IPieceAgent getUnlinkedPieceAgent(String stName);
+	public  Map<String, IPieceAgent>  getAllUnlinkedPieceAgents();
 	
 	public void addActivity(IBoardActivity oActivity);
 	public IBoardActivity undoLastActivity();
 	public IBoardActivity redoLastActivity();
+
+	public IBoardActivity getLastActivityByPlayer(IPlayerAgent oPlayer);
 }

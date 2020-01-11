@@ -39,7 +39,7 @@ import jchess.util.IAppLogger;
  * @since	25 Dec 2019
  */
 
-class DefaultRuleProcessorTest1 {
+class DefaultRuleProcessorTest1_2PlayerBoard {
 	static IBoardAgent m_oBoard;
 	static DefaultRuleProcessor m_oRuleProcessor;
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();

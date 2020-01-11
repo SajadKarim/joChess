@@ -90,11 +90,11 @@ public class BoardData implements IBoardData {
 		return m_mpRules;
 	}
 
-	public IPiece getPiece(String stName) {
+	public IPiece getUnlinkedPiece(String stName) {
 		return m_mpPieces.get(stName);
 	}
 
-	public  Map<String, IPiece>  getAllPieces() {
+	public  Map<String, IPiece> getAllUnlinkedPieces() {
 		return m_mpPieces;
 	}
 

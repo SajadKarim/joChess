@@ -83,12 +83,12 @@ public interface IBoard {
 	 * @param stName
 	 * @return IPiece
 	 */		
-	public IPiece getPiece(String stName);
+	public IPiece getUnlinkedPiece(String stName);
 	/**
 	 * This method returns all the available IPiece objects.
 	 * @return Map of String, IPiece
 	 */
-	public  Map<String, IPiece>  getAllPieces();
+	public  Map<String, IPiece>  getAllUnlinkedPieces();
 	/**
 	 * This method return the BoardData object.
 	 * @return IBoardData 

@@ -87,6 +87,10 @@ public class PieceAgent implements IPieceAgent {
 		return (List<IRuleAgent>)(Object)m_oPiece.getAllRules();
 	}
 	
+	public IRule getRule(String stRuleName) {
+		return m_oPiece.getRule(stRuleName);
+	}
+
 	public int getRuns() {
 		return m_lstPositionHistory.size();
 	}

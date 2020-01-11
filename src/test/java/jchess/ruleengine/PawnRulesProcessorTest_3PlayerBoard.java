@@ -26,12 +26,13 @@ import jchess.common.enumerator.File;
 import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
+import jchess.gamelogic.BoardActivity;
 import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
-class PawnRulesProcessorTest {
+class PawnRulesProcessorTest_3PlayerBoard {
 	static IAppLogger m_oLogger;
 	static IBoardAgent m_oBoard;
 	static IRuleProcessor m_oRuleProcessor ;
@@ -51,7 +52,7 @@ class PawnRulesProcessorTest {
 	void setUp() throws Exception {
 		ICacheManager oCacheManager = new CacheManager(m_oLogger);
 		
-		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "2PlayerBoard.xml");
+		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "3PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleProcessorTest");
 	}
 
@@ -75,10 +76,10 @@ class PawnRulesProcessorTest {
 
 	@Test
 	void testTryPawnPromotionRuleForEdge_SuccessCase() {
-		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d7");
+		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("c7");
 		
 		// This change is made to create a scenarios where White Pawn has reached d7 position and wants to promote itself.
-		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("d2").getPiece();
+		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("c2").getPiece();
 		oCurrentPosition.setPiece(oPawnPiece); 
 		oPawnPiece.setPosition(oCurrentPosition);
 
@@ -91,8 +92,8 @@ class PawnRulesProcessorTest {
 		
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
-		IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent("d8");
-		IPositionAgent oActualPositionInMap = mpCandidatePositions.get("d8").getCandidatePosition();
+		IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent("c8");
+		IPositionAgent oActualPositionInMap = mpCandidatePositions.get("c8").getCandidatePosition();
 		
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
@@ -113,10 +114,10 @@ class PawnRulesProcessorTest {
 
 	@Test
 	void testTryPawnPromotionRuleForVertex_SuccessCase() {
-		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d7");
+		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("c7");
 		
 		// This change is made to create a scenarios where White Pawn has reached d7 position and wants to promote itself.
-		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("d2").getPiece();
+		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("c2").getPiece();
 		oCurrentPosition.setPiece(oPawnPiece); 
 		oPawnPiece.setPosition(oCurrentPosition);
 
@@ -129,7 +130,7 @@ class PawnRulesProcessorTest {
 		
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
-		String[] arPositionsToValidate = {"c8", "e8"};
+		String[] arPositionsToValidate = {"b8", "d8"};
 		for( String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
@@ -198,5 +199,86 @@ class PawnRulesProcessorTest {
 
 		assertEquals(oExpectedPiece, oActualPiece);
 	}
+	
+	@Test
+	void testtryPawnEnPassantRule() {
+		// Player 1 move Pawn from b2 to b4
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("b2").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("b2").getPiece(), m_oBoard.getPositionAgent("b2"), m_oBoard.getPositionAgent("b4"));
+		// Player 2 move Pawn from g11 to g10
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("g11").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("g11").getPiece(), m_oBoard.getPositionAgent("g11"), m_oBoard.getPositionAgent("g10"));
+		// Player 3 move Pawn from k7 to k6
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("k7").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("k7").getPiece(), m_oBoard.getPositionAgent("k7"), m_oBoard.getPositionAgent("k6"));
+		// Player 1 move Pawn from b4 to b5
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("b4").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("b4").getPiece(), m_oBoard.getPositionAgent("b4"), m_oBoard.getPositionAgent("b5"));
+		// Player 2 move Pawn from c7 to c5
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("c7").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("c7").getPiece(), m_oBoard.getPositionAgent("c7"), m_oBoard.getPositionAgent("c5"));
+		// Player 3 move Pawn from e11 to e10
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("e11").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("e11").getPiece(), m_oBoard.getPositionAgent("e11"), m_oBoard.getPositionAgent("e10"));
 
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
+		PawnRulesProcessor.tryPawnEnPassantRule(m_oBoard, m_oBoard.getPositionAgent("b5").getPiece(), mpCandidatePositions);
+
+		int nExpectedValuesInMap = 1;
+		int nActualValuesInMap = mpCandidatePositions.size();
+		
+		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
+
+		String[] arPositionsToValidate = {"c5"};
+		for( String stPositionId : arPositionsToValidate) {
+			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
+			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
+			
+			assertEquals(oExpectedPositionInMap, oActualPositionInMap);
+		}
+	}
+	
+	private void makeMoveToTesttryPawnEnPassantRule(IRuleAgent oRule, IPieceAgent oPieceToMove, IPositionAgent oCurrentPosition, IPositionAgent oNewPosition) {
+		IMoveCandidate oMoveCandidate = new MoveCandidate(oRule, oPieceToMove, oCurrentPosition, oNewPosition);
+
+		oCurrentPosition.setPiece(null);
+		oNewPosition.setPiece(oPieceToMove);
+		oPieceToMove.setPosition(oNewPosition);
+		
+		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
+		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceToMove);
+		oActivity.addPriorMoveEntry(oNewPosition, null);
+		oActivity.addPostMoveEntry(oCurrentPosition, null );
+		oActivity.addPostMoveEntry(oNewPosition, oPieceToMove);
+		oActivity.setPlayer(oPieceToMove.getPlayer());
+
+		m_oBoard.addActivity(oActivity);		
+	}
+
+	@Test
+	void testtryExecutePawnEnPassantRule() {
+		// Player 1 move Pawn from b2 to b4
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("b2").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("b2").getPiece(), m_oBoard.getPositionAgent("b2"), m_oBoard.getPositionAgent("b4"));
+		// Player 2 move Pawn from g11 to g10
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("g11").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("g11").getPiece(), m_oBoard.getPositionAgent("g11"), m_oBoard.getPositionAgent("g10"));
+		// Player 3 move Pawn from k7 to k6
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("k7").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("k7").getPiece(), m_oBoard.getPositionAgent("k7"), m_oBoard.getPositionAgent("k6"));
+		// Player 1 move Pawn from b4 to b5
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("b4").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("b4").getPiece(), m_oBoard.getPositionAgent("b4"), m_oBoard.getPositionAgent("b5"));
+		// Player 2 move Pawn from c7 to c5
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("c7").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("c7").getPiece(), m_oBoard.getPositionAgent("c7"), m_oBoard.getPositionAgent("c5"));
+		// Player 3 move Pawn from e11 to e10
+		makeMoveToTesttryPawnEnPassantRule((IRuleAgent)m_oBoard.getPositionAgent("e11").getPiece().getRule("Pawn_Move"), m_oBoard.getPositionAgent("e11").getPiece(), m_oBoard.getPositionAgent("e11"), m_oBoard.getPositionAgent("e10"));
+
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();
+		PawnRulesProcessor.tryPawnEnPassantRule(m_oBoard, m_oBoard.getPositionAgent("b5").getPiece(), mpCandidatePositions);
+
+		IBoardActivity oBoardActivity = PawnRulesProcessor.tryExecutePawnEnPassantRule(m_oBoard, mpCandidatePositions.get("c5"));
+
+		IPieceAgent oPieceToMove = oBoardActivity.getPriorMoveDetails().get(m_oBoard.getPositionAgent("b5"));
+		IPositionAgent oExpectedPosition = m_oBoard.getPositionAgent("c5");
+		IPositionAgent oActualPosition = oPieceToMove.getPosition();
+		
+		assertEquals(oExpectedPosition, oActualPosition);
+
+		IPieceAgent oPieceToCapture = oBoardActivity.getPriorMoveDetails().get(m_oBoard.getPositionAgent("c5"));
+		oExpectedPosition = null;
+		oActualPosition = oPieceToCapture.getPosition();
+		
+		assertEquals(oExpectedPosition, oActualPosition);
+}
 }
