@@ -3683,34 +3683,34 @@
     <Rule Name="Move_Diagonally_1" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Edgewise_*" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Diagonally_*" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
+    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="DIFFERENT"/>
     <Rule Name="Pawn_Jump" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1">
       <Rules>
         <Rule Name="Pawn_Jump_1" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1"/>
       </Rules>
     </Rule>
-    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="FORWARD" Family="SAME"/>
+    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="IGNORE" Rank="FORWARD" Family="SAME"/>
     <Rule Name="Vertex_Traversal" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="SAME"/>
     <Rule Name="Edge_Traversal" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Knight_Move_1" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="FORWARD" Family="SAME">
+    <Rule Name="Knight_Move_1" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="FORWARD" Family="SAME">
       <Rules>        
         <Rule Name="Knight_Move_1_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_1_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_2" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="FORWARD" Rank="FORWARD" Family="SAME">
+    <Rule Name="Knight_Move_2" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="FORWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_2_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_2_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_3" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="BACKWARD" Family="SAME">
+    <Rule Name="Knight_Move_3" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="BACKWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_3_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_3_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_4" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="FORWARD" Rank="BACKWARD" Family="SAME">
+    <Rule Name="Knight_Move_4" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="BACKWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_4_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_4_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>

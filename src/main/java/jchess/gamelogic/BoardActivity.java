@@ -33,6 +33,10 @@ public class BoardActivity implements IBoardActivity {
 		m_mpDetailsAfterMove = new HashMap<IPositionAgent, IPieceAgent>();
 	}
 	
+	public IMoveCandidate getMoveCandidate() {
+		return m_oMoveCandidate;
+	}
+	
 	public Map<IPositionAgent, IPieceAgent> getPriorMoveDetails(){
 		return m_mpDetailsBeforeMove;
 	}

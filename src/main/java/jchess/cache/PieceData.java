@@ -71,6 +71,10 @@ public class PieceData implements IPieceData {
 	public void addRule(IRule oRule) {
 		m_mpRule.put(oRule.getName(), oRule);
 	}
+
+	public IRule getRule(String stRuleName) {
+		return m_mpRule.get(stRuleName);
+	}
 	// endregion
 	
 	public void setFamily(String stFamily) {

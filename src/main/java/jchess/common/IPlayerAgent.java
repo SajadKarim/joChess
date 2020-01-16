@@ -1,6 +1,7 @@
 package jchess.common;
 
 import java.awt.Image;
+import java.util.Map;
 
 /**
  * IPlayerAgent provides interface for the module where the
@@ -18,4 +19,7 @@ public interface IPlayerAgent extends IPlayer {
 	public String  getLastName();
 	public void setImage(Image oImage);
 	public Image getImage();
+	public void addPiece(IPieceAgent oPiece);
+	public IPieceAgent getPiece(String stName);
+	public Map<String, IPieceAgent> getAllPieces();
 }

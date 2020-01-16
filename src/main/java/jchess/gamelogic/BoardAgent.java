@@ -101,12 +101,12 @@ public class BoardAgent implements IBoardAgent {
 		return m_oBoard.getAllRules();
 	}
 
-	public IPiece getPiece(String stName) {
-		return m_oBoard.getPiece(stName);
+	public IPiece getUnlinkedPiece(String stName) {
+		return m_oBoard.getUnlinkedPiece(stName);
 	}
 
-	public  Map<String, IPiece> getAllPieces() {
-		return m_oBoard.getAllPieces();
+	public  Map<String, IPiece> getAllUnlinkedPieces() {
+		return m_oBoard.getAllUnlinkedPieces();
 	}
 
 	public IBoardData getBoardData() {
@@ -139,13 +139,18 @@ public class BoardAgent implements IBoardAgent {
     	for(Map.Entry<String, IPlayerAgent> itPlayers: getPlayers().entrySet()) {
     		IPlayerAgent oPlayer = itPlayers.getValue();
 
-    		for (Map.Entry<String, String> itPlayerPieceMapping : m_oBoard.getPlayerMapping(oPlayer.getName()).entrySet()) {
-    			IPositionAgent oPosition = getPositionAgent(itPlayerPieceMapping.getKey());
-    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getPiece(itPlayerPieceMapping.getValue()).clone();
-    			
-    			oPiece.setPlayer(oPlayer);
-    			
-    			linkPieceAndPosition(oPosition, oPiece);    			
+    		Map<String, String> mpPlayerPieceMapping = m_oBoard.getPlayerMapping(oPlayer.getName());
+    		if( mpPlayerPieceMapping != null) {
+	    		for (Map.Entry<String, String> itPlayerPieceMapping : mpPlayerPieceMapping.entrySet()) {
+	    			IPositionAgent oPosition = getPositionAgent(itPlayerPieceMapping.getKey());
+	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getUnlinkedPiece(itPlayerPieceMapping.getValue()).clone();
+	    			
+	    			oPiece.setPlayer(oPlayer);
+	    			
+	    			oPlayer.addPiece(oPiece);
+	    			
+	    			linkPieceAndPosition(oPosition, oPiece);    			
+	    		}
     		}
     	}    
     }
@@ -176,11 +181,11 @@ public class BoardAgent implements IBoardAgent {
 		return (Map<String, IRuleAgent>)(Object)getAllRules();
 	}
 	
-	public IPieceAgent getPieceAgent(String stName) {
-		return (IPieceAgent)getPiece(stName);
+	public IPieceAgent getUnlinkedPieceAgent(String stName) {
+		return (IPieceAgent)getUnlinkedPiece(stName);
 	}
-	public  Map<String, IPieceAgent>  getAllPieceAgents(){
-		return (Map<String, IPieceAgent>)(Object)getAllPieces();
+	public  Map<String, IPieceAgent> getAllUnlinkedPieceAgents(){
+		return (Map<String, IPieceAgent>)(Object)getAllUnlinkedPieces();
 	}
 	
 	public PositionAgent getPositionByName(String stName) {
@@ -205,7 +210,7 @@ public class BoardAgent implements IBoardAgent {
 	}
 	
 	public PieceAgent getPieceByName(String stName) {
-		return (PieceAgent)getPiece(stName);
+		return (PieceAgent)getUnlinkedPiece(stName);
 	}
 	public Map<String, IPieceAgent> getPieces(){
 		return (Map<String, IPieceAgent>)(Object)getPieces();
@@ -292,5 +297,16 @@ public class BoardAgent implements IBoardAgent {
 		}
 		
 		return oActivity;
+	}
+	
+	public IBoardActivity getLastActivityByPlayer(IPlayerAgent oPlayer) {
+		for(int nIndex = m_lstActivity.size() - 1; nIndex >= 0; nIndex--) {
+			IBoardActivity oActivity = m_lstActivity.get(nIndex);
+			
+			if( oActivity.getPlayer().equals(oPlayer))
+				return oActivity;
+		}
+		
+		return null;
 	}
 }

@@ -1,9 +1,13 @@
 package jchess.gamelogic;
 
 import java.awt.Image;
+import java.util.HashMap;
+import java.util.Map;
 
 import jchess.cache.PlayerData;
 import jchess.common.IBoardMapping;
+import jchess.common.IPiece;
+import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPlayerData;
 
@@ -21,9 +25,11 @@ public class PlayerAgent implements IPlayerAgent {
 	private String m_stFirstName;
 	private String m_stLastName;
 	private Image m_oImage;
+	private Map<String, IPieceAgent> m_mpPieces;
 	
 	public PlayerAgent() {
 		m_oPlayerData = new PlayerData();
+		m_mpPieces = new HashMap<String, IPieceAgent>();
 	}
 	
 	public String getName()
@@ -37,8 +43,7 @@ public class PlayerAgent implements IPlayerAgent {
 	
 	public IBoardMapping getBoardMapping() {
 		return m_oPlayerData.getBoardMapping();
-	}
-	
+	}	
 
 	public void setFirstName(String stName) {
 		m_stFirstName = stName;
@@ -67,5 +72,17 @@ public class PlayerAgent implements IPlayerAgent {
 
 	public Image getImage() {
 		return m_oImage;
+	}
+	
+	public void addPiece(IPieceAgent oPiece) {
+		m_mpPieces.put(oPiece.getName(), oPiece);
+	}
+
+	public IPieceAgent getPiece(String stName) {
+		return m_mpPieces.get(stName);
+	}
+
+	public Map<String, IPieceAgent> getAllPieces() {
+		return m_mpPieces;
 	}
 }

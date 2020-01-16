@@ -12,6 +12,7 @@ import java.util.Map;
 public interface IBoardActivity {
 	public IPlayerAgent getPlayer();
 	public void setPlayer(IPlayerAgent oPlayer);
+	public IMoveCandidate getMoveCandidate();
 	public Map<IPositionAgent, IPieceAgent> getPriorMoveDetails();
 	public void addPriorMoveEntry(IPositionAgent oPosition, IPieceAgent oPiece);
 	public Map<IPositionAgent, IPieceAgent> getPostMoveDetails();

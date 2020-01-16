@@ -94,7 +94,7 @@ public class PawnRulesProcessor {
 		// TODO: For the time being I am skipping unit test for the following code.
 		// How To: Need to move the following window launching code to a separate file, so that we can extend it for unittest and
 		// pass a default piece to be selected to continue with the unit test.
-		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllPieceAgents(), oSourcePiecePriorMove);
+		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllUnlinkedPieceAgents(), oSourcePiecePriorMove);
 		IPawnPromotionDialogView oView = new PawnPromotionDialogView(oGUIHandle.getGUIMainFrame(), oData.getViewData());
 		IPresenter oPresenter = new PawnPromotionPresenter(oView, oData, null);		
 		oGUIHandle.showDialog(oPresenter);
@@ -187,15 +187,40 @@ public class PawnRulesProcessor {
 
 		Map<String, IPositionAgent> mpPosition = oPosition.getAllPathAgents(oPlayer.getBoardMapping(), Direction.EDGE, Family.DIFFERENT, File.IGNORE, Rank.SAME);
 		for( Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
-			IPositionAgent oNextPosition = it.getValue();
-			IPieceAgent oNextPiece = oNextPosition.getPiece();
+			IPositionAgent oTargetPosition = it.getValue();
+			IPieceAgent oTargetPiece = oTargetPosition.getPiece();
 			
-			if( oNextPiece != null && oNextPiece.getPlayer() != oPiece.getPlayer() && oNextPiece.getPositionHistoryCount() == 1) {
-				IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
-	        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
-	        	oRule.getRuleData().setCustomName("MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]");
-	        	    		
-	        	mpCandidateMovePositions.put(it.getValue().getName(), new MoveCandidate(oRule, oPosition.getPiece(), oPosition, it.getValue()));
+			// Checks the target piece should not belong to the same player.
+			if( oTargetPiece != null && oTargetPiece.getPlayer() != oPiece.getPlayer()) { 
+				
+				// Fetching the player's last activity to see which piece the player moved in its last turn.
+				IBoardActivity oActivity = oBoard.getLastActivityByPlayer(oTargetPiece.getPlayer());
+				if( oActivity == null)
+					continue;
+				
+				IMoveCandidate oMoveCandidate =  oActivity.getMoveCandidate();
+				if( oMoveCandidate == null) {
+					// Abnormal state: Log error.
+					continue;
+				}
+				
+				// Checking if this was the same piece that was moved two positions ahead in the last move by the player.
+				if(!oMoveCandidate.getPieceToMove().equals(oTargetPiece))
+					continue;
+				
+				 /* 
+				  * Background: Pawn piece can jump to two places ahead on its first move only but by doing this it cannot escape the capture. 
+				  * Therefore, if Pawn make two jumps on its first move to escape capture by other player's pawn then the rule En-Passant let 
+				  * other players to capture, if possible, the Pawn on their very next move (only).
+				  * The following check verifies whether the piece moved two positions ahead in its first move or not.
+				  */
+				if( Math.abs( oMoveCandidate.getSourcePosition().getRank() - oMoveCandidate.getCandidatePosition().getRank()) == 2) {
+					IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
+		        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
+		        	oRule.getRuleData().setCustomName("MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]");
+		        	    		
+		        	mpCandidateMovePositions.put(it.getValue().getName(), new MoveCandidate(oRule, oPosition.getPiece(), oPosition, it.getValue()));
+				}
 			}
 		}
 	}
@@ -209,6 +234,7 @@ public class PawnRulesProcessor {
 		IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
 		
 		oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
+		oPieceLinkedToNewPosition.setPosition(null);
 		oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
 		oCurrentPosition.setPiece(null);
 		
