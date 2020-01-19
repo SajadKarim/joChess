@@ -153,7 +153,9 @@ public class RuleAgent implements IRuleAgent {
 		
 		Iterator<IRule> it = m_oRule.getAllRules().iterator();
     	while( it.hasNext()) {
-    		m_qRules.add((IRuleAgent)it.next());
+    		IRuleAgent oChildRule = (IRuleAgent)it.next();
+    		oChildRule.reset();
+    		m_qRules.add(oChildRule);
     	}
 	}
 		

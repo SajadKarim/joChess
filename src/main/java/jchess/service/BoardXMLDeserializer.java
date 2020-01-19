@@ -335,11 +335,33 @@ class BoardXMLDeserializer {
 	}
 	
 	private static void populateRule(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IRule oParentRule, IAppLogger oLogger) {
-		try{			
-			NodeList lstRuleNodes = ((Element)oRootElement.getElementsByTagName("Rules").item(0)).getElementsByTagName("Rule");
-			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
-				Element oRuleNode = (Element)(lstRuleNodes.item(nRuleIndex));
+		try{
+			
+			Node ndRuleRoot = null;
+			
+			Node nIterator = oRootElement.getFirstChild();
+			while( nIterator != null){
+				if( nIterator.getNodeName().equals("Rules")) {
+					ndRuleRoot = nIterator;
+					break;
+				}
 				
+				nIterator = nIterator.getNextSibling();
+			}
+			
+			if( ndRuleRoot == null)
+				return;
+			
+			Node ndRule =  ndRuleRoot.getFirstChild();
+			
+			while( ndRule != null) {
+				
+				if( !ndRule.getNodeName().equals("Rule")) {
+					ndRule = ndRule.getNextSibling();
+					continue;
+				}
+				Element oRuleNode = (Element)ndRule;
+					
 				String stName = oRuleNode.getAttributes().getNamedItem("Name").getNodeValue();
 				RuleType enRuleType = StringToEnum.convertStringToRuleType( oRuleNode.getAttributes().getNamedItem("Type").getNodeValue());
 				Direction enDirection = StringToEnum.convertStringToDirection( oRuleNode.getAttributes().getNamedItem("Direction").getNodeValue());
@@ -357,6 +379,12 @@ class BoardXMLDeserializer {
 						nLifespan = Integer.MAX_VALUE;
 				}
 
+				String stCustomRuleName = "";
+				Node ndCustomRuleName = oRuleNode.getAttributes().getNamedItem("CustomRuleName");
+				if( ndCustomRuleName != null ) {
+					stCustomRuleName = ndCustomRuleName.getNodeValue();
+				}
+
 				IRule oRule = oBoardFactory.createRule();
 				
 				oRule.getRuleData().setName(stName);
@@ -368,6 +396,7 @@ class BoardXMLDeserializer {
 				oRule.getRuleData().setFile(enFile);
 				oRule.getRuleData().setRank(enRank);
 				oRule.getRuleData().setLifespan(nLifespan);
+				oRule.getRuleData().setCustomName(stCustomRuleName);
 				
 				if( oParentRule != null)
 					oParentRule.getRuleData().addRule( oRule);
@@ -375,6 +404,8 @@ class BoardXMLDeserializer {
 					oBoard.getBoardData().addRule( oRule);
 				
 				populateRule(oBoard, oBoardFactory, oRuleNode, oRule, oLogger);
+
+				ndRule = ndRule.getNextSibling();
 			}
 		}
 		catch(java.lang.Exception e) {

@@ -47,7 +47,6 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
     }
 
     /** Method of adding new move
-     * @param move String which in is capt player move
      */
     public void addMove(String stMoveString)
     {

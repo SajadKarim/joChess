@@ -61,44 +61,6 @@ class PawnRulesProcessorTest_3PlayerBoard {
 	}
 
 	@Test
-	void testTryPawnPromotionRuleForEdge_FailureCase() {
-		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
-
-		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
-		
-		PawnRulesProcessor.tryPawnPromotionRuleForEdge(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
-
-		int nExpectedValuesInMap = 0;
-		int nActualValuesInMap = mpCandidatePositions.size();
-		
-		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
-	}
-
-	@Test
-	void testTryPawnPromotionRuleForEdge_SuccessCase() {
-		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("c7");
-		
-		// This change is made to create a scenarios where White Pawn has reached d7 position and wants to promote itself.
-		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("c2").getPiece();
-		oCurrentPosition.setPiece(oPawnPiece); 
-		oPawnPiece.setPosition(oCurrentPosition);
-
-		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
-		
-		PawnRulesProcessor.tryPawnPromotionRuleForEdge(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
-
-		int nExpectedValuesInMap = 1;
-		int nActualValuesInMap = mpCandidatePositions.size();
-		
-		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
-
-		IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent("c8");
-		IPositionAgent oActualPositionInMap = mpCandidatePositions.get("c8").getCandidatePosition();
-		
-		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
-	}
-
-	@Test
 	void testTryPawnPromotionRuleForVertex_FailureCase() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
 

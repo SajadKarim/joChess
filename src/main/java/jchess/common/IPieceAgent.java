@@ -27,4 +27,8 @@ public interface IPieceAgent extends IPiece {
 	public void enqueuePositionHistory(IPositionAgent oPosition);
 	public IPositionAgent dequeuePositionHistory();
 	public int getPositionHistoryCount();
+	
+	public Object getCustomData();
+	public void setCustomData(Object oCustomData);	
+	public void updateImage(String stImageFileName);
 }

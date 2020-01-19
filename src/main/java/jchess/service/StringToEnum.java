@@ -36,6 +36,8 @@ class StringToEnum {
 			return RuleType.MOVE_IFF_CAPTURE_POSSIBLE;
 		case "MOVE_TRANSIENT":
 			return RuleType.MOVE_TRANSIENT;
+		case "CUSTOM":
+			return RuleType.CUSTOM;
 		}
 		return null;
 	}
