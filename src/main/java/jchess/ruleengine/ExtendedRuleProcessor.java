@@ -13,10 +13,12 @@ import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 /**
- * This class provides some extended (custom) functionality to process rules.
- * It evaluates the possible move candidates using the Rules acceptable in XML.
- * It also facilitate in executing the Rules.
- * 
+ * This class extends DefaultRuleEngine class and provides extended functionalities, in addition to those provided by
+ * DefaultRuleEngine, that all common to all the boards.
+ * It process all the custom operations that are common to all the boards available in the system. It includes 
+ * finding out possible move candidates for custom pieces and the execution of these rules.
+ * It helps the engine in facilitating the rules that are not supported by XML.
+ *  
  * @author	Sajad Karim
  * @since	7 Dec 2019
  */
@@ -29,8 +31,12 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	}
 
 	/**
-	 * This method finds out whether the proivded Position can be a candidate to make a move, also it (with the help of Rule)
-	 * deduces whether algorithm should proceed with the Position to find out the next possible candidate moves.
+	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
+	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
 	 */
 	@Override
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
@@ -55,9 +61,20 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 		
     }
 
+	/**
+	 * This method checks whether the position meets the requirements defined in the rule to be a possible move candidate, and it
+	 * also finds out whether to seize the search process or not.
+	 * 
+	 * @param IPlayerAgent
+	 * @param IRule
+	 * @param IPositionAgent
+	 * @param AtomicReference<Boolean>
+	 * @param AtomicReference<Boolean>
+	 */
 	@Override
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Verifying if position can be a candidate move and can continue as the next position.", "checkForPositionMoveCandidacyAndContinuity", "ExtendedRuleProcessor");
+
 		super.checkForPositionMoveCandidacyAndContinuity(oPlayer, oRule, oCandidacyPosition, bIsValidMode, bCanContinue);
 
 		switch(oRule.getRuleType()) {
@@ -76,14 +93,15 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 							bCanContinue.set(true);
 						}
 					}
-					break;					
+					break;
 					case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":{
 						bIsValidMode.set(true);
 						bCanContinue.set(false);
 					}
-					break;
 				}
 			}
+			break;
+			default:
 				break;
 		}
 	}

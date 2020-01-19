@@ -31,9 +31,9 @@ import jchess.ruleengine.gui.PawnPromotionModel;
 import jchess.ruleengine.gui.PawnPromotionPresenter;
 
 /**
- * This is a custom class specific to Pawn piece.
+ * This is a custom class specific to process the custom rules that are peculiar to Pawn piece only.
  * This class defines all the custom rules that at the moments are not supportable in XML.
- * 
+ *  
  * @author	Sajad Karim
  * @since	7 Dec 2019
  */
@@ -41,11 +41,22 @@ import jchess.ruleengine.gui.PawnPromotionPresenter;
 public class PawnRulesProcessor {
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
+	/**
+	 * This method looks for the possibility whether the pawn is eligible to make a promotion move.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
+	 */
 	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
-		tryPawnPromotionRuleForEdge(oBoard, oPiece, mpCandidateMovePositions);
+		//tryPawnPromotionRuleForEdge(oBoard, oPiece, mpCandidateMovePositions);
 		tryPawnPromotionRuleForVertex(oBoard, oPiece, mpCandidateMovePositions);
 	}
 
+	/* Bug Fix: 
+	 * Jira Id: NOT-110
+	 * Commenting out folloiwng code as pawn promotion rules should not work on edge.
+	 * 
 	static void tryPawnPromotionRuleForEdge(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
@@ -64,7 +75,16 @@ public class PawnRulesProcessor {
 			}
 		}
 	}
-
+	*/
+	
+	/**
+	 * This method looks for the possibility whether the pawn is eligible to make a promotion move. It looks of the opposite
+	 * player's piece on the positions linked to its vertexes.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
+	 */
 	static void tryPawnPromotionRuleForVertex(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
@@ -83,6 +103,14 @@ public class PawnRulesProcessor {
 		}
 	}
 
+	/**
+	 * This method executes pawn promotion rule.
+	 * 
+	 * @param IBoardAgent
+	 * @param IGUIHandle
+	 * @param IMoveCandidate
+	 * @return IBoardActivity
+	 */
 	public static IBoardActivity tryExecutePawnPromotionRule(IBoardAgent oBoard, IGUIHandle oGUIHandle, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 		
@@ -120,6 +148,14 @@ public class PawnRulesProcessor {
 		return oActivity;
 	}	
 
+	/**
+	 * This method looks for the possibility whether the pawn is eligible to jump one position on its first move or not.
+	 * 
+	 * @param IRuleProcessor
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate> 
+	 */
 	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {		
 		if( oPiece.getRuns() > 0)
 			return;
@@ -154,6 +190,14 @@ public class PawnRulesProcessor {
 		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositions);
 }
 	
+	/**
+	 * This method let pawn to jump one piece on its first move.
+	 * 
+	 * @param IBoardAgent
+	 * @param IGUIHandle
+	 * @param IMoveCandidate
+	 * @return IBoardActivity
+	 */
 	public static IBoardActivity tryExecutePawnFirstMoveException(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = null;
 		
@@ -181,6 +225,13 @@ public class PawnRulesProcessor {
 		return oActivity;
 	}
 	
+	/**
+	 * This method checks the eligibility of EnPassant rule.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
+	 */
 	public static void tryPawnEnPassantRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
@@ -225,6 +276,13 @@ public class PawnRulesProcessor {
 		}
 	}
 
+	/**
+	 * This method executes EnPassant rule.
+	 * 
+	 * @param IBoardAgent
+	 * @param IMoveCandidate
+	 * @return IBoardActivity
+	 */
 	public static IBoardActivity tryExecutePawnEnPassantRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 
