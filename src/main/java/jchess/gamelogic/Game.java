@@ -1,22 +1,30 @@
 package jchess.gamelogic;
 
+
 import com.google.inject.Inject;
 
 import jchess.common.IBoardActivity;
+import jchess.common.IBoardAgent;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
+import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.gui.IGUIHandle;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.ruleengine.IRuleEngine;
+import jchess.ruleengine.IRuleProcessor;
 import jchess.util.IAppLogger;
 import jchess.util.ITimer;
 import jchess.util.ITimerListener;
 import jchess.util.LogLevel;
+import jchess.ruleengine.KingRulesProcessor;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.JOptionPane;
 
 /**
  * This class is responsible to perform operations against any activity on Board.
@@ -137,6 +145,63 @@ public class Game implements IGame, ITimerListener{
 			deselectedActivePosition();
 		}		
 	}
+	public boolean tryCheckRule()
+	{
+		//Get Active Board and Active Player
+		IBoardAgent oCurrentBoard =  this.m_oGameModel.getBoard();
+		IPlayerAgent oCurrentPlayer = this.m_oGameState.getActivePlayer();
+		//Get the King's position of Active Player
+		String[] KingArray= new String[] {"Black", "White", "Red"};
+		String KingName = "";
+		IPieceAgent oKingPiece = null;
+		IPositionAgent oKingPosition = null;
+		int kingRank = 0;
+		int kingFile = 0;
+		for(String KingColour : KingArray)
+		{
+			KingName = "King" + KingColour;
+			IPieceAgent tempPiece = oCurrentPlayer.getPiece(KingName);
+			if(tempPiece != null)
+			{
+				oKingPiece = tempPiece;
+				oKingPosition = oKingPiece.getPosition();
+				kingRank = oKingPosition.getRank();
+				kingFile = oKingPosition.getFile();
+			}
+		}
+		
+		
+		//Go through all PositionAgents and check for the Piece. If the Piece is from different Players.
+		//Check for candidate positions of the Piece to see if it match the position of the current Player's King. If Yes return true, if no return false.
+		for(Map.Entry<String,IPositionAgent> oPositionPiece : oCurrentBoard.getAllPositionAgents().entrySet()) {
+			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
+			if(oRandomPiece != null)
+			{
+				if(oRandomPiece.getPlayer()!=oCurrentPlayer)
+				{
+					System.out.println(oRandomPiece.getName());
+					Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
+					for(Map.Entry<String, IMoveCandidate> oCandidateMovePostion : mpCandidateMovePosition.entrySet())
+					{
+						System.out.println("File and Rank of Piece:");
+						System.out.println(oCandidateMovePostion.getValue().getCandidatePosition().getFile());
+						System.out.println(oCandidateMovePostion.getValue().getCandidatePosition().getRank());
+						System.out.println("File and rank of King:");
+						System.out.println(kingRank);
+						System.out.println(kingFile);
+						int pieceRank = oCandidateMovePostion.getValue().getCandidatePosition().getRank();
+						int pieceFile = oCandidateMovePostion.getValue().getCandidatePosition().getFile();
+						if(pieceRank==kingRank && pieceFile==kingFile)
+						{
+							return true;
+						}	
+					}
+					
+				}
+			}
+		}
+		return false;
+	}
 		
 	/**
 	 * Following method triggers Rule execution code.
@@ -146,14 +211,25 @@ public class Game implements IGame, ITimerListener{
 	public void tryExecuteRule(IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Trying to make move." + oMoveCandidate.toLog(), "tryExecuteRule", "Game");
 
+		
+		
 		deselectedActivePosition();
+		
+//		IPlayerAgent oPlayer = m_oGameState.getActivePlayer();
+////		oPlayer.getAllPieces();
+//		System.out.println(oPlayer.getAllPieces());
+		//check here
+		
 		IBoardActivity oActivity = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
+//		m_oExtendedRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPiece, oMoveCandidate);
 
 		if( oActivity != null) {
 			m_oGameModel.addBoardActivity(oActivity);
 			m_oGameState.switchPlayTurn();
 			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
 			notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+			
+			//also check here
 		}
 	}
 	
