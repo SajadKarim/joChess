@@ -68,8 +68,14 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	public void showMainWindow() {
      	m_oLogger.writeLog(LogLevel.DETAILED, "Launching main window.", "showMainWindow", "GUIManager");
 
+     	try {
      	m_oMainPresenter.init();
     	m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
+     	}catch(Exception ex) {
+	    	m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "xxxxx", "JChessView");
+
+		}
+
 	}
 	
 	/**
