@@ -96,7 +96,7 @@ public class Settings implements Serializable
     {
         if (Settings.loc == null)
         {
-            Settings.loc = PropertyResourceBundle.getBundle("jchess.resources.i18n.main");
+            Settings.loc = PropertyResourceBundle.getBundle("jchess.main");
             Locale.setDefault(Locale.ENGLISH);
         }
         String result = "";

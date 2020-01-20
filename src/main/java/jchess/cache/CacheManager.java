@@ -7,10 +7,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.javatuples.Pair;
+import org.jdesktop.application.Application;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import jchess.Main;
 import jchess.common.IBoardAgent;
 import jchess.gamelogic.BoardAgentFactory;
 import jchess.service.StorageType;
@@ -43,11 +45,27 @@ public class CacheManager implements ICacheManager{
     
     	m_oLogger.writeLog(LogLevel.INFO, "Instantiating CacheManager.", "CacheManager", "CacheManager");
 
-    	BOARDLAYOUTS_DIRECTORY = getClass().getClassLoader().getResource("boardlayout").getPath() + File.separator;
+    	BOARDLAYOUTS_DIRECTORY = getJarPath() + File.separator;
 
+    	m_oLogger.writeLog(LogLevel.INFO, "****************: " + getJarPath(), "CacheManager", "CacheManager");
+    	
         init();
     } 
   
+    static String getJarPath()
+    {
+    	String path = CacheManager.class.getClassLoader().getResource("boardlayout").getPath();
+        //String path = CacheManager.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar!/", "");
+        path = path.replaceAll("file:/", "");
+        int lastSlash = path.lastIndexOf(File.separator); 
+        if(path.length()-1 == lastSlash)
+        {
+            path = path.substring(0, lastSlash);
+        }
+        path = path.replace("%20", " ");
+        return path;
+    }
     
     public IBoardAgent getBoard(String stGameId) {
     	if( m_mpBoardCache.containsKey(stGameId))

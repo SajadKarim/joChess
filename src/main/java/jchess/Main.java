@@ -93,7 +93,12 @@ public class Main extends SingleFrameApplication implements IMain{
     	// **IMPORTANT
     	// TODO: before launching main window, we need to call CacheManager and load cache with preliminary details about all the boards available.
     	
+    	try {
     	// Launching main window.
         launch(Main.class, args);
+    	}catch(Exception ex) {
+    		m_oLogger.writeLog(LogLevel.INFO, ex.toString(), "addTab", "MainPresenter");
+
+    	}
     }
 }

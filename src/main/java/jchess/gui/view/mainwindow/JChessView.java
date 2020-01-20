@@ -25,8 +25,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import jchess.IMain;
-import jchess.JChessAboutBox;
-import jchess.ThemeChooseWindow;
+import jchess.gui.view.aboutwindow.*;
+import jchess.gui.view.themewindow.*;
 import jchess.gui.IGUIManager;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -62,19 +62,17 @@ public class JChessView extends FrameView implements IJChessView, ActionListener
         m_oGUIManager = oGUIManager;
         m_oMainApplication = oMainApplication;
         
-    	// Acquiring AppLogger.
-    	m_oLogger.writeLog(LogLevel.DETAILED, "Game startup.");
-
         initComponents();
         
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-        messageTimer = new Timer(messageTimeout, new ActionListener() {
+       	messageTimer = new Timer(messageTimeout, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
             }
         });
-        messageTimer.setRepeats(false);
+
+       	messageTimer.setRepeats(false);
         int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
         for (int i = 0; i < busyIcons.length; i++) {
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
