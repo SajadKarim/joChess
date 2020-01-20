@@ -56,7 +56,7 @@ public class CacheManager implements ICacheManager{
     {
     	String path = CacheManager.class.getClassLoader().getResource("boardlayout").getPath();
         //String path = CacheManager.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-        path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar[a-zA-Z0-9%!@#$%^&*\\\\(\\\\)\\\\[\\\\]\\\\{\\\\}\\\\.\\\\,\\\\s]*/", "");
+        path = path.replaceAll("[a-zA-Z0-9%!@#$%^\\-&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar[a-zA-Z0-9%!\\-@#$%^&*\\\\(\\\\)\\\\[\\\\]\\\\{\\\\}\\\\.\\\\,\\\\s]*/", "");
         path = path.replaceAll("file:/", "");
         int lastSlash = path.lastIndexOf(File.separator); 
         if(path.length()-1 == lastSlash)
