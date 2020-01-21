@@ -8,3 +8,5 @@ The base code used in this project is taken from the following location;
 https://sourceforge.net/projects/javaopenchess/files/1.0.1/joChess-1.0.1-sources.zip/download
 
 ..more details shall be available soon..
+
+<iframe src="https://docs.google.com/document/d/e/2PACX-1vR-p3zoqv0ygB051m5VPSrFwylu4EBymR8a9Z_ZE7fyRLYSr1Kpo38K1D3OiZ5qrDzgD7zMxd1uyJzz/pub?embedded=true"></iframe>
