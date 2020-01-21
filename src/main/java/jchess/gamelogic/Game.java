@@ -101,6 +101,9 @@ public final class Game implements IGame, ITimerListener {
 	public void onBoardActivity(IPositionAgent oPosition) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Activity on board has been observed.", "onBoardActivity", "Game");
 
+		// This checks the stalemate rule
+		checkStalemate();
+				
 		// This checks if there is any Player who is assigned turn to make a move.
 		if (m_oGameState.getActivePlayer() == null) {
 			m_oLogger.writeLog(LogLevel.DETAILED, "There is not Active player.", "onBoardActivity", "Game");
@@ -201,7 +204,47 @@ public final class Game implements IGame, ITimerListener {
 		}
 		return false;
 	}
+	
+	/**
+	 * Checking for Stalemate Rule
+	 * 
+	 * Stalemate is a situation in the game of chess where the player whose turn 
+	 * it is to move is not in check but has no legal move. 
+	 * The rules of chess provide that when stalemate occurs, the game ends as a draw.
+	 */
+	public void checkStalemate() {
+		m_oLogger.writeLog(LogLevel.INFO, "Instantiating check for Stalemate.", "checkStalemate", "Game");
 		
+		Boolean bstalemate = true;
+		IBoardAgent oCurrentBoard =  this.m_oGameModel.getBoard();
+		IPlayerAgent oCurrentPlayer = this.m_oGameState.getActivePlayer();
+		int icounter1 =0;
+		int icounter2=0;
+		for(Map.Entry<String,IPositionAgent> oPositionPiece : oCurrentBoard.getAllPositionAgents().entrySet()) {
+			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
+			if(oRandomPiece != null && oRandomPiece.getPlayer()==oCurrentPlayer)
+			{	
+				icounter1+=1;
+				if(oRandomPiece.getPieceData().getName().startsWith("King")) {
+					if(tryCheckRule()) {
+						bstalemate = false;
+					}	
+				}
+				Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
+				if(mpCandidateMovePosition.isEmpty()) {
+					icounter2+=1;
+				}
+
+			}
+		}
+		
+		if(icounter1==icounter2 && bstalemate) {
+			m_oLogger.writeLog(LogLevel.INFO, "Stalemate: Match is a draw.", "checkStalemate", "Game");
+			int confirmDialog = JOptionPane.showConfirmDialog(null, "Match is a draw", "StaleMate", JOptionPane.DEFAULT_OPTION);
+			System.out.println(confirmDialog);
+		}		
+	}
+	
 	/**
 	 * Following method triggers Rule execution code.
 	 * 
