@@ -1,10 +1,37 @@
+
+buildscript {
+
+    repositories {
+
+        jcenter()
+
+    }
+
+
+
+    dependencies {
+
+        classpath 'com.bmuschko:gradle-clover-plugin:2.2.3'
+
+    }
+
+}
+
 plugins {
 	id 'java'
 	id 'eclipse'
+	id 'checkstyle'
+	id 'com.bmuschko.clover' version '2.2.3'
 }
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+
+	clover 'org.openclover:clover:4.3.1'
+
 }
 
 dependencies {
@@ -22,8 +49,7 @@ dependencies {
 	
 	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
    	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
-} 
-
+ } 
 
 jar {
   manifest { 
@@ -33,6 +59,12 @@ jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
-test {
-    useJUnitPlatform()
+test
+{
+   useJUnitPlatform()
+}
+
+checkstyle {
+    ignoreFailures = true
+	toolVersion = "8.24"
 }
