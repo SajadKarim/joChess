@@ -18,7 +18,7 @@ import jchess.util.IAppLogger;
  * @since	7 Dec 2019
  */
 
-public class PawnPromotionPresenter implements IPresenter {
+public final class PawnPromotionPresenter implements IPresenter {
     private final IPawnPromotionDialogView m_oView;
     private final IPawnPromotionModel m_oData;
     private final IAppLogger m_oAppLogger;

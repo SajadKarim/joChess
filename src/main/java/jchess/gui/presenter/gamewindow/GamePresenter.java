@@ -16,10 +16,10 @@ import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.DialogResult;
 import jchess.gamelogic.IGame;
-import jchess.gui.model.gamewindow.*;
+import jchess.gui.model.gamewindow.IGameModel;
+import jchess.gui.view.gamewindow.IGameView;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
-import jchess.gui.view.gamewindow.*;
 
 /**
  * This is class is responsible to show or load Game window with the help of model and presenter.
@@ -28,7 +28,7 @@ import jchess.gui.view.gamewindow.*;
  * @since	7 Dec 2019
  */
 
-public class GamePresenter extends AbstractModule implements IGamePresenter{
+public final class GamePresenter extends AbstractModule implements IGamePresenter{
     private IGame m_oGame;
     private final IGameView m_oView;
     private final IGameModel m_oModel;
@@ -137,7 +137,7 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
      	m_oLogger.writeLog(LogLevel.DETAILED, "Undoing last move.", "onPlayerRequestForUndoBoardActivity", "GamePresenter");
 
      	IBoardActivity oActivity = m_oModel.tryUndoBoardActivity();
-		if( oActivity != null) {
+		if (oActivity != null) {
 			m_oGame.setPlayerAsActivePlayer(oActivity.getPlayer());
 			m_oView.removeBoardActivity(oActivity.toString());
 			
@@ -150,7 +150,7 @@ public class GamePresenter extends AbstractModule implements IGamePresenter{
      	m_oLogger.writeLog(LogLevel.DETAILED, "Redoing last move.", "onPlayerRequestForRedoBoardActivity", "GamePresenter");
 
      	IBoardActivity oActivity = m_oModel.tryRedoBoardActivity();
-		if( oActivity != null) {
+		if (oActivity != null) {
 			m_oGame.setPlayerTurnAsLast(oActivity.getPlayer());
 			m_oView.addBoardActivity(oActivity.toString());
 

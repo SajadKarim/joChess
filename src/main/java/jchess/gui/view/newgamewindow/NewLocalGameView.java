@@ -32,7 +32,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class NewLocalGameView extends JPanel implements ActionListener, INewLocalGameView {
+public final class NewLocalGameView extends JPanel implements ActionListener, INewLocalGameView {
 
 	INewGameModel m_oData;
 	INewGameListener m_oCallback;

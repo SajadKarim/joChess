@@ -26,7 +26,7 @@ public interface IBoardData extends IBoard {
 	public String getMarkedCellImagePath();
 	
 	public void addMapping(String stPlayer, String stPiece, String stPosition);
-	public void addPiece(IPiece oPiece) ;
+	public void addPiece(IPiece oPiece);
 	public void addRule(IRule oRule);
 	public void addPlayer(IPlayer oPlayer);
 	public void addPosition(IPosition oPosition);

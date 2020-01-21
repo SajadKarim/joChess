@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class AppLogger implements IAppLogger {
+public final class AppLogger implements IAppLogger {
 	private final Logger m_oLogger;
 
 	@Inject

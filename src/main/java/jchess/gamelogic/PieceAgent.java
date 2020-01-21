@@ -22,7 +22,7 @@ import jchess.util.GUI;
  * @since	7 Dec 2019
  */
 
-public class PieceAgent implements IPieceAgent {
+public final class PieceAgent implements IPieceAgent {
 	private IPieceData m_oPiece;
 	private IPlayerAgent m_oPlayer;
 	private Image m_oImage;
@@ -40,12 +40,12 @@ public class PieceAgent implements IPieceAgent {
 		m_oImage = oPiece.m_oImage;
 		m_oPlayer = oPiece.m_oPlayer;
 		m_oPosition = oPiece.m_oPosition;
-		m_oPiece = new PieceData( (PieceData)oPiece.m_oPiece);
+		m_oPiece = new PieceData((PieceData)oPiece.m_oPiece);
 		m_lstPositionHistory = new LinkedList<IPositionAgent>();
 		m_oCustomData = oPiece.m_oCustomData;
 	}
 
-	public void init(){
+	public void init() {
 		m_oImage = GUI.loadImage(getImagePath());
 	}
 	
@@ -57,7 +57,7 @@ public class PieceAgent implements IPieceAgent {
 		return m_oPiece.getImagePath();
 	}
 	
-	public List< IRule> getAllRules(){
+	public List<IRule> getAllRules() {
 		return m_oPiece.getAllRules();
 	}
 	
@@ -70,7 +70,7 @@ public class PieceAgent implements IPieceAgent {
 	}
 
 	public Image getImage() {
-		if( m_oImage == null)			
+		if (m_oImage == null)			
 			m_oImage = GUI.loadImage(getImagePath());
 
 		return m_oImage;
@@ -139,7 +139,7 @@ public class PieceAgent implements IPieceAgent {
 		m_oCustomData = oCustomData;
 	}
 	
-	public void updateImage(String stImageFileName){
+	public void updateImage(String stImageFileName) {
 		m_oImage = GUI.loadImage(stImageFileName);
 	}
 }

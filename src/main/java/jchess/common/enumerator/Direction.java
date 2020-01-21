@@ -7,7 +7,7 @@ package jchess.common.enumerator;
  * @since	7 Dec 2019
  */
 
-public enum Direction{
+public enum Direction {
 	EDGE,
 	VERTEX
 }

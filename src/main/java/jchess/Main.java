@@ -37,7 +37,7 @@ import jchess.util.LogLevel;
 /**
  * The main class of the application.
  */
-public class Main extends SingleFrameApplication implements IMain{
+public final class Main extends SingleFrameApplication implements IMain {
 	/**
 	 * Class responsible to handle logging related functionality.
 	 */
@@ -76,13 +76,15 @@ public class Main extends SingleFrameApplication implements IMain{
     
     /**
      * Main method launching the application.
+     * 
+     * @param String[]
      */
     public static void main(String[] args) {
     	// Initializing DI for objects that should instantiate once.
     	m_oGlobalModuleInjector = Guice.createInjector(new GlobalModule());
 
-    	IDIManager m_oDIManager = m_oGlobalModuleInjector.getInstance(DIManager.class);
-    	m_oDIManager.setGlobalInjector(m_oGlobalModuleInjector);
+    	IDIManager oDIManager = m_oGlobalModuleInjector.getInstance(DIManager.class);
+    	oDIManager.setGlobalInjector(m_oGlobalModuleInjector);
     	
     	// Acquiring AppLogger.
     	m_oLogger = m_oGlobalModuleInjector.getInstance(AppLogger.class);    	
@@ -93,12 +95,7 @@ public class Main extends SingleFrameApplication implements IMain{
     	// **IMPORTANT
     	// TODO: before launching main window, we need to call CacheManager and load cache with preliminary details about all the boards available.
     	
-    	try {
     	// Launching main window.
-        launch(Main.class, args);
-    	}catch(Exception ex) {
-    		m_oLogger.writeLog(LogLevel.INFO, ex.toString(), "addTab", "MainPresenter");
-
-    	}
+		launch(Main.class, args);
     }
 }

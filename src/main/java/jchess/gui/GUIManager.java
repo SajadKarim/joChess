@@ -69,13 +69,11 @@ public class GUIManager implements IGUIManager, IGUIHandle {
      	m_oLogger.writeLog(LogLevel.DETAILED, "Launching main window.", "showMainWindow", "GUIManager");
 
      	try {
-     	m_oMainPresenter.init();
-    	m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
-     	}catch(Exception ex) {
+     		m_oMainPresenter.init();
+     		m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
+     	} catch(Exception ex) {
 	    	m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "xxxxx", "JChessView");
-
 		}
-
 	}
 	
 	/**
@@ -144,7 +142,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	public void onPlayerRequestForUndoBoardActivity(Component oSelectedGame) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Undo the move.", "onPlayerRequestForUndoBoardActivity", "GUIManager");
 
-		if( oSelectedGame == null) {
+		if (oSelectedGame == null) {
 	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForUndoBoardActivity", "GUIManager");
 			return;
 		}
@@ -156,7 +154,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	public void onPlayerRequestForRedoBoardActivity(Component oSelectedGame) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Request to Redo the move.", "onPlayerRequestForRedoBoardActivity", "GUIManager");
 
-		if( oSelectedGame == null) {
+		if (oSelectedGame == null) {
 	    	m_oLogger.writeLog(LogLevel.INFO, "No game is selected.", "onPlayerRequestForRedoBoardActivity", "GUIManager");
 			return;
 		}

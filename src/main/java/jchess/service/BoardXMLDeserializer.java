@@ -39,7 +39,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-class BoardXMLDeserializer {
+final class BoardXMLDeserializer {
 	
 	/**
 	 * Following code serializes Board object.
@@ -48,8 +48,7 @@ class BoardXMLDeserializer {
 	 * @param oBoard
 	 */
 	static void serializeBoard(BoardData oBoard) {		
-		try
-		{
+		try {
 			Map<String, IPosition> treeMap = new TreeMap<String, IPosition>(oBoard.getAllPositions());
 
 			for (Map.Entry<String, IPosition> entry : treeMap.entrySet()) {
@@ -91,16 +90,13 @@ class BoardXMLDeserializer {
 
 	    		System.out.print("</Shape></Position>");
 			}
-		}
-		catch(java.lang.Exception e) {
+		} catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
 	}
 	
 	static IBoard getBoard(String stFilePath, IBoardFactory oBoardFactory, IAppLogger oLogger) {
-		
-		try
-		{
+		try {
 			Document m_oDocument;
 			DocumentBuilder m_oBuilder;	
 			DocumentBuilderFactory m_oFactory;	
@@ -130,8 +126,7 @@ class BoardXMLDeserializer {
 			oBoard.init();
 			
 			return oBoard;
-		}
-		catch(java.lang.Exception e) {
+		} catch(java.lang.Exception e) {
 			System.out.println(e);
 		}
 		
@@ -139,9 +134,7 @@ class BoardXMLDeserializer {
 	}	
 	
 	static IBoard getBoardWithPlayerDetailsOnly(String stFilePath, IBoardFactory oBoardFactory, IAppLogger oLogger) {
-		
-		try
-		{
+		try {
 			Document m_oDocument;
 			DocumentBuilder m_oBuilder;	
 			DocumentBuilderFactory m_oFactory;	
@@ -163,8 +156,7 @@ class BoardXMLDeserializer {
 			loadPlayers(oBoard, oBoardFactory, oRootElement, oLogger);
 			
 			return oBoard;
-		}
-		catch(java.lang.Exception e) {
+		} catch(java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 		
@@ -172,9 +164,7 @@ class BoardXMLDeserializer {
 	}	
 	
 	static IBoard getBoardWithPrimaryDetailsOnly(String stFilePath, IBoardFactory oBoardFactory, IAppLogger oLogger) {
-		
-		try
-		{
+		try {
 			Document m_oDocument;
 			DocumentBuilder m_oBuilder;	
 			DocumentBuilderFactory m_oFactory;	
@@ -194,8 +184,7 @@ class BoardXMLDeserializer {
 			populateBoardAttributes(oBoard, oRootElement, oLogger);
 			
 			return oBoard;
-		}
-		catch(java.lang.Exception e) {
+		} catch (java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 		return null;
@@ -230,61 +219,55 @@ class BoardXMLDeserializer {
 	}
 
 	private static void loadPositionsBasicDetails(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
-
-		try
-		{
-		NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
-		for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
-		
-			IPosition oPosition = oBoardFactory.createPosition();
-
-			Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
+		try {
+			NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
+			for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
 			
-			String stFile = oPositionNode.getAttributes().getNamedItem("File").getNodeValue();
-			String stRank = oPositionNode.getAttributes().getNamedItem("Rank").getNodeValue();
-			String stFamily = oPositionNode.getAttributes().getNamedItem("Family").getNodeValue();
-			
-			oPosition.getPosition().setFile(stFile.charAt(0));
-			oPosition.getPosition().setRank(Integer.parseInt(stRank));
-			oPosition.getPosition().setCategory(stFamily);
-						
-			Node oShapeNode = ((Element)oPositionNode.getElementsByTagName("Shape").item(0)).getElementsByTagName("Coordinates").item(0);
-
-			String stX1 = oShapeNode.getAttributes().getNamedItem("x1").getNodeValue();
-			String stY1 = oShapeNode.getAttributes().getNamedItem("y1").getNodeValue();
-			String stX2 = oShapeNode.getAttributes().getNamedItem("x2").getNodeValue();
-			String stY2 = oShapeNode.getAttributes().getNamedItem("y2").getNodeValue();
-			String stX3 = oShapeNode.getAttributes().getNamedItem("x3").getNodeValue();
-			String stY3 = oShapeNode.getAttributes().getNamedItem("y3").getNodeValue();
-			String stX4 = oShapeNode.getAttributes().getNamedItem("x4").getNodeValue();
-			String stY4 = oShapeNode.getAttributes().getNamedItem("y4").getNodeValue();
-
-			Quadrilateral oShape = new Quadrilateral(Integer.parseInt(stX1), 
-					Integer.parseInt(stY1), 
-					Integer.parseInt(stX2), 
-					Integer.parseInt(stY2), 
-					Integer.parseInt(stX3), 
-					Integer.parseInt(stY3), 
-					Integer.parseInt(stX4), 
-					Integer.parseInt(stY4));
-			
-			oPosition.getPosition().setShape(oShape);
-			
-			oBoard.getBoardData().addPosition(oPosition);
-		}
-		}
-		catch(java.lang.Exception e) {
+				IPosition oPosition = oBoardFactory.createPosition();
+	
+				Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
+				
+				String stFile = oPositionNode.getAttributes().getNamedItem("File").getNodeValue();
+				String stRank = oPositionNode.getAttributes().getNamedItem("Rank").getNodeValue();
+				String stFamily = oPositionNode.getAttributes().getNamedItem("Family").getNodeValue();
+				
+				oPosition.getPosition().setFile(stFile.charAt(0));
+				oPosition.getPosition().setRank(Integer.parseInt(stRank));
+				oPosition.getPosition().setCategory(stFamily);
+							
+				Node oShapeNode = ((Element)oPositionNode.getElementsByTagName("Shape").item(0)).getElementsByTagName("Coordinates").item(0);
+	
+				String stX1 = oShapeNode.getAttributes().getNamedItem("x1").getNodeValue();
+				String stY1 = oShapeNode.getAttributes().getNamedItem("y1").getNodeValue();
+				String stX2 = oShapeNode.getAttributes().getNamedItem("x2").getNodeValue();
+				String stY2 = oShapeNode.getAttributes().getNamedItem("y2").getNodeValue();
+				String stX3 = oShapeNode.getAttributes().getNamedItem("x3").getNodeValue();
+				String stY3 = oShapeNode.getAttributes().getNamedItem("y3").getNodeValue();
+				String stX4 = oShapeNode.getAttributes().getNamedItem("x4").getNodeValue();
+				String stY4 = oShapeNode.getAttributes().getNamedItem("y4").getNodeValue();
+	
+				Quadrilateral oShape = new Quadrilateral(Integer.parseInt(stX1), 
+						Integer.parseInt(stY1), 
+						Integer.parseInt(stX2), 
+						Integer.parseInt(stY2), 
+						Integer.parseInt(stX3), 
+						Integer.parseInt(stY3), 
+						Integer.parseInt(stX4), 
+						Integer.parseInt(stY4));
+				
+				oPosition.getPosition().setShape(oShape);
+				
+				oBoard.getBoardData().addPosition(oPosition);
+			}
+		} catch (java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
-
 	}
 
 	private static void loadPositionsConnectionDetails(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
-
-		try
-		{
+		try {
 			NodeList lstPositionNodes = ((Element)oRootElement.getElementsByTagName("Positions").item(0)).getElementsByTagName("Position");
-			for( int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
+			for (int nPositionIndex = 0, nPositionIndexMax = lstPositionNodes.getLength(); nPositionIndex < nPositionIndexMax; nPositionIndex++) {
 	
 				Element oPositionNode = (Element)(lstPositionNodes.item(nPositionIndex));
 				
@@ -293,7 +276,7 @@ class BoardXMLDeserializer {
 				
 				IPosition oPosition = oBoard.getPosition(stFile + stRank);
 				NodeList lstDirectionNodes = ((Element)oPositionNode.getElementsByTagName("Directions").item(0)).getElementsByTagName("Direction");
-				for( int nDirectionIndex = 0, nDirectionIndexMax = lstDirectionNodes.getLength(); nDirectionIndex < nDirectionIndexMax; nDirectionIndex++) {
+				for (int nDirectionIndex = 0, nDirectionIndexMax = lstDirectionNodes.getLength(); nDirectionIndex < nDirectionIndexMax; nDirectionIndex++) {
 					Element oDirectionNode = (Element)(lstDirectionNodes.item(nDirectionIndex));
 	
 					String stType = oDirectionNode.getAttributes().getNamedItem("Type").getNodeValue();
@@ -302,7 +285,7 @@ class BoardXMLDeserializer {
 					IPathData oPath = new Path(stName, StringToEnum.convertStringToDirection(stType), null);
 	
 					NodeList lstLinkedPositionNodes = oDirectionNode.getElementsByTagName("LinkedPosition");
-					for( int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
+					for (int nLinkedPositionIndex = 0, nLinkedPositionIndexMax = lstLinkedPositionNodes.getLength(); nLinkedPositionIndex < nLinkedPositionIndexMax; nLinkedPositionIndex++) {
 						String stLinkedPosition = lstLinkedPositionNodes.item(nLinkedPositionIndex).getChildNodes().item(0).getNodeValue();
 						
 						oPath.addPosition(oBoard.getPosition(stLinkedPosition));
@@ -312,7 +295,7 @@ class BoardXMLDeserializer {
 				}   
 	
 				NodeList lstConnectionNodes = ((Element)oPositionNode.getElementsByTagName("Connections").item(0)).getElementsByTagName("Connection");
-				for( int nConnectionIndex = 0, nConnectionIndexMax = lstConnectionNodes.getLength(); nConnectionIndex < nConnectionIndexMax; nConnectionIndex++) {
+				for (int nConnectionIndex = 0, nConnectionIndexMax = lstConnectionNodes.getLength(); nConnectionIndex < nConnectionIndexMax; nConnectionIndex++) {
 	
 					Element oConnectionNode = (Element)(lstConnectionNodes.item(nConnectionIndex));
 	
@@ -322,8 +305,7 @@ class BoardXMLDeserializer {
 					oPosition.getPosition().linkPaths(stPoint1, stPoint2);
 				}
 			}
-		}
-		catch(java.lang.Exception e) {
+		} catch (java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 
@@ -335,13 +317,12 @@ class BoardXMLDeserializer {
 	}
 	
 	private static void populateRule(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IRule oParentRule, IAppLogger oLogger) {
-		try{
-			
+		try {
 			Node ndRuleRoot = null;
 			
 			Node nIterator = oRootElement.getFirstChild();
-			while( nIterator != null){
-				if( nIterator.getNodeName().equals("Rules")) {
+			while (nIterator != null){
+				if (nIterator.getNodeName().equals("Rules")) {
 					ndRuleRoot = nIterator;
 					break;
 				}
@@ -349,17 +330,18 @@ class BoardXMLDeserializer {
 				nIterator = nIterator.getNextSibling();
 			}
 			
-			if( ndRuleRoot == null)
+			if (ndRuleRoot == null)
 				return;
 			
 			Node ndRule =  ndRuleRoot.getFirstChild();
 			
-			while( ndRule != null) {
+			while (ndRule != null) {
 				
-				if( !ndRule.getNodeName().equals("Rule")) {
+				if (!ndRule.getNodeName().equals("Rule")) {
 					ndRule = ndRule.getNextSibling();
 					continue;
 				}
+				
 				Element oRuleNode = (Element)ndRule;
 					
 				String stName = oRuleNode.getAttributes().getNamedItem("Name").getNodeValue();
@@ -373,15 +355,18 @@ class BoardXMLDeserializer {
 				
 				int nLifespan = Integer.MAX_VALUE;
 				Node ndLifespan = oRuleNode.getAttributes().getNamedItem("Lifespan");
-				if( ndLifespan != null ) {
+				
+				if (ndLifespan != null ) {
 					nLifespan = tryParseInt(ndLifespan.getNodeValue());
-					if( nLifespan == -1)
+					if (nLifespan == -1) {
 						nLifespan = Integer.MAX_VALUE;
+					}
 				}
 
 				String stCustomRuleName = "";
 				Node ndCustomRuleName = oRuleNode.getAttributes().getNamedItem("CustomRuleName");
-				if( ndCustomRuleName != null ) {
+				
+				if (ndCustomRuleName != null ) {
 					stCustomRuleName = ndCustomRuleName.getNodeValue();
 				}
 
@@ -398,64 +383,61 @@ class BoardXMLDeserializer {
 				oRule.getRuleData().setLifespan(nLifespan);
 				oRule.getRuleData().setCustomName(stCustomRuleName);
 				
-				if( oParentRule != null)
+				if (oParentRule != null) {
 					oParentRule.getRuleData().addRule( oRule);
-				else
+				} else {
 					oBoard.getBoardData().addRule( oRule);
+				}
 				
 				populateRule(oBoard, oBoardFactory, oRuleNode, oRule, oLogger);
 
 				ndRule = ndRule.getNextSibling();
 			}
-		}
-		catch(java.lang.Exception e) {
+		} catch (java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 	}
 	
 	private static void loadPieces(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
-
-		try
-		{
-		NodeList lstPieceNodes = ((Element)oRootElement.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
-		for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
-		
-			Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
+		try {
+			NodeList lstPieceNodes = ((Element)oRootElement.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
 			
-			String stName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
-			String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
-			String stFamily = oPieceNode.getAttributes().getNamedItem("Family").getNodeValue();
-			
-			IPiece oPiece = oBoardFactory.createPiece();
-			
-			oPiece.getPieceData().setName(stName);
-			oPiece.getPieceData().setImagePath(stImage);
-			oPiece.getPieceData().setFamily(stFamily);
-
-			NodeList lstRuleNodes = ((Element)oPieceNode.getElementsByTagName("AllowedMoves").item(0)).getElementsByTagName("Rule");
-			for( int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
-				Element oRuleNode = (Element)(lstRuleNodes.item(nRuleIndex));
-
-				String stRule = oRuleNode.getChildNodes().item(0).getNodeValue();
+			for (int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
+				Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
 				
-				oPiece.getPieceData().addRule(oBoard.getRule(stRule));
-			}   
-			oPiece.init();
-			
-			oBoard.getBoardData().addPiece( oPiece);
-		}
-		}
-		catch(java.lang.Exception e) {
+				String stName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
+				String stImage = oPieceNode.getAttributes().getNamedItem("Image").getNodeValue();
+				String stFamily = oPieceNode.getAttributes().getNamedItem("Family").getNodeValue();
+				
+				IPiece oPiece = oBoardFactory.createPiece();
+				
+				oPiece.getPieceData().setName(stName);
+				oPiece.getPieceData().setImagePath(stImage);
+				oPiece.getPieceData().setFamily(stFamily);
+	
+				NodeList lstRuleNodes = ((Element)oPieceNode.getElementsByTagName("AllowedMoves").item(0)).getElementsByTagName("Rule");
+				for (int nRuleIndex = 0, nRuleIndexMax = lstRuleNodes.getLength(); nRuleIndex < nRuleIndexMax; nRuleIndex++) {
+					Element oRuleNode = (Element)(lstRuleNodes.item(nRuleIndex));
+	
+					String stRule = oRuleNode.getChildNodes().item(0).getNodeValue();
+					
+					oPiece.getPieceData().addRule(oBoard.getRule(stRule));
+				}   
+				oPiece.init();
+				
+				oBoard.getBoardData().addPiece( oPiece);
+			}
+		} catch (java.lang.Exception e) {
 			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 		}
 
 	}
 
 	private static void loadPlayers(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
-
-		try{
+		try {
 			NodeList lstPlayerNodes = ((Element)oRootElement.getElementsByTagName("Players").item(0)).getElementsByTagName("Player");
-			for( int nPlayerIndex = 0, nPlayerIndexMax = lstPlayerNodes.getLength(); nPlayerIndex < nPlayerIndexMax; nPlayerIndex++) {
+			 
+			for (int nPlayerIndex = 0, nPlayerIndexMax = lstPlayerNodes.getLength(); nPlayerIndex < nPlayerIndexMax; nPlayerIndex++) {
 			
 				Element oPlayerNode = (Element)(lstPlayerNodes.item(nPlayerIndex));
 				
@@ -466,7 +448,7 @@ class BoardXMLDeserializer {
 	
 				try {
 					NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
-					for( int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
+					for (int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
 						Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
 		
 						String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
@@ -476,7 +458,7 @@ class BoardXMLDeserializer {
 					}   
 					
 					NodeList lstMappingNodes = ((Element)oPlayerNode.getElementsByTagName("BoardMapping").item(0)).getElementsByTagName("Map");
-					for( int nMappingIndex = 0, nMappingIndexMax = lstMappingNodes.getLength(); nMappingIndex < nMappingIndexMax; nMappingIndex++) {
+					for (int nMappingIndex = 0, nMappingIndexMax = lstMappingNodes.getLength(); nMappingIndex < nMappingIndexMax; nMappingIndex++) {
 						Element oMappingNode = (Element)(lstMappingNodes.item(nMappingIndex));
 		
 						String stTo = oMappingNode.getAttributes().getNamedItem("To").getNodeValue();
@@ -487,8 +469,7 @@ class BoardXMLDeserializer {
 						
 						oPlayer.getPlayerData().addBoardMapping(nFrom, nTo);
 					}   
-				}
-				catch(java.lang.Exception e) {
+				} catch(java.lang.Exception e) {
 					oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
 				}
 

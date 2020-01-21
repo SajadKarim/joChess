@@ -42,7 +42,7 @@ import jchess.ruleengine.IRuleProcessor;
  * @since	7 Dec 2019
  */
 
-public class GameWndModule extends AbstractModule {
+public final class GameWndModule extends AbstractModule {
 	private Injector m_oGlobalInjector = null;
 	private String m_stBoardFileName;
 	private String m_stBoardName;
@@ -89,7 +89,7 @@ public class GameWndModule extends AbstractModule {
 		oCacheManager.loadBoardFromFile(m_stGameId, m_stBoardFileName);
 		
 		GameModel oGameModel = new GameModel(null);
-		oGameModel.setBoard( oCacheManager.getBoard(m_stGameId));
+		oGameModel.setBoard(oCacheManager.getBoard(m_stGameId));
 		return oGameModel;
 	}
 
@@ -110,9 +110,9 @@ public class GameWndModule extends AbstractModule {
 
 		try {			
 			oRuleProcessor = (IRuleProcessor)Class.forName("jchess.ruleengine." + oBoard.getRuleProcessorName()).getConstructor(IAppLogger.class).newInstance(oAppLogger);
-			oRuleEngine= (IRuleEngine)Class.forName("jchess.ruleengine." + oBoard.getRuleEngineName()).getConstructor(IRuleProcessor.class, IGUIHandle.class, IAppLogger.class).newInstance(new Object[] {oRuleProcessor, oGUIManager.getGUIHandle() , oAppLogger});
+			oRuleEngine = (IRuleEngine)Class.forName("jchess.ruleengine." + oBoard.getRuleEngineName()).getConstructor(IRuleProcessor.class, IGUIHandle.class, IAppLogger.class).newInstance(new Object[] {oRuleProcessor, oGUIManager.getGUIHandle(), oAppLogger});
 		} catch(java.lang.Exception e) {
-			oAppLogger.writeLog(LogLevel.ERROR, "An unhandled exception has occured. Exception="+e.toString(), "provideRuleEngine", "GameWndModule");
+			oAppLogger.writeLog(LogLevel.ERROR, "An unhandled exception has occured. Exception=" + e.toString(), "provideRuleEngine", "GameWndModule");
 		}
 		return oRuleEngine;
 	}

@@ -20,20 +20,21 @@ import jchess.common.enumerator.Direction;
  * @since	7 Dec 2019
  */
 
-public class Path implements IPathData, IPathAgent{	
+public final class Path implements IPathData, IPathAgent {	
 	private String m_stName;
 	private Direction  m_enDirection;	
 	private List<IPath> m_lstNeighbour;
-	private List<IPosition > m_lstPosition;	
+	private List<IPosition> m_lstPosition;	
 	
 	public Path(String stName, Direction enDirection, IPositionData oPosition) {
 		m_stName = stName;
 		m_enDirection = enDirection;		
 		m_lstNeighbour = new ArrayList<IPath>();
-		m_lstPosition = new ArrayList<IPosition >();
+		m_lstPosition = new ArrayList<IPosition>();
 
-		if( oPosition != null)
+		if (oPosition != null) {
 			addPosition(oPosition);
+		}
 	}
 	
 	public Path(Path oPath) {
@@ -41,12 +42,16 @@ public class Path implements IPathData, IPathAgent{
 		m_enDirection = oPath.m_enDirection;		
 
 		m_lstNeighbour = new ArrayList<IPath>();
-		for(IPath oInnerPath : oPath.m_lstNeighbour)
-			m_lstNeighbour.add(oInnerPath);
 		
-		m_lstPosition = new ArrayList<IPosition >();
-		for(IPosition oPosition : oPath.m_lstPosition)
+		for (IPath oInnerPath : oPath.m_lstNeighbour) {
+			m_lstNeighbour.add(oInnerPath);
+		}
+		
+		m_lstPosition = new ArrayList<IPosition>();
+		
+		for (IPosition oPosition : oPath.m_lstPosition) {
 			m_lstPosition.add(oPosition);
+		}
 	}
 
 	// region: Implements IPath
@@ -58,20 +63,22 @@ public class Path implements IPathData, IPathAgent{
 		return m_enDirection;
 	}
 	
-	public List<IPath> getAllNeighbors(){
+	public List<IPath> getAllNeighbors() {
 		return m_lstNeighbour;
 	}
 	
-	public List<IPosition> getAllPositions(){
+	public List<IPosition> getAllPositions() {
 		return m_lstPosition;
 	}
 
 	public Boolean doesPositionExist(String stName) {		
 		Iterator<IPosition> it = m_lstPosition.iterator();
-    	while( it.hasNext()) {
+    	while (it.hasNext()) {
     		IPosition oPosition = it.next();
-    		if( oPosition != null && oPosition.getName().equals(stName))
+    		
+    		if (oPosition != null && oPosition.getName().equals(stName)) {
     			return true;
+    		}
     	}
 
     	return false;
@@ -99,7 +106,7 @@ public class Path implements IPathData, IPathAgent{
 		m_lstPosition.add(oPosition);
 	}
 	
-	public List<IPathData> getAllNeighbourPathData(){
+	public List<IPathData> getAllNeighbourPathData() {
 		return (List<IPathData>)(Object)m_lstNeighbour;
 	}
 		
@@ -109,7 +116,7 @@ public class Path implements IPathData, IPathAgent{
 	// endregion
 	
 	// region: Implements IPathAgent	
-	public List<IPathAgent> getAllNeighbourPathAgents(){
+	public List<IPathAgent> getAllNeighbourPathAgents() {
 		return (List<IPathAgent>)(Object)m_lstNeighbour;
 	}
 		

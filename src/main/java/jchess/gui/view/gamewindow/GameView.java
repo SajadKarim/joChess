@@ -29,7 +29,7 @@ import jchess.common.gui.IModel;
  * @since	7 Dec 2019
  */
 
-public class GameView extends JPanel implements IGameView, MouseListener, ComponentListener {
+public final class GameView extends JPanel implements IGameView, MouseListener, ComponentListener {
 	private IGameModel m_oData;
 	private IClockView m_oClockView;
 	private IBoardView m_oBoardView;    
@@ -75,7 +75,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         m_oBoardView.init();
         
 		oDimension = new Dimension(180, 60);        
-        m_oPlayerView.setDimension( oDimension);
+        m_oPlayerView.setDimension(oDimension);
         m_oPlayerView.getViewComponent().setSize(oDimension);
         m_oPlayerView.getViewComponent().setLocation(new Point(m_oData.getBoard().getBoardWidth() + 20, 0));
         this.add(m_oPlayerView.getViewComponent());
@@ -94,16 +94,15 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
         this.add(m_oMoveHistoryView.getScrollPane());
         m_oMoveHistoryView.init();	}
 	
-    public void mouseClicked(MouseEvent event)
-    {
-    	switch(event.getButton() ) {
-    		case MouseEvent.BUTTON1:{
+    public void mouseClicked(MouseEvent event) {
+    	switch (event.getButton()) {
+    		case MouseEvent.BUTTON1: {
                 int x = event.getX();
                 int y = event.getY();
    	
                 IPositionAgent oPosition = getPosition(x, y);
                 
-                if( oPosition != null) {
+                if (oPosition != null) {
                  	m_oLogger.writeLog(LogLevel.INFO, String.format("User clicked on Position=%s.", oPosition.getName()), "mouseClicked", "GameView");
 
                 	notifyListenersOnPositionClicked(oPosition);
@@ -118,7 +117,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
 
     	for (Map.Entry<String, IPositionAgent> entry : m_oData.getBoard().getAllPositionAgents().entrySet()) {
 			IPositionAgent oPosition = entry.getValue();
-			if( ((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y))) {
+			if (((IPolygon) oPosition.getShape()).getPolygon().contains(new Point(x, y))) {
 				return oPosition;
 			}
 		}
@@ -129,32 +128,25 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     public void mousePressed(MouseEvent event) {
     }
     
-    public void mouseReleased(MouseEvent arg0)
-    {
+    public void mouseReleased(MouseEvent arg0) {
     }
 
-    public void mouseEntered(MouseEvent arg0)
-    {
+    public void mouseEntered(MouseEvent arg0) {
     }
 
-    public void mouseExited(MouseEvent arg0)
-    {
+    public void mouseExited(MouseEvent arg0) {
     }
 
-    public void componentResized(ComponentEvent e)
-    {
+    public void componentResized(ComponentEvent e) {
     }
 
-    public void componentMoved(ComponentEvent e)
-    {
+    public void componentMoved(ComponentEvent e) {
     }
 
-    public void componentShown(ComponentEvent e)
-    {
+    public void componentShown(ComponentEvent e) {
     }
 
-    public void componentHidden(ComponentEvent e)
-    {
+    public void componentHidden(ComponentEvent e) {
     }
     
     public Component getViewComponent() {
@@ -164,7 +156,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     public void repaintClockView() {
     	try {
     		m_oClockView.getViewComponent().repaint();
-    	}catch(java.lang.Exception e) {
+    	} catch (Exception e) {
          	m_oLogger.writeLog(LogLevel.ERROR, String.format("Unhandled exception occured. %s", e.toString()), "repaintClockView", "GameView");
     	}
     }
@@ -172,8 +164,7 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     public void repaintBoardView() {
     	try {
     		m_oBoardView.getViewComponent().repaint();
-    	}
-    	catch(java.lang.Exception e) {
+    	} catch (Exception e) {
          	m_oLogger.writeLog(LogLevel.ERROR, String.format("Unhandled exception occured. %s", e.toString()), "repaintBoardView", "GameView");
     	}
     }
@@ -181,14 +172,12 @@ public class GameView extends JPanel implements IGameView, MouseListener, Compon
     public void repaintPlayerView() {
     	try {    		
     		m_oPlayerView.getViewComponent().repaint();
-    	}
-    	catch(java.lang.Exception e) {
+    	} catch (Exception e) {
          	m_oLogger.writeLog(LogLevel.ERROR, String.format("Unhandled exception occured. %s", e.toString()), "repaintPlayerView", "GameView");
     	}
     }
     @Override
-    public void paintComponent(Graphics oGraphics)
-    {
+    public void paintComponent(Graphics oGraphics) {
     	super.paintComponent(oGraphics);
     }
 

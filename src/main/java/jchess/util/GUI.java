@@ -24,8 +24,6 @@ import java.awt.*;
 import java.net.*;
 import java.io.*;
 
-import jchess.Main;
-
 import java.util.Properties;
 import java.io.FileOutputStream;
 

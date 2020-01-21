@@ -11,7 +11,7 @@ package jchess.common.enumerator;
  * @since	7 Dec 2019
  */
 
-public enum RuleType{
+public enum RuleType {
 	MOVE,
 	MOVE_AND_CAPTURE,
 	MOVE_IFF_CAPTURE_POSSIBLE,

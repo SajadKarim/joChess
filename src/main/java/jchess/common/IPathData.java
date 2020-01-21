@@ -15,7 +15,7 @@ import jchess.common.enumerator.Direction;
 
 public interface IPathData extends IPath {	
 	public void setName(String stName);
-	public void setDirection(Direction enDirection );
+	public void setDirection(Direction enDirection);
 	public void addNeighbour(IPath oPath);
 	public void addPosition(IPosition oPosition);
 	public List<IPathData> getAllNeighbourPathData();

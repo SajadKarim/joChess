@@ -30,7 +30,7 @@ import jchess.common.enumerator.Rank;
  * @since	7 Dec 2019
  */
 
-public class PositionAgent implements IPositionAgent {
+public final class PositionAgent implements IPositionAgent {
 	private IPositionData m_oPosition;
 	private IPieceAgent m_oPiece;
 	
@@ -75,7 +75,7 @@ public class PositionAgent implements IPositionAgent {
 		return m_oPosition.getPath(stName);
 	}
 
-	public Map<String, IPath> getAllPaths(){
+	public Map<String, IPath> getAllPaths() {
 		return m_oPosition.getAllPaths();
 	}
 	//endregion
@@ -97,51 +97,49 @@ public class PositionAgent implements IPositionAgent {
 	 * This method would return the Position that is linked to NE location (if any).
 	 * 
 	 */	
-	public List<IPositionAgent> tryGetOppositePath( IPositionAgent oPosition) {	
+	public List<IPositionAgent> tryGetOppositePath(IPositionAgent oPosition) {	
 		String stInitiator = null;
 		
-		for( Map.Entry<String, IPath> entry: m_oPosition.getAllPaths().entrySet()) {
+		for (Map.Entry<String, IPath> entry: m_oPosition.getAllPaths().entrySet()) {
 	    	IPath oPath = entry.getValue();// it.next();
-	    	if( oPath.doesPositionExist(oPosition.getName())) {
+	    	if (oPath.doesPositionExist(oPosition.getName())) {
 		        stInitiator = oPath.getName();
 		        break;
 	    	}
 	    }
 	    
-	    if( stInitiator == null)
+	    if (stInitiator == null) {
 	    	return null;
+	    }
    	
 		IPath oPath = m_oPosition.getPath(stInitiator);
 		
-		if( oPath.getAllNeighbors().size() != 2)
+		if (oPath.getAllNeighbors().size() != 2) {
 			return null;
+		}
 		
 		String stA = oPath.getAllNeighbors().get(0).getName();
 		String stB = oPath.getAllNeighbors().get(1).getName();
 
 		String stInitiatorA = stInitiator;
 		String stInitiatorB = stInitiator;
-		while( true) {
+		while (true) {
 			String newA = getOtherNeighbour(stA, stInitiatorA);
 			String newB = getOtherNeighbour(stB, stInitiatorB);
 
-			if( newA == null || newB == null)
+			if (newA == null || newB == null) {
 				return null;
+			}
 			
-			if( newA.equals(newB)) {
-				List<IPositionAgent> lst = new ArrayList<IPositionAgent>();
+			if (newA.equals(newB)) {
+				List<IPositionAgent> lstPositions = new ArrayList<IPositionAgent>();
 				
-				List<IPositionAgent> temp = this.getPathByName(newA).getAllPositionAgents();
-				
-				
-				Iterator<IPositionAgent> __it = temp.iterator(); 
-			    while( __it.hasNext()) {
-
-			    	lst.add((PositionAgent)__it.next());
+				Iterator<IPositionAgent> itPosition = this.getPathByName(newA).getAllPositionAgents().iterator(); 
+			    while (itPosition.hasNext()) {
+			    	lstPositions.add((PositionAgent)itPosition.next());
 			    }
-
 				
-				return lst;
+				return lstPositions;
 			}
 			
 			stInitiatorA = stA;
@@ -186,31 +184,36 @@ public class PositionAgent implements IPositionAgent {
 	private String getOtherNeighbour(String stPathName, String stNeighbour) {
 		IPath oPath = m_oPosition.getPath(stPathName);
 		
-		if( oPath.getAllNeighbors().size() != 2)
+		if (oPath.getAllNeighbors().size() != 2) {
 			return null;
+		}
 		
-		if( !oPath.getAllNeighbors().get(0).getName().equals(stNeighbour))
+		if (!oPath.getAllNeighbors().get(0).getName().equals(stNeighbour)) {
 			return oPath.getAllNeighbors().get(0).getName();
+		}
 		
-		if( !oPath.getAllNeighbors().get(1).getName().equals(stNeighbour))
+		if (!oPath.getAllNeighbors().get(1).getName().equals(stNeighbour)) {
 			return oPath.getAllNeighbors().get(1).getName();
+		}
 		
 		return null;
 	}
 
 	public Map<String, IPositionAgent> getAllPathAgents(IBoardMapping oBoardMapping, Direction enDirection, Family enFamily, File enFile, Rank enRank) {
 		Map<String, IPositionAgent> mpPaths = new HashMap<String, IPositionAgent>();
-		for( Map.Entry<String, IPath> itPath : m_oPosition.getAllPaths().entrySet()) {
+		for (Map.Entry<String, IPath> itPath : m_oPosition.getAllPaths().entrySet()) {
 	    	IPath oPath = itPath.getValue();
 	    	
-	    	if( oPath.getDirection() != enDirection)
+	    	if (oPath.getDirection() != enDirection) {
 	    		continue;
+	    	}
 	    	
 	    	Iterator<IPosition> itPosition = oPath.getAllPositions().iterator();
-	    	while( itPosition.hasNext()) {
+	    	while (itPosition.hasNext()) {
 	    		IPositionAgent oNextPosition = (IPositionAgent)itPosition.next();
-		    	if( tryValidateRuleApplicability(oBoardMapping, enFamily, enFile, enRank, oNextPosition))
+		    	if (tryValidateRuleApplicability(oBoardMapping, enFamily, enFile, enRank, oNextPosition)) {
 		    		mpPaths.put(oNextPosition.getName(), oNextPosition);
+		    	}
 	    	}
 		}
 
@@ -221,14 +224,16 @@ public class PositionAgent implements IPositionAgent {
 		String stCategorySource = this.getCategory().toUpperCase();
 		String stCategoryDestination = oNextPosition.getCategory().toUpperCase();
 
-		switch( enFamily) {
+		switch (enFamily) {
 		case DIFFERENT:
-			if( stCategorySource.equals(stCategoryDestination))
+			if (stCategorySource.equals(stCategoryDestination)) {
 				return false;
+			}
 			break;
 		case SAME:
-			if( !stCategorySource.equals(stCategoryDestination))
+			if (!stCategorySource.equals(stCategoryDestination)) {
 				return false;
+			}
 			break;
 		case IGNORE:
 			break;
@@ -236,42 +241,48 @@ public class PositionAgent implements IPositionAgent {
 			return false;
 		}
 		
-		int nFileSource = oBoardMapping.getMapping(this.getFile() );
-		int nFileDestination = oBoardMapping.getMapping(oNextPosition.getFile() );
+		int nFileSource = oBoardMapping.getMapping(this.getFile());
+		int nFileDestination = oBoardMapping.getMapping(oNextPosition.getFile());
 		
-		switch( enFile) {
+		switch (enFile) {
 		case SAME:
-			if( nFileSource != nFileDestination)
+			if (nFileSource != nFileDestination) {
 				return false;
+			}
 			break;
 		case FORWARD:
-			if( nFileDestination <= nFileSource)
+			if (nFileDestination <= nFileSource) {
 				return false;
+			}
 			break;
 		case BACKWARD:
-			if( nFileDestination >= nFileSource)
+			if (nFileDestination >= nFileSource) {
 				return false;
+			}
 			break;
 		case IGNORE:
 		default:
 			break;
 		}
 
-		int nRankSource = oBoardMapping.getMapping(this.getRank() );
-		int nRankDestination = oBoardMapping.getMapping(oNextPosition.getRank() );
+		int nRankSource = oBoardMapping.getMapping(this.getRank());
+		int nRankDestination = oBoardMapping.getMapping(oNextPosition.getRank());
 
-		switch( enRank) {
+		switch (enRank) {
 		case SAME:
-			if( nRankSource != nRankDestination)
+			if (nRankSource != nRankDestination) {
 				return false;
+			}
 			break;
 		case FORWARD:
-			if( nRankDestination <= nRankSource)
+			if (nRankDestination <= nRankSource) {
 				return false;
+			}
 			break;
 		case BACKWARD:
-			if( nRankDestination >= nRankSource)
+			if (nRankDestination >= nRankSource) {
 				return false;
+			}
 			break;
 		case IGNORE:
 		default:

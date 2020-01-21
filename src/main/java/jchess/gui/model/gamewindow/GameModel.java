@@ -21,12 +21,12 @@ import jchess.util.IAppLogger;
  */
 
 @Singleton
-public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerModel{
-	IBoardAgent m_oBoard;
-	String m_stClockText;
-	IPlayerAgent m_oPlayer;
+public final class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerModel {
+	private IBoardAgent m_oBoard;
+	private String m_stClockText;
+	private IPlayerAgent m_oPlayer;
 	
-	IAppLogger m_oLogger;
+	private IAppLogger m_oLogger;
 	
 	@Inject
 	public GameModel(IAppLogger oLogger) {
@@ -81,7 +81,7 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	public Image getMarkedCellImage() {
 		return m_oBoard.getMarkedCellImage();
 	}
-	public Map<String, IPositionAgent> getPositions(){
+	public Map<String, IPositionAgent> getPositions() {
 		return m_oBoard.getAllPositionAgents();
 	}
 	//endregion
@@ -96,7 +96,7 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	}
 	//endregion
 	
-	public Map<String, IPlayerAgent > getAllPlayerAgents(){
+	public Map<String, IPlayerAgent > getAllPlayerAgents() {
 		return (Map<String, IPlayerAgent>)(Object)m_oBoard.getAllPlayers();
 	}
 	
@@ -119,7 +119,7 @@ public class GameModel implements IGameModel, IBoardModel, IClockModel, IPlayerM
 	public void updatePlayerNames(Map<String, IPlayerAgent> mpPlayer) {
      	//m_oLogger.writeLog(LogLevel.DETAILED, "Updating player's name.", "updatePlayerNames", "GameModel");
 
-		for(Map.Entry<String, IPlayerAgent> itPlayer: m_oBoard.getAllPlayerAgents().entrySet()) {
+		for (Map.Entry<String, IPlayerAgent> itPlayer: m_oBoard.getAllPlayerAgents().entrySet()) {
 			itPlayer.getValue().setFirstName(mpPlayer.get(itPlayer.getKey()).getFirstName());
 		}
 	}

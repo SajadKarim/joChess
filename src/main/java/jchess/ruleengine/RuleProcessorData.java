@@ -3,7 +3,7 @@ package jchess.ruleengine;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 
-public class RuleProcessorData {
+public final class RuleProcessorData {
 	public IRuleAgent m_oRule;
 	public IPositionAgent m_oLastPosition;
 	public IPositionAgent m_oCurrentPosition;

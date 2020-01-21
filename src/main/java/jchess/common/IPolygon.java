@@ -9,6 +9,6 @@ import java.awt.Polygon;
  * @since	7 Dec 2019
  */
 
-public interface IPolygon extends IShape{
+public interface IPolygon extends IShape {
 	public Polygon getPolygon();	
 }

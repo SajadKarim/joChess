@@ -2,7 +2,12 @@ package jchess.common;
 
 import java.util.List;
 
-import jchess.common.enumerator.*;
+import jchess.common.enumerator.Direction;
+import jchess.common.enumerator.Family;
+import jchess.common.enumerator.File;
+import jchess.common.enumerator.Manoeuvre;
+import jchess.common.enumerator.Rank;
+import jchess.common.enumerator.RuleType;
 
 /**
  * IRuleData provides interface for the cache module.

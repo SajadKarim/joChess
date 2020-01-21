@@ -22,7 +22,7 @@ import jchess.common.enumerator.RuleType;
  * @since	7 Dec 2019
  */
 
-public class RuleData implements IRuleData {
+public final class RuleData implements IRuleData {
 	private File m_enFile;
 	private Rank m_enRank;	
 	private String m_stName;
@@ -55,7 +55,7 @@ public class RuleData implements IRuleData {
 		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
 		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
 		m_mpRule = new HashMap<String, IRule>();
-		for(Map.Entry<String, IRule> it : oRule.m_mpRule.entrySet()) {
+		for (Map.Entry<String, IRule> it : oRule.m_mpRule.entrySet()) {
 			m_mpRule.put( it.getKey(), it.getValue().clone());
 		}
 	}
@@ -93,7 +93,7 @@ public class RuleData implements IRuleData {
 		return m_enRank;
 	}
 	
-	public List<IRule> getAllRules(){
+	public List<IRule> getAllRules() {
 		return new ArrayList<IRule>(m_mpRule.values());
 	}
 	
@@ -135,7 +135,7 @@ public class RuleData implements IRuleData {
 		m_enRank = enRank;
 	}
 	
-	public void addRule(IRule oRule){
+	public void addRule(IRule oRule) {
 		m_mpRule.put(oRule.getName(), oRule);
 	}
 		

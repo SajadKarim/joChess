@@ -10,7 +10,7 @@ package jchess.common.enumerator;
  * @since	7 Dec 2019
  */
 
-public enum Manoeuvre{
+public enum Manoeuvre {
 	BLINKER,
 	FILE_AND_RANK,
 	BLINKER_WITH_FILE_AND_RANK

@@ -8,7 +8,7 @@ package jchess.common.enumerator;
  * @since	7 Dec 2019
  */
 
-public enum Family{
+public enum Family {
 	SAME,
 	DIFFERENT,
 	PROVIDED,
