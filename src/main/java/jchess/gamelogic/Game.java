@@ -18,7 +18,6 @@ import jchess.util.IAppLogger;
 import jchess.util.ITimer;
 import jchess.util.ITimerListener;
 import jchess.util.LogLevel;
-import jchess.ruleengine.KingRulesProcessor;
 
 import java.util.ArrayList;
 import java.util.Map;
