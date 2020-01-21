@@ -20,7 +20,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class GameState implements IGameState {
+public final class GameState implements IGameState {
 	private IPlayerAgent m_oActivePlayer;
 	private IPositionAgent m_oSelectedPiece;
 	private Map<String, IMoveCandidate> m_lstPossibleMovePositionsForSelectedPiece;
@@ -35,7 +35,7 @@ public class GameState implements IGameState {
 
 		m_qPlayersInQueue = new LinkedList<IPlayerAgent>();
 		
-		for (Map.Entry<String,IPlayerAgent> entry : oGameModel.getAllPlayerAgents().entrySet()) {
+		for (Map.Entry<String, IPlayerAgent> entry : oGameModel.getAllPlayerAgents().entrySet()) {
 			m_qPlayersInQueue.add(entry.getValue());
 		}
 		
@@ -82,7 +82,7 @@ public class GameState implements IGameState {
 	}
 
 	public IMoveCandidate getMoveCandidate(IPositionAgent oPosition) {
-		if( m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
+		if (m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
 
 		return null;
@@ -97,7 +97,7 @@ public class GameState implements IGameState {
 	}
 	
 	public void makeLastPlayerAsCurrentPlayer(IPlayerAgent oPlayer) {
-		while( !m_qPlayersInQueue.peek().equals(oPlayer)) {
+		while (!m_qPlayersInQueue.peek().equals(oPlayer)) {
 			switchPlayTurn();
 		}
 	}

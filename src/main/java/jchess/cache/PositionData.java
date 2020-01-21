@@ -17,7 +17,7 @@ import jchess.common.IShape;
  * @since	7 Dec 2019
  */
 
-public class PositionData implements IPositionData {
+public final class PositionData implements IPositionData {
 	private int m_nFile;
 	private int m_nRank;
 	private String m_stCategory;
@@ -28,7 +28,7 @@ public class PositionData implements IPositionData {
 		m_mpPath = new HashMap<String, IPath>();
 	}
 	
-	PositionData( char chFile, int nRank, IShape oShape, String stCategory) {
+	PositionData(char chFile, int nRank, IShape oShape, String stCategory) {
 		m_nFile = (int)chFile;
 		m_nRank = nRank;
 		m_oShape = oShape;		
@@ -37,7 +37,7 @@ public class PositionData implements IPositionData {
 		m_mpPath = new HashMap<String, IPath>();
 	}
 	
-	public PositionData( PositionData oPosition) {
+	public PositionData(PositionData oPosition) {
 		m_nFile = oPosition.m_nFile;
 		m_nRank = oPosition.m_nRank;
 		m_oShape = oPosition.m_oShape;		
@@ -46,8 +46,8 @@ public class PositionData implements IPositionData {
 		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
 		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
 		m_mpPath  = new HashMap<String, IPath>();
-		for(Map.Entry<String, IPath> it : oPosition.m_mpPath .entrySet()) {
-			m_mpPath.put( it.getKey(), it.getValue().clone());
+		for (Map.Entry<String, IPath> it : oPosition.m_mpPath .entrySet()) {
+			m_mpPath.put(it.getKey(), it.getValue().clone());
 		}
 		//m_mpPath = new HashMap<String, IPath>(oPosition.m_mpPath);
 	}
@@ -77,7 +77,7 @@ public class PositionData implements IPositionData {
 		return m_mpPath.get(stName);
 	}
 
-	public Map<String, IPath> getAllPaths(){
+	public Map<String, IPath> getAllPaths() {
 		return m_mpPath;
 	}
 
@@ -115,12 +115,14 @@ public class PositionData implements IPositionData {
 	
 	public void linkPaths(String stPathA, String stPathB) {
 		IPath oPathA = m_mpPath.get(stPathA);
-		if( oPathA == null)
+		if(oPathA == null) {
 			return;
+		}
 		
 		IPath oPathB = m_mpPath.get(stPathB);
-		if( oPathB == null)
+		if(oPathB == null) {
 			return;
+		}
 		
 		oPathA.getPathData().addNeighbour(oPathB);
 		oPathB.getPathData().addNeighbour(oPathA);

@@ -17,7 +17,7 @@ import jchess.common.IRule;
  * @since	7 Dec 2019
  */
 
-public class BoardData implements IBoardData {
+public final class BoardData implements IBoardData {
 	private int m_nWidth;
 	private int m_nHeight;
 	private String m_stName;
@@ -27,15 +27,15 @@ public class BoardData implements IBoardData {
 	private String m_stRuleEngineName;	
 	private String m_stRuleProcessorName;
     private Map<String, IRule> m_mpRules;
-    private Map<String, IPiece > m_mpPieces;
-    private Map<String, IPlayer > m_mpPlayers;
+    private Map<String, IPiece> m_mpPieces;
+    private Map<String, IPlayer> m_mpPlayers;
     private Map<String, IPosition> m_mpPosition;
     private Map<String, Map<String, String>> m_mpMapping;
     
     public BoardData() {
     	m_mpRules = new HashMap<String, IRule>();
-    	m_mpPieces = new HashMap<String, IPiece >();
-    	m_mpPlayers = new HashMap<String, IPlayer >();    	
+    	m_mpPieces = new HashMap<String, IPiece>();
+    	m_mpPlayers = new HashMap<String, IPlayer>();    	
     	m_mpPosition = new HashMap<String, IPosition>();
     	m_mpMapping = new HashMap<String, Map<String, String>>();    	
     }
@@ -77,7 +77,7 @@ public class BoardData implements IBoardData {
 		return m_mpPlayers.get(stName);
 	}
 
-	public Map<String, IPlayer > getAllPlayers() {
+	public Map<String, IPlayer> getAllPlayers() {
 		return m_mpPlayers;
 		//return new ArrayList<IPlayer >( m_mpPlayers.values());
 	}
@@ -153,8 +153,9 @@ public class BoardData implements IBoardData {
 	}	
     
 	public void addMapping(String stPlayer, String stPiece, String stPosition) {
-    	if( m_mpMapping.get(stPlayer) == null)
-        	m_mpMapping.put(stPlayer, new HashMap<String, String>());	
+		if (m_mpMapping.get(stPlayer) == null) {
+        	m_mpMapping.put(stPlayer, new HashMap<String, String>());
+    	}
     	m_mpMapping.get(stPlayer).put(stPosition, stPiece);
     }
 	//endregion

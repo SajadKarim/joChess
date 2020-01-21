@@ -18,7 +18,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-class FBDBService extends StorageService {
+final class FBDBService extends StorageService {
 	private IAppLogger m_oLogger;
 
 	public FBDBService(IAppLogger oLogger) {

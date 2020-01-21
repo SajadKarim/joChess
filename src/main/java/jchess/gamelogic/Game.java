@@ -30,7 +30,7 @@ import java.util.Map;
  * @since	7 Dec 2019
  */
 
-public class Game implements IGame, ITimerListener{
+public final class Game implements IGame, ITimerListener {
 	private ITimer m_oTimer;
 	private IGameModel m_oGameModel;
 	private IGameState m_oGameState;
@@ -50,7 +50,7 @@ public class Game implements IGame, ITimerListener{
 	 * @param oRuleEngine
 	 */
 	@Inject
-	public Game(IGameModel oGameModel, ITimer oTimer, IGUIHandle oGUIHandle, IAppLogger oLogger, IGameState oGameState, IRuleEngine oRuleEngine){
+	public Game(IGameModel oGameModel, ITimer oTimer, IGUIHandle oGUIHandle, IAppLogger oLogger, IGameState oGameState, IRuleEngine oRuleEngine) {
 		m_oLogger = oLogger;
 		
 		oLogger.writeLog(LogLevel.DETAILED, "Instantiating Game.", "Game", "Game");
@@ -95,21 +95,21 @@ public class Game implements IGame, ITimerListener{
 		m_oLogger.writeLog(LogLevel.DETAILED, "Activity on board has been observed.", "onBoardActivity", "Game");
 
 		// This checks if there is any Player who is assigned turn to make a move.
-		if( m_oGameState.getActivePlayer() == null) {
+		if (m_oGameState.getActivePlayer() == null) {
 			m_oLogger.writeLog(LogLevel.DETAILED, "There is not Active player.", "onBoardActivity", "Game");
 			return;
 		}
 		
-		if( m_oGameState.getActivePosition() == null) {
+		if (m_oGameState.getActivePosition() == null) {
 			// Following code finds and marks all the possible candidate positions that the selected Piece can take.			
-			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
+			if (oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player selected a new Position.", "onBoardActivity", "Game");
 				tryFinalAllPossibleMoveCandidates(oPosition.getPiece());
 				return;
 			}
 		} else {	
 			// Following code deselected the currently marked candidate moves as user clicked on a different location than the marked ones.
-			if( m_oGameState.isThisActivePosition(oPosition.getName())) {
+			if (m_oGameState.isThisActivePosition(oPosition.getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on the selected Position.", "onBoardActivity", "Game");
 				deselectedActivePosition();
 				return;
@@ -117,7 +117,7 @@ public class Game implements IGame, ITimerListener{
 
 			// User selected a different piece than the one it made last time and following code finds and marks all the possible 
 			// candidate positions that the selected Piece can take.			
-			if( oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
+			if (oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on some other Piece.", "onBoardActivity", "Game");
 				tryFinalAllPossibleMoveCandidates(oPosition.getPiece());
 				return;
@@ -125,7 +125,7 @@ public class Game implements IGame, ITimerListener{
 		
 			// User selected one of the marked candidate positions and hence triggered Rule execution logic.
 			IMoveCandidate oMoveCandidate =m_oGameState.getMoveCandidate(oPosition); 
-			if( oMoveCandidate != null) {
+			if (oMoveCandidate != null) {
 				m_oLogger.writeLog(LogLevel.DETAILED, "Player clicked on one of the Move candidancies.", "onBoardActivity", "Game");
 				//oMoveCandidate.setSourcePosition(m_oGameState.getActivePosition());
 				tryExecuteRule(oMoveCandidate);
@@ -149,7 +149,7 @@ public class Game implements IGame, ITimerListener{
 		deselectedActivePosition();
 		IBoardActivity oActivity = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
 
-		if( oActivity != null) {
+		if (oActivity != null) {
 			m_oGameModel.addBoardActivity(oActivity);
 			m_oGameState.switchPlayTurn();
 			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
@@ -163,14 +163,13 @@ public class Game implements IGame, ITimerListener{
 	public void deselectedActivePosition() {
 		m_oLogger.writeLog(LogLevel.INFO, "Deslecting all the move candidancies.", "deselectedActivePosition", "Game");
 
-		if( m_oGameState.getPossibleMovesForActivePosition() != null) {
-
+		if (m_oGameState.getPossibleMovesForActivePosition() != null) {
 			for (Map.Entry<String, IMoveCandidate> entry : m_oGameState.getPossibleMovesForActivePosition().entrySet()) {
 				entry.getValue().getCandidatePosition().setMoveCandidacy(false);
 	    	}		
 		}
 
-		if( m_oGameState.getActivePosition() != null) {			
+		if (m_oGameState.getActivePosition() != null) {			
 			m_oGameState.getActivePosition().setSelectState(false);
 		}
 		
@@ -183,11 +182,11 @@ public class Game implements IGame, ITimerListener{
 	 * 
 	 * @param oPosition - It holds Piece and Rule information that is required to find out possible positions.
 	 */
-	private void tryFinalAllPossibleMoveCandidates(IPieceAgent oPiece){
+	private void tryFinalAllPossibleMoveCandidates(IPieceAgent oPiece) {
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Finding all the possible moves for Position=[%s]", oPiece.toLog()), "tryFinalAllPossibleMoveCandidates", "Game");
 
 		IPositionAgent oPosition = oPiece.getPosition();
-		if( oPosition == null) {
+		if (oPosition == null) {
 			m_oLogger.writeLog(LogLevel.INFO, "No piece attached.", "tryFinalAllPossibleMoveCandidates", "Game");
 			return;
 		}
@@ -252,7 +251,7 @@ public class Game implements IGame, ITimerListener{
 		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player as active one.", "setPlayerAsActivePlayer", "Game");
 
 		deselectedActivePosition();
-		while( !m_oGameState.getActivePlayer().equals(oPlayer)) {
+		while (!m_oGameState.getActivePlayer().equals(oPlayer)) {
 			m_oGameState.switchPlayTurn();
 		}			
 		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
@@ -262,7 +261,7 @@ public class Game implements IGame, ITimerListener{
 		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player's turn as last.", "setPlayerTurnAsLast", "Game");
 
 		deselectedActivePosition();
-		while( !m_oGameState.getActivePlayer().equals(oPlayer)) {
+		while (!m_oGameState.getActivePlayer().equals(oPlayer)) {
 			m_oGameState.switchPlayTurn();
 		}
 			

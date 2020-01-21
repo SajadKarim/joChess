@@ -43,7 +43,7 @@ import java.awt.event.ActionEvent;
  * When pawn reach the end of the chessboard it can be change to rook,
  * bishop, queen or knight. For what pawn is promoted decideds player.
  */
-public class PawnPromotionDialogView extends JDialog implements IPawnPromotionDialogView , ActionListener
+public final class PawnPromotionDialogView extends JDialog implements IPawnPromotionDialogView , ActionListener
 {
     GridBagLayout gbl;
     public String result;

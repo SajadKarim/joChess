@@ -21,7 +21,7 @@ import jchess.gui.model.newgamewindow.INewGameModel;
  * @since	7 Dec 2019
  */
 
-public class PlayerDetailsEntryView extends JPanel implements IPlayerDetailsEntryView {
+public final class PlayerDetailsEntryView extends JPanel implements IPlayerDetailsEntryView {
 
 	private INewGameModel m_oData;
 	private INewGameListener m_oCallback;

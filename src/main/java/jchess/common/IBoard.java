@@ -49,7 +49,7 @@ public interface IBoard {
 	 * This method returns all the available IPosition objects.
 	 * @return Map of String, IPosition
 	 */
-	public Map<String, IPosition> getAllPositions() ;
+	public Map<String, IPosition> getAllPositions();
 	/**
 	 * Returns IPlayer against the value provided to it.
 	 * Method returns NULL if it does not find any value against the provided name.
@@ -62,7 +62,7 @@ public interface IBoard {
 	 * This method returns all the available IPlayer objects.
 	 * @return Map of String, IPlayer
 	 */
-	public Map<String, IPlayer > getAllPlayers();
+	public Map<String, IPlayer> getAllPlayers();
 	/**
 	 * Returns IRule against the value provided to it.
 	 * Method returns NULL if it does not find any value against the provided name.

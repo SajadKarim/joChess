@@ -12,7 +12,7 @@ import jchess.common.IRuleAgent;
  * @since	29th Dec 2019
  */
 
-public class MoveCandidate implements IMoveCandidate {
+public final class MoveCandidate implements IMoveCandidate {
 	private IPieceAgent m_oPieceToMove;
 	private IPositionAgent m_oSourcePosition;
 	private IPositionAgent m_oCandidatePosition;

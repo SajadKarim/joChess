@@ -7,7 +7,7 @@ import jchess.common.IPlayer;
 import jchess.common.IPosition;
 import jchess.common.IRule;
 
-public class BoardDataFactory implements IBoardFactory {
+public final class BoardDataFactory implements IBoardFactory {
 
 	public IPosition createPosition() {
 		return new PositionData();

@@ -26,8 +26,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.jdesktop.application.Application;
-
 import jchess.Main;
 import jchess.Settings;
 import jchess.util.GUI;
@@ -36,9 +34,6 @@ import javax.swing.event.ListSelectionEvent;
 import java.io.File;
 import java.util.Properties;
 import java.io.FileOutputStream;
-import java.net.URL;
-
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class ThemeChooseWindow extends JDialog implements ActionListener, ListSelectionListener
 {

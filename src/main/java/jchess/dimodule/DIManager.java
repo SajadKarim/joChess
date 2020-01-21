@@ -13,7 +13,7 @@ import com.google.inject.Singleton;
  */
 
 @Singleton
-public class DIManager implements IDIManager {
+public final class DIManager implements IDIManager {
 	private Injector m_oGlobalInjector;
 	
 	@Inject

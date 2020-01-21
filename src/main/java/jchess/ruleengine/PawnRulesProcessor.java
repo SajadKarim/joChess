@@ -38,7 +38,7 @@ import jchess.ruleengine.gui.PawnPromotionPresenter;
  * @since	7 Dec 2019
  */
 
-public class PawnRulesProcessor {
+public final class PawnRulesProcessor {
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
 	/**

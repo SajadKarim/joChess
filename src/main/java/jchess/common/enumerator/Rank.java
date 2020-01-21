@@ -8,7 +8,7 @@ package jchess.common.enumerator;
  * @since	7 Dec 2019
  */
 
-public enum Rank{
+public enum Rank {
 	SAME,
 	FORWARD,
 	BACKWARD,

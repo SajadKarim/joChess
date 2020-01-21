@@ -29,7 +29,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class BoardView extends JPanel implements IBoardView {
+public final class BoardView extends JPanel implements IBoardView {
 	private IBoardModel m_oData;
 	private Dimension m_oDimension;
 	private IAppLogger m_oLogger;
@@ -57,16 +57,18 @@ public class BoardView extends JPanel implements IBoardView {
     }
 	
 	private void drawPositions(Graphics oGraphics) {
-		for (Map.Entry<String,IPositionAgent> entry : m_oData.getPositions().entrySet()) {
+		for (Map.Entry<String, IPositionAgent> entry : m_oData.getPositions().entrySet()) {
     		IPositionAgent oPosition = entry.getValue();
-    		if( oPosition.getPiece() != null) {
+    		if (oPosition.getPiece() != null) {
     			drawPiece(oGraphics, ((IPolygon)(oPosition.getShape())).getPolygon(), ((PieceAgent)oPosition.getPiece()).getImage());
     			
-    			if( oPosition.getSelectState())
+    			if (oPosition.getSelectState()) {
     				selectPosition(oGraphics, oPosition);
+    			}
     		}
-    		if( oPosition.getMoveCandidacy())
+    		if (oPosition.getMoveCandidacy()) {
     			markPositions(oGraphics, oPosition);
+    		}
     	}
 	}
 	/**
@@ -75,29 +77,26 @@ public class BoardView extends JPanel implements IBoardView {
 	 * @param oPosition the position in the chess board
 	 */
 	public void selectPosition(Graphics oGraphics, IPositionAgent oPosition) {
-		try
-        {
-		Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
-    	
-		int nWidth = (int)oPolygon.getBounds2D().getWidth();
-		int nHeight = (int)oPolygon.getBounds2D().getHeight();
-		
-        BufferedImage resized = new BufferedImage(nWidth, nHeight, BufferedImage.TYPE_INT_ARGB_PRE);
-        Graphics2D imageGr = (Graphics2D) resized.createGraphics();
-        imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        imageGr.drawImage(m_oData.getActivCellImage(), 0, 0, nWidth, nHeight, null);
-        imageGr.dispose();
-        Image oResizedImage = resized.getScaledInstance(nWidth, nHeight, 0);
-        
-    	oGraphics.setClip(oPolygon);
-    	oGraphics.drawImage(oResizedImage, (int)oPolygon.getBounds2D().getMinX(), (int)oPolygon.getBounds2D().getMinY(), this);
-        }
-        catch (java.lang.NullPointerException exc)
-        {
+		try {
+			Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
+	    	
+			int nWidth = (int)oPolygon.getBounds2D().getWidth();
+			int nHeight = (int)oPolygon.getBounds2D().getHeight();
+			
+	        BufferedImage resized = new BufferedImage(nWidth, nHeight, BufferedImage.TYPE_INT_ARGB_PRE);
+	        Graphics2D imageGr = (Graphics2D) resized.createGraphics();
+	        imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	        imageGr.drawImage(m_oData.getActivCellImage(), 0, 0, nWidth, nHeight, null);
+	        imageGr.dispose();
+	        Image oResizedImage = resized.getScaledInstance(nWidth, nHeight, 0);
+	        
+	    	oGraphics.setClip(oPolygon);
+	    	oGraphics.drawImage(oResizedImage, (int)oPolygon.getBounds2D().getMinX(), (int)oPolygon.getBounds2D().getMinY(), this);
+        } catch(NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
-
 	}
+
 	/**
 	 * Mark the position in the chess board
 	 * @param oGraphics the chess board
@@ -105,15 +104,12 @@ public class BoardView extends JPanel implements IBoardView {
 	 */
 	public void markPositions(Graphics oGraphics, IPositionAgent oPosition) {
     	
-		try
-        {
+		try {
 			Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
         	
 			oGraphics.setClip(oPolygon);
 			oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX()-20, (int)oPolygon.getBounds2D().getCenterY()-20, this);
-        }
-        catch (java.lang.NullPointerException exc)
-        {
+        } catch(NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
     }
@@ -123,25 +119,20 @@ public class BoardView extends JPanel implements IBoardView {
 	 * @param oPolygon the position of the piece
 	 * @param oPieceImage the image of the piece
 	 */
-	public void drawPiece(Graphics oGraphics, Polygon oPolygon, Image oPieceImage)
-    {
-        try
-        {
+	public void drawPiece(Graphics oGraphics, Polygon oPolygon, Image oPieceImage) {
+        try {
         	oGraphics.setClip(oPolygon);
             oGraphics.drawImage(oPieceImage, 
             		(int)oPolygon.getBounds2D().getCenterX()-30, 
             		(int)oPolygon.getBounds2D().getCenterY()-30, 
             		this);
-        }
-        catch (java.lang.NullPointerException exc)
-        {
+        } catch (java.lang.NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
     }
 	
     @Override
-    public void paintComponent(Graphics oGraphics)
-    {
+    public void paintComponent(Graphics oGraphics) {
     	super.paintComponent(oGraphics);
     	draw(oGraphics);
     }

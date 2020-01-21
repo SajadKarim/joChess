@@ -22,14 +22,13 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class PlayerView extends JPanel implements IPlayerView {
+public final class PlayerView extends JPanel implements IPlayerView {
 	private IPlayerModel m_oData;
 	private Dimension m_oDimension; 
 	private IAppLogger m_oLogger;
 	
 	@Inject
-    public PlayerView(IPlayerModel oData, IAppLogger oLogger)
-    {
+    public PlayerView(IPlayerModel oData, IAppLogger oLogger) {
 		m_oData = oData;
     	m_oLogger = oLogger;
     	
@@ -45,8 +44,7 @@ public class PlayerView extends JPanel implements IPlayerView {
     	m_oDimension = oDimension;	
     }
     
-    void draw(Graphics oGraphics)
-    {
+    void draw(Graphics oGraphics) {
         oGraphics.setColor(Color.BLACK);
         oGraphics.fillRect(0, 0, m_oDimension.width, m_oDimension.height);
         
@@ -63,15 +61,13 @@ public class PlayerView extends JPanel implements IPlayerView {
 
          if( m_oData != null) {
         	 oGraphics.drawString(m_oData.getPlayerName() + ": " + m_oData.getPlayerFirstName() , 5, 50);
-        }
-        else {
+        } else {
         	 oGraphics.drawString("Sajad Karim", 5, 50);
          }
     }
 
     @Override
-    public void paintComponent(Graphics oGraphics)
-    {
+    public void paintComponent(Graphics oGraphics) {
     	draw(oGraphics);
     }
 

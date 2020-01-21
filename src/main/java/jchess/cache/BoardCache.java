@@ -10,8 +10,7 @@ import jchess.common.IBoardAgent;
  * @since	7 Dec 2019
  */
 
-public class BoardCache
-{
+public final class BoardCache {
 	private String m_stBoardName;
 	private IBoardAgent m_oBoard;
 	

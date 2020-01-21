@@ -8,7 +8,7 @@ package jchess.common;
  *
  */
 
-public interface IShape{
+public interface IShape {
 	public int getTopLeftX();
 	public int getTopLeftY();
 	public String toString();

@@ -6,7 +6,6 @@ import java.util.Map;
 
 import jchess.cache.PlayerData;
 import jchess.common.IBoardMapping;
-import jchess.common.IPiece;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPlayerData;
@@ -20,7 +19,7 @@ import jchess.common.IPlayerData;
  * @since	7 Dec 2019
  */
 
-public class PlayerAgent implements IPlayerAgent {
+public final class PlayerAgent implements IPlayerAgent {
 	private IPlayerData m_oPlayerData;
 	private String m_stFirstName;
 	private String m_stLastName;
@@ -32,8 +31,7 @@ public class PlayerAgent implements IPlayerAgent {
 		m_mpPieces = new HashMap<String, IPieceAgent>();
 	}
 	
-	public String getName()
-    {
+	public String getName() {
         return m_oPlayerData.getName();
     }
 

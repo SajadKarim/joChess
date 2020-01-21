@@ -13,11 +13,12 @@ import com.google.inject.Inject;
 import jchess.cache.ICacheManager;
 import jchess.common.gui.DialogResult;
 import jchess.gui.model.newgamewindow.INewGameModel;
+import jchess.gui.view.newgamewindow.INewGameListener;
+import jchess.gui.view.newgamewindow.INewGameView;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
-import jchess.gui.view.newgamewindow.*;
 
-public class NewGamePresenter extends AbstractModule implements INewGamePresenter {
+public final class NewGamePresenter extends AbstractModule implements INewGamePresenter {
     private final INewGameView m_oView;
     private final INewGameModel m_oModel;
     private final ICacheManager m_oCacheManager;

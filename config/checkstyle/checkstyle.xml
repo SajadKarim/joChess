@@ -46,23 +46,22 @@
     <!-- Excludes all 'module-info.java' files              -->
     <!-- See https://checkstyle.org/config_filefilters.html -->
     <module name="BeforeExecutionExclusionFileFilter">
-        <property name="fileNamePattern" value="module\-info\.java$"/>
+        <property name="fileNamePattern" value="(JChessView|JChessTabbedPane|ThemeChooseWindow|JChessAboutBox|NewLocalGameView|PlayerDetailsEntryView).java"/>
     </module>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
     <module name="SuppressionFilter">
-        <property name="file" value="${org.checkstyle.sun.suppressionfilter.config}"
-                  default="checkstyle-suppressions.xml" />
+        <property name="file" value="suppressions.xml" />
         <property name="optional" value="true"/>
     </module>
 
     <!-- Checks that a package-info.java file exists for each package.     -->
     <!-- See https://checkstyle.org/config_javadoc.html#JavadocPackage -->
-    <module name="JavadocPackage"/>
+    <!--Jira NOT-112 module name="JavadocPackage"/ -->
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See https://checkstyle.org/config_misc.html#NewlineAtEndOfFile -->
-    <module name="NewlineAtEndOfFile"/>
+    <!--Jira NOT-112 module name="NewlineAtEndOfFile"/ -->
 
     <!-- Checks that property files contain the same keys.         -->
     <!-- See https://checkstyle.org/config_misc.html#Translation -->
@@ -73,20 +72,21 @@
     <module name="FileLength"/>
     <module name="LineLength">
       <property name="fileExtensions" value="java"/>
+       <property name="max" value="150"/>
     </module>
 
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/config_whitespace.html -->
-    <module name="FileTabCharacter"/>
+    <!--Jira NOT-112 module name="FileTabCharacter"/-->
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See https://checkstyle.org/config_misc.html -->
-    <module name="RegexpSingleline">
+    <!--Jira NOT-112 module name="RegexpSingleline">
        <property name="format" value="\s+$"/>
        <property name="minimum" value="0"/>
        <property name="maximum" value="0"/>
        <property name="message" value="Line has trailing spaces."/>
-    </module>
+    </module -->
 
     <!-- Checks for Headers                                -->
     <!-- See https://checkstyle.org/config_header.html   -->
@@ -99,24 +99,29 @@
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/config_javadoc.html -->
-        <module name="InvalidJavadocPosition"/>
+        <!-- tempmodule name="InvalidJavadocPosition"/>
         <module name="JavadocMethod"/>
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
-        <module name="MissingJavadocMethod"/>
+        <module name="MissingJavadocMethod"/-->
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
-        <module name="ConstantName"/>
-        <module name="LocalFinalVariableName"/>
-        <module name="LocalVariableName"/>
-        <module name="MemberName"/>
-        <module name="MethodName"/>
-        <module name="PackageName"/>
-        <module name="ParameterName"/>
-        <module name="StaticVariableName"/>
-        <module name="TypeName"/>
+
+		<module name="LocalVariableName">
+        	<property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+       		<message key="name.invalidPattern"  value="Local name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+		<module name="MemberName">
+        	<property name="format" value="^m_[a-z]([a-zA-Z0-9]*)$"/>
+       		<message key="name.invalidPattern"  value="Member name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="ParameterName">
+            <property name="format" value="^[a-z]([a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        
 
         <!-- Checks for imports                              -->
         <!-- See https://checkstyle.org/config_import.html -->
@@ -147,8 +152,8 @@
 
         <!-- Modifier Checks                                    -->
         <!-- See https://checkstyle.org/config_modifiers.html -->
-        <module name="ModifierOrder"/>
-        <module name="RedundantModifier"/>
+        <!--Jira NOT-112 module name="ModifierOrder"/ -->
+        <!--Jira NOT-112 module name="RedundantModifier"/ -->
 
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See https://checkstyle.org/config_blocks.html -->
@@ -175,14 +180,14 @@
         <!-- See https://checkstyle.org/config_design.html -->
         <module name="DesignForExtension"/>
         <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
+        <!--Jira NOT-112 module name="HideUtilityClassConstructor"/ -->
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See https://checkstyle.org/config_misc.html -->
         <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
+        <!--Jira NOT-112 module name="FinalParameters"/-->
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 

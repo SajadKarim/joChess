@@ -26,7 +26,7 @@ public interface IPositionAgent extends IPosition {
 	public void setSelectState(Boolean oSelect);
 	public IPathAgent getPathByName(String stName);
 	public void setMoveCandidacy(Boolean bMoveCandidacy);
-	public List<IPositionAgent> tryGetOppositePath( IPositionAgent oPosition);	
+	public List<IPositionAgent> tryGetOppositePath(IPositionAgent oPosition);	
 	public Map<String, IPositionAgent> getAllPathAgents(IBoardMapping oBoardMapping, Direction enDirection, Family enFamily, File enFile, Rank enRank);
 	public Boolean tryValidateRuleApplicability(IBoardMapping oBoardMapping, Family enFamily, File enFile, Rank enRank, IPositionAgent oNextPosition);	
 	public String toLog();

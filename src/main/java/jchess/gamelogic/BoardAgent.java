@@ -8,7 +8,6 @@ import jchess.cache.BoardData;
 import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardData;
-import jchess.common.IMoveCandidate;
 import jchess.common.IPiece;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayer;
@@ -27,7 +26,7 @@ import jchess.util.GUI;
  * @since	7 Dec 2019
  */
 
-public class BoardAgent implements IBoardAgent {
+public final class BoardAgent implements IBoardAgent {
 	private IBoardData m_oBoard;
 	private Image m_oBoardImage;
 	private Image m_oActivCellImage;
@@ -89,7 +88,7 @@ public class BoardAgent implements IBoardAgent {
 		return m_oBoard.getPlayer(stName);
 	}
 
-	public Map<String, IPlayer > getAllPlayers() {
+	public Map<String, IPlayer> getAllPlayers() {
 		return m_oBoard.getAllPlayers();
 	}
 
@@ -136,11 +135,11 @@ public class BoardAgent implements IBoardAgent {
 	}
 	
     private void updatePieceAndPositionReferences() {
-    	for(Map.Entry<String, IPlayerAgent> itPlayers: getPlayers().entrySet()) {
+    	for (Map.Entry<String, IPlayerAgent> itPlayers: getPlayers().entrySet()) {
     		IPlayerAgent oPlayer = itPlayers.getValue();
 
     		Map<String, String> mpPlayerPieceMapping = m_oBoard.getPlayerMapping(oPlayer.getName());
-    		if( mpPlayerPieceMapping != null) {
+    		if (mpPlayerPieceMapping != null) {
 	    		for (Map.Entry<String, String> itPlayerPieceMapping : mpPlayerPieceMapping.entrySet()) {
 	    			IPositionAgent oPosition = getPositionAgent(itPlayerPieceMapping.getKey());
 	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getUnlinkedPiece(itPlayerPieceMapping.getValue()).clone();
@@ -163,56 +162,56 @@ public class BoardAgent implements IBoardAgent {
 	public IPositionAgent getPositionAgent(String stName) {
 		return (IPositionAgent)getPosition(stName);
 	}
-	public Map<String, IPositionAgent> getAllPositionAgents(){
+	public Map<String, IPositionAgent> getAllPositionAgents() {
 		return (Map<String, IPositionAgent>)(Object)getAllPositions();
 	}
 	
 	public IPlayerAgent getPlayerAgent(String stName) {
 		return (IPlayerAgent)getPlayer(stName);
 	}
-	public Map<String, IPlayerAgent > getAllPlayerAgents(){
+	public Map<String, IPlayerAgent> getAllPlayerAgents() {
 		return (Map<String, IPlayerAgent>)(Object)getAllPlayers();
 	}
 	
 	public IRuleAgent getRuleAgent(String stName) {
 		return (IRuleAgent)getRule(stName);
 	}
-	public  Map<String, IRuleAgent> getAllRuleAgents(){
+	public Map<String, IRuleAgent> getAllRuleAgents() {
 		return (Map<String, IRuleAgent>)(Object)getAllRules();
 	}
 	
 	public IPieceAgent getUnlinkedPieceAgent(String stName) {
 		return (IPieceAgent)getUnlinkedPiece(stName);
 	}
-	public  Map<String, IPieceAgent> getAllUnlinkedPieceAgents(){
+	public  Map<String, IPieceAgent> getAllUnlinkedPieceAgents() {
 		return (Map<String, IPieceAgent>)(Object)getAllUnlinkedPieces();
 	}
 	
 	public PositionAgent getPositionByName(String stName) {
 		return (PositionAgent)getPosition(stName);
 	}
-	public Map<String, IPositionAgent> getPositions(){
+	public Map<String, IPositionAgent> getPositions() {
 		return (Map<String, IPositionAgent>)(Object)getAllPositions();
 	}
 	
 	public IPlayerAgent getPlayerByName(String stName) {
 		return (PlayerAgent)getPlayer(stName);
 	}
-	public Map<String, IPlayerAgent> getPlayers(){
+	public Map<String, IPlayerAgent> getPlayers() {
 		return (Map<String, IPlayerAgent>)(Object)getAllPlayers();		
 	}
 	
 	public RuleAgent getRuleByName(String stName) {
 		return (RuleAgent)getRule(stName);
 	}
-	public Map<String, IRuleAgent> getRules(){
+	public Map<String, IRuleAgent> getRules() {
 		return (Map<String, IRuleAgent>)(Object)getRules();
 	}
 	
 	public PieceAgent getPieceByName(String stName) {
 		return (PieceAgent)getUnlinkedPiece(stName);
 	}
-	public Map<String, IPieceAgent> getPieces(){
+	public Map<String, IPieceAgent> getPieces() {
 		return (Map<String, IPieceAgent>)(Object)getPieces();
 	}
 	//endregion
@@ -230,8 +229,8 @@ public class BoardAgent implements IBoardAgent {
 	}
 	
 	public void addActivity(IBoardActivity oActivity) {
-		if( m_nActivityIndex != m_lstActivity.size() - 1) {
-			for(int nIndex = m_lstActivity.size() - 1; nIndex > m_nActivityIndex; nIndex--) {
+		if (m_nActivityIndex != m_lstActivity.size() - 1) {
+			for (int nIndex = m_lstActivity.size() - 1; nIndex > m_nActivityIndex; nIndex--) {
 				m_lstActivity.remove(nIndex);
 			}
 			//m_lstActivity.subList(m_nActivityIndex, m_lstActivity.size() - 1).clear();
@@ -244,23 +243,23 @@ public class BoardAgent implements IBoardAgent {
 	public IBoardActivity undoLastActivity() {
 		IBoardActivity oActivity = null;
 		
-		if( m_nActivityIndex >= 0) {
+		if (m_nActivityIndex >= 0) {
 			oActivity = m_lstActivity.get(m_nActivityIndex);
 			m_nActivityIndex--;
 		}
 		
-		if( oActivity != null) {
-			for(Map.Entry<IPositionAgent, IPieceAgent> it : oActivity.getPriorMoveDetails().entrySet()) {
+		if (oActivity != null) {
+			for (Map.Entry<IPositionAgent, IPieceAgent> it : oActivity.getPriorMoveDetails().entrySet()) {
 				IPositionAgent oPosition = it.getKey();
 				IPieceAgent oPiece = it.getValue();
 								
 				oPosition.setPiece(oPiece);
-				if( oPiece != null) {
+				if (oPiece != null) {
 					IPositionAgent oPieceCurrentPosition = oPiece.getPosition();				
 
 					oPiece.setPosition(oPosition);
 					
-					if( oPieceCurrentPosition != oPosition) {
+					if (oPieceCurrentPosition != oPosition) {
 						oPiece.dequeuePositionHistory();
 					}
 				}
@@ -273,23 +272,23 @@ public class BoardAgent implements IBoardAgent {
 	public IBoardActivity redoLastActivity() {
 		IBoardActivity oActivity = null;
 		
-		if( m_nActivityIndex < m_lstActivity.size() -1) {
+		if (m_nActivityIndex < m_lstActivity.size() -1) {
 			m_nActivityIndex++;
 			oActivity = m_lstActivity.get(m_nActivityIndex);			
 		}
 		
-		if( oActivity != null) {
-			for(Map.Entry<IPositionAgent, IPieceAgent> it : oActivity.getPostMoveDetails().entrySet()) {
+		if (oActivity != null) {
+			for (Map.Entry<IPositionAgent, IPieceAgent> it : oActivity.getPostMoveDetails().entrySet()) {
 				IPositionAgent oPosition = it.getKey();
 				IPieceAgent oPiece = it.getValue();
 				
 				oPosition.setPiece(oPiece);
-				if( oPiece != null) {
+				if (oPiece != null) {
 					IPositionAgent oPieceCurrentPosition = oPiece.getPosition();				
 
 					oPiece.setPosition(oPosition);
 
-					if( oPieceCurrentPosition != oPosition) {
+					if (oPieceCurrentPosition != oPosition) {
 						oPiece.enqueuePositionHistory(oPosition);
 					}
 				}
@@ -300,11 +299,12 @@ public class BoardAgent implements IBoardAgent {
 	}
 	
 	public IBoardActivity getLastActivityByPlayer(IPlayerAgent oPlayer) {
-		for(int nIndex = m_lstActivity.size() - 1; nIndex >= 0; nIndex--) {
+		for (int nIndex = m_lstActivity.size() - 1; nIndex >= 0; nIndex--) {
 			IBoardActivity oActivity = m_lstActivity.get(nIndex);
 			
-			if( oActivity.getPlayer().equals(oPlayer))
+			if (oActivity.getPlayer().equals(oPlayer)) {
 				return oActivity;
+			}
 		}
 		
 		return null;

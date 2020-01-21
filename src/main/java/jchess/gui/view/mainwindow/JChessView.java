@@ -48,7 +48,7 @@ import java.awt.event.*;
  */
 
 @Singleton
-public class JChessView extends FrameView implements IJChessView, ActionListener, ComponentListener
+public final class JChessView extends FrameView implements IJChessView, ActionListener, ComponentListener
 {
 	private IMain m_oMainApplication;
     private IAppLogger m_oLogger; 

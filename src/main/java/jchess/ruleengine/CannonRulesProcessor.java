@@ -15,7 +15,7 @@ import jchess.gamelogic.BoardActivity;
  * @since	19 Jan 2020
  */
 
-public class CannonRulesProcessor {
+public final class CannonRulesProcessor {
 	
 	/**
 	 * This method executes cannon rule.
