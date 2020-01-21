@@ -23,7 +23,7 @@ public final class PawnPromotionPresenter implements IPresenter {
     private final IPawnPromotionModel m_oData;
     private final IAppLogger m_oAppLogger;
 
-	public PawnPromotionPresenter(IPawnPromotionDialogView oView, IPawnPromotionModel oData, IAppLogger oAppLogger){
+	public PawnPromotionPresenter(IPawnPromotionDialogView oView, IPawnPromotionModel oData, IAppLogger oAppLogger) {
 		m_oView = oView;
 		m_oData = oData;
 		m_oAppLogger = oAppLogger;
@@ -43,7 +43,7 @@ public final class PawnPromotionPresenter implements IPresenter {
     	m_oView.drawComponents();
 	}
 
-	public void onViewClosed(DialogResult oFormAction,Object oData) {
+	public void onViewClosed(DialogResult oFormAction, Object oData) {
 		m_oData.updateSelectedPiece((String)oData);
 	}
 	

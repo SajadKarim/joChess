@@ -101,7 +101,7 @@ public final class PositionAgent implements IPositionAgent {
 		String stInitiator = null;
 		
 		for (Map.Entry<String, IPath> entry: m_oPosition.getAllPaths().entrySet()) {
-	    	IPath oPath = entry.getValue();// it.next();
+	    	IPath oPath = entry.getValue();
 	    	if (oPath.doesPositionExist(oPosition.getName())) {
 		        stInitiator = oPath.getName();
 		        break;
@@ -176,7 +176,7 @@ public final class PositionAgent implements IPositionAgent {
 		return (IPathAgent)m_oPosition.getPath(stName);
 	}
 	
-	public Map<String, IPathAgent> getAllPathAgents(){
+	public Map<String, IPathAgent> getAllPathAgents() {
 		return  (Map<String, IPathAgent>)(Object)m_oPosition.getAllPaths();
 	}
 	// endregion

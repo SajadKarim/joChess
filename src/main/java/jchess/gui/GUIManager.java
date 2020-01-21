@@ -118,7 +118,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	public void onNewGameLaunchRequest(INewGameModel oData) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Request to launch a fresh game.", "onNewGameLaunchRequest", "GUIManager");
 
-    	showGameWindow( oData);
+    	showGameWindow (oData);
 	}
 	
 	/**

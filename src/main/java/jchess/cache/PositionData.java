@@ -115,12 +115,12 @@ public final class PositionData implements IPositionData {
 	
 	public void linkPaths(String stPathA, String stPathB) {
 		IPath oPathA = m_mpPath.get(stPathA);
-		if(oPathA == null) {
+		if (oPathA == null) {
 			return;
 		}
 		
 		IPath oPathB = m_mpPath.get(stPathB);
-		if(oPathB == null) {
+		if (oPathB == null) {
 			return;
 		}
 		

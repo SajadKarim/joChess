@@ -58,8 +58,8 @@ public class ThreePlayersHexBoardRuleEngine extends ExtendedRuleEngine {
 
 		IBoardActivity oActivity = super.tryExecuteRule(oBoard, oMoveCandidate);
 		
-		if( oActivity == null) {
-			switch( oMoveCandidate.getRule().getRuleType()) {
+		if (oActivity == null) {
+			switch (oMoveCandidate.getRule().getRuleType()) {
 				case CUSTOM: {
 					oActivity = tryExecuteCustomRules(oBoard, oMoveCandidate);
 				}
@@ -83,12 +83,12 @@ public class ThreePlayersHexBoardRuleEngine extends ExtendedRuleEngine {
 
 		IBoardActivity oMove = null;
 		 
-		switch( oMoveCandidate.getRule().getCustomName()) {
-		case "BOMB[CANNON]":
-			oMove = CannonRulesProcessor.tryExecuteBombAndPromotionRule(oBoard, oMoveCandidate);
-			break;
-		default:
-			break;
+		switch (oMoveCandidate.getRule().getCustomName()) {
+			case "BOMB[CANNON]":
+				oMove = CannonRulesProcessor.tryExecuteBombAndPromotionRule(oBoard, oMoveCandidate);
+				break;
+			default:
+				break;
 		}
 		
 		return oMove;

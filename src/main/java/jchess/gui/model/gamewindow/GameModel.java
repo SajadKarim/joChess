@@ -96,7 +96,7 @@ public final class GameModel implements IGameModel, IBoardModel, IClockModel, IP
 	}
 	//endregion
 	
-	public Map<String, IPlayerAgent > getAllPlayerAgents() {
+	public Map<String, IPlayerAgent> getAllPlayerAgents() {
 		return (Map<String, IPlayerAgent>)(Object)m_oBoard.getAllPlayers();
 	}
 	

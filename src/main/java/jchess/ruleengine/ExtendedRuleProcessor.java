@@ -44,19 +44,19 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 
 		super.tryEvaluateAllRules(oBoard, oPiece, mpCandidatePositions);
 
-		switch(oPiece.getName()) {
-		case "PawnWhite":
-		case "PawnBlack":
-		case "PawnRed": {
-			PawnRulesProcessor.tryPawnPromotionRule(oBoard, oPiece, mpCandidatePositions);
-
-			PawnRulesProcessor.tryPawnFirstMoveException(this, oBoard, oPiece, mpCandidatePositions);
-
-			PawnRulesProcessor.tryPawnEnPassantRule(oBoard, oPiece, mpCandidatePositions);
-		}
-			break;
-		default:
-			break;
+		switch (oPiece.getName()) {
+			case "PawnWhite":
+			case "PawnBlack":
+			case "PawnRed": {
+				PawnRulesProcessor.tryPawnPromotionRule(oBoard, oPiece, mpCandidatePositions);
+	
+				PawnRulesProcessor.tryPawnFirstMoveException(this, oBoard, oPiece, mpCandidatePositions);
+	
+				PawnRulesProcessor.tryPawnEnPassantRule(oBoard, oPiece, mpCandidatePositions);
+			}
+				break;
+			default:
+				break;
 		}
 		
     }
@@ -77,15 +77,15 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 
 		super.checkForPositionMoveCandidacyAndContinuity(oPlayer, oRule, oCandidacyPosition, bIsValidMode, bCanContinue);
 
-		switch(oRule.getRuleType()) {
+		switch (oRule.getRuleType()) {
 			case CUSTOM: {
-				switch(oRule.getCustomName()) {
+				switch (oRule.getCustomName()) {
 					case "MOVE_TRANSIENT[PAWN_FIRST_MOVE_EXCEPTION]":
 						bIsValidMode.set(false);
 						bCanContinue.set(true);
 					break;
-					case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]":{
-						if( oCandidacyPosition.getPiece() != null) {
+					case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]": {
+						if (oCandidacyPosition.getPiece() != null) {
 							bIsValidMode.set(false);
 							bCanContinue.set(false);
 						} else {
@@ -94,7 +94,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 						}
 					}
 					break;
-					case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":{
+					case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]": {
 						bIsValidMode.set(true);
 						bCanContinue.set(false);
 					}

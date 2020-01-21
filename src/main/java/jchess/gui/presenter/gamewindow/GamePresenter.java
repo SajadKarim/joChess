@@ -28,7 +28,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public final class GamePresenter extends AbstractModule implements IGamePresenter{
+public final class GamePresenter extends AbstractModule implements IGamePresenter {
     private IGame m_oGame;
     private final IGameView m_oView;
     private final IGameModel m_oModel;

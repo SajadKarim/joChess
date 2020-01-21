@@ -46,7 +46,7 @@
     <!-- Excludes all 'module-info.java' files              -->
     <!-- See https://checkstyle.org/config_filefilters.html -->
     <module name="BeforeExecutionExclusionFileFilter">
-        <property name="fileNamePattern" value="(JChessView|JChessTabbedPane|ThemeChooseWindow|JChessAboutBox|NewLocalGameView|PlayerDetailsEntryView).java"/>
+        <property name="fileNamePattern" value="(JChessView|JChessTabbedPane|ThemeChooseWindow|JChessAboutBox|NewLocalGameView|PlayerDetailsEntryView|PawnPromotionDialogView|BoardXMLDeserializer).java"/>
     </module>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->

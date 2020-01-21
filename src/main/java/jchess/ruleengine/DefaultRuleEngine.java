@@ -6,7 +6,11 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 
-import jchess.common.*;
+import jchess.common.IBoardActivity;
+import jchess.common.IBoardAgent;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
+import jchess.common.IPositionAgent;
 import jchess.gamelogic.BoardActivity;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
@@ -21,7 +25,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class DefaultRuleEngine implements IRuleEngine{
+public class DefaultRuleEngine implements IRuleEngine {
 	protected IRuleProcessor m_oRuleProcessor;
 	protected IGUIHandle m_oGUIHandler;
 	protected IAppLogger m_oLogger;
@@ -74,10 +78,11 @@ public class DefaultRuleEngine implements IRuleEngine{
 
 		IBoardActivity oActivity = null;
 		
-		switch( oMoveCandidate.getRule().getRuleType()) {
-			case MOVE:{
-				if( oMoveCandidate.getCandidatePosition().getPiece() != null)
+		switch (oMoveCandidate.getRule().getRuleType()) {
+			case MOVE: {
+				if (oMoveCandidate.getCandidatePosition().getPiece() != null) {
 					break;
+				}
 
 				oActivity = new BoardActivity(oMoveCandidate);
 				
@@ -93,13 +98,13 @@ public class DefaultRuleEngine implements IRuleEngine{
 				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
 				
 				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-				oActivity.addPostMoveEntry(oCurrentPosition, null );
+				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
+				oActivity.addPostMoveEntry(oCurrentPosition, null);
 				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
 				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 			}
-				break;
-			case MOVE_AND_CAPTURE:{
+			break;
+			case MOVE_AND_CAPTURE: {
 				oActivity = new BoardActivity(oMoveCandidate);
 
 				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
@@ -114,13 +119,13 @@ public class DefaultRuleEngine implements IRuleEngine{
 				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
 				
 				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-				oActivity.addPostMoveEntry(oCurrentPosition, null );
+				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
+				oActivity.addPostMoveEntry(oCurrentPosition, null);
 				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
 				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 			}
-				break;
-			case MOVE_IFF_CAPTURE_POSSIBLE:{
+			break;
+			case MOVE_IFF_CAPTURE_POSSIBLE: {
 				oActivity = new BoardActivity(oMoveCandidate);
 
 				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
@@ -135,23 +140,24 @@ public class DefaultRuleEngine implements IRuleEngine{
 				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
 				
 				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-				oActivity.addPostMoveEntry(oCurrentPosition, null );
+				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
+				oActivity.addPostMoveEntry(oCurrentPosition, null);
 				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
 				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 			}
 				break;
 			case MOVE_TRANSIENT:{
 			}
-				break;
+			break;
 			case CUSTOM:
 			default:
 				break;
 		}
 		
-		if( oActivity != null)
+		if (oActivity != null) {
 			m_oLogger.writeLog(LogLevel.INFO, String.format("Returning.. [%s].", oActivity.toLog()), "tryExecuteRule", "DefaultRuleEngine");
-
+		}
+		
 		return oActivity;
 	}
 }

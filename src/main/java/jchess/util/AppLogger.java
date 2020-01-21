@@ -33,15 +33,17 @@ public final class AppLogger implements IAppLogger {
 
 	public void writeLog(LogLevel enLogLevel, String stMessage) {
 		switch(enLogLevel) {
-		case INFO:
-			m_oLogger.info(stMessage);
-			break;
-		case ERROR:
-			m_oLogger.error(stMessage);
-			break;
-		case DETAILED:
-			m_oLogger.info(stMessage);
-			break;
+			case INFO:
+				m_oLogger.info(stMessage);
+				break;
+			case ERROR:
+				m_oLogger.error(stMessage);
+				break;
+			case DETAILED:
+				m_oLogger.info(stMessage);
+				break;
+			default:
+				break;
 		}
 	}
 }

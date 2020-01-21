@@ -31,8 +31,8 @@ import jchess.util.LogLevel;
 
 public final class BoardView extends JPanel implements IBoardView {
 	private IBoardModel m_oData;
-	private Dimension m_oDimension;
 	private IAppLogger m_oLogger;
+	private Dimension m_oDimension;
 	
 	@Inject
 	public BoardView(final IBoardModel oData, IAppLogger oLogger) {
@@ -92,7 +92,7 @@ public final class BoardView extends JPanel implements IBoardView {
 	        
 	    	oGraphics.setClip(oPolygon);
 	    	oGraphics.drawImage(oResizedImage, (int)oPolygon.getBounds2D().getMinX(), (int)oPolygon.getBounds2D().getMinY(), this);
-        } catch(NullPointerException exc) {
+        } catch (NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
 	}
@@ -108,7 +108,7 @@ public final class BoardView extends JPanel implements IBoardView {
 			Polygon oPolygon = ((IPolygon)oPosition.getShape()).getPolygon();
         	
 			oGraphics.setClip(oPolygon);
-			oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX()-20, (int)oPolygon.getBounds2D().getCenterY()-20, this);
+			oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX() - 20, (int)oPolygon.getBounds2D().getCenterY() - 20, this);
         } catch(NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
@@ -123,8 +123,8 @@ public final class BoardView extends JPanel implements IBoardView {
         try {
         	oGraphics.setClip(oPolygon);
             oGraphics.drawImage(oPieceImage, 
-            		(int)oPolygon.getBounds2D().getCenterX()-30, 
-            		(int)oPolygon.getBounds2D().getCenterY()-30, 
+            		(int)oPolygon.getBounds2D().getCenterX() - 30, 
+            		(int)oPolygon.getBounds2D().getCenterY() - 30, 
             		this);
         } catch (java.lang.NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
