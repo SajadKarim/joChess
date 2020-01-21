@@ -215,34 +215,34 @@ public final class Game implements IGame, ITimerListener {
 	public void checkStalemate() {
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating check for Stalemate.", "checkStalemate", "Game");
 		
-		Boolean bstalemate = true;
+		Boolean bStalemate = true;
 		IBoardAgent oCurrentBoard =  this.m_oGameModel.getBoard();
 		IPlayerAgent oCurrentPlayer = this.m_oGameState.getActivePlayer();
-		int icounter1 =0;
-		int icounter2=0;
+		int nCountNoOfPieces =0;
+		int nCountPiecesTrapped=0;
 		for(Map.Entry<String,IPositionAgent> oPositionPiece : oCurrentBoard.getAllPositionAgents().entrySet()) {
 			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
 			if(oRandomPiece != null && oRandomPiece.getPlayer()==oCurrentPlayer)
 			{	
-				icounter1+=1;
+				nCountNoOfPieces+=1;
 				if(oRandomPiece.getPieceData().getName().startsWith("King")) {
 					if(tryCheckRule()) {
-						bstalemate = false;
+						bStalemate = false;
 					}	
 				}
 				Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
 				if(mpCandidateMovePosition.isEmpty()) {
-					icounter2+=1;
+					nCountPiecesTrapped+=1;
 				}
 
 			}
 		}
 		
-		if(icounter1==icounter2 && bstalemate) {
+		if(nCountNoOfPieces==nCountPiecesTrapped && bStalemate) {
 			m_oLogger.writeLog(LogLevel.INFO, "Stalemate: Match is a draw.", "checkStalemate", "Game");
 			int confirmDialog = JOptionPane.showConfirmDialog(null, "Match is a draw", "StaleMate", JOptionPane.DEFAULT_OPTION);
 			System.out.println(confirmDialog);
-		}		
+		}				
 	}
 	
 	/**
