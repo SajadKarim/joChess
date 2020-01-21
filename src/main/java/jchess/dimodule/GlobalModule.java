@@ -27,7 +27,7 @@ import jchess.util.IAppLogger;
  * @since	7 Dec 2019
  */
 
-public class GlobalModule extends AbstractModule {	
+public final class GlobalModule extends AbstractModule {	
 	@Override 
 	protected void configure() {
 		bind(IDIManager.class).to(DIManager.class).in(Singleton.class);

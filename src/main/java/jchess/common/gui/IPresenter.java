@@ -13,7 +13,7 @@ import org.jdesktop.application.View;
  * @since	7 Dec 2019
  */
 
-public interface IPresenter extends IViewClosedListener{
+public interface IPresenter extends IViewClosedListener {
     public void init();
     public void showView();
     public View tryGetJDesktopView();

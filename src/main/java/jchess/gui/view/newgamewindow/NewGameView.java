@@ -21,7 +21,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class NewGameView extends JDialog implements INewGameView, INewGameListener {
+public final class NewGameView extends JDialog implements INewGameView, INewGameListener {
     private INewGameModel m_oData;
     private INewLocalGameView m_NewLocalGameView;
     private javax.swing.JTabbedPane m_oJTabbedPanel;

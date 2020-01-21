@@ -21,9 +21,10 @@ import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 /**
- * This class provides functionality to process all the basic rules (defined in XML).
- * It evaluates the possible move candidates using the Rules acceptable in XML.
- * It also facilitate in executing the Rules.
+ * This class provides functionality to process all the basic rules that can be provided in XML.
+ * It evaluates the pieces and with the help of the rules defined against them, it finds out all the possible move 
+ * candidates the piece can perform.
+ * It also facilitates the game engine in the execution of the rules.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019
@@ -34,7 +35,8 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	
 	/**
 	 * Constructor for DefaultRuleProcessor.
-	 * @param oLogger
+	 * 
+	 * @param IAppLogger
 	 */
 	public DefaultRuleProcessor(IAppLogger oLogger) {
 		m_oLogger = oLogger;
@@ -43,7 +45,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	}
 	
 	/**
-	 * This method tries to find all the possible candidate moves that the selected Piece can make.
+	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
+	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
 	 */
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "DefaultRuleProcessor");
@@ -74,12 +81,21 @@ public class DefaultRuleProcessor implements IRuleProcessor {
     }
 
 	/**
-	 * A Rule can manoeuvre in two way therefore this method makes respective calls in this method.
+	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
+	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
+	 * A Rule can manoeuvre in two ways therefore this method makes respective calls in this method.
+	 * 
+	 * @param IPieceAgent
+	 * @param IPositionAgent
+	 * @param IPlayerAgent
+	 * @param Queue<RuleProcessorData>
+	 * @param Map<String, IMoveCandidate>
 	 */
-	public void tryFindPossibleCandidateMovePositions(IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {		
+	public void tryFindPossibleCandidateMovePositions(IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finding candidate move positions.", "tryFindPossibleCandidateMovePositions", "DefaultRuleProcessor");
 
 		RuleProcessorData oData = null;		
+
 		while( (oData = qData.poll()) != null) {
 			// The underlying Rule behind this move (operation).
 			IRuleAgent oCurrentRule = oData.getRule();
@@ -102,9 +118,9 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	}
 	
 	/**
-	 * This method follows Blinker (Horse Blinkers) methodology to process any Rule.
-	 * 
-	 * Blinker Strategy:
+	 * This method follows Blinker (Horse Blinkers) methodology to make movements. It follows the straight path and does not support left
+	 * or right manoeuvres. It requires the last two positions (current and last positions) to find out the next opposite position. 
+	 * If the last position is not known then it first moves to every linked position and from their it takes straight path in each direction.
 	 * 
 	 * |A1|A2|A3|A4|A5|A....
 	 * |B1|B2|B3|B4|B5|B....
@@ -112,26 +128,43 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * |D1|D2|D3|D4|D5|D....
 	 * |....................
 	 * 
-	 * Consider above matrix and cell [C3].
-	 * Cell C3 is surrounded by 8 cells; cells that are at the following locations N,W,E,S,NE,NW,SE,SW.
-	 * All the attached locations (directions) to C3 are stored in the form of Paths. (Please refer XML for details).
+	 * Fig 3: 2-Players chess board.
 	 * 
-	 *  NW	N	NE
-	 * 	W		E
-	 *  SW	S	WE
-	 *  
-	 * Scenario#1: Traversing to NE direction.
-	 * Considering the start pointer is set to C3's SW location. 
-	 * [Summary]: Blinker strategy looks in two directions in parallel and if it reaches the same points in both the direction it ends the search and returns the 
-	 * position associated to that point/path.
-	 * [Detail]: Blinker strategy launches two threads (or code flows) that keeps looking for the next available path until they reach the 
-	 * same path where they initiated from or reaches a dead end.
-	 * Eg. (Considering above example) One code flow starts looking in the direction that leads to 'W', and the other in the direction the leads to 'S'.
-	 * After every iteration Blinker strategy compares the end-points both the directions reaches and if they met the same point it ends the search
-	 * operation and return the position attached to that point/path and if required, repeats the same process on the next position.
+	 * Consider Fig 3 (2 Player chess board) and cell “C3” is the active position, and the game engine has to find all the possible moves using
+	 * Blinker manoeuvre strategy.
 	 * 
+	 * Cell “C3” is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, B4 and they are in direction West, SouthWest, South, 
+	 * SouthEast, East, NorthEast, North, NorthWest respectively. All this information is stored in elements “Directions” and “Connections”
+	 * under the element “Position” (Refer to positions section of XML for details).
+	 * 
+	 * NW	N	NE
+	 * W	○	E
+	 * SW	S	WE
+	 * 
+	 * Table 1: Illustration for directions surrounding by a typical position ‘○’.
+	 * 
+	 * Example Scenario #1: Traversing towards NE direction.
+	 * Assumption: Current position is ‘○’ and last position is the position linked to “SW”.
+	 * In the above given scenario and assumption, Blinker strategy starts its search from “SW” and looks in two directions in parallel, 
+	 * “W” and “S” directions, until both the search paths leads to the same position, or any of them reaches a dead end. 
+	 * 
+	 * For instance, following are the search paths that above scenarios would produce:
+	 * Search path 1: SW	W	NW	N	NE
+	 * Search path 2: SW	S	WE	E	NE
+	 * As both the paths meets the same position at the end, the strategy ends its search and returns the position attached to “NE”. 
+	 * It would have return NULL position if search paths would not have reached the same positions.
+	 * 
+	 *
+	 * @param IRuleAgent
+	 * @param IPositionAgent
+	 * @param IPositionAgent
+	 * @param IPieceAgent
+	 * @param IPositionAgent
+	 * @param IPlayerAgent
+	 * @param Queue<RuleProcessorData>
+	 * @param Map<String, IMoveCandidate> 
 	 */
-	void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
+	protected void tryFindCandidateMovesForBlinkerStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForBlinkerStrategy", "DefaultRuleProcessor");
 
 		List<IPositionAgent> lstPosition = null;
@@ -197,9 +230,9 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	}
 	
 	/**
-	 * This method only uses File and Rank information to process any Rule.
 	 * 
-	 * File & Rule Strategy:
+	 * This method uses File and Rank information to make movements. It can move towards any direction at any stage during the
+	 *  processing of the rule. Parameters File and Rank of the rule assists this strategy in manoeuvring through positions.
 	 * 
 	 * |A1|A2|A3|A4|A5|A....
 	 * |B1|B2|B3|B4|B5|B....
@@ -207,27 +240,44 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * |D1|D2|D3|D4|D5|D....
 	 * |....................
 	 * 
-	 * The numbers mentioned in the above sample board represents File and Rank,
-	 * 'A', 'B', 'C', .... etc represent File
-	 * and similarly, '1', '2','3',..... etc represent Rank
+	 * Fig 3: 2-Players chess board.
 	 * 
 	 * 
-	 * Consider above matrix and cell [C3].
-	 * Cell C3 is surrounded by 8 cells; cells that are at the following locations N,W,E,S,NE,NW,SE,SW.
-	 * All the attached locations (directions) to C3 are stored in the form of Paths. (Please refer XML for details).
+	 * Consider Fig 3 (2 Player chess board) and cell “C3” is the active position, and the game engine has to find all the possible
+	 *  moves using File & Rank manoeuvre strategy.
+	 * Cell “C3” is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, and B4. All this information is stored in elements “Directions”
+	 *  and “Connections” under the element “Position” (Refer to positions section of XML for details).
 	 * 
-	 *  NW	N	NE
-	 * 	W		E
-	 *  SW	S	WE
-	 *  
-	 * Scenario#1: Moving to B4 cell.
-	 * From C3 to B4 requires a decrease in File and an increase in Rank.
-	 * In XML, increase and decrease in File and Rank is defined using FORWARD and BACKWARD.
+	 * Example Scenario #1: Move to position “D4”.
+	 * Assumption: Position “D4” is one File and one Rank ahead the current position, therefore, parameters File and Rank should have
+	 * value “FORWARD” assigned.
+	 * In the above given scenario, the strategy starts its search by traversing all the attached positions and comparing their File and Ranks.
+	 * The position “D4” is one File and one Rank above than the current position - and simply it would compare all the linked positions and
+	 * stops its search when it comes across the condition (where both File and Rank have greater values than the current position). 
 	 * 
-	 * Using above technique, any (even complex) manouevres can be made easily.
+	 * Example Scenario #2: Move to position “E4”.
+	 * In the above given scenario, there are numerous paths that can be provided to reach the desired position. Some are;
+	 * C3	->	D4	->	E4
+	 * C3	->	D3	->	E3	->	E4
+	 * C3	->	C4	->	D4	->	E4
+	 * The strategy starts its search by traversing all the attached positions and comparing their File and Ranks. Depending on the rule
+	 * strategy looks for desired position and repeats its search until it reaches the final position.
+	 * For instance if the second path is mentioned then it would first proceed in the direction twice when the Rank is same and File is
+	 * greater than the current position, and lastly it would proceed when File is same and Rank is greater.
 	 * 
+	 * for more details, visit https://docs.google.com/document/d/1KiicUFyHlNJx7MD8-wBBwc9jcpXSSnzioZWuMbWXLnU/edit
+	 *
+	 *
+	 * @param IRuleAgent
+	 * @param IPositionAgent
+	 * @param IPositionAgent
+	 * @param IPieceAgent
+	 * @param IPositionAgent
+	 * @param IPlayerAgent
+	 * @param Queue<RuleProcessorData>
+	 * @param Map<String, IMoveCandidate> 
 	 */
-	void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
+	protected void tryFindCandidateMovesForFileAndRankStrategy(IRuleAgent oCurrentRule, IPositionAgent oCurrentPosition, IPositionAgent oLastPosition, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Finding candidate move positions.", "tryFindCandidateMovesForFileAndRankStrategy", "DefaultRuleProcessor");
 
 		for( Map.Entry<String, IPathAgent> entry: oCurrentPosition.getAllPathAgents().entrySet()) {
@@ -272,8 +322,14 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	}
 
 	/**
-	 * This method finds out whether the proivded Position can be a candidate to make a move, also it (with the help of Rule)
-	 * deduces whether algorithm should proceed with the Position to find out the next possible candidate moves.
+	 * This method checks whether the position meets the requirements defined in the rule to be a possible move candidate, and it
+	 * also finds out whether to seize the search process or not.
+	 * 
+	 * @param IPlayerAgent
+	 * @param IRule
+	 * @param IPositionAgent
+	 * @param AtomicReference<Boolean>
+	 * @param AtomicReference<Boolean>
 	 */
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Verifying if position can be a candidate move and can continue as the next position.", "checkForPositionMoveCandidacyAndContinuity", "DefaultRuleProcessor");
@@ -318,6 +374,8 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 					bIsValidMode.set(true);
 					bCanContinue.set(false);
 				}
+				break;
+			default:
 				break;
 		}
 	}

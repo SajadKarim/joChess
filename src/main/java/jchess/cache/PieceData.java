@@ -16,14 +16,14 @@ import jchess.common.IRule;
  * @since	7 Dec 2019
  */
 
-public class PieceData implements IPieceData {
-	String m_stName;
-	String m_stImagePath;
-	String m_stFamily;
-	Map<String, IRule > m_mpRule;
+public final class PieceData implements IPieceData {
+	private String m_stName;
+	private String m_stImagePath;
+	private String m_stFamily;
+	private Map<String, IRule> m_mpRule;
 	
 	public PieceData() {
-		m_mpRule = new HashMap<String, IRule >();
+		m_mpRule = new HashMap<String, IRule>();
 	}
 	
 	public void init() {		
@@ -38,7 +38,7 @@ public class PieceData implements IPieceData {
 		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
 		m_mpRule = new HashMap<String, IRule>();
 		for(Map.Entry<String, IRule> it : oPiece.m_mpRule.entrySet()) {
-			m_mpRule.put( it.getKey(), it.getValue().clone());
+			m_mpRule.put(it.getKey(), it.getValue().clone());
 		}
 	}
 	
@@ -60,8 +60,8 @@ public class PieceData implements IPieceData {
 	public void setImagePath(String stImagePath) {
 		m_stImagePath = stImagePath;
 	}
-	public List<IRule> getAllRules(){
-		return new ArrayList<IRule >(m_mpRule.values());
+	public List<IRule> getAllRules() {
+		return new ArrayList<IRule>(m_mpRule.values());
 	}
 	
 	public PieceData getPieceData() {
@@ -70,6 +70,10 @@ public class PieceData implements IPieceData {
 
 	public void addRule(IRule oRule) {
 		m_mpRule.put(oRule.getName(), oRule);
+	}
+
+	public IRule getRule(String stRuleName) {
+		return m_mpRule.get(stRuleName);
 	}
 	// endregion
 	

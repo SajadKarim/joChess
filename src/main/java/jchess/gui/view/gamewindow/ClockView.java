@@ -22,7 +22,7 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class ClockView extends JPanel implements IClockView {
+public final class ClockView extends JPanel implements IClockView {
 	private IClockModel m_oData;
 	private Dimension m_oDimension;
 	private IAppLogger m_oLogger;
@@ -43,8 +43,7 @@ public class ClockView extends JPanel implements IClockView {
     	m_oDimension = oDimension;	
     }
     
-    void draw(Graphics oGraphics)
-    {
+    void draw(Graphics oGraphics) {
          oGraphics.setColor(Color.BLACK);
          oGraphics.fillRect(0, 0, m_oDimension.width, m_oDimension.height);
          
@@ -55,8 +54,7 @@ public class ClockView extends JPanel implements IClockView {
     }
 
     @Override
-    public void paintComponent(Graphics oGraphics)
-    {
+    public void paintComponent(Graphics oGraphics) {
     	draw(oGraphics);
     }
 
@@ -68,7 +66,6 @@ public class ClockView extends JPanel implements IClockView {
 	@Override
 	public void refresh() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

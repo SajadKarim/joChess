@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface IPieceAgent extends IPiece {
 	public List<IRuleAgent> getRules();
+	public IRule getRule(String stRuleName);
 	public IPlayerAgent getPlayer();
 	public void setPlayer(IPlayerAgent oPlayer);
 	public int getRuns();
@@ -26,4 +27,8 @@ public interface IPieceAgent extends IPiece {
 	public void enqueuePositionHistory(IPositionAgent oPosition);
 	public IPositionAgent dequeuePositionHistory();
 	public int getPositionHistoryCount();
+	
+	public Object getCustomData();
+	public void setCustomData(Object oCustomData);	
+	public void updateImage(String stImageFileName);
 }

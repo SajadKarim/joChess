@@ -45,7 +45,10 @@ class DefaultRuleEngineTest {
 	void setUp() throws Exception {
 		IAppLogger oLogger = new AppLogger();
 		ICacheManager oCacheManager = new CacheManager(oLogger);
-		
+
+    	String path = DefaultRuleEngineTest.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+
+
 		oCacheManager.loadBoardFromFile("DefaultRuleEngineTest", "2PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleEngineTest");
 

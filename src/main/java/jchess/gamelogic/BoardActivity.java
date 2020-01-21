@@ -8,7 +8,6 @@ import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
 
 /**
  * This is a data class that stores board activity that is generated against a move.
@@ -17,7 +16,7 @@ import jchess.common.IRuleAgent;
  * @since	29th Dec 2019
  */
 
-public class BoardActivity implements IBoardActivity {
+public final class BoardActivity implements IBoardActivity {
 	private String m_stToString;
 	private IPlayerAgent m_oPlayer;
 	private Map<IPositionAgent, IPieceAgent> m_mpDetailsBeforeMove;
@@ -33,19 +32,23 @@ public class BoardActivity implements IBoardActivity {
 		m_mpDetailsAfterMove = new HashMap<IPositionAgent, IPieceAgent>();
 	}
 	
-	public Map<IPositionAgent, IPieceAgent> getPriorMoveDetails(){
+	public IMoveCandidate getMoveCandidate() {
+		return m_oMoveCandidate;
+	}
+	
+	public Map<IPositionAgent, IPieceAgent> getPriorMoveDetails() {
 		return m_mpDetailsBeforeMove;
 	}
 	
-	public void addPriorMoveEntry(IPositionAgent oPosition, IPieceAgent oPiece){
+	public void addPriorMoveEntry(IPositionAgent oPosition, IPieceAgent oPiece) {
 		m_mpDetailsBeforeMove.put(oPosition, oPiece);
 	}
 	
-	public Map<IPositionAgent, IPieceAgent> getPostMoveDetails(){
+	public Map<IPositionAgent, IPieceAgent> getPostMoveDetails() {
 		return m_mpDetailsAfterMove;
 	}
 	
-	public void addPostMoveEntry(IPositionAgent oPosition, IPieceAgent oPiece){
+	public void addPostMoveEntry(IPositionAgent oPosition, IPieceAgent oPiece) {
 		m_mpDetailsAfterMove.put(oPosition, oPiece);
 	}
 
@@ -59,8 +62,8 @@ public class BoardActivity implements IBoardActivity {
 	
 	@Override
 	public String toString() {
-		if( m_stToString.isEmpty()) {
-		switch( m_oMoveCandidate.getRule().getRuleType()) {
+		if(m_stToString.isEmpty()) {
+		switch(m_oMoveCandidate.getRule().getRuleType()) {
 			case MOVE:
 				m_stToString 
 					= m_oPlayer.getName() 
@@ -87,8 +90,8 @@ public class BoardActivity implements IBoardActivity {
 				break;
 			case MOVE_TRANSIENT:
 				break;
-			case CUSTOM:{
-				switch( m_oMoveCandidate.getRule().getCustomName()) {
+			case CUSTOM: {	
+				switch(m_oMoveCandidate.getRule().getCustomName()) {
 				case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
 					m_stToString 
 						= m_oPlayer.getName() 

@@ -14,7 +14,7 @@ import jchess.common.IPieceAgent;
  * @since	7 Dec 2019
  */
 
-public class PawnPromotionModel implements IPawnPromotionModel {
+public final class PawnPromotionModel implements IPawnPromotionModel {
 	IPieceAgent m_oSelectedPiece;
 	IPieceAgent m_oPieceToPromote;
 	private Map<String, IPieceAgent> m_mpPieces;

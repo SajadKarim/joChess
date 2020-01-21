@@ -16,5 +16,6 @@ public interface IPieceData extends IPiece {
 	public void setImagePath(String stImagePath);
 	public List<IRule> getAllRules();
 	public void addRule(IRule oRule);
+	public IRule getRule(String stRuleName);
 	public void setFamily(String stFamily);
 }

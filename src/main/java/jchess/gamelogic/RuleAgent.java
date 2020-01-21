@@ -24,7 +24,7 @@ import jchess.common.enumerator.RuleType;
  * @since	7 Dec 2019
  */
 
-public class RuleAgent implements IRuleAgent {
+public final class RuleAgent implements IRuleAgent {
 	private int m_nAge;
 	private IRuleData m_oRule;
 	private int m_nRepeatCount;
@@ -40,13 +40,13 @@ public class RuleAgent implements IRuleAgent {
 	RuleAgent(RuleAgent oRuleAgent) {
 		m_nAge = oRuleAgent.m_nAge;
 		m_nRepeatCount = oRuleAgent.m_nRepeatCount;
-		m_oRule = new RuleData( (RuleData)oRuleAgent.m_oRule);		
+		m_oRule = new RuleData((RuleData)oRuleAgent.m_oRule);		
 		m_qRules = new LinkedList<IRuleAgent>(oRuleAgent.m_qRules);
 		
 		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
 		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
 		m_qRules = new LinkedList<IRuleAgent>();
-		for(IRuleAgent oRule: oRuleAgent.m_qRules) {
+		for (IRuleAgent oRule: oRuleAgent.m_qRules) {
 			m_qRules.add(oRule.clone());
 		}
 	}
@@ -84,7 +84,7 @@ public class RuleAgent implements IRuleAgent {
 		return m_oRule.getRank();
 	}
 	
-	public List<IRule> getAllRules(){
+	public List<IRule> getAllRules() {
 		return m_oRule.getAllRules();
 	}
 	
@@ -99,7 +99,7 @@ public class RuleAgent implements IRuleAgent {
 	}
 	
 	public Boolean canProceedWithThisRule() {
-		if( m_oRule.getMaxRecurrenceCount() > 0 && ++m_nRepeatCount < m_oRule.getMaxRecurrenceCount()) {
+		if (m_oRule.getMaxRecurrenceCount() > 0 && ++m_nRepeatCount < m_oRule.getMaxRecurrenceCount()) {
 			return true;
 		}
 		
@@ -107,11 +107,12 @@ public class RuleAgent implements IRuleAgent {
 	}
 
 	public IRuleAgent getNextChildRule() {
-		if( m_qRules.size() <= 0)
+		if (m_qRules.size() <= 0) {
 			return null;
-
+		}
+		
 		IRule oRule = m_qRules.remove(); 
-		if( oRule != null) {
+		if (oRule != null) {
 			return (RuleAgent)(oRule);
 		}
 		
@@ -119,15 +120,16 @@ public class RuleAgent implements IRuleAgent {
 	}
 
 	public IRuleAgent getNextRule() {
-		if( m_oRule.getMaxRecurrenceCount() > 0 && ++m_nRepeatCount < m_oRule.getMaxRecurrenceCount()) {
+		if (m_oRule.getMaxRecurrenceCount() > 0 && ++m_nRepeatCount < m_oRule.getMaxRecurrenceCount()) {
 			return this;
 		}
 		
-		if( m_qRules.size() <= 0)
+		if (m_qRules.size() <= 0) {
 			return null;
+		}
 
 		IRule oRule = m_qRules.remove(); 
-		if( oRule != null) {
+		if (oRule != null) {
 			return (RuleAgent)(oRule);
 		}
 		
@@ -148,12 +150,15 @@ public class RuleAgent implements IRuleAgent {
 	private void init() {
 		m_nRepeatCount = 0;
 
-		if( m_oRule.getAllRules() == null)
+		if (m_oRule.getAllRules() == null) {
 			return;
+		}
 		
 		Iterator<IRule> it = m_oRule.getAllRules().iterator();
-    	while( it.hasNext()) {
-    		m_qRules.add((IRuleAgent)it.next());
+    	while (it.hasNext()) {
+    		IRuleAgent oChildRule = (IRuleAgent)it.next();
+    		oChildRule.reset();
+    		m_qRules.add(oChildRule);
     	}
 	}
 		

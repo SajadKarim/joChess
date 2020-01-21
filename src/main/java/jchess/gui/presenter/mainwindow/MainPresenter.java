@@ -17,7 +17,7 @@ import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 @Singleton
-public class MainPresenter implements IMainPresenter{
+public final class MainPresenter implements IMainPresenter {
 	private IJChessView m_oJChessView;
 	
 	private IMain m_oApplication;

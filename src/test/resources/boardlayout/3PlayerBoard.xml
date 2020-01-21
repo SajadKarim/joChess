@@ -1,4 +1,4 @@
-<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700" RuleEngine="ExtendedRuleEngine" RuleProcessor="ExtendedRuleProcessor">
+<Board Name="3PlayerBoard" BoardImage="chessboard_3players.png" ActiveCellImage="sel_square.png" MarkedCellImage="able_square.png" Width="808" Height="700" RuleEngine="ThreePlayersHexBoardRuleEngine" RuleProcessor="ThreePlayersHexBoardRuleProcessor">
   <ColourScheme>
     <Family Name="White" Color="White" />
     <Family Name="Black" Color="Black" />
@@ -3683,37 +3683,189 @@
     <Rule Name="Move_Diagonally_1" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Edgewise_*" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
     <Rule Name="Move_Diagonally_*" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="99" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
+    <Rule Name="Pawn_Move" Type="MOVE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="DIFFERENT"/>
     <Rule Name="Pawn_Jump" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1">
       <Rules>
         <Rule Name="Pawn_Jump_1" Type="MOVE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" Lifespan="1"/>
       </Rules>
     </Rule>
-    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="IGNORE" Rank="FORWARD" Family="SAME"/>
+    <Rule Name="Pawn_Capture" Type="MOVE_IFF_CAPTURE_POSSIBLE" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="IGNORE" Rank="FORWARD" Family="SAME"/>
     <Rule Name="Vertex_Traversal" Type="MOVE_AND_CAPTURE" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="SAME"/>
     <Rule Name="Edge_Traversal" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="BLINKER" MaxRecurrenceAllowed="10000" File="IGNORE" Rank="IGNORE" Family="IGNORE"/>
-    <Rule Name="Knight_Move_1" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="FORWARD" Family="SAME">
+    <Rule Name="Knight_Move_1" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="FORWARD" Family="SAME">
       <Rules>        
         <Rule Name="Knight_Move_1_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_1_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_2" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="FORWARD" Rank="FORWARD" Family="SAME">
+    <Rule Name="Knight_Move_2" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="FORWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_2_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_2_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_3" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="BACKWARD" Family="SAME">
+    <Rule Name="Knight_Move_3" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="BACKWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_3_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_3_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
-    <Rule Name="Knight_Move_4" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="BLINKER" MaxRecurrenceAllowed="1" File="FORWARD" Rank="BACKWARD" Family="SAME">
+    <Rule Name="Knight_Move_4" Type="MOVE_TRANSIENT" Direction="VERTEX" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="BACKWARD" Family="SAME">
       <Rules>
         <Rule Name="Knight_Move_4_1" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE"/>
         <Rule Name="Knight_Move_4_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_1_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_2" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_2_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_3" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_3_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonL_3_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_4" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_4_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="FORWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonL_4_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_5" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="FORWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_5_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"  CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_6" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="5" File="FORWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_6_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_7" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_7_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_8" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_8_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_9" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_9_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonL_9_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_10" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_10_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonL_10_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_11" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="FORWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_11_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]" />
+      </Rules>
+    </Rule>
+    <Rule Name="CannonL_12" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="4" File="FORWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonL_12_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_1_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_2" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_2_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_3" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_3_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonR_3_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_4" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_4_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="BACKWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonR_4_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_5" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="BACKWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_5_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]" />
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_6" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="5" File="BACKWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_6_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_7" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_7_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_8" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_8_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_9" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_9_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonR_9_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_10" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_10_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE">
+          <Rules>
+            <Rule Name="CannonR_10_2" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
+          </Rules>
+        </Rule>
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_11" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="2" File="BACKWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_11_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="BACKWARD" Rank="SAME" Family="IGNORE" CustomRuleName="BOMB[CANNON]" />
+      </Rules>
+    </Rule>
+    <Rule Name="CannonR_12" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="4" File="BACKWARD" Rank="SAME" Family="IGNORE">
+      <Rules>
+        <Rule Name="CannonR_12_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
       </Rules>
     </Rule>
   </Rules>
@@ -3826,6 +3978,102 @@
         <Rule>Pawn_Capture</Rule>
       </AllowedMoves>
     </Piece>
+    <Piece Name="CannonWhiteR" Image="CannonR-W.png" Family="White">
+      <AllowedMoves>
+        <Rule>CannonR_1</Rule>
+        <Rule>CannonR_2</Rule>
+        <Rule>CannonR_3</Rule>
+        <Rule>CannonR_4</Rule>
+        <Rule>CannonR_5</Rule>
+        <Rule>CannonR_6</Rule>
+        <Rule>CannonR_7</Rule>
+        <Rule>CannonR_8</Rule>
+        <Rule>CannonR_9</Rule>
+        <Rule>CannonR_10</Rule>
+        <Rule>CannonR_11</Rule>
+        <Rule>CannonR_12</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="CannonWhiteL" Image="CannonL-W.png" Family="White">
+      <AllowedMoves>
+        <Rule>CannonL_1</Rule>
+        <Rule>CannonL_2</Rule>
+        <Rule>CannonL_3</Rule>
+        <Rule>CannonL_4</Rule>
+        <Rule>CannonL_5</Rule>
+        <Rule>CannonL_6</Rule>
+        <Rule>CannonL_7</Rule>
+        <Rule>CannonL_8</Rule>
+        <Rule>CannonL_9</Rule>
+        <Rule>CannonL_10</Rule>
+        <Rule>CannonL_11</Rule>
+        <Rule>CannonL_12</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="CannonBlackR" Image="CannonR-B.png" Family="Black">
+      <AllowedMoves>
+        <Rule>CannonR_1</Rule>
+        <Rule>CannonR_2</Rule>
+        <Rule>CannonR_3</Rule>
+        <Rule>CannonR_4</Rule>
+        <Rule>CannonR_5</Rule>
+        <Rule>CannonR_6</Rule>
+        <Rule>CannonR_7</Rule>
+        <Rule>CannonR_8</Rule>
+        <Rule>CannonR_9</Rule>
+        <Rule>CannonR_10</Rule>
+        <Rule>CannonR_11</Rule>
+        <Rule>CannonR_12</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="CannonBlackL" Image="CannonL-B.png" Family="Black">
+      <AllowedMoves>
+        <Rule>CannonL_1</Rule>
+        <Rule>CannonL_2</Rule>
+        <Rule>CannonL_3</Rule>
+        <Rule>CannonL_4</Rule>
+        <Rule>CannonL_5</Rule>
+        <Rule>CannonL_6</Rule>
+        <Rule>CannonL_7</Rule>
+        <Rule>CannonL_8</Rule>
+        <Rule>CannonL_9</Rule>
+        <Rule>CannonL_10</Rule>
+        <Rule>CannonL_11</Rule>
+        <Rule>CannonL_12</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="CannonRedR" Image="CannonR-R.png" Family="Red">
+      <AllowedMoves>
+        <Rule>CannonR_1</Rule>
+        <Rule>CannonR_2</Rule>
+        <Rule>CannonR_3</Rule>
+        <Rule>CannonR_4</Rule>
+        <Rule>CannonR_5</Rule>
+        <Rule>CannonR_6</Rule>
+        <Rule>CannonR_7</Rule>
+        <Rule>CannonR_8</Rule>
+        <Rule>CannonR_9</Rule>
+        <Rule>CannonR_10</Rule>
+        <Rule>CannonR_11</Rule>
+        <Rule>CannonR_12</Rule>
+      </AllowedMoves>
+    </Piece>
+    <Piece Name="CannonRedL" Image="CannonL-R.png" Family="Red">
+      <AllowedMoves>
+        <Rule>CannonL_1</Rule>
+        <Rule>CannonL_2</Rule>
+        <Rule>CannonL_3</Rule>
+        <Rule>CannonL_4</Rule>
+        <Rule>CannonL_5</Rule>
+        <Rule>CannonL_6</Rule>
+        <Rule>CannonL_7</Rule>
+        <Rule>CannonL_8</Rule>
+        <Rule>CannonL_9</Rule>
+        <Rule>CannonL_10</Rule>
+        <Rule>CannonL_11</Rule>
+        <Rule>CannonL_12</Rule>
+      </AllowedMoves>
+    </Piece>
   </Pieces>
   <Players>
     <Player Name="P1">
@@ -3838,14 +4086,14 @@
         <Piece Name="KnightWhite" Position="b1" />
         <Piece Name="RookWhite" Position="h1" />
         <Piece Name="RookWhite" Position="a1" />
-        <Piece Name="PawnWhite" Position="a2" />
+        <Piece Name="CannonWhiteL" Position="a2" />
         <Piece Name="PawnWhite" Position="b2" />
         <Piece Name="PawnWhite" Position="c2" />
         <Piece Name="PawnWhite" Position="d2" />
         <Piece Name="PawnWhite" Position="e2" />
         <Piece Name="PawnWhite" Position="f2" />
         <Piece Name="PawnWhite" Position="g2" />
-        <Piece Name="PawnWhite" Position="h2" />
+        <Piece Name="CannonWhiteR" Position="h2" />
       </Pieces>
       <BoardMapping>
       </BoardMapping>
@@ -3860,14 +4108,14 @@
         <Piece Name="KnightBlack" Position="b8" />
         <Piece Name="RookBlack" Position="l8" />
         <Piece Name="RookBlack" Position="a8" />
-        <Piece Name="PawnBlack" Position="a7" />
+        <Piece Name="CannonBlackR" Position="a7" />
         <Piece Name="PawnBlack" Position="b7" />
         <Piece Name="PawnBlack" Position="c7" />
         <Piece Name="PawnBlack" Position="d7" />
         <Piece Name="PawnBlack" Position="i7" />
         <Piece Name="PawnBlack" Position="j7" />
         <Piece Name="PawnBlack" Position="k7" />
-        <Piece Name="PawnBlack" Position="l7" />
+        <Piece Name="CannonBlackL" Position="l7" />
       </Pieces>
       <BoardMapping>
         <Map From="l" To="a" />
@@ -3910,11 +4158,11 @@
         <Piece Name="PawnRed" Position="e11" />
         <Piece Name="PawnRed" Position="f11" />
         <Piece Name="PawnRed" Position="g11" />
-        <Piece Name="PawnRed" Position="h11" />
+        <Piece Name="CannonRedL" Position="h11" />
         <Piece Name="PawnRed" Position="i11" />
         <Piece Name="PawnRed" Position="j11" />
         <Piece Name="PawnRed" Position="k11" />
-        <Piece Name="PawnRed" Position="l11" />
+        <Piece Name="CannonRedR" Position="l11" />
       </Pieces>
       <BoardMapping>
         <Map From="h" To="a" />

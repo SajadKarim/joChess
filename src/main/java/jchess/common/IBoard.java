@@ -49,7 +49,7 @@ public interface IBoard {
 	 * This method returns all the available IPosition objects.
 	 * @return Map of String, IPosition
 	 */
-	public Map<String, IPosition> getAllPositions() ;
+	public Map<String, IPosition> getAllPositions();
 	/**
 	 * Returns IPlayer against the value provided to it.
 	 * Method returns NULL if it does not find any value against the provided name.
@@ -62,7 +62,7 @@ public interface IBoard {
 	 * This method returns all the available IPlayer objects.
 	 * @return Map of String, IPlayer
 	 */
-	public Map<String, IPlayer > getAllPlayers();
+	public Map<String, IPlayer> getAllPlayers();
 	/**
 	 * Returns IRule against the value provided to it.
 	 * Method returns NULL if it does not find any value against the provided name.
@@ -83,12 +83,12 @@ public interface IBoard {
 	 * @param stName
 	 * @return IPiece
 	 */		
-	public IPiece getPiece(String stName);
+	public IPiece getUnlinkedPiece(String stName);
 	/**
 	 * This method returns all the available IPiece objects.
 	 * @return Map of String, IPiece
 	 */
-	public  Map<String, IPiece>  getAllPieces();
+	public  Map<String, IPiece>  getAllUnlinkedPieces();
 	/**
 	 * This method return the BoardData object.
 	 * @return IBoardData 

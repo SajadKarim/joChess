@@ -27,8 +27,8 @@ import jchess.service.StorageService;
  */
 
 @Singleton
-public class CacheManager implements ICacheManager{
-    private String BOARDLAYOUTS_DIRECTORY;
+public final class CacheManager implements ICacheManager {
+    private final static String BOARDLAYOUTS_DIRECTORY = getJarPath() + File.separator;
     
     private Map<String, BoardCache> m_mpBoardCache;
     private Map<String, Pair<String, Integer>> m_mpPlayerAllowedInBoard;
@@ -43,15 +43,27 @@ public class CacheManager implements ICacheManager{
     
     	m_oLogger.writeLog(LogLevel.INFO, "Instantiating CacheManager.", "CacheManager", "CacheManager");
 
-    	BOARDLAYOUTS_DIRECTORY = getClass().getClassLoader().getResource("boardlayout").getPath() + File.separator;
-
         init();
     } 
   
+    // TODO: move to utils class
+    static String getJarPath() {
+    	String path = CacheManager.class.getClassLoader().getResource("boardlayout").getPath();
+        //String path = CacheManager.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        path = path.replaceAll("[a-zA-Z0-9%!@#$%^\\-&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar[a-zA-Z0-9%!\\-@#$%^&*\\\\(\\\\)\\\\[\\\\]\\\\{\\\\}\\\\.\\\\,\\\\s]*/", "");
+        path = path.replaceAll("file:/", "");
+        int lastSlash = path.lastIndexOf(File.separator); 
+        if (path.length() - 1 == lastSlash) {
+            path = path.substring(0, lastSlash);
+        }
+        path = path.replace("%20", " ");
+        return path;
+    }
     
     public IBoardAgent getBoard(String stGameId) {
-    	if( m_mpBoardCache.containsKey(stGameId))
+    	if (m_mpBoardCache.containsKey(stGameId)) {
     		return m_mpBoardCache.get(stGameId).getBoard();
+    	}
     	
     	return null;
     }
@@ -61,11 +73,13 @@ public class CacheManager implements ICacheManager{
 	    	StorageService oStorageService = StorageService.create(StorageType.FBDB, m_oLogger);
 	    	m_mpPlayerAllowedInBoard = oStorageService.getPlayersInEachBoard(BOARDLAYOUTS_DIRECTORY);
 	
-	    	if( m_mpPlayerAllowedInBoard == null)
+	    	if (m_mpPlayerAllowedInBoard == null) {
 	    		return false;
+	    	}
     	} catch(java.lang.Exception ex) {
     		m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "init", "CacheManager");
     	}
+
     	return false;
     }
     
@@ -76,7 +90,7 @@ public class CacheManager implements ICacheManager{
     	m_mpBoardCache.put(stGameId, new BoardCache(stBoardName, oBoard));
     }
     
-    public SortedMap<String, Pair<String, Integer>> getPossiblePlayerInEachBoard(){
+    public SortedMap<String, Pair<String, Integer>> getPossiblePlayerInEachBoard() {
     	return new TreeMap<String, Pair<String, Integer>>(m_mpPlayerAllowedInBoard);
     }
 }

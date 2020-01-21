@@ -13,9 +13,9 @@ import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 /**
- * This class provides functionality to process all the basic rules (defined in XML).
- * It evaluates the possible move candidates using the Rules acceptable in XML.
- * It also facilitate in executing the Rules.
+ * This class provides functionality to process all the basic rules that can be provided in XML.
+ * It evaluates the pieces and with the help of the rules defined against them, it finds out all the possible move 
+ * candidates the piece can perform. It also facilitates the game engine in the execution of the rules.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019
@@ -28,9 +28,10 @@ public class DefaultRuleEngine implements IRuleEngine{
 	
 	/**
 	 * Constructor for DefaultRuleEngine.
-	 * @param oRuleProcessor
-	 * @param oGUIHandler
-	 * @param oLogger
+	 * 
+	 * @param IRuleProcessor
+	 * @param IGUIHandler
+	 * @param IAppLogger
 	 */
 	@Inject
 	public DefaultRuleEngine(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
@@ -42,8 +43,11 @@ public class DefaultRuleEngine implements IRuleEngine{
 	}
 		
 	/**
-	 * This method (with the help of provided IRuleProcessor) searches and returns all the possible moves-
-	 * that the selected piece can take.
+	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * return Map<String, IMoveCandidate>
 	 */
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating move candidates for selected position [%s].", oPiece.toLog()), "tryEvaluateAllRules", "DefaultRuleEngine");
@@ -59,9 +63,12 @@ public class DefaultRuleEngine implements IRuleEngine{
     }
 
 	/**
-	 * This method (with the help of provided IRuleProcessor) executes the provided move candidacy that IRuleEngine
-	 * provide in its initial iteration of finding the move candidates.
-	 */	
+	 * This method executes the rule provided with the move candidate.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * return IBoardActivity
+	 */
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Executing the rule for move candidate [%s].", oMoveCandidate.toLog()), "tryExecuteRule", "DefaultRuleEngine");
 

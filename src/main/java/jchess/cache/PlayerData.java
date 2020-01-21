@@ -31,22 +31,19 @@ import jchess.common.IPlayerData;
  * @since	7 Dec 2019
  */
 
-public class PlayerData implements IPlayerData{
-
-	public String m_stName;
-	public IBoardMapping m_oBoardMapping = null;
+public final class PlayerData implements IPlayerData {
+	private String m_stName;
+	private IBoardMapping m_oBoardMapping = null;
     
     public PlayerData() {    	
     	m_oBoardMapping = new BoardMapping();
     }
 
-    public void setName(String stName)
-    {
+    public void setName(String stName) {
         m_stName = stName;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return m_stName;
     }
 

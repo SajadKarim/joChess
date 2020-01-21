@@ -5,7 +5,10 @@ import com.google.inject.Injector;
 
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.gui.model.newgamewindow.NewGameModel;
-import jchess.gui.view.newgamewindow.*;
+import jchess.gui.view.newgamewindow.INewGameView;
+import jchess.gui.view.newgamewindow.INewLocalGameView;
+import jchess.gui.view.newgamewindow.NewGameView;
+import jchess.gui.view.newgamewindow.NewLocalGameView;
 
 /**
  * This class binds all the dependencies that are required for New-Game window.
@@ -15,7 +18,7 @@ import jchess.gui.view.newgamewindow.*;
  */
 
 public class NewGameWndModule extends AbstractModule {
-	Injector m_oGlobalInjector = null;
+	private Injector m_oGlobalInjector = null;
 	
 	public NewGameWndModule(Injector oGlobalInjector) {
 		m_oGlobalInjector = oGlobalInjector;

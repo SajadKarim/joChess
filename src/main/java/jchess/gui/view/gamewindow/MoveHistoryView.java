@@ -21,16 +21,14 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryView
-{
+public final class MoveHistoryView extends AbstractTableModel implements IMoveHistoryView {
     private DefaultTableModel tableModel;
     private JScrollPane scrollPane;
     private JTable table;
 	private IAppLogger m_oLogger;
 
 	@Inject
-    public MoveHistoryView(IAppLogger oLogger)
-    {
+    public MoveHistoryView(IAppLogger oLogger) {
         this.tableModel = new DefaultTableModel();
         this.table = new JTable(this.tableModel);
         this.scrollPane = new JScrollPane(this.table);
@@ -47,19 +45,17 @@ public class MoveHistoryView extends AbstractTableModel implements IMoveHistoryV
     }
 
     /** Method of adding new move
-     * @param move String which in is capt player move
      */
-    public void addMove(String stMoveString)
-    {
+    public void addMove(String stMoveString) {
     	String[] oRow = {stMoveString};
     	tableModel.addRow(oRow);
     }
 
-    public void removeMove(String stMoveString)
-    {
+    public void removeMove(String stMoveString) {
     	String stValueToCompare = (String)tableModel.getValueAt(tableModel.getRowCount()- 1, 0);
-    	if( stValueToCompare.equals(stMoveString))
+    	if (stValueToCompare.equals(stMoveString)) {
     		tableModel.removeRow(tableModel.getRowCount()- 1);
+    	}
     }
 
     @Override

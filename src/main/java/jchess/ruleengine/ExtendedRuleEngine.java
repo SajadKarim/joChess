@@ -13,10 +13,12 @@ import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
 /**
- * This class provides functionality to process extended (custom) rules.
- * It evaluates the possible move candidates using the Rules acceptable in XML.
- * It also facilitate in executing the Rules.
- * 
+ * This class extends DefaultRuleEngine class and provides extended functionalities, in addition to those provided by
+ * DefaultRuleEngine, that all common to all the boards.
+ * It process all the custom operations that are common to all the boards available in the system. It includes 
+ * finding out possible move candidates for custom pieces and the execution of these rules.
+ * It helps the engine in facilitating the rules that are not supported by XML.
+ *  
  * @author	Sajad Karim
  * @since	7 Dec 2019
  */
@@ -30,9 +32,13 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	}
 
 	/**
-	 * This method is an extension to one defined in DefaultRuleEngine.
-	 * It entertains custom Rules and adds further move candidates in addition to those that DefaultRuleEngine provides.
+	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * return Map<String, IMoveCandidate>
 	 */
+	@Override
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating rules attaches to the Position [%s].", oPiece.toLog()), "tryEvaluateAllRules", "ExtendedRuleEngine");
 
@@ -40,8 +46,13 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	}
 
 	/**
-	 * This method executes custom (user defined) rules.
-	 */	
+	 * This method executes the move candidate provided.
+	 * 
+	 * @param IBoardAgent
+	 * @param IMoveCandidate
+	 * return IBoardActivity
+	 */
+	@Override
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected move candidate.", "tryExecuteRule", "ExtendedRuleEngine");
 
@@ -60,6 +71,13 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 		return oActivity;
 	}
 
+	/**
+	 * This method executes the rule provided with the move candidate.
+	 * 
+	 * @param IBoardAgent
+	 * @param IMoveCandidate
+	 * return IBoardActivity
+	 */
 	private IBoardActivity tryExecuteCustomRules(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finalizing selected custom move candidate.", "tryExecuteCustomRules", "ExtendedRuleEngine");
 

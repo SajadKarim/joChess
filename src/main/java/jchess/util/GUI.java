@@ -24,8 +24,6 @@ import java.awt.*;
 import java.net.*;
 import java.io.*;
 
-import jchess.Main;
-
 import java.util.Properties;
 import java.io.FileOutputStream;
 
@@ -53,15 +51,12 @@ public class GUI
         Toolkit tk = Toolkit.getDefaultToolkit();
         try
         {
-            String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
-            System.out.println(configFile.getProperty("THEME"));
-            url = Main.class.getResource(imageLink);
-            img = tk.getImage(url);
-
+            String imageLink = GUI.getJarPath() + "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
+            img = tk.getImage(new File(imageLink).toURI().toURL());
         }
         catch (Exception e)
         {
-            System.out.println("some error loading image!");
+            System.out.println("some error loading image");
             e.printStackTrace();
         }
         return img;
@@ -88,7 +83,7 @@ public class GUI
 
     public static Properties getConfigFile() {
         Properties configFile= new Properties();
-        File fsConfigFile = new File(GUI.getJarPath() + File.separator+"jchess"+File.separator + "config.txt");
+        File fsConfigFile = new File(GUI.getJarPath() + File.separator + "config.txt");
 
         try {
         	if (!fsConfigFile.exists()) {

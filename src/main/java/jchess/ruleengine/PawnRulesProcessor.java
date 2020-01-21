@@ -31,21 +31,32 @@ import jchess.ruleengine.gui.PawnPromotionModel;
 import jchess.ruleengine.gui.PawnPromotionPresenter;
 
 /**
- * This is a custom class specific to Pawn piece.
+ * This is a custom class specific to process the custom rules that are peculiar to Pawn piece only.
  * This class defines all the custom rules that at the moments are not supportable in XML.
- * 
+ *  
  * @author	Sajad Karim
  * @since	7 Dec 2019
  */
 
-public class PawnRulesProcessor {
+public final class PawnRulesProcessor {
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
+	/**
+	 * This method looks for the possibility whether the pawn is eligible to make a promotion move.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
+	 */
 	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
-		tryPawnPromotionRuleForEdge(oBoard, oPiece, mpCandidateMovePositions);
+		//tryPawnPromotionRuleForEdge(oBoard, oPiece, mpCandidateMovePositions);
 		tryPawnPromotionRuleForVertex(oBoard, oPiece, mpCandidateMovePositions);
 	}
 
+	/* Bug Fix: 
+	 * Jira Id: NOT-110
+	 * Commenting out folloiwng code as pawn promotion rules should not work on edge.
+	 * 
 	static void tryPawnPromotionRuleForEdge(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
@@ -64,7 +75,16 @@ public class PawnRulesProcessor {
 			}
 		}
 	}
-
+	*/
+	
+	/**
+	 * This method looks for the possibility whether the pawn is eligible to make a promotion move. It looks of the opposite
+	 * player's piece on the positions linked to its vertexes.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
+	 */
 	static void tryPawnPromotionRuleForVertex(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
@@ -83,6 +103,14 @@ public class PawnRulesProcessor {
 		}
 	}
 
+	/**
+	 * This method executes pawn promotion rule.
+	 * 
+	 * @param IBoardAgent
+	 * @param IGUIHandle
+	 * @param IMoveCandidate
+	 * @return IBoardActivity
+	 */
 	public static IBoardActivity tryExecutePawnPromotionRule(IBoardAgent oBoard, IGUIHandle oGUIHandle, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 		
@@ -94,7 +122,7 @@ public class PawnRulesProcessor {
 		// TODO: For the time being I am skipping unit test for the following code.
 		// How To: Need to move the following window launching code to a separate file, so that we can extend it for unittest and
 		// pass a default piece to be selected to continue with the unit test.
-		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllPieceAgents(), oSourcePiecePriorMove);
+		IPawnPromotionModel oData = new PawnPromotionModel(oBoard.getAllUnlinkedPieceAgents(), oSourcePiecePriorMove);
 		IPawnPromotionDialogView oView = new PawnPromotionDialogView(oGUIHandle.getGUIMainFrame(), oData.getViewData());
 		IPresenter oPresenter = new PawnPromotionPresenter(oView, oData, null);		
 		oGUIHandle.showDialog(oPresenter);
@@ -120,6 +148,14 @@ public class PawnRulesProcessor {
 		return oActivity;
 	}	
 
+	/**
+	 * This method looks for the possibility whether the pawn is eligible to jump one position on its first move or not.
+	 * 
+	 * @param IRuleProcessor
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate> 
+	 */
 	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {		
 		if( oPiece.getRuns() > 0)
 			return;
@@ -154,6 +190,14 @@ public class PawnRulesProcessor {
 		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositions);
 }
 	
+	/**
+	 * This method let pawn to jump one piece on its first move.
+	 * 
+	 * @param IBoardAgent
+	 * @param IGUIHandle
+	 * @param IMoveCandidate
+	 * @return IBoardActivity
+	 */
 	public static IBoardActivity tryExecutePawnFirstMoveException(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = null;
 		
@@ -181,25 +225,64 @@ public class PawnRulesProcessor {
 		return oActivity;
 	}
 	
+	/**
+	 * This method checks the eligibility of EnPassant rule.
+	 * 
+	 * @param IBoardAgent
+	 * @param IPieceAgent
+	 * @param Map<String, IMoveCandidate>
+	 */
 	public static void tryPawnEnPassantRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 
 		Map<String, IPositionAgent> mpPosition = oPosition.getAllPathAgents(oPlayer.getBoardMapping(), Direction.EDGE, Family.DIFFERENT, File.IGNORE, Rank.SAME);
 		for( Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
-			IPositionAgent oNextPosition = it.getValue();
-			IPieceAgent oNextPiece = oNextPosition.getPiece();
+			IPositionAgent oTargetPosition = it.getValue();
+			IPieceAgent oTargetPiece = oTargetPosition.getPiece();
 			
-			if( oNextPiece != null && oNextPiece.getPlayer() != oPiece.getPlayer() && oNextPiece.getPositionHistoryCount() == 1) {
-				IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
-	        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
-	        	oRule.getRuleData().setCustomName("MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]");
-	        	    		
-	        	mpCandidateMovePositions.put(it.getValue().getName(), new MoveCandidate(oRule, oPosition.getPiece(), oPosition, it.getValue()));
+			// Checks the target piece should not belong to the same player.
+			if( oTargetPiece != null && oTargetPiece.getPlayer() != oPiece.getPlayer()) { 
+				
+				// Fetching the player's last activity to see which piece the player moved in its last turn.
+				IBoardActivity oActivity = oBoard.getLastActivityByPlayer(oTargetPiece.getPlayer());
+				if( oActivity == null)
+					continue;
+				
+				IMoveCandidate oMoveCandidate =  oActivity.getMoveCandidate();
+				if( oMoveCandidate == null) {
+					// Abnormal state: Log error.
+					continue;
+				}
+				
+				// Checking if this was the same piece that was moved two positions ahead in the last move by the player.
+				if(!oMoveCandidate.getPieceToMove().equals(oTargetPiece))
+					continue;
+				
+				 /* 
+				  * Background: Pawn piece can jump to two places ahead on its first move only but by doing this it cannot escape the capture. 
+				  * Therefore, if Pawn make two jumps on its first move to escape capture by other player's pawn then the rule En-Passant let 
+				  * other players to capture, if possible, the Pawn on their very next move (only).
+				  * The following check verifies whether the piece moved two positions ahead in its first move or not.
+				  */
+				if( Math.abs( oMoveCandidate.getSourcePosition().getRank() - oMoveCandidate.getCandidatePosition().getRank()) == 2) {
+					IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
+		        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
+		        	oRule.getRuleData().setCustomName("MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]");
+		        	    		
+		        	mpCandidateMovePositions.put(it.getValue().getName(), new MoveCandidate(oRule, oPosition.getPiece(), oPosition, it.getValue()));
+				}
 			}
 		}
 	}
 
+	/**
+	 * This method executes EnPassant rule.
+	 * 
+	 * @param IBoardAgent
+	 * @param IMoveCandidate
+	 * @return IBoardActivity
+	 */
 	public static IBoardActivity tryExecutePawnEnPassantRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 
@@ -209,6 +292,7 @@ public class PawnRulesProcessor {
 		IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
 		
 		oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
+		oPieceLinkedToNewPosition.setPosition(null);
 		oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
 		oCurrentPosition.setPiece(null);
 		

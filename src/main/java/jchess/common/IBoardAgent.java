@@ -18,18 +18,20 @@ public interface IBoardAgent extends IBoard {
 	public Image getMarkedCellImage();
 	
 	public IPositionAgent getPositionAgent(String stName);
-	public Map<String, IPositionAgent> getAllPositionAgents() ;
+	public Map<String, IPositionAgent> getAllPositionAgents();
 	
 	public IPlayerAgent getPlayerAgent(String stName);
-	public Map<String, IPlayerAgent > getAllPlayerAgents();
+	public Map<String, IPlayerAgent> getAllPlayerAgents();
 	
 	public IRuleAgent getRuleAgent(String stName);
 	public  Map<String, IRuleAgent>  getAllRuleAgents();
 	
-	public IPieceAgent getPieceAgent(String stName);
-	public  Map<String, IPieceAgent>  getAllPieceAgents();
+	public IPieceAgent getUnlinkedPieceAgent(String stName);
+	public  Map<String, IPieceAgent>  getAllUnlinkedPieceAgents();
 	
 	public void addActivity(IBoardActivity oActivity);
 	public IBoardActivity undoLastActivity();
 	public IBoardActivity redoLastActivity();
+
+	public IBoardActivity getLastActivityByPlayer(IPlayerAgent oPlayer);
 }
