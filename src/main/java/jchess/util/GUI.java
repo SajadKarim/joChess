@@ -51,7 +51,7 @@ public class GUI
         Toolkit tk = Toolkit.getDefaultToolkit();
         try
         {
-            String imageLink = GUI.getJarPath() + "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
+            String imageLink = GUI.getJarPath() + "/theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             img = tk.getImage(new File(imageLink).toURI().toURL());
         }
         catch (Exception e)

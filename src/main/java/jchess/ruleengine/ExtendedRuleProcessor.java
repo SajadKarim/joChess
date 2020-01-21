@@ -54,6 +54,9 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	
 				PawnRulesProcessor.tryPawnEnPassantRule(oBoard, oPiece, mpCandidatePositions);
 			}
+			case "KingWhite": {
+				KingRulesProcessor.tryKingCastlingRules(oBoard, oPiece, mpCandidatePositions);
+			// ADD KING CASE
 				break;
 			default:
 				break;

@@ -246,6 +246,7 @@ public final class PawnRulesProcessor {
 			// Checks the target piece should not belong to the same player.
 			if (oTargetPiece != null && oTargetPiece.getPlayer() != oPiece.getPlayer()) { 
 				
+				 // NEED THIS!!
 				// Fetching the player's last activity to see which piece the player moved in its last turn.
 				IBoardActivity oActivity = oBoard.getLastActivityByPlayer(oTargetPiece.getPlayer());
 				if (oActivity == null) {
