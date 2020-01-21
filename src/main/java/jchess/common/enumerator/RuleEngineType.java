@@ -16,18 +16,18 @@ public enum RuleEngineType {
 	RULEENGINE_6PLAYER;
 	
 	public static RuleEngineType convertStringToEnum(String stValue) {
-		switch(stValue){
-		case "RULEENGINE_2PLAYER":
-			return RULEENGINE_2PLAYER;
-		case "RULEENGINE_3PLAYER":
-			return RULEENGINE_3PLAYER;
-		case "RULEENGINE_4PLAYER":
-			return RULEENGINE_4PLAYER;
-		case "RULEENGINE_6PLAYER":
-			return RULEENGINE_6PLAYER;
-		case "RULEENGINE_DEFAULT":
-		default:
-			return RULEENGINE_DEFAULT;
+		switch (stValue) {
+			case "RULEENGINE_2PLAYER":
+				return RULEENGINE_2PLAYER;
+			case "RULEENGINE_3PLAYER":
+				return RULEENGINE_3PLAYER;
+			case "RULEENGINE_4PLAYER":
+				return RULEENGINE_4PLAYER;
+			case "RULEENGINE_6PLAYER":
+				return RULEENGINE_6PLAYER;
+			case "RULEENGINE_DEFAULT":
+			default:
+				return RULEENGINE_DEFAULT;
 		}
 	}
 }

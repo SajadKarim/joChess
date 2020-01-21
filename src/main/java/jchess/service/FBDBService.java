@@ -6,7 +6,8 @@ import java.util.TreeMap;
 
 import org.javatuples.Pair;
 
-import jchess.common.*;
+import jchess.common.IBoard;
+import jchess.common.IBoardFactory;
 import jchess.gamelogic.BoardAgentFactory;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -31,7 +32,7 @@ final class FBDBService extends StorageService {
 		return BoardXMLDeserializer.getBoard(stFilePath, oBoardFactory, m_oLogger);
 	}	
 
-	public SortedMap<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath){
+	public SortedMap<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath) {
 		m_oLogger.writeLog(LogLevel.INFO, stFolderPath, "getPossiblePlayerInEachBoard", "FBDBService");
 		
 		SortedMap<String, Pair<String, Integer>> mpData = new TreeMap<String, Pair<String, Integer>>();
@@ -45,7 +46,7 @@ final class FBDBService extends StorageService {
 				
 				IBoard oBoard = BoardXMLDeserializer.getBoardWithPlayerDetailsOnly(stBoardFilePath, new BoardAgentFactory(), m_oLogger);
 
-				if( oBoard != null) {
+				if (oBoard != null) {
 					mpData.put(oBoard.getName(), new Pair<String, Integer>(arFiles[i].getName(), oBoard.getAllPlayers().size()));
 				}
 			}

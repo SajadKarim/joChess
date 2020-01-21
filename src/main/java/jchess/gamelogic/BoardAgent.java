@@ -272,7 +272,7 @@ public final class BoardAgent implements IBoardAgent {
 	public IBoardActivity redoLastActivity() {
 		IBoardActivity oActivity = null;
 		
-		if (m_nActivityIndex < m_lstActivity.size() -1) {
+		if (m_nActivityIndex < m_lstActivity.size() - 1) {
 			m_nActivityIndex++;
 			oActivity = m_lstActivity.get(m_nActivityIndex);			
 		}

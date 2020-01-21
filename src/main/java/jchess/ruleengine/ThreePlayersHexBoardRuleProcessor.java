@@ -61,22 +61,24 @@ public class ThreePlayersHexBoardRuleProcessor extends ExtendedRuleProcessor {
 		
 		super.checkForPositionMoveCandidacyAndContinuity(oPlayer, oRule, oCandidacyPosition, bIsValidMode, bCanContinue);
 
-		switch(oRule.getRuleType()) {
+		switch (oRule.getRuleType()) {
 			case CUSTOM: {
-				switch(oRule.getCustomName()) {
+				switch (oRule.getCustomName()) {
 					case "BOMB[CANNON]":{
-						if( oCandidacyPosition.getPiece() == null) {
+						if (oCandidacyPosition.getPiece() == null) {
 							bIsValidMode.set(true);
 							bCanContinue.set(false);
-						} else if( oCandidacyPosition.getPiece().getPlayer() == oPlayer) {
+						} else if (oCandidacyPosition.getPiece().getPlayer() == oPlayer) {
 							bIsValidMode.set(false);
 							bCanContinue.set(false);
-						} else if( oCandidacyPosition.getPiece().getPlayer() != oPlayer) {
+						} else if (oCandidacyPosition.getPiece().getPlayer() != oPlayer) {
 							bIsValidMode.set(true);
 							bCanContinue.set(false);
 						}
 					}
-					break;
+						break;
+					default:
+						break;
 				}
 			}
 			break;

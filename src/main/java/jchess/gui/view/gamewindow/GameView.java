@@ -109,6 +109,8 @@ public final class GameView extends JPanel implements IGameView, MouseListener, 
                 }
     		}
     		break;
+    		default:
+    		break;
     	}
     }
 

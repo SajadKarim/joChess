@@ -32,11 +32,12 @@ public final class CannonRulesProcessor {
 
 		IPlayerAgent oPlayer = oSourcePiecePriorMove.getPlayer();
 	
-		if( oDestinationPiecePriorMove != null && oDestinationPiecePriorMove.getPlayer() == oSourcePiecePriorMove.getPlayer())
+		if (oDestinationPiecePriorMove != null && oDestinationPiecePriorMove.getPlayer() == oSourcePiecePriorMove.getPlayer()) {
 			return null;
+		}
 		
 		Object oData = oSourcePiecePriorMove.getCustomData();
-		if( oData == null) {
+		if (oData == null) {
 			IPieceAgent oSourcePieceAfterMove = (IPieceAgent) oSourcePiecePriorMove.clone();
 			oSourcePieceAfterMove.setPosition(oMoveCandidate.getSourcePosition());
 
@@ -53,7 +54,7 @@ public final class CannonRulesProcessor {
 			oActivity.setPlayer(oPlayer);
 		} else {
 			int nRemainingBombs = (int)oData;
-			if( nRemainingBombs == 1) {
+			if (nRemainingBombs == 1) {
 				IPieceAgent oSourcePieceAfterMove = (IPieceAgent)oBoard.getUnlinkedPieceAgent(getPawnPieceName(oSourcePiecePriorMove.getName())).clone(); 
 				
 				oSourcePieceAfterMove.setPosition(oMoveCandidate.getSourcePosition());
@@ -76,38 +77,38 @@ public final class CannonRulesProcessor {
 	
 	// This method takes the piece name and returns the respective image for the cannon when it is consumed.
 	public static String getImageFilePathForConsumedCannon(String stName) {
-		switch(stName) {
-		case "CannonWhiteR":
-			return "CannonR-W-Consumed.png";
-		case "CannonWhiteL":
-			return "CannonL-W-Consumed.png";
-		case "CannonBlackR":
-			return "CannonR-B-Consumed.png";
-		case "CannonBlackL":
-			return "CannonL-B-Consumed.png";
-		case "CannonRedR":
-			return "CannonR-R-Consumed.png";
-		case "CannonRedL":
-			return "CannonL-R-Consumed.png";
+		switch (stName) {
+			case "CannonWhiteR":
+				return "CannonR-W-Consumed.png";
+			case "CannonWhiteL":
+				return "CannonL-W-Consumed.png";
+			case "CannonBlackR":
+				return "CannonR-B-Consumed.png";
+			case "CannonBlackL":
+				return "CannonL-B-Consumed.png";
+			case "CannonRedR":
+				return "CannonR-R-Consumed.png";
+			case "CannonRedL":
+				return "CannonL-R-Consumed.png";
+			default:
+				return "";
 		}
-		
-		return "";
 	}
 
 	// This method takes the piece name and returns the respective pawn piece name.
 	public static String getPawnPieceName(String stName) {
-		switch(stName) {
-		case "CannonWhiteR":
-		case "CannonWhiteL":
-			return "PawnWhite";
-		case "CannonBlackR":
-		case "CannonBlackL":
-			return "PawnBlack";
-		case "CannonRedR":
-		case "CannonRedL":
-			return "PawnRed";
+		switch (stName) {
+			case "CannonWhiteR":
+			case "CannonWhiteL":
+				return "PawnWhite";
+			case "CannonBlackR":
+			case "CannonBlackL":
+				return "PawnBlack";
+			case "CannonRedR":
+			case "CannonRedL":
+				return "PawnRed";
+			default:
+				return "";
 		}
-		
-		return "";
 	}
 }

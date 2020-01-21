@@ -82,8 +82,9 @@ public final class GameState implements IGameState {
 	}
 
 	public IMoveCandidate getMoveCandidate(IPositionAgent oPosition) {
-		if (m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
+		if (m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null) {
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
+		}
 
 		return null;
 	}

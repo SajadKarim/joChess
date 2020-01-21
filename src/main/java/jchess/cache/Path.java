@@ -94,7 +94,7 @@ public final class Path implements IPathData, IPathAgent {
 	public void setName(String stName) {
 		m_stName = stName;
 	}
-	public void setDirection(Direction enDirection ) {
+	public void setDirection(Direction enDirection) {
 		m_enDirection = enDirection;
 	}
 	

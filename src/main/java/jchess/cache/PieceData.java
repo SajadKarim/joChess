@@ -37,7 +37,7 @@ public final class PieceData implements IPieceData {
 		// TODO: I tired HashMap's clone, but it does not call Object's copy constructor.
 		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
 		m_mpRule = new HashMap<String, IRule>();
-		for(Map.Entry<String, IRule> it : oPiece.m_mpRule.entrySet()) {
+		for (Map.Entry<String, IRule> it : oPiece.m_mpRule.entrySet()) {
 			m_mpRule.put(it.getKey(), it.getValue().clone());
 		}
 	}

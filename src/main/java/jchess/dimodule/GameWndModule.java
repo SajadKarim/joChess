@@ -111,7 +111,7 @@ public final class GameWndModule extends AbstractModule {
 		try {			
 			oRuleProcessor = (IRuleProcessor)Class.forName("jchess.ruleengine." + oBoard.getRuleProcessorName()).getConstructor(IAppLogger.class).newInstance(oAppLogger);
 			oRuleEngine = (IRuleEngine)Class.forName("jchess.ruleengine." + oBoard.getRuleEngineName()).getConstructor(IRuleProcessor.class, IGUIHandle.class, IAppLogger.class).newInstance(new Object[] {oRuleProcessor, oGUIManager.getGUIHandle(), oAppLogger});
-		} catch(java.lang.Exception e) {
+		} catch (Exception e) {
 			oAppLogger.writeLog(LogLevel.ERROR, "An unhandled exception has occured. Exception=" + e.toString(), "provideRuleEngine", "GameWndModule");
 		}
 		return oRuleEngine;

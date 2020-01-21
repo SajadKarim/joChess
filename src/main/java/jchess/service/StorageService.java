@@ -20,11 +20,11 @@ public abstract class StorageService {
 	public abstract Map<String, Pair<String, Integer>> getPlayersInEachBoard(String stFolderPath);
 
 	public static StorageService create(StorageType enStorageType, IAppLogger oLogger) {		
-		switch(enStorageType) {
-			case FBDB:{
+		switch (enStorageType) {
+			case FBDB:
 				return new FBDBService(oLogger);
-			}
+			default:
+				return null;
 		}
-		return null;
 	}
 }

@@ -62,8 +62,8 @@ public final class BoardActivity implements IBoardActivity {
 	
 	@Override
 	public String toString() {
-		if(m_stToString.isEmpty()) {
-		switch(m_oMoveCandidate.getRule().getRuleType()) {
+		if (m_stToString.isEmpty()) {
+		switch (m_oMoveCandidate.getRule().getRuleType()) {
 			case MOVE:
 				m_stToString 
 					= m_oPlayer.getName() 

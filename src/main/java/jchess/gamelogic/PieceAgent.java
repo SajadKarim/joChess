@@ -70,9 +70,10 @@ public final class PieceAgent implements IPieceAgent {
 	}
 
 	public Image getImage() {
-		if (m_oImage == null)			
+		if (m_oImage == null) {
 			m_oImage = GUI.loadImage(getImagePath());
-
+		}
+		
 		return m_oImage;
 	}
 

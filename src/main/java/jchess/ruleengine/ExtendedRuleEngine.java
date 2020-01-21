@@ -58,8 +58,8 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 
 		IBoardActivity oActivity = super.tryExecuteRule(oBoard, oMoveCandidate);
 		
-		if( oActivity == null) {
-			switch( oMoveCandidate.getRule().getRuleType()) {
+		if (oActivity == null) {
+			switch (oMoveCandidate.getRule().getRuleType()) {
 				case CUSTOM: {
 					oActivity = tryExecuteCustomRules(oBoard, oMoveCandidate);
 				}
@@ -83,18 +83,18 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 
 		IBoardActivity oMove = null;
 		 
-		switch( oMoveCandidate.getRule().getCustomName()) {
-		case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
-			oMove = PawnRulesProcessor.tryExecutePawnPromotionRule(oBoard, m_oGUIHandler, oMoveCandidate);			
-			break;
-		case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]":
-			oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oBoard, oMoveCandidate);
-			break;
-		case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":
-			oMove = PawnRulesProcessor.tryExecutePawnEnPassantRule(oBoard, oMoveCandidate);
-			break;
-		default:
-			break;
+		switch (oMoveCandidate.getRule().getCustomName()) {
+			case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
+				oMove = PawnRulesProcessor.tryExecutePawnPromotionRule(oBoard, m_oGUIHandler, oMoveCandidate);			
+				break;
+			case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]":
+				oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oBoard, oMoveCandidate);
+				break;
+			case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":
+				oMove = PawnRulesProcessor.tryExecutePawnEnPassantRule(oBoard, oMoveCandidate);
+				break;
+			default:
+				break;
 		}
 		
 		return oMove;

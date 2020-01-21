@@ -91,8 +91,7 @@ public final class NewGameView extends JDialog implements INewGameView, INewGame
 	}
 
 	@Override
-    public void paint(Graphics g)
-    {
+    public void paint(Graphics g) {
 		m_NewLocalGameView.drawComponents();
     }
     

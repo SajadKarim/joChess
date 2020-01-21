@@ -17,82 +17,88 @@ import jchess.common.enumerator.RuleType;
 class StringToEnum {
 
 	static public Direction convertStringToDirection(String stDirection) {
-		switch(stDirection.toUpperCase()) {
-		case "EDGE":
-			return Direction.EDGE;
-		case "VERTEX":
-			return Direction.VERTEX;
+		switch (stDirection.toUpperCase()) {
+			case "EDGE":
+				return Direction.EDGE;
+			case "VERTEX":
+				return Direction.VERTEX;
+			default:
+				return null;
 		}
-		return null;
 	}
 	
 	static public RuleType convertStringToRuleType( String stRuleType) {
 		switch(stRuleType.toUpperCase()) {
-		case "MOVE":
-			return RuleType.MOVE;
-		case "MOVE_AND_CAPTURE":
-			return RuleType.MOVE_AND_CAPTURE;
-		case "MOVE_IFF_CAPTURE_POSSIBLE":
-			return RuleType.MOVE_IFF_CAPTURE_POSSIBLE;
-		case "MOVE_TRANSIENT":
-			return RuleType.MOVE_TRANSIENT;
-		case "CUSTOM":
-			return RuleType.CUSTOM;
+			case "MOVE":
+				return RuleType.MOVE;
+			case "MOVE_AND_CAPTURE":
+				return RuleType.MOVE_AND_CAPTURE;
+			case "MOVE_IFF_CAPTURE_POSSIBLE":
+				return RuleType.MOVE_IFF_CAPTURE_POSSIBLE;
+			case "MOVE_TRANSIENT":
+				return RuleType.MOVE_TRANSIENT;
+			case "CUSTOM":
+				return RuleType.CUSTOM;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	static public Manoeuvre convertStringToManoeuvre( String stManoeuvre) {
 		switch(stManoeuvre.toUpperCase()) {
-		case "BLINKER":
-			return Manoeuvre.BLINKER;
-		case "BLINKER_WITH_FILE_AND_RANK":
-			return Manoeuvre.BLINKER_WITH_FILE_AND_RANK;
-		case "FILE_AND_RANK":
-			return Manoeuvre.FILE_AND_RANK;
+			case "BLINKER":
+				return Manoeuvre.BLINKER;
+			case "BLINKER_WITH_FILE_AND_RANK":
+				return Manoeuvre.BLINKER_WITH_FILE_AND_RANK;
+			case "FILE_AND_RANK":
+				return Manoeuvre.FILE_AND_RANK;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	static public File convertStringToFile( String stFile) {
 		switch(stFile.toUpperCase()) {
-		case "BACKWARD":
-			return File.BACKWARD;
-		case "FORWARD":
-			return File.FORWARD;
-		case "SAME":
-			return File.SAME;
-		case "IGNORE":
-			return File.IGNORE;
+			case "BACKWARD":
+				return File.BACKWARD;
+			case "FORWARD":
+				return File.FORWARD;
+			case "SAME":
+				return File.SAME;
+			case "IGNORE":
+				return File.IGNORE;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	static public Rank convertStringToRank( String stRank) {
 		switch(stRank.toUpperCase()) {
-		case "BACKWARD":
-			return Rank.BACKWARD;
-		case "FORWARD":
-			return Rank.FORWARD;
-		case "SAME":
-			return Rank.SAME;
-		case "IGNORE":
-			return Rank.IGNORE;
+			case "BACKWARD":
+				return Rank.BACKWARD;
+			case "FORWARD":
+				return Rank.FORWARD;
+			case "SAME":
+				return Rank.SAME;
+			case "IGNORE":
+				return Rank.IGNORE;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	static public Family convertStringToFamily( String stFamily) {
 		switch(stFamily.toUpperCase()) {
-		case "DIFFERENT":
-			return Family.DIFFERENT;
-		case "PROVIDED":
-			return Family.PROVIDED;
-		case "SAME":
-			return Family.SAME;
-		case "IGNORE":
-			return Family.IGNORE;
+			case "DIFFERENT":
+				return Family.DIFFERENT;
+			case "PROVIDED":
+				return Family.PROVIDED;
+			case "SAME":
+				return Family.SAME;
+			case "IGNORE":
+				return Family.IGNORE;
+			default:
+				return null;
 		}
-		return null;
 	}
 }

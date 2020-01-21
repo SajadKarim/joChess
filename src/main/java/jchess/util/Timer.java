@@ -11,7 +11,7 @@ import com.google.inject.Inject;
  * @since	7 Dec 2019
  */
 
-public class Timer implements ITimer {
+public final class Timer implements ITimer {
     private Thread m_oThread;
 	private int m_nTimerLengthInSeconds;
 	private int m_nTimerRemainingSeconds;	
@@ -20,12 +20,12 @@ public class Timer implements ITimer {
 	private Boolean m_bNotifyEverySecond;
 	private Boolean m_bNotifyWhenTimerEnds;
 	
-    private final ArrayList<ITimerListener> lstLiteners;
+    private final ArrayList<ITimerListener> m_lstLiteners;
 
     @Inject
 	public Timer() {
-        m_oThread = new Thread(this);        
-        lstLiteners = new ArrayList<ITimerListener>();
+        m_oThread = new Thread(this);
+        m_lstLiteners = new ArrayList<ITimerListener>();
 	}
 	
     public void start(int nTimerLengthInSeconds, 
@@ -42,50 +42,38 @@ public class Timer implements ITimer {
         m_oThread.start();
     }
 
-    public void stop()
-    {
+    public void stop() {
     	m_nTimerLengthInSeconds = 0;
     	m_nTimerRecurrenceCount = 0;
     	
-        try
-        {
+        try {
         	m_oThread.wait();
-        }
-        catch (java.lang.InterruptedException exc)
-        {
+        } catch (InterruptedException exc) {
             System.out.println("Error blocking thread: " + exc);
-        }
-        catch (java.lang.IllegalMonitorStateException exc1)
-        {
+        } catch (IllegalMonitorStateException exc1) {
             System.out.println("Error blocking thread: " + exc1);
         }
     }
 
 
 	@Override
-    public void run()
-    {
-        while (m_nTimerRecurrenceCount > 0)
-        {
-			while (m_nTimerRemainingSeconds > 0)
-	        {	        	
-	        	if( m_bNotifyEverySecond) {
+    public void run() {
+        while (m_nTimerRecurrenceCount > 0) {
+			while (m_nTimerRemainingSeconds > 0) {	        	
+	        	if (m_bNotifyEverySecond) {
 	        		notifyListenersOnSecondElapsed(m_nTimerRemainingSeconds);
 	        	}
 	        	
-	            try
-	            {
+	            try {
 	                m_oThread.sleep(1000);
-	            }
-	            catch (InterruptedException e)
-	            {
+	            } catch (InterruptedException e) {
 	                System.out.println("Some error in gameClock thread: " + e);
 	            }
 	
 	            m_nTimerRemainingSeconds--;
 	        }
 
-        	if( m_bNotifyEverySecond) {
+        	if (m_bNotifyEverySecond) {
         		notifyListenersOnTimerEnds();
         	}
         	
@@ -97,24 +85,23 @@ public class Timer implements ITimer {
         this.stop();
     }
 
-    private void timeOver()
-    {
+    private void timeOver() {
     }
     
     private void notifyListenersOnSecondElapsed(int nRemainingSeconds) {
-        for (final ITimerListener listener : lstLiteners) {
+        for (final ITimerListener listener : m_lstLiteners) {
             listener.onSecondElapsed(nRemainingSeconds);
         }
     }
 
     private void notifyListenersOnTimerEnds() {
-        for (final ITimerListener listener : lstLiteners) {
+        for (final ITimerListener listener : m_lstLiteners) {
             listener.onTimerElapsed();
         }
     }
 
     public void addListener(final ITimerListener listener) {
-        lstLiteners.add(listener);
+    	m_lstLiteners.add(listener);
     }
 
 }

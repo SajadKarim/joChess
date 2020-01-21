@@ -56,7 +56,7 @@ public final class RuleData implements IRuleData {
 		// For the time being I am manually copying all the objects. Need to do it proper way to do deep copy.
 		m_mpRule = new HashMap<String, IRule>();
 		for (Map.Entry<String, IRule> it : oRule.m_mpRule.entrySet()) {
-			m_mpRule.put( it.getKey(), it.getValue().clone());
+			m_mpRule.put(it.getKey(), it.getValue().clone());
 		}
 	}
 	
