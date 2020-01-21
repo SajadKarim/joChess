@@ -56,7 +56,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 			}
 			case "KingWhite": {
 				KingRulesProcessor.tryKingCastlingRules(oBoard, oPiece, mpCandidatePositions);
-			// ADD KING CASE
+			}
 				break;
 			default:
 				break;
