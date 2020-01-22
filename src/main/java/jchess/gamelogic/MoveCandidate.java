@@ -1,5 +1,7 @@
 package jchess.gamelogic;
 
+import java.util.List;
+
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
@@ -17,6 +19,7 @@ public final class MoveCandidate implements IMoveCandidate {
 	private IPositionAgent m_oSourcePosition;
 	private IPositionAgent m_oCandidatePosition;
 	private IRuleAgent m_oRule;
+	private List<IMoveCandidate> m_lstSecondaryMoves;
 
 	public MoveCandidate(IRuleAgent oRule, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPositionAgent oCandidatePosition) {
 		m_oRule = oRule;
@@ -47,5 +50,13 @@ public final class MoveCandidate implements IMoveCandidate {
 				, m_oSourcePosition.getName()
 				, m_oCandidatePosition.getName()
 				, m_oRule.getName());
+	}
+
+	public List<IMoveCandidate> getSecondaryMoves() {
+		return m_lstSecondaryMoves;
+	}
+
+	public void addSecondaryMove(IMoveCandidate secondaryMove) {
+		this.m_lstSecondaryMoves.add(secondaryMove);
 	}
 }

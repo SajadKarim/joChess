@@ -1,7 +1,10 @@
 package jchess.ruleengine;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 
 import jchess.common.IBoardActivity;
@@ -44,14 +47,14 @@ public final class KingRulesProcessor {
 	 * @param IPieceAgent
 	 * @param Map<String, IMoveCandidate>
 	 */
-	public static void tryKingCastlingRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
+	public static void tryKingCastlingRules(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		System.out.println("Trying king castling moves., tryKingCastlingRules, KingRulesProcessor");
 
 		if (oPiece.getPositionHistoryCount() > 0) {
 			return;
 		}
-		tryShortCastlingRule(oBoard, oPiece, mpCandidateMovePositions);
-		tryLongCastlingRule(oBoard, oPiece, mpCandidateMovePositions);
+		tryCastlingRule(oRuleProcessor, File.BACKWARD, oBoard, oPiece, mpCandidateMovePositions);
+		tryCastlingRule(oRuleProcessor, File.FORWARD, oBoard, oPiece, mpCandidateMovePositions);
 		
 	
 	}
@@ -69,7 +72,7 @@ public final class KingRulesProcessor {
 			{
 				if(oRandomPiece.getPlayer() != oCurrentPlayer)
 				{
-					Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
+					Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(oCurrentBoard, oRandomPiece);
 					for(Map.Entry<String, IMoveCandidate> oCandidateMovePostion : mpCandidateMovePosition.entrySet())
 					{
 						// iteratiion over the fields of interest is done here to save iterating over the players own pieces again
@@ -98,30 +101,7 @@ public final class KingRulesProcessor {
 		
 	}
 	
-	
-	/**
-	 * This method checks the eligibility of the short king castling rule.
-	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
-	 */
-	public static void tryShortCastlingRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 
-		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
-    	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
-    	oRule.getRuleData().setCustomName("MOVE_CASTLING_SHORT[KING]");
-    	String oPlayerColor = oPiece.getFamily();
-    	IPieceAgent rook = oPiece.getPlayer().getPiece("Rook" + oPlayerColor);
-    	if (rook.getPositionHistoryCount() > 0) {
-			return;
-		}
-    	// find path to get to rook
-		// if path is clear
-		// and path is safe
-		// then display the possible move
-	}
-	
 	/**
 	 * This method checks the eligibility of the long king castling rule.
 	 * 
@@ -129,31 +109,58 @@ public final class KingRulesProcessor {
 	 * @param IPieceAgent
 	 * @param Map<String, IMoveCandidate>
 	 */
-	public static void tryLongCastlingRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
+	public static void tryCastlingRule(IRuleProcessor oRuleProcessor, File fDirection, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
+		
+		IRule oRule = m_oBoardFactory.createRule();		
+		oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
+		oRule.getRuleData().setDirection(Direction.EDGE);
+		oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRule.getRuleData().setFile(fDirection);
+		oRule.getRuleData().setRank(Rank.SAME);
+		oRule.getRuleData().setFamily(Family.IGNORE);
+		oRule.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRule.getRuleData().setName("KingCastlingCheck");
+		oRule.getRuleData().setCustomName("MOVE_TRANSIENT[KING_CASTLING_CHECK]");
+		
+		((IRuleAgent)oRule).reset();
+		
+		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
+		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPiece.getPosition(), null));
+		
+		Map<String, IMoveCandidate> mpCandidateMovePositionsForCastlingCheck = new HashMap<String, IMoveCandidate>();
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositionsForCastlingCheck);
 
-		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
-    	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
-    	oRule.getRuleData().setCustomName("MOVE_CASTLING_LONG[KING]");
-    	String oPlayerColor = oPiece.getFamily();
-    	IPieceAgent rook = oPiece.getPlayer().getPiece("Rook" + oPlayerColor);
-    	if (rook.getPositionHistoryCount() > 0) {
-			return;
+		System.out.println("Got possible positions for king.");
+		IPositionAgent possibleKingTarget = oPiece.getPosition();
+		IPositionAgent possibleRookTarget = oPiece.getPosition();
+		
+		for (Entry<String, IMoveCandidate> moveCandidateEntry : mpCandidateMovePositionsForCastlingCheck.entrySet()) {
+			IPositionAgent fieldOnPath = moveCandidateEntry.getValue().getCandidatePosition();
+			
+			if (fieldOnPath.getPiece() == null) {
+				possibleRookTarget = possibleKingTarget;
+				possibleKingTarget = fieldOnPath;
+			}
+			else if (fieldOnPath.getPiece().getName() == "Rook" + oPiece.getFamily() && fieldOnPath.getPiece().getPositionHistoryCount() == 0) {
+				// we have found a rook so the path seems to be clear.
+				// TODO: check if fields are endangered
+				
+				moveCandidateEntry.getValue().getRule().getRuleData().setCustomName("MOVE[KING_CASTLING]");
+				moveCandidateEntry.getValue().addSecondaryMove(new MoveCandidate(null, fieldOnPath.getPiece(), fieldOnPath, possibleRookTarget));
+				mpCandidateMovePositions.put(fieldOnPath.getName(), moveCandidateEntry.getValue());
+			}
 		}
-    	// find path to get to rook
-		// if path is clear
-		// and path is safe
-		// then display the possible move
 	}
 	
-
 	/**
-	 * This method executes the kings move for the castling rules.
+	 * This method executes the short castling rule.
 	 * 
 	 * @param IBoardAgent
 	 * @param IMoveCandidate
 	 * @return IBoardActivity
 	 */
-	public static IBoardActivity tryExecuteKingsMoveForCastlingRule(IMoveCandidate oMoveCandidate) {
+	public static IBoardActivity tryExecuteCastlingRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
+		// move the king
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 		
 		IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
@@ -175,40 +182,25 @@ public final class KingRulesProcessor {
 		
 		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 		
-		return oActivity;
-	}
-	/**
-	 * This method executes the short castling rule.
-	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
-	 * @return IBoardActivity
-	 */
-	public static IBoardActivity tryExecuteShortCastlingRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
-		// move the king
-		IBoardActivity oActivity = tryExecuteKingsMoveForCastlingRule(oMoveCandidate);
+		// move the rook
+		for (IMoveCandidate secondaryMoveCandidate : oMoveCandidate.getSecondaryMoves()) {
+			oActivity.addPriorMoveEntry(secondaryMoveCandidate.getSourcePosition(), secondaryMoveCandidate.getSourcePosition().getPiece());
+			oActivity.addPriorMoveEntry(secondaryMoveCandidate.getCandidatePosition(), secondaryMoveCandidate.getCandidatePosition().getPiece());
 
-		
-		// TODO: move the rook respectively.
-		
-		
+			oActivity.addPostMoveEntry(secondaryMoveCandidate.getSourcePosition(), null);
+			oActivity.addPostMoveEntry(secondaryMoveCandidate.getCandidatePosition(), secondaryMoveCandidate.getSourcePosition().getPiece());
+		}
+
 		return oActivity;
 	}
 
-	/**
-	 * This method executes the long castling rule.
-	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
-	 * @return IBoardActivity
-	 */
-	public static IBoardActivity tryExecuteLongCastlingRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
-		// move the king
-		IBoardActivity oActivity = tryExecuteKingsMoveForCastlingRule(oMoveCandidate);
-		
-		// TODO: move the rook respectively.
-		
 
-		return null;
+	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {		
+		if (oPiece.getRuns() > 0) {
+			return;
+		}
+		
+		
 	}
+	
 }

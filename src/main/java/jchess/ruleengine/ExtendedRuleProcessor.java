@@ -57,7 +57,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 			case "KingWhite": 
 			case "KingBlack":
 			case "KingRed": {
-				KingRulesProcessor.tryKingCastlingRules(oBoard, oPiece, mpCandidatePositions);
+				KingRulesProcessor.tryKingCastlingRules(this, oBoard, oPiece, mpCandidatePositions);
 				//System.out.println("Evaluating selected move candidate: KING CASTLING");
 
 			}
