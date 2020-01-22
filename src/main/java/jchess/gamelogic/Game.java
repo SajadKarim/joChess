@@ -12,6 +12,7 @@ import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.gui.IGUIHandle;
 import jchess.gui.model.gamewindow.IGameModel;
+import jchess.gui.view.mainwindow.IJChessView;
 import jchess.ruleengine.IRuleEngine;
 import jchess.ruleengine.IRuleProcessor;
 import jchess.util.IAppLogger;
@@ -45,6 +46,11 @@ public final class Game implements IGame, ITimerListener {
 	private ArrayList<IGameListener> m_lstListener;
 	private IGUIHandle m_oGUIHandle;
 	private IAppLogger m_oLogger;
+	private IJChessView m_oJChessView;
+	
+	public static int m_nCheckTime;
+	public static String m_stPlayerCheck;
+	public static String m_stPlayerInCheck;
 	
 	/**
 	 * Constructor for Game.
@@ -57,7 +63,7 @@ public final class Game implements IGame, ITimerListener {
 	 * @param oRuleEngine
 	 */
 	@Inject
-	public Game(IGameModel oGameModel, ITimer oTimer, IGUIHandle oGUIHandle, IAppLogger oLogger, IGameState oGameState, IRuleEngine oRuleEngine) {
+	public Game(IGameModel oGameModel, ITimer oTimer, IGUIHandle oGUIHandle, IAppLogger oLogger, IGameState oGameState, IRuleEngine oRuleEngine, IJChessView oJChessView) {
 		m_oLogger = oLogger;
 		
 		oLogger.writeLog(LogLevel.DETAILED, "Instantiating Game.", "Game", "Game");
@@ -70,6 +76,11 @@ public final class Game implements IGame, ITimerListener {
 		m_oGameModel = oGameModel;
 
 		m_oRuleProcessor  = oRuleEngine;
+
+		m_oJChessView = oJChessView;
+		m_nCheckTime = 0;
+		m_stPlayerCheck = "";
+		m_stPlayerInCheck = "";
 	}
 	
 	public void init() {
@@ -110,6 +121,17 @@ public final class Game implements IGame, ITimerListener {
 			return;
 		}
 		
+		// This check if the Player's king is in check position.
+		if(tryCheckRule()==true)
+		{
+			if(m_nCheckTime == 0)
+			{
+				int confirmDialog = JOptionPane.showConfirmDialog(null, "Your King is in Check Position. Save him immediately, or else you will lose", "Warning!", JOptionPane.DEFAULT_OPTION);
+				System.out.println(confirmDialog);
+				m_nCheckTime = 1;
+			}
+		}
+		
 		if (m_oGameState.getActivePosition() == null) {
 			// Following code finds and marks all the possible candidate positions that the selected Piece can take.			
 			if (oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
@@ -147,28 +169,34 @@ public final class Game implements IGame, ITimerListener {
 			deselectedActivePosition();
 		}		
 	}
+	/**
+	 * Check Rule
+	 * Check if the King is in Check position
+	 * Save the name of the Player check and the Player in check
+	 * @return
+	 */
 	public boolean tryCheckRule()
 	{
 		//Get Active Board and Active Player
-		IBoardAgent oCurrentBoard =  this.m_oGameModel.getBoard();
-		IPlayerAgent oCurrentPlayer = this.m_oGameState.getActivePlayer();
+		IBoardAgent oCurrentBoard =  m_oGameModel.getBoard();
+		IPlayerAgent oCurrentPlayer = m_oGameState.getActivePlayer();
 		//Get the King's position of Active Player
 		String[] KingArray= new String[] {"Black", "White", "Red"};
-		String KingName = "";
+		String stKingName = "";
 		IPieceAgent oKingPiece = null;
 		IPositionAgent oKingPosition = null;
-		int kingRank = 0;
-		int kingFile = 0;
-		for(String KingColour : KingArray)
+		int nKingRank = 0;
+		int nKingFile = 0;
+		for(String stKingColour : KingArray)
 		{
-			KingName = "King" + KingColour;
-			IPieceAgent tempPiece = oCurrentPlayer.getPiece(KingName);
+			stKingName = "King" + stKingColour;
+			IPieceAgent tempPiece = oCurrentPlayer.getPiece(stKingName);
 			if(tempPiece != null)
 			{
 				oKingPiece = tempPiece;
 				oKingPosition = oKingPiece.getPosition();
-				kingRank = oKingPosition.getRank();
-				kingFile = oKingPosition.getFile();
+				nKingRank = oKingPosition.getRank();
+				nKingFile = oKingPosition.getFile();
 			}
 		}
 		
@@ -185,16 +213,12 @@ public final class Game implements IGame, ITimerListener {
 					Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
 					for(Map.Entry<String, IMoveCandidate> oCandidateMovePostion : mpCandidateMovePosition.entrySet())
 					{
-						System.out.println("File and Rank of Piece:");
-						System.out.println(oCandidateMovePostion.getValue().getCandidatePosition().getFile());
-						System.out.println(oCandidateMovePostion.getValue().getCandidatePosition().getRank());
-						System.out.println("File and rank of King:");
-						System.out.println(kingRank);
-						System.out.println(kingFile);
 						int pieceRank = oCandidateMovePostion.getValue().getCandidatePosition().getRank();
 						int pieceFile = oCandidateMovePostion.getValue().getCandidatePosition().getFile();
-						if(pieceRank==kingRank && pieceFile==kingFile)
+						if(pieceRank==nKingRank && pieceFile==nKingFile)
 						{
+							m_stPlayerCheck = oRandomPiece.getPlayer().getName();
+							m_stPlayerInCheck = oCurrentPlayer.getName();
 							return true;
 						}	
 					}
@@ -253,25 +277,29 @@ public final class Game implements IGame, ITimerListener {
 	public void tryExecuteRule(IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Trying to make move." + oMoveCandidate.toLog(), "tryExecuteRule", "Game");
 
-		
-		
 		deselectedActivePosition();
-		
-//		IPlayerAgent oPlayer = m_oGameState.getActivePlayer();
-////		oPlayer.getAllPieces();
-//		System.out.println(oPlayer.getAllPieces());
-		//check here
 		
 		IBoardActivity oActivity = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
 //		m_oExtendedRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPiece, oMoveCandidate);
 
 		if (oActivity != null) {
 			m_oGameModel.addBoardActivity(oActivity);
+			//Check if the King is still in Check position after the player make the move. Then the current player is lose.
+			if(m_oGameState.getActivePlayer().getName()==m_stPlayerInCheck && tryCheckRule()==true)
+			{
+				JOptionPane.showConfirmDialog(null, "Check Mate!"+"\n"+ m_stPlayerInCheck +"'s King can't escape" +"\n" + m_stPlayerCheck + " is the winner!!!"  , "Winner chicken dinner!", JOptionPane.DEFAULT_OPTION);
+				m_oJChessView.removeCurrentTab();
+				IBoardAgent oNullBoard =  null;
+				m_oGameModel.setBoard(oNullBoard);
+				m_oTimer.stop();
+				
+			}
 			m_oGameState.switchPlayTurn();
 			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
 			notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+			//Set the Check time to 0. So the warning would appear again in the next turn
+			m_nCheckTime = 0;
 			
-			//also check here
 		}
 	}
 	
