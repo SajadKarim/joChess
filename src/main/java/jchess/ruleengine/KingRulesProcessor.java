@@ -2,6 +2,7 @@ package jchess.ruleengine;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -127,14 +128,47 @@ public final class KingRulesProcessor {
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPiece.getPosition(), null));
 		
-		Map<String, IMoveCandidate> mpCandidateMovePositionsForCastlingCheck = new HashMap<String, IMoveCandidate>();
-		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositionsForCastlingCheck);
+		Map<String, IMoveCandidate> mpHorizontalPathToNextPiece = new HashMap<String, IMoveCandidate>();
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpHorizontalPathToNextPiece);
+		
+		if (mpHorizontalPathToNextPiece.isEmpty()) {
+			System.out.println("Horizontal path seems to be empty");
+			return;
+		}
+		// Get One more field in the same direction to see what was blocking.
+		//Iterator<Entry<String,IMoveCandidate>> lastEntryIterator = mpHorizontalPathToNextPiece.entrySet().iterator();
+		Entry<String,IMoveCandidate> lastEntry = null;
+		for (Entry<String,IMoveCandidate> element : mpHorizontalPathToNextPiece.entrySet()) {
+			lastEntry = element;
+		}
+		// the final field with the piece or edge
+		Map<String, IPositionAgent> mpHorizontalPathToNextPiece_LastField = lastEntry.getValue().getCandidatePosition().getAllPathAgents(oPiece.getPlayer().getBoardMapping(), Direction.EDGE, Family.IGNORE, fDirection, Rank.IGNORE);
+		IPositionAgent oPositionOfLastField = mpHorizontalPathToNextPiece_LastField.values().stream().findFirst().get();
 
+		// If he's a rook and he has never moved get first and second entry in map (last and second-last fields in path)
+		if(oPositionOfLastField.getPiece() != null && oPositionOfLastField.getPiece().getName() == "Rook" + oPiece.getFamily() && oPositionOfLastField.getPiece().getPositionHistoryCount() == 0) {
+			
+			IMoveCandidate possibleKingMoveCandidate = mpHorizontalPathToNextPiece.values().stream().findFirst().get();
+			IMoveCandidate possibleRookMoveCandidate = mpHorizontalPathToNextPiece.values().stream().skip(1).findFirst().get();
+			
+			for (Entry<String, IMoveCandidate> moveCandidateEntry : mpHorizontalPathToNextPiece.entrySet()) {
+				IPositionAgent fieldOnPath = moveCandidateEntry.getValue().getCandidatePosition();
+				System.out.println("__LOOKING AT: " + fieldOnPath.getName());
+				// if field is endangered then quit the function
+			}
+			// if we got this far the path is safe and we can add the move candidate to the .
+			possibleKingMoveCandidate.getRule().getRuleData().setCustomName("MOVE[KING_CASTLING]");
+			possibleKingMoveCandidate.addSecondaryMove(new MoveCandidate(null, oPositionOfLastField.getPiece(), oPositionOfLastField, possibleRookMoveCandidate.getCandidatePosition()));
+			mpCandidateMovePositions.put(oPositionOfLastField.getName(), possibleKingMoveCandidate);
+			
+		}
+		
+		
 		System.out.println("Got possible positions for king.");
-		IPositionAgent possibleKingTarget = oPiece.getPosition();
+		/*IPositionAgent possibleKingTarget = oPiece.getPosition();
 		IPositionAgent possibleRookTarget = oPiece.getPosition();
 		
-		for (Entry<String, IMoveCandidate> moveCandidateEntry : mpCandidateMovePositionsForCastlingCheck.entrySet()) {
+		for (Entry<String, IMoveCandidate> moveCandidateEntry : mpHorizontalPathToNextPiece.entrySet()) {
 			IPositionAgent fieldOnPath = moveCandidateEntry.getValue().getCandidatePosition();
 			System.out.println("__LOOKING AT: " + fieldOnPath.getName());
 			
@@ -150,7 +184,7 @@ public final class KingRulesProcessor {
 				moveCandidateEntry.getValue().addSecondaryMove(new MoveCandidate(null, fieldOnPath.getPiece(), fieldOnPath, possibleRookTarget));
 				mpCandidateMovePositions.put(fieldOnPath.getName(), moveCandidateEntry.getValue());
 			}
-		}
+		}*/
 	}
 	
 	/**
