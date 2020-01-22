@@ -136,6 +136,7 @@ public final class KingRulesProcessor {
 		
 		for (Entry<String, IMoveCandidate> moveCandidateEntry : mpCandidateMovePositionsForCastlingCheck.entrySet()) {
 			IPositionAgent fieldOnPath = moveCandidateEntry.getValue().getCandidatePosition();
+			System.out.println("__LOOKING AT: " + fieldOnPath.getName());
 			
 			if (fieldOnPath.getPiece() == null) {
 				possibleRookTarget = possibleKingTarget;
