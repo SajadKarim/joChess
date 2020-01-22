@@ -72,8 +72,8 @@ public final class PlayerAgent implements IPlayerAgent {
 		return m_oImage;
 	}
 	
-	public void addPiece(IPieceAgent oPiece) {
-		m_mpPieces.put(oPiece.getName(), oPiece);
+	public void addPiece(String stPieceCustomName, IPieceAgent oPiece) {
+		m_mpPieces.put(stPieceCustomName, oPiece);
 	}
 
 	public IPieceAgent getPiece(String stName) {

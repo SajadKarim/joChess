@@ -1,6 +1,6 @@
 package jchess.common;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * IBoardData provides interface for the cache module.
@@ -25,11 +25,11 @@ public interface IBoardData extends IBoard {
 	public String getActivCellImagePath();
 	public String getMarkedCellImagePath();
 	
-	public void addMapping(String stPlayer, String stPiece, String stPosition);
+	public void addMapping(String stPlayer, IPlayerPieceMapping oMapping);
 	public void addPiece(IPiece oPiece);
 	public void addRule(IRule oRule);
 	public void addPlayer(IPlayer oPlayer);
 	public void addPosition(IPosition oPosition);
 	
-	public Map<String, String> getPlayerMapping(String stName);	
+	public List<IPlayerPieceMapping> getPlayerMapping(String stName);	
 }

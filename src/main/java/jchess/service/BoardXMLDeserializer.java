@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 
 import jchess.cache.BoardData;
 import jchess.cache.Path;
+import jchess.cache.PlayerPieceMapping;
 import jchess.cache.Quadrilateral;
 import jchess.common.IBoard;
 import jchess.common.IBoardFactory;
@@ -310,7 +311,6 @@ final class BoardXMLDeserializer {
 		}
 
 	}
-
 	
 	private static void loadRules(IBoard oBoard, IBoardFactory oBoardFactory, Element oRootElement, IAppLogger oLogger){
 		populateRule(oBoard, oBoardFactory, oRootElement, null, oLogger);
@@ -441,20 +441,21 @@ final class BoardXMLDeserializer {
 			
 				Element oPlayerNode = (Element)(lstPlayerNodes.item(nPlayerIndex));
 				
-				String stName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
+				String stPlayerName = oPlayerNode.getAttributes().getNamedItem("Name").getNodeValue();
 							
 				IPlayer oPlayer = oBoardFactory.createPlayer();
-				oPlayer.getPlayerData().setName(stName);
+				oPlayer.getPlayerData().setName(stPlayerName);
 	
 				try {
 					NodeList lstPieceNodes = ((Element)oPlayerNode.getElementsByTagName("Pieces").item(0)).getElementsByTagName("Piece");
 					for (int nPieceIndex = 0, nPieceIndexMax = lstPieceNodes.getLength(); nPieceIndex < nPieceIndexMax; nPieceIndex++) {
 						Element oPieceNode = (Element)(lstPieceNodes.item(nPieceIndex));
 		
-						String stPieceName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
-						String stPosition = oPieceNode.getAttributes().getNamedItem("Position").getNodeValue();
+						String stPieceCustomName = oPieceNode.getAttributes().getNamedItem("Name").getNodeValue();
+						String stPieceRef = oPieceNode.getAttributes().getNamedItem("PieceRef").getNodeValue();
+						String stPositionRef = oPieceNode.getAttributes().getNamedItem("PositionRef").getNodeValue();
 								
-						oBoard.getBoardData().addMapping(stName, stPieceName, stPosition);
+						oBoard.getBoardData().addMapping(stPlayerName, new PlayerPieceMapping( stPieceCustomName, stPieceRef, stPositionRef));
 					}   
 					
 					NodeList lstMappingNodes = ((Element)oPlayerNode.getElementsByTagName("BoardMapping").item(0)).getElementsByTagName("Map");

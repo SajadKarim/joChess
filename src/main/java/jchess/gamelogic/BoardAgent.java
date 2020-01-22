@@ -1,7 +1,9 @@
 package jchess.gamelogic;
 
 import java.awt.Image;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import jchess.cache.BoardData;
@@ -12,6 +14,7 @@ import jchess.common.IPiece;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayer;
 import jchess.common.IPlayerAgent;
+import jchess.common.IPlayerPieceMapping;
 import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
@@ -138,15 +141,17 @@ public final class BoardAgent implements IBoardAgent {
     	for (Map.Entry<String, IPlayerAgent> itPlayers: getPlayers().entrySet()) {
     		IPlayerAgent oPlayer = itPlayers.getValue();
 
-    		Map<String, String> mpPlayerPieceMapping = m_oBoard.getPlayerMapping(oPlayer.getName());
+    		List<IPlayerPieceMapping> mpPlayerPieceMapping = m_oBoard.getPlayerMapping(oPlayer.getName());
     		if (mpPlayerPieceMapping != null) {
-	    		for (Map.Entry<String, String> itPlayerPieceMapping : mpPlayerPieceMapping.entrySet()) {
-	    			IPositionAgent oPosition = getPositionAgent(itPlayerPieceMapping.getKey());
-	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getUnlinkedPiece(itPlayerPieceMapping.getValue()).clone();
+    			Iterator<IPlayerPieceMapping> it = mpPlayerPieceMapping.iterator();
+    			while( it.hasNext()) {
+    				IPlayerPieceMapping oMapping = it.next();
+    				IPositionAgent oPosition = getPositionAgent(oMapping.getPositionRef());
+	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getUnlinkedPiece(oMapping.getPieceRef()).clone();
 	    			
 	    			oPiece.setPlayer(oPlayer);
 	    			
-	    			oPlayer.addPiece(oPiece);
+	    			oPlayer.addPiece(oMapping.getPieceCustomName(), oPiece);
 	    			
 	    			linkPieceAndPosition(oPosition, oPiece);    			
 	    		}

@@ -4078,44 +4078,44 @@
   <Players>
     <Player Name="P1">
       <Pieces>
-        <Piece Name="KingWhite" Position="e1" />
-        <Piece Name="QueenWhite" Position="d1" />
-        <Piece Name="BishopWhite" Position="f1" />
-        <Piece Name="BishopWhite" Position="c1" />
-        <Piece Name="KnightWhite" Position="g1" />
-        <Piece Name="KnightWhite" Position="b1" />
-        <Piece Name="RookWhite" Position="h1" />
-        <Piece Name="RookWhite" Position="a1" />
-        <Piece Name="CannonWhiteL" Position="a2" />
-        <Piece Name="PawnWhite" Position="b2" />
-        <Piece Name="PawnWhite" Position="c2" />
-        <Piece Name="PawnWhite" Position="d2" />
-        <Piece Name="PawnWhite" Position="e2" />
-        <Piece Name="PawnWhite" Position="f2" />
-        <Piece Name="PawnWhite" Position="g2" />
-        <Piece Name="CannonWhiteR" Position="h2" />
+        <Piece Name="KingWhite"    PieceRef="KingWhite" PositionRef="e1" />
+        <Piece Name="QueenWhite"   PieceRef="QueenWhite" PositionRef="d1" />
+        <Piece Name="BishopWhite1"  PieceRef="BishopWhite" PositionRef="f1" />
+        <Piece Name="BishopWhite2"  PieceRef="BishopWhite" PositionRef="c1" />
+        <Piece Name="KnightWhite1"  PieceRef="KnightWhite" PositionRef="g1" />
+        <Piece Name="KnightWhite2"  PieceRef="KnightWhite" PositionRef="b1" />
+        <Piece Name="RookWhite1"    PieceRef="RookWhite" PositionRef="h1" />
+        <Piece Name="RookWhite2"    PieceRef="RookWhite" PositionRef="a1" />
+        <Piece Name="CannonWhiteL" PieceRef="CannonWhiteL" PositionRef="a2" />
+        <Piece Name="PawnWhite2"    PieceRef="PawnWhite" PositionRef="b2" />
+        <Piece Name="PawnWhite3"    PieceRef="PawnWhite" PositionRef="c2" />
+        <Piece Name="PawnWhite4"    PieceRef="PawnWhite" PositionRef="d2" />
+        <Piece Name="PawnWhite5"    PieceRef="PawnWhite" PositionRef="e2" />
+        <Piece Name="PawnWhite6"    PieceRef="PawnWhite" PositionRef="f2" />
+        <Piece Name="PawnWhite7"    PieceRef="PawnWhite" PositionRef="g2" />
+        <Piece Name="CannonWhiteR" PieceRef="CannonWhiteR" PositionRef="h2" />
       </Pieces>
       <BoardMapping>
       </BoardMapping>
     </Player>
     <Player Name="P2">
       <Pieces>
-        <Piece Name="KingBlack" Position="i8" />
-        <Piece Name="QueenBlack" Position="d8" />
-        <Piece Name="BishopBlack" Position="j8" />
-        <Piece Name="BishopBlack" Position="c8" />
-        <Piece Name="KnightBlack" Position="k8" />
-        <Piece Name="KnightBlack" Position="b8" />
-        <Piece Name="RookBlack" Position="l8" />
-        <Piece Name="RookBlack" Position="a8" />
-        <Piece Name="CannonBlackR" Position="a7" />
-        <Piece Name="PawnBlack" Position="b7" />
-        <Piece Name="PawnBlack" Position="c7" />
-        <Piece Name="PawnBlack" Position="d7" />
-        <Piece Name="PawnBlack" Position="i7" />
-        <Piece Name="PawnBlack" Position="j7" />
-        <Piece Name="PawnBlack" Position="k7" />
-        <Piece Name="CannonBlackL" Position="l7" />
+        <Piece Name="KingBlack"    PieceRef="KingBlack" PositionRef="i8" />
+        <Piece Name="QueenBlack"   PieceRef="QueenBlack" PositionRef="d8" />
+        <Piece Name="BishopBlack1"  PieceRef="BishopBlack" PositionRef="j8" />
+        <Piece Name="BishopBlack2"  PieceRef="BishopBlack" PositionRef="c8" />
+        <Piece Name="KnightBlack1"  PieceRef="KnightBlack" PositionRef="k8" />
+        <Piece Name="KnightBlack2"  PieceRef="KnightBlack" PositionRef="b8" />
+        <Piece Name="RookBlack1"    PieceRef="RookBlack" PositionRef="l8" />
+        <Piece Name="RookBlack2"    PieceRef="RookBlack" PositionRef="a8" />
+        <Piece Name="CannonBlackL" PieceRef="CannonBlackR" PositionRef="a7" />
+        <Piece Name="PawnBlack2"    PieceRef="PawnBlack" PositionRef="b7" />
+        <Piece Name="PawnBlack3"    PieceRef="PawnBlack" PositionRef="c7" />
+        <Piece Name="PawnBlack4"    PieceRef="PawnBlack" PositionRef="d7" />
+        <Piece Name="PawnBlack5"    PieceRef="PawnBlack" PositionRef="i7" />
+        <Piece Name="PawnBlack6"    PieceRef="PawnBlack" PositionRef="j7" />
+        <Piece Name="PawnBlack7"    PieceRef="PawnBlack" PositionRef="k7" />
+        <Piece Name="CannonBlackR" PieceRef="CannonBlackL" PositionRef="l7" />
       </Pieces>
       <BoardMapping>
         <Map From="l" To="a" />
@@ -4147,22 +4147,22 @@
     </Player>
     <Player Name="P3">
       <Pieces>
-        <Piece Name="KingRed" Position="i12" />
-        <Piece Name="QueenRed" Position="e12" />
-        <Piece Name="BishopRed" Position="j12" />
-        <Piece Name="BishopRed" Position="f12" />
-        <Piece Name="KnightRed" Position="k12" />
-        <Piece Name="KnightRed" Position="g12" />
-        <Piece Name="RookRed" Position="l12" />
-        <Piece Name="RookRed" Position="h12" />
-        <Piece Name="PawnRed" Position="e11" />
-        <Piece Name="PawnRed" Position="f11" />
-        <Piece Name="PawnRed" Position="g11" />
-        <Piece Name="CannonRedL" Position="h11" />
-        <Piece Name="PawnRed" Position="i11" />
-        <Piece Name="PawnRed" Position="j11" />
-        <Piece Name="PawnRed" Position="k11" />
-        <Piece Name="CannonRedR" Position="l11" />
+        <Piece Name="KingRed"    PieceRef="KingRed" PositionRef="i12" />
+        <Piece Name="QueenRed"   PieceRef="QueenRed" PositionRef="e12" />
+        <Piece Name="BishopRed1"  PieceRef="BishopRed" PositionRef="j12" />
+        <Piece Name="BishopRed2"  PieceRef="BishopRed" PositionRef="f12" />
+        <Piece Name="KnightRed1"  PieceRef="KnightRed" PositionRef="k12" />
+        <Piece Name="KnightRed2"  PieceRef="KnightRed" PositionRef="g12" />
+        <Piece Name="RookRed1"    PieceRef="RookRed" PositionRef="l12" />
+        <Piece Name="RookRed2"    PieceRef="RookRed" PositionRef="h12" />
+        <Piece Name="CannonRedL" PieceRef="PawnRed" PositionRef="e11" />
+        <Piece Name="PawnRed2"    PieceRef="PawnRed" PositionRef="f11" />
+        <Piece Name="PawnRed3"    PieceRef="PawnRed" PositionRef="g11" />
+        <Piece Name="PawnRed4"    PieceRef="CannonRedL" PositionRef="h11" />
+        <Piece Name="PawnRed5"    PieceRef="PawnRed" PositionRef="i11" />
+        <Piece Name="PawnRed6"    PieceRef="PawnRed" PositionRef="j11" />
+        <Piece Name="PawnRed7"    PieceRef="PawnRed" PositionRef="k11" />
+        <Piece Name="CannonRedR" PieceRef="CannonRedR" PositionRef="l11" />
       </Pieces>
       <BoardMapping>
         <Map From="h" To="a" />

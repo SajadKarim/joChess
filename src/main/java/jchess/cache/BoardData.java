@@ -1,11 +1,14 @@
 package jchess.cache;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import jchess.common.IBoardData;
 import jchess.common.IPiece;
 import jchess.common.IPlayer;
+import jchess.common.IPlayerPieceMapping;
 import jchess.common.IPosition;
 import jchess.common.IRule;
 
@@ -30,14 +33,14 @@ public final class BoardData implements IBoardData {
     private Map<String, IPiece> m_mpPieces;
     private Map<String, IPlayer> m_mpPlayers;
     private Map<String, IPosition> m_mpPosition;
-    private Map<String, Map<String, String>> m_mpMapping;
+    private Map<String, List<IPlayerPieceMapping>> m_mpMapping;
     
     public BoardData() {
     	m_mpRules = new HashMap<String, IRule>();
     	m_mpPieces = new HashMap<String, IPiece>();
     	m_mpPlayers = new HashMap<String, IPlayer>();    	
     	m_mpPosition = new HashMap<String, IPosition>();
-    	m_mpMapping = new HashMap<String, Map<String, String>>();    	
+    	m_mpMapping = new HashMap<String, List<IPlayerPieceMapping>>();    	
     }
     
     // region: Implements IBoard
@@ -148,15 +151,15 @@ public final class BoardData implements IBoardData {
 		m_mpPieces.put(oPiece.getName(), oPiece);
 	}
 
-	public Map<String, String> getPlayerMapping(String stName) {
+	public List<IPlayerPieceMapping> getPlayerMapping(String stName) {
 		return m_mpMapping.get(stName);
 	}	
     
-	public void addMapping(String stPlayer, String stPiece, String stPosition) {
+	public void addMapping(String stPlayer, IPlayerPieceMapping oMapping) {
 		if (m_mpMapping.get(stPlayer) == null) {
-        	m_mpMapping.put(stPlayer, new HashMap<String, String>());
+        	m_mpMapping.put(stPlayer, new LinkedList<IPlayerPieceMapping>());
     	}
-    	m_mpMapping.get(stPlayer).put(stPosition, stPiece);
+    	m_mpMapping.get(stPlayer).add(oMapping);
     }
 	//endregion
 	
