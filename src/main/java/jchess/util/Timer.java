@@ -20,12 +20,16 @@ public final class Timer implements ITimer {
 	private Boolean m_bNotifyEverySecond;
 	private Boolean m_bNotifyWhenTimerEnds;
 	
+	private Boolean m_bActive;
+	
     private final ArrayList<ITimerListener> m_lstLiteners;
 
     @Inject
 	public Timer() {
         m_oThread = new Thread(this);
         m_lstLiteners = new ArrayList<ITimerListener>();
+        
+        m_bActive = false;
 	}
 	
     public void start(int nTimerLengthInSeconds, 
@@ -39,20 +43,23 @@ public final class Timer implements ITimer {
 		m_bNotifyEverySecond = bNotifyEverySecond;
 		m_bNotifyWhenTimerEnds = bNotifyWhenTimerEnds;
 		
+		m_bActive = true;
         m_oThread.start();
     }
 
     public void stop() {
     	m_nTimerLengthInSeconds = 0;
     	m_nTimerRecurrenceCount = 0;
+    	m_bActive = false;
     	
-        try {
+        /*try {
         	m_oThread.wait();
         } catch (InterruptedException exc) {
             System.out.println("Error blocking thread: " + exc);
         } catch (IllegalMonitorStateException exc1) {
             System.out.println("Error blocking thread: " + exc1);
         }
+        */
     }
 
 
@@ -71,6 +78,9 @@ public final class Timer implements ITimer {
 	            }
 	
 	            m_nTimerRemainingSeconds--;
+
+	            if( !m_bActive)
+	        		break;
 	        }
 
         	if (m_bNotifyEverySecond) {
@@ -80,11 +90,16 @@ public final class Timer implements ITimer {
         	m_nTimerRemainingSeconds = m_nTimerLengthInSeconds;
         	
         	m_nTimerRecurrenceCount--;
+        	
+        	if( !m_bActive)
+        		break;
         }
         
-        this.stop();
+        //this.stop();
     }
 
+	
+	
     private void timeOver() {
     }
     
