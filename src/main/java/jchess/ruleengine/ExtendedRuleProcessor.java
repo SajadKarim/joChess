@@ -43,7 +43,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "ExtendedRuleProcessor");
 
 		super.tryEvaluateAllRules(oBoard, oPiece, mpCandidatePositions);
-
+		System.out.println("Evaluating selected move candidate: " + oPiece.getName());
 		switch (oPiece.getName()) {
 			case "PawnWhite":
 			case "PawnBlack":
@@ -58,6 +58,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 				KingRulesProcessor.tryKingCastlingRules(oBoard, oPiece, mpCandidatePositions);
 			}
 				break;
+
 			default:
 				break;
 		}
