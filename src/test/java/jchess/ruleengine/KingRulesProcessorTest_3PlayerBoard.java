@@ -61,22 +61,21 @@ class KingRulesProcessorTest_3PlayerBoard {
 	}
 	
 	@Test
-	void testTryShortCastlingRule_FailureCaseEndangered() {
+	void testTryCastlingRule_Short_FailureCaseEndangered() {
 		//make case where path is free but endangered
-		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("e1"); // White King
+		IPositionAgent oKingPosition = m_oBoard.getPositionAgent("e1"); // White King
 		m_oBoard.getPositionAgent("f1").setPiece(null); // Remove White Knight
 		m_oBoard.getPositionAgent("g1").setPiece(null); // Remove White Horse
 		IPositionAgent oPawnPosition = m_oBoard.getPositionAgent("g2"); // Remove White Pawn
 		
-		// This change is made to create a scenario where a red Pawn has reached g2 position and endangers the path for castling.
+		// This change is made to create a scenario where a red Pawn has reached position g2 and endangers the path for castling.
 		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("f11").getPiece();
 		oPawnPosition.setPiece(oPawnPiece); 
-		oPawnPiece.setPosition(oPawnPosition);
-		
+		oPawnPiece.setPosition(oPawnPosition);		
 		
 		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		KingRulesProcessor.tryShortCastlingRule(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.FORWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 0;
 		int nActualValuesInMap = mpCandidatePositions.size();
@@ -85,24 +84,99 @@ class KingRulesProcessorTest_3PlayerBoard {
 	}
 	
 	@Test
-	void testTryShortCastlingRule_FailureCaseVacant() {
+	void testTryCastlingRule_Long_FailureCaseEndangered() {
 		//make case where path is free but endangered
-		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("e1"); // White King
-		m_oBoard.getPositionAgent("f1").setPiece(null); // Remove White Knight
-		IPositionAgent oPawnPosition = m_oBoard.getPositionAgent("g2"); // Remove White Pawn
-				
+		IPositionAgent oKingPosition = m_oBoard.getPositionAgent("e1"); // White King
+		m_oBoard.getPositionAgent("d1").setPiece(null); // Remove White Queen
+		m_oBoard.getPositionAgent("c1").setPiece(null); // Remove White Knight
+		m_oBoard.getPositionAgent("b1").setPiece(null); // Remove White Horse
+		IPositionAgent oPawnPosition = m_oBoard.getPositionAgent("b2"); // Remove White Pawn
+		
+		// This change is made to create a scenario where a black Pawn has reached position b2 and endangers the path for castling.
+		IPieceAgent oPawnPiece = m_oBoard.getPositionAgent("b7").getPiece();
+		oPawnPosition.setPiece(oPawnPiece); 
+		oPawnPiece.setPosition(oPawnPosition);		
+		
 		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
 		
-		KingRulesProcessor.tryShortCastlingRule(m_oBoard, oCurrentPosition.getPiece(), mpCandidatePositions);
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.BACKWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
 
 		int nExpectedValuesInMap = 0;
 		int nActualValuesInMap = mpCandidatePositions.size();
 		
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 	}
+	
 	@Test
-	void testTryShortCastlingRule_SuccessCase() {
+	void testTryCastlingRule_Short_FailureCaseVacant() {
+		//make case where path is free but endangered
+		IPositionAgent oKingPosition = m_oBoard.getPositionAgent("e1"); // White King
+		m_oBoard.getPositionAgent("f1").setPiece(null); // Remove White Knight
+		IPositionAgent oPawnPosition = m_oBoard.getPositionAgent("g2"); // Remove White Pawn
+				
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
+		
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.FORWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
+
+		int nExpectedValuesInMap = 0;
+		int nActualValuesInMap = mpCandidatePositions.size();
+		
+		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
+	}
+	
+	@Test
+	void testTryCastlingRule_Long_FailureCaseVacant() {
+		//make case where path is free but endangered
+		IPositionAgent oKingPosition = m_oBoard.getPositionAgent("e1"); // White King
+		m_oBoard.getPositionAgent("d1").setPiece(null); // Remove White Queen
+		m_oBoard.getPositionAgent("c1").setPiece(null); // Remove White Knight
+		
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
+		
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.BACKWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
+
+		int nExpectedValuesInMap = 0;
+		int nActualValuesInMap = mpCandidatePositions.size();
+		
+		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
+	}
+	
+	@Test
+	void testTryCastlingRule_ShortSuccessCase() {
 		//make case where path is free and not endangered
+		IPositionAgent oKingPosition = m_oBoard.getPositionAgent("e1"); // White King
+		m_oBoard.getPositionAgent("f1").setPiece(null); // Remove White Knight
+		m_oBoard.getPositionAgent("g1").setPiece(null); // Remove White Horse
+
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
+		
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.FORWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
+
+		int nExpectedValuesInMap = 1;
+		int nActualValuesInMap = mpCandidatePositions.size();
+		
+		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
+	}
+	
+	@Test
+	void testTryCastlingRule_SuccessCase() {
+		//make case where path is free and not endangered
+		IPositionAgent oKingPosition = m_oBoard.getPositionAgent("e1"); // White King
+		m_oBoard.getPositionAgent("d1").setPiece(null); // Remove White Queen
+		m_oBoard.getPositionAgent("c1").setPiece(null); // Remove White Knight
+		m_oBoard.getPositionAgent("b1").setPiece(null); // Remove White Horse
+		m_oBoard.getPositionAgent("f1").setPiece(null); // Remove White Knight
+		m_oBoard.getPositionAgent("g1").setPiece(null); // Remove White Horse
+
+		Map<String, IMoveCandidate> mpCandidatePositions = new HashMap<String, IMoveCandidate>();		
+
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.BACKWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
+		KingRulesProcessor.tryCastlingRule(m_oRuleProcessor, File.FORWARD, m_oBoard, oKingPosition.getPiece(), mpCandidatePositions);
+
+		int nExpectedValuesInMap = 2;
+		int nActualValuesInMap = mpCandidatePositions.size();
+		
+		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 	}
 
 }
