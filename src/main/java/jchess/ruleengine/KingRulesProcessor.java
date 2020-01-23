@@ -164,70 +164,46 @@ public final class KingRulesProcessor {
 				mpNextField = posNextField.getAllPathAgents(oPiece.getPlayer().getBoardMapping(), Direction.EDGE, Family.IGNORE, fDirection, Rank.SAME);
 				continue;
 			}
-			System.out.println("__It is a: " + pcNextField.getName() + ", Rook" + oPiece.getFamily() + " expected. with moveHistory length: " + pcNextField.getPositionHistoryCount());
+			System.out.println("__Comparing string '" + pcNextField.getName() + "' and 'Rook" + oPiece.getFamily() + "'");
+			boolean sameName = pcNextField.getName().equals("Rook" + oPiece.getFamily());
+			System.out.println("__same: " + sameName);
+			System.out.println("__with moveHistory length: " + pcNextField.getPositionHistoryCount());
 			// otherwise If he's a rook and he has never moved get first and second entry in map (last and second-last fields in path)
-			if(pcNextField.getName() == "Rook" + oPiece.getFamily()) 
-			{ 
-				System.out.println("__RookWhite is found.");
-				if (pcNextField.getPositionHistoryCount() == 0) 
-				{
-					System.out.println("__RookWhites moveHistory length is 0.");
-			
-					IRule oRule = m_oBoardFactory.createRule();		
-					oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
-					oRule.getRuleData().setDirection(Direction.EDGE);
-					oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
-					oRule.getRuleData().setFile(fDirection);
-					oRule.getRuleData().setRank(Rank.SAME);
-					oRule.getRuleData().setFamily(Family.IGNORE);
-					oRule.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
-					oRule.getRuleData().setCustomName("MOVE[KING_CASTLING]");
-					System.out.println("__Rule created.");
-					//IMoveCandidate possibleKingMoveCandidate = mpHorizontalPathToNextPiece.values().stream().findFirst().get();
-					//IMoveCandidate possibleRookMoveCandidate = mpHorizontalPathToNextPiece.values().stream().skip(1).findFirst().get();
-					
-					for (IPositionAgent moveCandidateEntry : pathToRook) {
-						System.out.println("__LOOKING AT: " + moveCandidateEntry.getName());
-						// if field is endangered then quit the function
-					}
-					// if we got this far the path is safe and we can add the move candidate to the map of possible move candidates.
-					IMoveCandidate oCastlingMoveKingCandidate = new MoveCandidate((IRuleAgent)oRule, oPiece, oPiece.getPosition(), possibleKingTarget);
-					IMoveCandidate oCastlingMoveRookCandidate = new MoveCandidate(null, posNextField.getPiece(), posNextField, possibleRookTarget);
-					System.out.println("__candidate moves created. they are: KING " + oCastlingMoveKingCandidate.getCandidatePosition().getName() + " and ROOK " + oCastlingMoveRookCandidate.getCandidatePosition().getName());
-					oCastlingMoveKingCandidate.addSecondaryMove(oCastlingMoveRookCandidate);
-					mpCandidateMovePositions.put(possibleKingTarget.getName(), oCastlingMoveKingCandidate);
-					System.out.println("__candidateMoves added.");
-					break;
+			if(sameName && pcNextField.getPositionHistoryCount() == 0) 
+			{
+				System.out.println("__RookWhites moveHistory length is 0.");
+		
+				IRule oRule = m_oBoardFactory.createRule();		
+				oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
+				oRule.getRuleData().setDirection(Direction.EDGE);
+				oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+				oRule.getRuleData().setFile(fDirection);
+				oRule.getRuleData().setRank(Rank.SAME);
+				oRule.getRuleData().setFamily(Family.IGNORE);
+				oRule.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+				oRule.getRuleData().setCustomName("MOVE[KING_CASTLING]");
+				System.out.println("__Rule created.");
+				//IMoveCandidate possibleKingMoveCandidate = mpHorizontalPathToNextPiece.values().stream().findFirst().get();
+				//IMoveCandidate possibleRookMoveCandidate = mpHorizontalPathToNextPiece.values().stream().skip(1).findFirst().get();
+				
+				for (IPositionAgent moveCandidateEntry : pathToRook) {
+					System.out.println("__LOOKING AT: " + moveCandidateEntry.getName());
+					// if field is endangered then quit the function
 				}
+				// if we got this far the path is safe and we can add the move candidate to the map of possible move candidates.
+				IMoveCandidate oCastlingMoveKingCandidate = new MoveCandidate((IRuleAgent)oRule, oPiece, oPiece.getPosition(), possibleKingTarget);
+				IMoveCandidate oCastlingMoveRookCandidate = new MoveCandidate(null, posNextField.getPiece(), posNextField, possibleRookTarget);
+				System.out.println("__candidate moves created. they are: KING " + oCastlingMoveKingCandidate.getCandidatePosition().getName() + " and ROOK " + oCastlingMoveRookCandidate.getCandidatePosition().getName());
+				oCastlingMoveKingCandidate.addSecondaryMove(oCastlingMoveRookCandidate);
+				mpCandidateMovePositions.put(possibleKingTarget.getName(), oCastlingMoveKingCandidate);
+				System.out.println("__candidateMoves added.");
+				break;				
 			
 			}
 			else {
 				System.out.println("__Criteria not met. continuing..");
 				break;
 			}
-
-		
-		//System.out.println("Got possible positions for king.");
-		/*IPositionAgent possibleKingTarget = oPiece.getPosition();
-		IPositionAgent possibleRookTarget = oPiece.getPosition();
-		
-		for (Entry<String, IMoveCandidate> moveCandidateEntry : mpHorizontalPathToNextPiece.entrySet()) {
-			IPositionAgent fieldOnPath = moveCandidateEntry.getValue().getCandidatePosition();
-			System.out.println("__LOOKING AT: " + fieldOnPath.getName());
-			
-			if (fieldOnPath.getPiece() == null) {
-				possibleRookTarget = possibleKingTarget;
-				possibleKingTarget = fieldOnPath;
-			}
-			else if (fieldOnPath.getPiece().getName() == "Rook" + oPiece.getFamily() && fieldOnPath.getPiece().getPositionHistoryCount() == 0) {
-				// we have found a rook so the path seems to be clear.
-				// TODO: check if fields are endangered
-				
-				moveCandidateEntry.getValue().getRule().getRuleData().setCustomName("MOVE[KING_CASTLING]");
-				moveCandidateEntry.getValue().addSecondaryMove(new MoveCandidate(null, fieldOnPath.getPiece(), fieldOnPath, possibleRookTarget));
-				mpCandidateMovePositions.put(fieldOnPath.getName(), moveCandidateEntry.getValue());
-			}
-		}*/
 		}
 	}
 	
