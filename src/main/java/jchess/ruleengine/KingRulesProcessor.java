@@ -60,13 +60,8 @@ public final class KingRulesProcessor {
 	
 	}
 	
-	public static boolean isAnyFieldEndangeredOrVacant(IPositionAgent[] fields, IBoardAgent oCurrentBoard, IPlayerAgent oCurrentPlayer) {
-		// if any of the fields is vacant return true
-		for (IPositionAgent field : fields) {
-			if (field.getPiece() != null) {
-				return true;
-			}
-		}
+	public static boolean isFieldEndangered(IPositionAgent field, IBoardAgent oCurrentBoard, IPlayerAgent oCurrentPlayer) {
+
 		for(Map.Entry<String,IPositionAgent> oPositionPiece : oCurrentBoard.getAllPositionAgents().entrySet()) {
 			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
 			if(oRandomPiece != null)
@@ -112,7 +107,7 @@ public final class KingRulesProcessor {
 	 */
 	public static void tryCastlingRule(IRuleProcessor oRuleProcessor, File fDirection, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		
-		IRule oRule = m_oBoardFactory.createRule();		
+		/*IRule oRule = m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -129,42 +124,90 @@ public final class KingRulesProcessor {
 		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPiece.getPosition(), null));
 		
 		Map<String, IMoveCandidate> mpHorizontalPathToNextPiece = new HashMap<String, IMoveCandidate>();
-		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpHorizontalPathToNextPiece);
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositions);
 		
-		if (mpHorizontalPathToNextPiece.isEmpty()) {
+		if (mpCandidateMovePositions.isEmpty()) {
 			System.out.println("Horizontal path seems to be empty");
 			return;
 		}
 		// Get One more field in the same direction to see what was blocking.
-		//Iterator<Entry<String,IMoveCandidate>> lastEntryIterator = mpHorizontalPathToNextPiece.entrySet().iterator();
+		
+		// first get the last field of the path
 		Entry<String,IMoveCandidate> lastEntry = null;
-		for (Entry<String,IMoveCandidate> element : mpHorizontalPathToNextPiece.entrySet()) {
+		for (Entry<String,IMoveCandidate> element : mpCandidateMovePositions.entrySet()) {
 			lastEntry = element;
 		}
-		// the final field with the piece or edge
-		Map<String, IPositionAgent> mpHorizontalPathToNextPiece_LastField = lastEntry.getValue().getCandidatePosition().getAllPathAgents(oPiece.getPlayer().getBoardMapping(), Direction.EDGE, Family.IGNORE, fDirection, Rank.IGNORE);
-		IPositionAgent oPositionOfLastField = mpHorizontalPathToNextPiece_LastField.values().stream().findFirst().get();
+		IMoveCandidate oHorizontalPathToNextPiece_LastFieldMoveCandidate = lastEntry.getValue();
+		IPositionAgent oHorizontalPathToNextPiece_LastFieldMovePosition = oHorizontalPathToNextPiece_LastFieldMoveCandidate.getCandidatePosition();
+		*/
+		// then get the final field with the piece or edge
+		
+		
+		IPositionAgent possibleKingTarget = oPiece.getPosition();
+		IPositionAgent possibleRookTarget = oPiece.getPosition();
+		LinkedList<IPositionAgent> pathToRook = new LinkedList<IPositionAgent>();
+		Map<String, IPositionAgent> mpNextField = oPiece.getPosition().getAllPathAgents(oPiece.getPlayer().getBoardMapping(), Direction.EDGE, Family.IGNORE, fDirection, Rank.SAME);
 
-		// If he's a rook and he has never moved get first and second entry in map (last and second-last fields in path)
-		if(oPositionOfLastField.getPiece() != null && oPositionOfLastField.getPiece().getName() == "Rook" + oPiece.getFamily() && oPositionOfLastField.getPiece().getPositionHistoryCount() == 0) {
+		while(true)
+		{
+			// find the next field in direction of edge
+			IPositionAgent posNextField = mpNextField.values().stream().findFirst().get();
+			IPieceAgent pcNextField = posNextField.getPiece();
 			
-			IMoveCandidate possibleKingMoveCandidate = mpHorizontalPathToNextPiece.values().stream().findFirst().get();
-			IMoveCandidate possibleRookMoveCandidate = mpHorizontalPathToNextPiece.values().stream().skip(1).findFirst().get();
+			System.out.println("__Checking Field For Castling Move: " + posNextField.getName());
 			
-			for (Entry<String, IMoveCandidate> moveCandidateEntry : mpHorizontalPathToNextPiece.entrySet()) {
-				IPositionAgent fieldOnPath = moveCandidateEntry.getValue().getCandidatePosition();
-				System.out.println("__LOOKING AT: " + fieldOnPath.getName());
-				// if field is endangered then quit the function
+			// if its empty then set king and rook target positions
+			if (posNextField.getPiece() == null) {
+				possibleRookTarget = possibleKingTarget;
+				possibleKingTarget = posNextField;
+				pathToRook.add(posNextField);
+				mpNextField = posNextField.getAllPathAgents(oPiece.getPlayer().getBoardMapping(), Direction.EDGE, Family.IGNORE, fDirection, Rank.SAME);
+				continue;
 			}
-			// if we got this far the path is safe and we can add the move candidate to the .
-			possibleKingMoveCandidate.getRule().getRuleData().setCustomName("MOVE[KING_CASTLING]");
-			possibleKingMoveCandidate.addSecondaryMove(new MoveCandidate(null, oPositionOfLastField.getPiece(), oPositionOfLastField, possibleRookMoveCandidate.getCandidatePosition()));
-			mpCandidateMovePositions.put(oPositionOfLastField.getName(), possibleKingMoveCandidate);
+			System.out.println("__It is a: " + pcNextField.getName() + ", Rook" + oPiece.getFamily() + " expected. with moveHistory length: " + pcNextField.getPositionHistoryCount());
+			// otherwise If he's a rook and he has never moved get first and second entry in map (last and second-last fields in path)
+			if(pcNextField.getName() == "Rook" + oPiece.getFamily()) 
+			{ 
+				System.out.println("__RookWhite is found.");
+				if (pcNextField.getPositionHistoryCount() == 0) 
+				{
+					System.out.println("__RookWhites moveHistory length is 0.");
 			
-		}
+					IRule oRule = m_oBoardFactory.createRule();		
+					oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
+					oRule.getRuleData().setDirection(Direction.EDGE);
+					oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+					oRule.getRuleData().setFile(fDirection);
+					oRule.getRuleData().setRank(Rank.SAME);
+					oRule.getRuleData().setFamily(Family.IGNORE);
+					oRule.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+					oRule.getRuleData().setCustomName("MOVE[KING_CASTLING]");
+					System.out.println("__Rule created.");
+					//IMoveCandidate possibleKingMoveCandidate = mpHorizontalPathToNextPiece.values().stream().findFirst().get();
+					//IMoveCandidate possibleRookMoveCandidate = mpHorizontalPathToNextPiece.values().stream().skip(1).findFirst().get();
+					
+					for (IPositionAgent moveCandidateEntry : pathToRook) {
+						System.out.println("__LOOKING AT: " + moveCandidateEntry.getName());
+						// if field is endangered then quit the function
+					}
+					// if we got this far the path is safe and we can add the move candidate to the map of possible move candidates.
+					IMoveCandidate oCastlingMoveKingCandidate = new MoveCandidate((IRuleAgent)oRule, oPiece, oPiece.getPosition(), possibleKingTarget);
+					IMoveCandidate oCastlingMoveRookCandidate = new MoveCandidate(null, posNextField.getPiece(), posNextField, possibleRookTarget);
+					System.out.println("__candidate moves created. they are: KING " + oCastlingMoveKingCandidate.getCandidatePosition().getName() + " and ROOK " + oCastlingMoveRookCandidate.getCandidatePosition().getName());
+					oCastlingMoveKingCandidate.addSecondaryMove(oCastlingMoveRookCandidate);
+					mpCandidateMovePositions.put(possibleKingTarget.getName(), oCastlingMoveKingCandidate);
+					System.out.println("__candidateMoves added.");
+					break;
+				}
+			
+			}
+			else {
+				System.out.println("__Criteria not met. continuing..");
+				break;
+			}
+
 		
-		
-		System.out.println("Got possible positions for king.");
+		//System.out.println("Got possible positions for king.");
 		/*IPositionAgent possibleKingTarget = oPiece.getPosition();
 		IPositionAgent possibleRookTarget = oPiece.getPosition();
 		
@@ -185,6 +228,7 @@ public final class KingRulesProcessor {
 				mpCandidateMovePositions.put(fieldOnPath.getName(), moveCandidateEntry.getValue());
 			}
 		}*/
+		}
 	}
 	
 	/**
