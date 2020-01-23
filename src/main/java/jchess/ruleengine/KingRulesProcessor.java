@@ -31,8 +31,8 @@ import jchess.gui.IGUIHandle;
 import jchess.util.LogLevel;
 
 /**
- * This is a custom class specific to process the custom rules that are peculiar to the King piece only.
- * This class defines all the custom rules that at the moments are not supportable in XML.
+ * This is a custom class specific to process the custom rules that are specific to the King piece only.
+ * This class defines all the custom rules that at the moment are not supportable in XML.
  *  
  * @author	Kenneth Allan
  * @since	21 Jan 2020
@@ -42,7 +42,7 @@ public final class KingRulesProcessor {
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
 	/**
-	 * This method checks the eligibility of the long and short king castling rules.
+	 * This method checks the eligibility of the long and short king castling moves and writes the possible move candidates into the passed map.
 	 * 
 	 * @param IBoardAgent
 	 * @param IPieceAgent
