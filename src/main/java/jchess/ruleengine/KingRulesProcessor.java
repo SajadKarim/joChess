@@ -1,12 +1,8 @@
 package jchess.ruleengine;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 
 import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
@@ -23,12 +19,9 @@ import jchess.common.enumerator.File;
 import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
-import jchess.common.gui.IPresenter;
 import jchess.gamelogic.BoardActivity;
 import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
-import jchess.gui.IGUIHandle;
-import jchess.util.LogLevel;
 
 /**
  * This is a custom class specific to process the custom rules that are specific to the King piece only.
