@@ -10,6 +10,7 @@ import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
+import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.gamelogic.BoardActivity;
 import jchess.gui.IGUIHandle;
@@ -65,7 +66,12 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		return mpCandidateMovePositions;
     }
-
+	
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer)
+	{
+		return m_oRuleProcessor.tryCheckIfPlayerEndengered(oBoard, oPlayer);
+	
+	}
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 
@@ -160,4 +166,5 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		return oActivity;
 	}
+	
 }

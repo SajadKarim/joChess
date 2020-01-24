@@ -1,6 +1,7 @@
 package jchess.ruleengine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -384,4 +385,51 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 				break;
 		}
 	}
+	
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer)
+	{
+		//Get Active Board and Active Player
+//				String[] checkArray = new String[3];
+//				IBoardAgent oCurrentBoard =  m_oGameModel.getBoard();
+//				IPlayerAgent oCurrentPlayer = m_oGameState.getActivePlayer();
+				//Get the King's position of Active Player
+				IPieceAgent oKingPiece = oPlayer.getKingPiece();
+				IPositionAgent oKingPosition = oKingPiece.getPosition();
+				int nKingRank = oKingPosition.getRank();
+				int nKingFile = oKingPosition.getFile();
+				
+				//Go through all PositionAgents and check for the Piece. If the Piece is from different Players.
+				//Check for candidate positions of the Piece to see if it match the position of the current Player's King. If Yes return true, if no return false.
+				for(Map.Entry<String,IPositionAgent> oPositionPiece : oBoard.getAllPositionAgents().entrySet()) {
+					IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
+					if(oRandomPiece != null)
+					{
+						if(oRandomPiece.getPlayer()!= oPlayer)
+						{
+							Map<String, IMoveCandidate> mpCandidateMovePositions = new HashMap<String, IMoveCandidate>();
+							tryEvaluateAllRules(oBoard, oRandomPiece, mpCandidateMovePositions);
+
+							for(Map.Entry<String, IMoveCandidate> oCandidateMovePostion : mpCandidateMovePositions.entrySet())
+							{
+								int pieceRank = oCandidateMovePostion.getValue().getCandidatePosition().getRank();
+								int pieceFile = oCandidateMovePostion.getValue().getCandidatePosition().getFile();
+								if(pieceRank==nKingRank && pieceFile==nKingFile)
+								{
+//									//m_stPlayerCheck Player Check
+//									checkArray[1] = oRandomPiece.getPlayer().getName();
+//									//m_stPlayerInCheck Player in Check
+//									checkArray[2] = oCurrentPlayer.getName();
+//									//array[1] Result of check
+//									checkArray[0] = "Yes";
+									return oRandomPiece.getPlayer();
+								}	
+							}
+							
+						}
+					}
+				}
+//				checkArray[0] = "No";
+				return null;	
+	}
+
 }

@@ -4,4 +4,6 @@ import java.awt.Component;
 
 public interface IJChessView {
 	public void addTab(Component oComponent, String stName);
+
+	public void removeCurrentTab();
 }

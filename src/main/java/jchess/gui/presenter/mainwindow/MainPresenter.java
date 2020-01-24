@@ -42,6 +42,11 @@ public final class MainPresenter implements IMainPresenter {
 
 		m_oJChessView.addTab(oComponent, stName);
 	}
+	
+	public void closetab()
+	{
+		m_oJChessView.removeCurrentTab();
+	}
 
 	@Override
 	public void showView() {

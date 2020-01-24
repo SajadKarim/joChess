@@ -16,6 +16,7 @@ import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.DialogResult;
 import jchess.gamelogic.IGame;
+import jchess.gui.IGUIManager;
 import jchess.gui.model.gamewindow.IGameModel;
 import jchess.gui.view.gamewindow.IGameView;
 import jchess.util.IAppLogger;
@@ -34,14 +35,16 @@ public final class GamePresenter extends AbstractModule implements IGamePresente
     private final IGameModel m_oModel;
     private final ICacheManager m_oCacheManager;
     private final IAppLogger m_oLogger;
+    private final IGUIManager m_oGUIHandle;
     
     @Inject
-    public GamePresenter(final IGame oGame, final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager, final IAppLogger oLogger) {
+    public GamePresenter(final IGUIManager oGUIHandle, final IGame oGame, final IGameView oView, final IGameModel oModel, final ICacheManager oCacheManager, final IAppLogger oLogger) {
         m_oGame = oGame;
     	m_oView = oView;
     	m_oModel = oModel;
         m_oLogger  = oLogger;
         m_oCacheManager = oCacheManager;
+        m_oGUIHandle = oGUIHandle;
         
      	m_oLogger.writeLog(LogLevel.INFO, "Instantiating GamePresenter.", "GamePresenter", "GamePresenter");
     }
@@ -156,5 +159,15 @@ public final class GamePresenter extends AbstractModule implements IGamePresente
 
 			m_oView.repaintBoardView();
 		}
+	}
+	
+	public void endCurrentGame()
+	{
+		m_oGUIHandle.closeGameWindow();
+	}
+	
+	public void displayConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle)
+	{
+		m_oGUIHandle.popUpConfirmDialog(stConfirmDialogMessage, stConfirmDialogTitle);
 	}
 }

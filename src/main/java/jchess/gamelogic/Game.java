@@ -12,6 +12,7 @@ import jchess.common.IPosition;
 import jchess.common.IPositionAgent;
 import jchess.gui.IGUIHandle;
 import jchess.gui.model.gamewindow.IGameModel;
+import jchess.gui.view.mainwindow.IJChessView;
 import jchess.ruleengine.IRuleEngine;
 import jchess.ruleengine.IRuleProcessor;
 import jchess.util.IAppLogger;
@@ -46,6 +47,9 @@ public final class Game implements IGame, ITimerListener {
 	private IGUIHandle m_oGUIHandle;
 	private IAppLogger m_oLogger;
 	
+	public Boolean m_bCheckDialogShown;
+
+	
 	/**
 	 * Constructor for Game.
 	 * 
@@ -70,6 +74,11 @@ public final class Game implements IGame, ITimerListener {
 		m_oGameModel = oGameModel;
 
 		m_oRuleProcessor  = oRuleEngine;
+//		m_oGameListener = oGameListener;
+
+//		m_oJChessView = oJChessView;
+		m_bCheckDialogShown = false;
+
 	}
 	
 	public void init() {
@@ -110,6 +119,22 @@ public final class Game implements IGame, ITimerListener {
 			return;
 		}
 		
+		// This check if the Player's king is in check position.
+		IBoardAgent oCurrentBoard =  m_oGameModel.getBoard();
+		IPlayerAgent oCurrentPlayer = m_oGameState.getActivePlayer();
+		IPlayerAgent oRivalPlayer = m_oRuleProcessor.tryCheckIfPlayerEndengered( oCurrentBoard, oCurrentPlayer);
+		if( oRivalPlayer != null)
+		{
+			if(!m_bCheckDialogShown)
+			{
+//				int confirmDialog = JOptionPane.showConfirmDialog(null, "Your King is in Check Position. Save him immediately, or else you will lose", "Warning!", JOptionPane.DEFAULT_OPTION);
+				String stCheckWarning = "Your King is in Check Position. Save him immediately, or else you will lose";
+				String stCheckTitle = "Warning";
+				notifyListenersDisplayConfirmDialog(stCheckWarning,stCheckTitle);
+				m_bCheckDialogShown = true;
+			}
+		}
+		
 		if (m_oGameState.getActivePosition() == null) {
 			// Following code finds and marks all the possible candidate positions that the selected Piece can take.			
 			if (oPosition.getPiece() != null && m_oGameState.isThisActivePlayer(oPosition.getPiece().getPlayer().getName())) {
@@ -147,63 +172,6 @@ public final class Game implements IGame, ITimerListener {
 			deselectedActivePosition();
 		}		
 	}
-	public boolean tryCheckRule()
-	{
-		//Get Active Board and Active Player
-		IBoardAgent oCurrentBoard =  this.m_oGameModel.getBoard();
-		IPlayerAgent oCurrentPlayer = this.m_oGameState.getActivePlayer();
-		//Get the King's position of Active Player
-		String[] KingArray= new String[] {"Black", "White", "Red"};
-		String KingName = "";
-		IPieceAgent oKingPiece = null;
-		IPositionAgent oKingPosition = null;
-		int kingRank = 0;
-		int kingFile = 0;
-		for(String KingColour : KingArray)
-		{
-			KingName = "King" + KingColour;
-			IPieceAgent tempPiece = oCurrentPlayer.getPiece(KingName);
-			if(tempPiece != null)
-			{
-				oKingPiece = tempPiece;
-				oKingPosition = oKingPiece.getPosition();
-				kingRank = oKingPosition.getRank();
-				kingFile = oKingPosition.getFile();
-			}
-		}
-		
-		
-		//Go through all PositionAgents and check for the Piece. If the Piece is from different Players.
-		//Check for candidate positions of the Piece to see if it match the position of the current Player's King. If Yes return true, if no return false.
-		for(Map.Entry<String,IPositionAgent> oPositionPiece : oCurrentBoard.getAllPositionAgents().entrySet()) {
-			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
-			if(oRandomPiece != null)
-			{
-				if(oRandomPiece.getPlayer()!=oCurrentPlayer)
-				{
-					System.out.println(oRandomPiece.getName());
-					Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
-					for(Map.Entry<String, IMoveCandidate> oCandidateMovePostion : mpCandidateMovePosition.entrySet())
-					{
-						System.out.println("File and Rank of Piece:");
-						System.out.println(oCandidateMovePostion.getValue().getCandidatePosition().getFile());
-						System.out.println(oCandidateMovePostion.getValue().getCandidatePosition().getRank());
-						System.out.println("File and rank of King:");
-						System.out.println(kingRank);
-						System.out.println(kingFile);
-						int pieceRank = oCandidateMovePostion.getValue().getCandidatePosition().getRank();
-						int pieceFile = oCandidateMovePostion.getValue().getCandidatePosition().getFile();
-						if(pieceRank==kingRank && pieceFile==kingFile)
-						{
-							return true;
-						}	
-					}
-					
-				}
-			}
-		}
-		return false;
-	}
 	
 	/**
 	 * Checking for Stalemate Rule
@@ -225,11 +193,11 @@ public final class Game implements IGame, ITimerListener {
 			if(oRandomPiece != null && oRandomPiece.getPlayer()==oCurrentPlayer)
 			{	
 				nCountNoOfPieces+=1;
-				if(oRandomPiece.getPieceData().getName().startsWith("King")) {
-					if(tryCheckRule()) {
-						bStalemate = false;
-					}	
-				}
+//				if(oRandomPiece.getPieceData().getName().startsWith("King")) {
+//					if(tryCheckRule()) {
+//						bStalemate = false;
+//					}	
+//				}
 				Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
 				if(mpCandidateMovePosition.isEmpty()) {
 					nCountPiecesTrapped+=1;
@@ -253,25 +221,36 @@ public final class Game implements IGame, ITimerListener {
 	public void tryExecuteRule(IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, "Trying to make move." + oMoveCandidate.toLog(), "tryExecuteRule", "Game");
 
-		
-		
 		deselectedActivePosition();
-		
-//		IPlayerAgent oPlayer = m_oGameState.getActivePlayer();
-////		oPlayer.getAllPieces();
-//		System.out.println(oPlayer.getAllPieces());
-		//check here
 		
 		IBoardActivity oActivity = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
 //		m_oExtendedRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPiece, oMoveCandidate);
 
 		if (oActivity != null) {
 			m_oGameModel.addBoardActivity(oActivity);
+			//Check if the King is still in Check position after the player make the move. Then the current player is lose.
+			IBoardAgent oCurrentBoard =  m_oGameModel.getBoard();
+			IPlayerAgent oCurrentPlayer = m_oGameState.getActivePlayer();
+			
+			IPlayerAgent oRivalPlayer = m_oRuleProcessor.tryCheckIfPlayerEndengered( oCurrentBoard, oCurrentPlayer);
+			if( oRivalPlayer != null)
+			//if(m_oGameState.getActivePlayer().getName()==stCheckResult[2] && stCheckResult[0]=="Yes")
+			{
+				String stConfirmDialogMessage = "Check Mate!"+"\n"+ oCurrentPlayer.getName() +"'s King can't escape" +"\n" + oRivalPlayer.getName() + " is the winner!!!";
+				String stConfirmDialogTitle = "Winner chicken dinner!";
+				notifyListenersDisplayConfirmDialog(stConfirmDialogMessage,stConfirmDialogTitle);
+				notifyListenersEndCurrentGame();
+				IBoardAgent oNullBoard =  null;
+				m_oGameModel.setBoard(oNullBoard);
+				m_oTimer.stop();
+				
+			}
 			m_oGameState.switchPlayTurn();
 			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
 			notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+			//Set the Check time to 0. So the warning would appear again in the next turn
+			m_bCheckDialogShown = false;
 			
-			//also check here
 		}
 	}
 	
@@ -332,7 +311,21 @@ public final class Game implements IGame, ITimerListener {
 	public void addListener(final IGameListener oListener) {
         m_lstListener.add(oListener);
     }
-
+	
+	public void notifyListenersEndCurrentGame()
+	{
+		for (final IGameListener oListener : m_lstListener) {
+            oListener.endCurrentGame();
+        }	
+	}
+	
+	public void notifyListenersDisplayConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle)
+	{
+		for (final IGameListener oListener : m_lstListener) {
+            oListener.displayConfirmDialog(stConfirmDialogMessage, stConfirmDialogTitle);
+        }
+	}
+	
 	public void notifyListenersOnTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about second elapse.", "notifyListenersOnTimerUpdate_SecondsElapsed", "Game");
 

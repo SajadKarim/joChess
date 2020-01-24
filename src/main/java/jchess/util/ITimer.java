@@ -9,4 +9,5 @@ package jchess.util;
 public interface ITimer extends Runnable {
     public void start(int nTimerLengthInSeconds, int nTimerRecurrenceCount, int nPauseTimerBeforeNextRecurrence, Boolean bNotifyEverySecond, Boolean bNotifyWhenTimerEnds);
     public void addListener(final ITimerListener listener);
+	public void stop();
 }
