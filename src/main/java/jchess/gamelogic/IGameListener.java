@@ -15,4 +15,6 @@ public interface IGameListener {
 	public void onTimerUpdate_TimerElapsed(IPlayerAgent oPlayer);
 	public void onCurrentPlayerChanged(IPlayerAgent oPlayer);
 	public void onMoveMadeByPlayer(IPlayerAgent oPlayer, IBoardActivity oMove);	
+	public void endCurrentGame();
+	public void displayConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle);
 }

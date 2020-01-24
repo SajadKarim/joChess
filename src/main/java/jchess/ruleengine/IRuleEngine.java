@@ -6,6 +6,7 @@ import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
+import jchess.common.IPlayerAgent;
 
 /**
  * This interface aims to provide abstraction to classes that should provide functionality to process and execute no just the rules
@@ -27,4 +28,5 @@ import jchess.common.IPieceAgent;
 public interface IRuleEngine {
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece);
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate);
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer);
 }

@@ -22,4 +22,5 @@ public interface IPlayerAgent extends IPlayer {
 	public void addPiece(String stPieceCustomName, IPieceAgent oPiece);
 	public IPieceAgent getPiece(String stName);
 	public Map<String, IPieceAgent> getAllPieces();
+	public IPieceAgent getKingPiece();
 }

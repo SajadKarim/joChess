@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -113,7 +114,17 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 		
 		m_nGameCounter++;
 	}
-
+	
+	public void closeGameWindow()
+	{
+		m_oMainPresenter.closetab();
+	}
+	
+	public void popUpConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle)
+	{
+		JOptionPane.showConfirmDialog(null, stConfirmDialogMessage,stConfirmDialogTitle , JOptionPane.DEFAULT_OPTION);
+	}
+	
 	@Override
 	public void onNewGameLaunchRequest(INewGameModel oData) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Request to launch a fresh game.", "onNewGameLaunchRequest", "GUIManager");
