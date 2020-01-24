@@ -72,6 +72,11 @@ public class DefaultRuleEngine implements IRuleEngine {
 		return m_oRuleProcessor.tryCheckIfPlayerEndengered(oBoard, oPlayer);
 	
 	}
+	
+	
+	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		return m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
+	}
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 

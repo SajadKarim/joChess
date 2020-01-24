@@ -109,10 +109,7 @@ public final class Game implements IGame, ITimerListener {
 	 */
 	public void onBoardActivity(IPositionAgent oPosition) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Activity on board has been observed.", "onBoardActivity", "Game");
-
-		// This checks the stalemate rule
-		checkStalemate();
-				
+		
 		// This checks if there is any Player who is assigned turn to make a move.
 		if (m_oGameState.getActivePlayer() == null) {
 			m_oLogger.writeLog(LogLevel.DETAILED, "There is not Active player.", "onBoardActivity", "Game");
@@ -133,6 +130,20 @@ public final class Game implements IGame, ITimerListener {
 				notifyListenersDisplayConfirmDialog(stCheckWarning,stCheckTitle);
 				m_bCheckDialogShown = true;
 			}
+		}
+		
+		// This checks the stalemate rule
+		if(m_oRuleProcessor.checkStalemate(oCurrentBoard, oCurrentPlayer)) {
+			m_oLogger.writeLog(LogLevel.INFO, "Stalemate: Match is a draw.", "checkStalemate", "Game");
+			String stStaleMateWarning = "No pieces can be moved resulting in Stalemate, the match is a draw";
+			String stStaleMateTitle = "Warning";
+			notifyListenersDisplayConfirmDialog(stStaleMateWarning,stStaleMateTitle);
+			
+			notifyListenersEndCurrentGame();
+			IBoardAgent oNullBoard =  null;
+			m_oGameModel.setBoard(oNullBoard);
+			m_oTimer.stop();
+
 		}
 		
 		if (m_oGameState.getActivePosition() == null) {
@@ -173,45 +184,7 @@ public final class Game implements IGame, ITimerListener {
 		}		
 	}
 	
-	/**
-	 * Checking for Stalemate Rule
-	 * 
-	 * Stalemate is a situation in the game of chess where the player whose turn 
-	 * it is to move is not in check but has no legal move. 
-	 * The rules of chess provide that when stalemate occurs, the game ends as a draw.
-	 */
-	public void checkStalemate() {
-		m_oLogger.writeLog(LogLevel.INFO, "Instantiating check for Stalemate.", "checkStalemate", "Game");
-		
-		Boolean bStalemate = true;
-		IBoardAgent oCurrentBoard =  this.m_oGameModel.getBoard();
-		IPlayerAgent oCurrentPlayer = this.m_oGameState.getActivePlayer();
-		int nCountNoOfPieces =0;
-		int nCountPiecesTrapped=0;
-		for(Map.Entry<String,IPositionAgent> oPositionPiece : oCurrentBoard.getAllPositionAgents().entrySet()) {
-			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
-			if(oRandomPiece != null && oRandomPiece.getPlayer()==oCurrentPlayer)
-			{	
-				nCountNoOfPieces+=1;
-//				if(oRandomPiece.getPieceData().getName().startsWith("King")) {
-//					if(tryCheckRule()) {
-//						bStalemate = false;
-//					}	
-//				}
-				Map<String, IMoveCandidate> mpCandidateMovePosition = m_oRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oRandomPiece);
-				if(mpCandidateMovePosition.isEmpty()) {
-					nCountPiecesTrapped+=1;
-				}
-
-			}
-		}
-		
-		if(nCountNoOfPieces==nCountPiecesTrapped && bStalemate) {
-			m_oLogger.writeLog(LogLevel.INFO, "Stalemate: Match is a draw.", "checkStalemate", "Game");
-			int confirmDialog = JOptionPane.showConfirmDialog(null, "Match is a draw", "StaleMate", JOptionPane.DEFAULT_OPTION);
-			System.out.println(confirmDialog);
-		}				
-	}
+	
 	
 	/**
 	 * Following method triggers Rule execution code.
