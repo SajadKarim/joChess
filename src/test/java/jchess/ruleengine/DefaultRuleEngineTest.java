@@ -61,7 +61,6 @@ class DefaultRuleEngineTest {
 
 	@Test
 	void testTryExecuteRule_MOVE_CAPTURE_BY_1() { 
-		fail();
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d3");
 
