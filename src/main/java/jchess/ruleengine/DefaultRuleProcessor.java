@@ -131,7 +131,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * 
 	 * Fig 3: 2-Players chess board.
 	 * 
-	 * Consider Fig 3 (2 Player chess board) and cell â€œC3â€� is the active position, and the game engine has to find all the possible moves using
+	 * Consider Fig 3 (2 Player chess board) and cell "C3" is the active position, and the game engine has to find all the possible moves using
 	 * Blinker manoeuvre strategy.
 	 * 
 	 * Cell â€œC3â€� is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, B4 and they are in direction West, SouthWest, South, 
