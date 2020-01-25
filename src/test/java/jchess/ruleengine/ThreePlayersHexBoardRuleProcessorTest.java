@@ -151,10 +151,12 @@ class ThreePlayersHexBoardRuleProcessorTest {
 	}
 	
 	@Test
-	//Checking Stalemate by 
-	//deleteing all pieces of Player 2 except 1 pawn but keeping it trapped.
-	//Moving the King of Player 2 to such a positon that its not a check but cannot move.
-	//here we are using the Queen of Player 1 to achieve that situation.
+	/*
+	 * Checking Stalemate by 
+	 * deleteing all pieces of Player 2 except 1 pawn but keeping it trapped.
+	 * Moving the King of Player 2 to such a positon that its not a check but cannot move.
+	 * here we are using the Queen of Player 1 to achieve that situation.
+	 */
 	void testCheckStalemate() {
 		
 		// Other than pawn at b7 and king at i8, Setting pieces of Player 2 as null.
@@ -253,11 +255,13 @@ class ThreePlayersHexBoardRuleProcessorTest {
 	}
 	
 	@Test
-	//Checking Stalemate by 
-	//deleteing all pieces of Player 2 except 1 pawn but keeping it trapped.
-	//Moving the King of Player 2 to such a positon that it can make more than 1 movements.
-	//here we are using the Queen of Player 1 to achieve that situation.
-	//In this case its not a stalemate as the king can move.
+	/*
+	 * Checking Stalemate by 
+	 * deleteing all pieces of Player 2 except 1 pawn but keeping it trapped.
+	 * Moving the King of Player 2 to such a positon that it can make more than 1 movements.
+	 * here we are using the Queen of Player 1 to achieve that situation.
+	 * In this case its not a stalemate as the king can move.
+	 */
 	void testCheckStalemateWhenKingCanMove() {
 		
 		// Other than pawn at b7 and king at i8, Setting pieces of Player 2 as null.
@@ -356,11 +360,13 @@ class ThreePlayersHexBoardRuleProcessorTest {
 	}
 	
 	@Test
-	//Checking Stalemate by 
-	//deleteing all pieces of Player 2 except 1 pawn, here pawn has movement and is not trapped.
-	//Moving the King of Player 2 to such a positon that it cannot make a movement.
-	//here we are using the Queen of Player 1 to achieve that situation.
-	//In this case its not a stalemate as the pawn can move.
+	/*
+	 * Checking Stalemate by 
+	 * deleteing all pieces of Player 2 except 1 pawn, here pawn has movement and is not trapped.
+	 * Moving the King of Player 2 to such a positon that it cannot make a movement.
+	 * here we are using the Queen of Player 1 to achieve that situation.
+	 * In this case its not a stalemate as the pawn can move.
+	 */
 	void testCheckStalemateWhenKingCantMove() {
 		
 		// Other than pawn at b7 and king at i8, Setting pieces of Player 2 as null.
