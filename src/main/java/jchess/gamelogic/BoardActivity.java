@@ -124,9 +124,9 @@ public final class BoardActivity implements IBoardActivity {
 						+ ", to:" 
 						+ m_oMoveCandidate.getCandidatePosition().getName()
 						+ " | - from:" 
-						+ m_oMoveCandidate.getSecondaryMoves().get(0).getSourcePosition().getName() 
+						+ m_oMoveCandidate.getSecondaryMove(0).getSourcePosition().getName() 
 						+ ", to:" 
-						+ m_oMoveCandidate.getSecondaryMoves().get(0).getCandidatePosition().getName();
+						+ m_oMoveCandidate.getSecondaryMove(0).getCandidatePosition().getName();
 					break;
 				default:
 					break;

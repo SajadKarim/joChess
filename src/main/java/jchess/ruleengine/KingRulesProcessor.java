@@ -130,7 +130,6 @@ public final class KingRulesProcessor {
 					if(isFieldEndangered(moveCandidateEntry, oRuleProcessor, oBoard, oCurrentPlayer)) {
 						return;
 					}
-					// if field is endangered then quit the function
 				}
 				
 				// if we got this far the path is safe and we can add the move candidate to the map of possible move candidates.
@@ -177,18 +176,22 @@ public final class KingRulesProcessor {
 		oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);		
 		
 		// move the rook
-		for (IMoveCandidate secondaryMoveCandidate : oMoveCandidate.getSecondaryMoves()) {
-			secondaryMoveCandidate.getPieceToMove().setPosition(secondaryMoveCandidate.getCandidatePosition());
-			secondaryMoveCandidate.getCandidatePosition().setPiece(secondaryMoveCandidate.getPieceToMove());
-			secondaryMoveCandidate.getSourcePosition().setPiece(null);
-			
-			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-			oActivity.addPriorMoveEntry(secondaryMoveCandidate.getSourcePosition(), secondaryMoveCandidate.getSourcePosition().getPiece());
-			oActivity.addPriorMoveEntry(secondaryMoveCandidate.getCandidatePosition(), secondaryMoveCandidate.getCandidatePosition().getPiece());
+		IMoveCandidate oSecondaryMoveCandidate = oMoveCandidate.getSecondaryMove(0);
+		IPieceAgent pcSecondaryMoveCandidate = oSecondaryMoveCandidate.getPieceToMove();
+		IPositionAgent posSecondaryMoveCandidateSource = oSecondaryMoveCandidate.getSourcePosition();
+		IPositionAgent posSecondaryMoveCandidateTarget = oSecondaryMoveCandidate.getCandidatePosition();
+		
+		pcSecondaryMoveCandidate.setPosition(oSecondaryMoveCandidate.getCandidatePosition());
+		oSecondaryMoveCandidate.getCandidatePosition().setPiece(pcSecondaryMoveCandidate);
+		oSecondaryMoveCandidate.getSourcePosition().setPiece(null);
+		
+		pcSecondaryMoveCandidate.enqueuePositionHistory(oCurrentPosition);
+		oActivity.addPriorMoveEntry(posSecondaryMoveCandidateSource, pcSecondaryMoveCandidate);
+		oActivity.addPriorMoveEntry(oSecondaryMoveCandidate.getCandidatePosition(), posSecondaryMoveCandidateTarget.getPiece());
 
-			oActivity.addPostMoveEntry(secondaryMoveCandidate.getSourcePosition(), null);
-			oActivity.addPostMoveEntry(secondaryMoveCandidate.getCandidatePosition(), secondaryMoveCandidate.getSourcePosition().getPiece());
-		}
+		oActivity.addPostMoveEntry(posSecondaryMoveCandidateSource, null);
+		oActivity.addPostMoveEntry(posSecondaryMoveCandidateTarget, pcSecondaryMoveCandidate);
+	
 		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 
 		return oActivity;

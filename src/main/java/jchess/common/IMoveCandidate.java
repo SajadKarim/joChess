@@ -15,7 +15,7 @@ public interface IMoveCandidate {
 	public IPositionAgent getSourcePosition();
 	public IPositionAgent getCandidatePosition();
 	
-	public List<IMoveCandidate> getSecondaryMoves();
+	public IMoveCandidate getSecondaryMove(int i);
 	public void addSecondaryMove(IMoveCandidate secondaryMove);
 	
 	public String toLog();

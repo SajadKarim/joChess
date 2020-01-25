@@ -7,6 +7,7 @@ import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
+import jchess.util.LogLevel;
 
 /**
  * This is a data class that stores move information that a Piece can make.
@@ -20,13 +21,14 @@ public final class MoveCandidate implements IMoveCandidate {
 	private IPositionAgent m_oSourcePosition;
 	private IPositionAgent m_oCandidatePosition;
 	private IRuleAgent m_oRule;
-	private List<IMoveCandidate> m_lstSecondaryMoves = new LinkedList<IMoveCandidate>();
+	private List<IMoveCandidate> m_lstSecondaryMoves;
 
 	public MoveCandidate(IRuleAgent oRule, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPositionAgent oCandidatePosition) {
 		m_oRule = oRule;
 		m_oPieceToMove = oPieceToMove;
 		m_oSourcePosition = oSourcePosition;
 		m_oCandidatePosition = oCandidatePosition;
+		m_lstSecondaryMoves = new LinkedList<IMoveCandidate>();
 	}
 
 	public IRuleAgent getRule() {
@@ -53,8 +55,15 @@ public final class MoveCandidate implements IMoveCandidate {
 				, m_oRule.getName());
 	}
 
-	public List<IMoveCandidate> getSecondaryMoves() {
-		return m_lstSecondaryMoves;
+	public IMoveCandidate getSecondaryMove(int index) {
+		IMoveCandidate secondaryCandidate = null;
+		try {
+			secondaryCandidate = m_lstSecondaryMoves.get(index);
+			
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		return secondaryCandidate;
 	}
 
 	public void addSecondaryMove(IMoveCandidate secondaryMove) {
