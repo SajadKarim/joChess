@@ -432,4 +432,106 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 				return null;	
 	}
 
+	/**
+	 * Checking for Stalemate Rule
+	 * 
+	 * Stalemate is a situation in the game of chess where the player whose turn 
+	 * it is to move is not in check but has no legal move. 
+	 * The rules of chess provide that when stalemate occurs, the game ends as a draw.
+	 */
+	
+	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		//we find out the possible movement that the current king can make. 
+		//If all the movements of the king leads to checkmate and the current position is not a check 
+		//and no other pieces of the current player can be moved then its a stalemate resulting in a draw
+		Boolean bStalemateCheckIfPlayerEndengered = false;
+		Boolean bStalemateCheckIfPlayNotPossible = false;
+		int nCountNoOfPieces =0;
+		int nCountPiecesTrapped=0;
+		int nCounterOfKingMoves=0;
+		int nCounterOfKingMovesResultingCheckMater=0;
+		int[] iaArrayOfPossibleChecks = new int[]{0,0,0,0,0,0,0,0,0}; 
+		//fetching all pieces from the board
+		for(Map.Entry<String,IPositionAgent> oPositionPiece : oBoard.getAllPositionAgents().entrySet()) 
+		{
+			IPieceAgent oRandomPiece = oPositionPiece.getValue().getPiece();
+			//check to filter out only the pieces of the current player
+			if(oRandomPiece != null && oRandomPiece.getPlayer()== oPlayer) 
+			{
+				nCountNoOfPieces+=1;
+				//checking if the piece iterated is a king
+				if(oRandomPiece.getName().startsWith("King")) 
+				{	
+					//Checking if its in check
+					IPlayerAgent oCurrentPlayer = tryCheckIfPlayerEndengered( oBoard, oPlayer);
+					if( oCurrentPlayer == null)
+						bStalemateCheckIfPlayerEndengered = true;
+					
+					Map<String, IMoveCandidate> mpCandidateMovePositions = new HashMap<String, IMoveCandidate>();
+					tryEvaluateAllRules(oBoard, oRandomPiece, mpCandidateMovePositions);					
+					
+					//Iterating the different moves that the king can make
+					for(Map.Entry<String, IMoveCandidate> oCandidateMovePostion : mpCandidateMovePositions.entrySet()) {
+						
+						int nKingPieceRank = oCandidateMovePostion.getValue().getCandidatePosition().getRank();
+						int nKingPieceFile = oCandidateMovePostion.getValue().getCandidatePosition().getFile();
+						nCounterOfKingMoves+=1;
+						
+						//Iterating through all the pieces to check ig the movements available for the king is possible or not.
+						for(Map.Entry<String,IPositionAgent> oOppPositionPiece : oBoard.getAllPositionAgents().entrySet()) {
+							IPieceAgent oOppRandomPiece = oOppPositionPiece.getValue().getPiece();
+							//Selecting pieces of the opponent player
+							if(oOppRandomPiece != null && oOppRandomPiece.getPlayer()!= oPlayer) {
+								Map<String, IMoveCandidate> mpOppCandidateMovePositions = new HashMap<String, IMoveCandidate>();
+								tryEvaluateAllRules(oBoard, oOppRandomPiece, mpOppCandidateMovePositions);
+								
+								//fetching all the moves that the piece of the opponent can make 
+								for(Map.Entry<String, IMoveCandidate> oOppCandidateMovePostion : mpOppCandidateMovePositions.entrySet())
+								{
+									int nPieceRank = oOppCandidateMovePostion.getValue().getCandidatePosition().getRank();
+									int nPieceFile = oOppCandidateMovePostion.getValue().getCandidatePosition().getFile();
+									
+									//Checking if the moves performed by the opponent piece gets to the kings position
+									if(nPieceRank==nKingPieceRank && nPieceFile==nKingPieceFile)
+									{
+										iaArrayOfPossibleChecks[nCounterOfKingMoves]=1;
+									}	
+								}
+							}
+						}
+					}
+
+					//Checking if the king can make any moves
+					for(int i=1;i <= nCounterOfKingMoves;i++) {
+						if(iaArrayOfPossibleChecks[i]==1) {
+							nCounterOfKingMovesResultingCheckMater+=1;
+						}
+					}
+				
+					if(nCounterOfKingMoves==nCounterOfKingMovesResultingCheckMater) {
+						bStalemateCheckIfPlayNotPossible = true;
+					}
+					
+					nCountPiecesTrapped+=1;
+				}
+				else 
+				{
+					//Checks if all the other pieces can move
+					Map<String, IMoveCandidate> mpCandidateMovePositions = new HashMap<String, IMoveCandidate>();
+					tryEvaluateAllRules(oBoard, oRandomPiece, mpCandidateMovePositions);
+					
+					if(mpCandidateMovePositions.isEmpty()) 
+					{
+						nCountPiecesTrapped+=1;
+					}
+				}
+			}
+		}
+
+		if(nCountNoOfPieces==nCountPiecesTrapped && bStalemateCheckIfPlayerEndengered && bStalemateCheckIfPlayNotPossible) {
+			return true;
+		}	
+		return false;
+	}
+	
 }
