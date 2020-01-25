@@ -136,7 +136,7 @@ public final class Game implements IGame, ITimerListener {
 		if(m_oRuleProcessor.checkStalemate(oCurrentBoard, oCurrentPlayer)) {
 			m_oLogger.writeLog(LogLevel.INFO, "Stalemate: Match is a draw.", "checkStalemate", "Game");
 			String stStaleMateWarning = "No pieces can be moved resulting in Stalemate, the match is a draw";
-			String stStaleMateTitle = "Warning";
+			String stStaleMateTitle = "Game is a draw";
 			notifyListenersDisplayConfirmDialog(stStaleMateWarning,stStaleMateTitle);
 			
 			notifyListenersEndCurrentGame();
