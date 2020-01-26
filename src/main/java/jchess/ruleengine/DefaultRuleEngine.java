@@ -67,8 +67,7 @@ public class DefaultRuleEngine implements IRuleEngine {
 		return mpCandidateMovePositions;
     }
 	
-	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer)
-	{
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer) {
 		return m_oRuleProcessor.tryCheckIfPlayerEndengered(oBoard, oPlayer);
 	
 	}
@@ -80,7 +79,8 @@ public class DefaultRuleEngine implements IRuleEngine {
 		long t2 = System.nanoTime();
 		
 		long timeElapsed  = t2 - t1;
-		System.out.println("Execution time in milliseconds : " + 
+		System.out.println("Execution time in milliseconds : " 
+				+ 
 				timeElapsed / 1000000);
 		return b;
 	}
@@ -119,7 +119,7 @@ public class DefaultRuleEngine implements IRuleEngine {
 				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 				break;
-			case MOVE_TRANSIENT:{
+			case MOVE_TRANSIENT: {
 			}
 			break;
 			case CUSTOM:

@@ -109,7 +109,7 @@ public final class BoardView extends JPanel implements IBoardView {
         	
 			oGraphics.setClip(oPolygon);
 			oGraphics.drawImage(m_oData.getMarkedCellImage(), (int)oPolygon.getBounds2D().getCenterX() - 20, (int)oPolygon.getBounds2D().getCenterY() - 20, this);
-        } catch(NullPointerException exc) {
+        } catch (NullPointerException exc) {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }
     }

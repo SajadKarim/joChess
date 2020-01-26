@@ -60,7 +60,7 @@ public final class PlayerView extends JPanel implements IPlayerView {
          oGraphics.setFont(new Font("Arial", Font.BOLD, 20));
 
          if (m_oData != null) {
-        	 oGraphics.drawString(m_oData.getPlayerName() + ": " + m_oData.getPlayerFirstName() , 5, 50);
+        	 oGraphics.drawString(m_oData.getPlayerName() + ": " + m_oData.getPlayerFirstName(), 5, 50);
          } else {
         	 oGraphics.drawString("Sajad Karim", 5, 50);
          }

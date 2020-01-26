@@ -144,7 +144,7 @@ public final class BoardAgent implements IBoardAgent {
     		List<IPlayerPieceMapping> mpPlayerPieceMapping = m_oBoard.getPlayerMapping(oPlayer.getName());
     		if (mpPlayerPieceMapping != null) {
     			Iterator<IPlayerPieceMapping> it = mpPlayerPieceMapping.iterator();
-    			while( it.hasNext()) {
+    			while (it.hasNext()) {
     				IPlayerPieceMapping oMapping = it.next();
     				IPositionAgent oPosition = getPositionAgent(oMapping.getPositionRef());
 	    			IPieceAgent oPiece = (IPieceAgent)m_oBoard.getUnlinkedPiece(oMapping.getPieceRef()).clone();
