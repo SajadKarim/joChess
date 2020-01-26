@@ -30,4 +30,5 @@ public interface IRuleEngine {
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate);
 	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer);
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer);
+	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece);
 }

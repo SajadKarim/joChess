@@ -34,4 +34,5 @@ public interface IRuleProcessor {
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue);
 	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer);
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer);
+	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece);
 }
