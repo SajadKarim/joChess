@@ -24,4 +24,6 @@ public interface IGameState {
 	public Boolean isThisActivePlayer(String stPlayerName);
 	public Boolean isThisActivePosition(String stPositionName);
 	public void makeLastPlayerAsCurrentPlayer(IPlayerAgent oPlayer);
+	public void removePlayer(IPlayerAgent oPlayer);
+	public int getCurrentPlayersCount();
 }
