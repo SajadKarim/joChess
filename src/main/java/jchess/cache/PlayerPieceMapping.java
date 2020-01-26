@@ -7,7 +7,7 @@ import jchess.common.IPlayerPieceMapping;
  * @author 	Sajad Karim
  * @since	22 Jan 2020
  */
-public class PlayerPieceMapping implements IPlayerPieceMapping {
+public final class PlayerPieceMapping implements IPlayerPieceMapping {
 	private String m_stPieceCustomName;
 	private String m_stPieceRef;
 	private String m_stPositionRef;

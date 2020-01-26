@@ -23,4 +23,6 @@ public interface IPlayerAgent extends IPlayer {
 	public IPieceAgent getPiece(String stName);
 	public Map<String, IPieceAgent> getAllPieces();
 	public IPieceAgent getKingPiece();
+	public int getRemainingTimeInSec();
+	public void setRemainingTimeInSec(int nRemainingTimeInSec);
 }
