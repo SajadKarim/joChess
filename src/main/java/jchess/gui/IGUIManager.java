@@ -17,6 +17,7 @@ public interface IGUIManager extends INewGameListener {
 	public void showNewGameWindow();
 	public void closeGameWindow();
 	public void popUpConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle);
+	public void showGameStartPopup();
 	public void showGameWindow(INewGameModel oData);
 	public IGUIHandle getGUIHandle();
 	public void onPlayerRequestForUndoBoardActivity(Component oSelectedGame);

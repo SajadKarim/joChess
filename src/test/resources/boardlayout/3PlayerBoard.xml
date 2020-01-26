@@ -3716,6 +3716,7 @@
         <Rule Name="Knight_Move_4_2" Type="MOVE_AND_CAPTURE" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="FORWARD" Rank="SAME" Family="IGNORE"/>
       </Rules>
     </Rule>
+    <!-- Cannon Rule: Start-->
     <Rule Name="CannonL_1" Type="MOVE_TRANSIENT" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="3" File="SAME" Rank="FORWARD" Family="IGNORE">
       <Rules>
         <Rule Name="CannonL_1_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="FORWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
@@ -3868,6 +3869,7 @@
         <Rule Name="CannonR_12_1" Type="CUSTOM" Direction="EDGE" Manoeuvre="FILE_AND_RANK" MaxRecurrenceAllowed="1" File="SAME" Rank="BACKWARD" Family="IGNORE" CustomRuleName="BOMB[CANNON]"/>
       </Rules>
     </Rule>
+    <!-- Cannon Rule: End-->
   </Rules>
   <Pieces>
     <Piece Name="KingWhite" Image="King-W.png" Family="White">

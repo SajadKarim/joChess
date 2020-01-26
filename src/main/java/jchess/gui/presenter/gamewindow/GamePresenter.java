@@ -69,6 +69,10 @@ public final class GamePresenter extends AbstractModule implements IGamePresente
      	m_oLogger.writeLog(LogLevel.DETAILED, "Displaying view.", "showView", "GamePresenter");
 
     	m_oView.drawComponents();
+
+    	m_oGUIHandle.showGameStartPopup();
+    	
+    	m_oGame.start();
     }
     
     public Component tryGetViewComponent() {
