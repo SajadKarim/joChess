@@ -84,10 +84,10 @@ public final class Game implements IGame, ITimerListener {
 	public void init() {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Instializing Game.", "init", "Game");
 
-		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());		
+		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
 		
-		m_oTimer.addListener(this);		
-		m_oTimer.start(60*60, 10000, 0, true, true);
+		m_oTimer.addListener(this);
+		m_oTimer.start(m_oGameState.getActivePlayer().getRemainingTimeInSec());
 	}
 	
 	@Override
@@ -99,8 +99,12 @@ public final class Game implements IGame, ITimerListener {
 	public void onTimerElapsed() {
 		m_oLogger.writeLog(LogLevel.DETAILED, "All the time has been elasped.", "onTimerElasped", "Game");
 
+		stopAndUpdateTimeForCurrentActivePlayer(m_oGameState.getActivePlayer());
+
 		deselectedActivePosition();
+
 		m_oGameState.switchPlayTurn();
+
 		notifyListenersOnTimerUpdate_TimerElapsed(m_oGameState.getActivePlayer());		
 	}
 	
@@ -197,33 +201,35 @@ public final class Game implements IGame, ITimerListener {
 		deselectedActivePosition();
 		
 		IBoardActivity oActivity = m_oRuleProcessor.tryExecuteRule(m_oGameModel.getBoard(), oMoveCandidate);
-//		m_oExtendedRuleProcessor.tryEvaluateAllRules(m_oGameModel.getBoard(), oPiece, oMoveCandidate);
 
 		if (oActivity != null) {
+			stopAndUpdateTimeForCurrentActivePlayer(m_oGameState.getActivePlayer());
+
 			m_oGameModel.addBoardActivity(oActivity);
+
+			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
+			
 			//Check if the King is still in Check position after the player make the move. Then the current player is lose.
-			IBoardAgent oCurrentBoard =  m_oGameModel.getBoard();
 			IPlayerAgent oCurrentPlayer = m_oGameState.getActivePlayer();
 			
-			IPlayerAgent oRivalPlayer = m_oRuleProcessor.tryCheckIfPlayerEndengered( oCurrentBoard, oCurrentPlayer);
+			IPlayerAgent oRivalPlayer = m_oRuleProcessor.tryCheckIfPlayerEndengered( m_oGameModel.getBoard(), oCurrentPlayer);
 			if( oRivalPlayer != null)
-			//if(m_oGameState.getActivePlayer().getName()==stCheckResult[2] && stCheckResult[0]=="Yes")
 			{
-				String stConfirmDialogMessage = "Check Mate!"+"\n"+ oCurrentPlayer.getName() +"'s King can't escape" +"\n" + oRivalPlayer.getName() + " is the winner!!!";
-				String stConfirmDialogTitle = "Winner chicken dinner!";
-				notifyListenersDisplayConfirmDialog(stConfirmDialogMessage,stConfirmDialogTitle);
-				notifyListenersEndCurrentGame();
-				IBoardAgent oNullBoard =  null;
-				m_oGameModel.setBoard(oNullBoard);
 				m_oTimer.stop();
-				
+
+				String stTextToDisplay= String.format("Checkmate! %s's King cannot escape. %s is the winner!", oCurrentPlayer.getName(), oRivalPlayer.getName());
+				notifyListenersDisplayConfirmDialog(stTextToDisplay, "Game End");
+				notifyListenersEndCurrentGame();
+
+				return;
 			}
+			
 			m_oGameState.switchPlayTurn();
-			notifyListenersOnMoveMadeByPlayer(m_oGameState.getActivePlayer(), oActivity);
-			notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+
+			startAndUpdateTimeForNewActivePlayer(m_oGameState.getActivePlayer());
+
 			//Set the Check time to 0. So the warning would appear again in the next turn
 			m_bCheckDialogShown = false;
-			
 		}
 	}
 	
@@ -334,23 +340,40 @@ public final class Game implements IGame, ITimerListener {
 	public void setPlayerAsActivePlayer(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player as active one.", "setPlayerAsActivePlayer", "Game");
 
+		stopAndUpdateTimeForCurrentActivePlayer(m_oGameState.getActivePlayer());
+
 		deselectedActivePosition();
+		
 		while (!m_oGameState.getActivePlayer().equals(oPlayer)) {
 			m_oGameState.switchPlayTurn();
-		}			
-		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+		}
+
+		startAndUpdateTimeForNewActivePlayer(m_oGameState.getActivePlayer());
 	}
 
 	public void setPlayerTurnAsLast(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player's turn as last.", "setPlayerTurnAsLast", "Game");
 
+		stopAndUpdateTimeForCurrentActivePlayer(m_oGameState.getActivePlayer());
+		
 		deselectedActivePosition();
+		
 		while (!m_oGameState.getActivePlayer().equals(oPlayer)) {
 			m_oGameState.switchPlayTurn();
 		}
 			
 		m_oGameState.switchPlayTurn();
-
-		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
+		startAndUpdateTimeForNewActivePlayer(m_oGameState.getActivePlayer());
+	}
+	
+	private void stopAndUpdateTimeForCurrentActivePlayer(IPlayerAgent oCurrentActivePlayer) {
+		m_oTimer.stop();
+		oCurrentActivePlayer.setRemainingTimeInSec(m_oTimer.getTimerRemainingSeconds());
+	}
+	
+	private void startAndUpdateTimeForNewActivePlayer(IPlayerAgent oNewActivePlayer) {
+		m_oTimer.start(oNewActivePlayer.getRemainingTimeInSec());
+		notifyListenersOnCurrentPlayerChanged(oNewActivePlayer);
+		notifyListenersOnTimerUpdate_SecondsElapsed(oNewActivePlayer.getRemainingTimeInSec());
 	}
 }

@@ -26,10 +26,12 @@ public final class PlayerAgent implements IPlayerAgent {
 	private String m_stLastName;
 	private Image m_oImage;
 	private Map<String, IPieceAgent> m_mpPieces;
+	private int m_nRemainingGameTimeInSec;
 	
 	public PlayerAgent() {
 		m_oPlayerData = new PlayerData();
 		m_mpPieces = new HashMap<String, IPieceAgent>();
+		m_nRemainingGameTimeInSec = 30 * 60;
 	}
 	
 	public String getName() {
@@ -101,5 +103,13 @@ public final class PlayerAgent implements IPlayerAgent {
 			}
 		}
 		return oKingPiece;
+	}
+
+	public int getRemainingTimeInSec() {
+		return m_nRemainingGameTimeInSec;
+	}
+
+	public void setRemainingTimeInSec(int nRemainingTimeInSec) {
+		m_nRemainingGameTimeInSec = nRemainingTimeInSec;	
 	}
 }
