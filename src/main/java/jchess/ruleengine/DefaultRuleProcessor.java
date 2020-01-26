@@ -452,6 +452,10 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		for (Map.Entry<String,IPieceAgent> itPiece : oPlayer.getAllPieces().entrySet()) {
 			IPieceAgent oPiece = itPiece.getValue();
 			
+			if (oPiece.getPosition() == null) {
+				continue;
+			}
+			
 			if (oPiece.equals(oKingPiece)) {
 				continue;
 			}
