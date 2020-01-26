@@ -16,4 +16,5 @@ public interface IGame {
 	public void onBoardActivity(IPositionAgent oPosition);
 	public void setPlayerAsActivePlayer(IPlayerAgent oPlayer);
 	public void setPlayerTurnAsLast(IPlayerAgent oPlayer);
+	public void start();
 }

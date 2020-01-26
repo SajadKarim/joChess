@@ -75,7 +75,14 @@ public class DefaultRuleEngine implements IRuleEngine {
 	
 	
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
-		return m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
+		long t1 = System.nanoTime();
+		Boolean b = m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
+		long t2 = System.nanoTime();
+		
+		long timeElapsed  = t2 - t1;
+		System.out.println("Execution time in milliseconds : " + 
+				timeElapsed / 1000000);
+		return b;
 	}
 	/**
 	 * This method executes the rule provided with the move candidate.

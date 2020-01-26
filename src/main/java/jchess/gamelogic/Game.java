@@ -74,11 +74,8 @@ public final class Game implements IGame, ITimerListener {
 		m_oGameModel = oGameModel;
 
 		m_oRuleProcessor  = oRuleEngine;
-//		m_oGameListener = oGameListener;
 
-//		m_oJChessView = oJChessView;
 		m_bCheckDialogShown = false;
-
 	}
 	
 	public void init() {
@@ -87,9 +84,14 @@ public final class Game implements IGame, ITimerListener {
 		notifyListenersOnCurrentPlayerChanged(m_oGameState.getActivePlayer());
 		
 		m_oTimer.addListener(this);
-		m_oTimer.start(m_oGameState.getActivePlayer().getRemainingTimeInSec());
 	}
 	
+	public void start() {
+		m_oLogger.writeLog(LogLevel.DETAILED, "Starting Game.", "start", "Game");
+
+		m_oTimer.start(m_oGameState.getActivePlayer().getRemainingTimeInSec());
+	}
+
 	@Override
 	public void onSecondElapsed(int nRemainingSeconds) {
 		notifyListenersOnTimerUpdate_SecondsElapsed(nRemainingSeconds);
@@ -227,7 +229,14 @@ public final class Game implements IGame, ITimerListener {
 			//Check if the King is still in Check position after the player make the move. Then the current player is lose.
 			IPlayerAgent oCurrentPlayer = m_oGameState.getActivePlayer();
 			
+			long t1 = System.nanoTime();
 			IPlayerAgent oRivalPlayer = m_oRuleProcessor.tryCheckIfPlayerEndengered( m_oGameModel.getBoard(), oCurrentPlayer);
+			long t2 = System.nanoTime();
+			
+			long timeElapsed  = t2 - t1;
+			System.out.println("Execution time in milliseconds : " + 
+					timeElapsed / 1000000);
+
 			if( oRivalPlayer != null)
 			{
 				m_oTimer.stop();
