@@ -35,7 +35,7 @@ import jchess.util.IAppLogger;
 class PawnRulesProcessorTest_3PlayerBoard {
 	static IAppLogger m_oLogger;
 	static IBoardAgent m_oBoard;
-	static IRuleProcessor m_oRuleProcessor ;
+	static IRuleProcessor m_oRuleProcessor;
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 
 	@BeforeAll
@@ -93,7 +93,7 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
 		String[] arPositionsToValidate = {"b8", "d8"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -121,7 +121,7 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
 		String[] arPositionsToValidate = {"d4"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -134,7 +134,7 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d4");
 
-		IRuleAgent oRule= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.CUSTOM);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(1);
@@ -186,7 +186,7 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
 		String[] arPositionsToValidate = {"c5"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -204,7 +204,7 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceToMove);
 		oActivity.addPriorMoveEntry(oNewPosition, null);
-		oActivity.addPostMoveEntry(oCurrentPosition, null );
+		oActivity.addPostMoveEntry(oCurrentPosition, null);
 		oActivity.addPostMoveEntry(oNewPosition, oPieceToMove);
 		oActivity.setPlayer(oPieceToMove.getPlayer());
 

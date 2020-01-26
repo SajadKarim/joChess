@@ -64,7 +64,7 @@ class DefaultRuleEngineTest {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d3");
 
-		IRuleAgent oRule= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(1);
@@ -97,7 +97,7 @@ class DefaultRuleEngineTest {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
 		IPositionAgent oCandidatePosition = m_oBoard.getPositionAgent("d7");
 
-		IRuleAgent oRule= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.MOVE_AND_CAPTURE);
 		oRule.getRuleData().setDirection(Direction.EDGE);
 		oRule.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);

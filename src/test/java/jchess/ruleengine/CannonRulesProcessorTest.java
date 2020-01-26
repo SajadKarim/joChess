@@ -12,13 +12,10 @@ import jchess.cache.CacheManager;
 import jchess.cache.ICacheManager;
 import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IBoardFactory;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRule;
 import jchess.common.IRuleAgent;
-import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
@@ -26,7 +23,7 @@ import jchess.util.IAppLogger;
 class CannonRulesProcessorTest {
 	static IAppLogger m_oLogger;
 	static IBoardAgent m_oBoard;
-	static IRuleProcessor m_oRuleProcessor ;
+	static IRuleProcessor m_oRuleProcessor;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {

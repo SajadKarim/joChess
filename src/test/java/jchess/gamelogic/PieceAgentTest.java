@@ -36,26 +36,23 @@ public class PieceAgentTest {
 	}
 	
 	@Test
-	void testGetImagePath()
-	{
+	void testGetImagePath() {
 		String expected = "D:\\";
 		String actual = oPieceAgent.getImagePath();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetName()
-	{
+	void testGetName() {
 		String expected = "UnitTest";
 		String actual = oPieceAgent.getName();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetPieceData()
-	{
+	void testGetPieceData() {
 		Object expected = oPieceData;
 		Object actual = oPieceAgent.getPieceData();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 }

@@ -146,7 +146,7 @@ class DefaultRuleProcessorTest1_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
 		String[] arPositionsToValidate = {"c5", "c3", "e3", "e5"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			

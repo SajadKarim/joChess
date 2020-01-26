@@ -36,35 +36,31 @@ public class BoardAgentTest {
 	}
 	
 	@Test
-	void testGetBoardHeighth()
-	{
+	void testGetBoardHeighth() {
 		int expected = 100;
 		int actual = oBoardAgent.getBoardHeight();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetBoardWidth()
-	{
+	void testGetBoardWidth() {
 		int expected = 100;
 		int actual = oBoardAgent.getBoardWidth();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetBoardName()
-	{
+	void testGetBoardName() {
 		String expected = "UnitTest";
 		String actual = oBoardAgent.getName();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetBoardData()
-	{
+	void testGetBoardData() {
 		Object expected = oBoardData;
 		Object actual = oBoardAgent.getBoardData();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 
 }

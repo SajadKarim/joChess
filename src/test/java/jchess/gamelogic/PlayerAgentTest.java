@@ -42,42 +42,37 @@ class PlayerAgentTest {
 	}
 	
 	@Test
-	void testGetName()
-	{
+	void testGetName() {
 		String expected = "UnitTest";
 		String actual = oPlayerAgent.getName();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetFirstName()
-	{
+	void testGetFirstName() {
 		String expected = "Test";
 		String actual = oPlayerAgent.getFirstName();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetLastName()
-	{
+	void testGetLastName() {
 		String expected = "Unit";
 		String actual = oPlayerAgent.getLastName();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetPlayerData()
-	{
+	void testGetPlayerData() {
 		Object expected = oPlayerData;
 		Object actual = oPlayerAgent.getPlayerData();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void testGetImage()
-	{
+	void testGetImage() {
 		Image expected = null;
 		Image actual = oPlayerAgent.getImage();
-		assertEquals(expected,actual);
+		assertEquals(expected, actual);
 	}
 }

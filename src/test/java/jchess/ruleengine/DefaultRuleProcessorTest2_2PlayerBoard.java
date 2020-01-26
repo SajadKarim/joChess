@@ -108,7 +108,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"d5", "d6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -153,7 +153,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
 		String[] arPositionsToValidate = {"b6", "c5", "c3", "e3", "e5", "f6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -194,7 +194,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"d5", "d6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -235,7 +235,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"c5", "b6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -276,7 +276,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"a4", "b4", "c4"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -431,7 +431,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"e4", "f4", "g4", "h4"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -472,7 +472,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 
 		String[] arPositionsToValidate = {"e5", "f6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -513,7 +513,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"d5", "d6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -554,7 +554,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"c5", "b6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -595,7 +595,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"a4", "b4", "c4"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -750,7 +750,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"e4", "f4", "g4", "h4"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -791,7 +791,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 		
 		String[] arPositionsToValidate = {"e5", "f6"};
-		for( String stPositionId : arPositionsToValidate) {
+		for (String stPositionId : arPositionsToValidate) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -812,7 +812,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPlayerAgent oExpected = null;
 		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
 		
-		assertEquals(oExpected,oActual);
+		assertEquals(oExpected, oActual);
 	}
 	/**
 	 * Check if the King is in Check position by
@@ -821,8 +821,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 	 * Use Player 1's Pawn to check
 	 */
 	@Test
-	void testCheckIfPlayerEndengered_RivalPawn_King_checkPosition()
-	{
+	void testCheckIfPlayerEndengered_RivalPawn_King_checkPosition() {
 		//Get the Player 2
 		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P2");
 		//Get the Player 1
@@ -849,7 +848,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("e3");
 
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -867,7 +866,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
 		System.out.println(oActual);
 		
-		assertEquals(oExpected,oActual);
+		assertEquals(oExpected, oActual);
 		
 	}
 	/**
@@ -878,8 +877,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 	 * Use Player 1's Pawn to check
 	 */
 	@Test
-	void testCheckIfPlayerEndengered_RivalQueen_King_checkPosition()
-	{
+	void testCheckIfPlayerEndengered_RivalQueen_King_checkPosition() {
 		//Get the Player 2
 		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P2");
 		//Get the Player 1
@@ -909,7 +907,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("d2");
 
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -927,7 +925,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
 		System.out.println(oActual);
 		
-		assertEquals(oExpected,oActual);
+		assertEquals(oExpected, oActual);
 		
 	}
 	/**
@@ -936,8 +934,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 	 * Move Player 2's King to a safe position
 	 */
 	@Test
-	void testCheckIfPlayerEndengered_King_notInCheckPosition()
-	{
+	void testCheckIfPlayerEndengered_King_notInCheckPosition() {
 		//Get the Player 2
 		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P2");
 		//Get the Player 1
@@ -964,7 +961,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("e4");
 
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -982,7 +979,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
 		System.out.println(oActual);
 		
-		assertEquals(oExpected,oActual);
+		assertEquals(oExpected, oActual);
 		
 	}
 	
@@ -1035,7 +1032,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfPawn = m_oBoard.getPositionAgent("e2");
 		IPositionAgent oDestinationPositionOfPawn = m_oBoard.getPositionAgent("e6");
 		
-		IRuleAgent oRulepawn= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawn = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawn.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawn.getRuleData().setDirection(Direction.EDGE);
 		oRulepawn.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1053,7 +1050,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("h8");
 		
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1071,7 +1068,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
 		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("g6");
 		
-		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleQueen = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
 		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1137,7 +1134,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfPawn = m_oBoard.getPositionAgent("e2");
 		IPositionAgent oDestinationPositionOfPawn = m_oBoard.getPositionAgent("e6");
 		
-		IRuleAgent oRulepawn= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawn = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawn.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawn.getRuleData().setDirection(Direction.EDGE);
 		oRulepawn.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1155,7 +1152,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("h8");
 		
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1173,7 +1170,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
 		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("g5");
 		
-		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleQueen = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
 		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1239,7 +1236,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfPawn = m_oBoard.getPositionAgent("e2");
 		IPositionAgent oDestinationPositionOfPawn = m_oBoard.getPositionAgent("e5");
 		
-		IRuleAgent oRulepawn= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawn = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawn.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawn.getRuleData().setDirection(Direction.EDGE);
 		oRulepawn.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1257,7 +1254,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("h8");
 		
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -1275,7 +1272,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
 		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("g6");
 		
-		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleQueen = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
 		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);

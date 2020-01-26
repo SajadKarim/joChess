@@ -62,9 +62,9 @@ class ThreePlayersHexBoardRuleProcessorTest {
 
 	@Test
 	void testTryEvaluateAllRules_CannonPieceAtA2_EmptyBoard() {
-		for (Map.Entry<String,IPositionAgent> entry : m_oBoard.getAllPositionAgents().entrySet()) {
+		for (Map.Entry<String, IPositionAgent> entry : m_oBoard.getAllPositionAgents().entrySet()) {
     		IPositionAgent oPosition = entry.getValue();
-    		if( !oPosition.getName().equals("a2") && oPosition.getPiece() != null) {
+    		if (!oPosition.getName().equals("a2") && oPosition.getPiece() != null) {
     			oPosition.setPiece(null);
     		}
     	}
@@ -78,7 +78,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		
 		assertEquals(mpCandidatePositions.size(), arrExpectedPositionIds.length);
 
-		for( String stPositionId : arrExpectedPositionIds) {
+		for (String stPositionId : arrExpectedPositionIds) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -88,9 +88,9 @@ class ThreePlayersHexBoardRuleProcessorTest {
 
 	@Test
 	void testTryEvaluateAllRules_CannonPieceAtH2_EmptyBoard() {
-		for (Map.Entry<String,IPositionAgent> entry : m_oBoard.getAllPositionAgents().entrySet()) {
+		for (Map.Entry<String, IPositionAgent> entry : m_oBoard.getAllPositionAgents().entrySet()) {
     		IPositionAgent oPosition = entry.getValue();
-    		if( !oPosition.getName().equals("h2") && oPosition.getPiece() != null) {
+    		if (!oPosition.getName().equals("h2") && oPosition.getPiece() != null) {
     			oPosition.setPiece(null);
     		}
     	}
@@ -104,7 +104,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		
 		assertEquals(mpCandidatePositions.size(), arrExpectedPositionIds.length);
 
-		for( String stPositionId : arrExpectedPositionIds) {
+		for (String stPositionId : arrExpectedPositionIds) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -123,7 +123,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		
 		assertEquals(mpCandidatePositions.size(), arrExpectedPositionIds.length);
 
-		for( String stPositionId : arrExpectedPositionIds) {
+		for (String stPositionId : arrExpectedPositionIds) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -142,7 +142,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		
 		assertEquals(mpCandidatePositions.size(), arrExpectedPositionIds.length);
 
-		for( String stPositionId : arrExpectedPositionIds) {
+		for (String stPositionId : arrExpectedPositionIds) {
 			IPositionAgent oExpectedPositionInMap = m_oBoard.getPositionAgent(stPositionId);
 			IPositionAgent oActualPositionInMap = mpCandidatePositions.get(stPositionId).getCandidatePosition();
 			
@@ -194,7 +194,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfPawnWhite = m_oBoard.getPositionAgent("b2");
 		IPositionAgent oDestinationPositionOfPawnWhite = m_oBoard.getPositionAgent("b4");
 		
-		IRuleAgent oRulepawnWhite= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawnWhite = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawnWhite.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawnWhite.getRuleData().setDirection(Direction.EDGE);
 		oRulepawnWhite.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -212,7 +212,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfPawnBlack = m_oBoard.getPositionAgent("b7");
 		IPositionAgent oDestinationPositionOfPawnBlack = m_oBoard.getPositionAgent("b5");
 		
-		IRuleAgent oRulepawnBlack= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawnBlack = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawnBlack.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawnBlack.getRuleData().setDirection(Direction.EDGE);
 		oRulepawnBlack.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -230,7 +230,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("i8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("l8");
 		
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -248,7 +248,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
 		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("j7");
 		
-		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleQueen = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
 		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -314,7 +314,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfPawnWhite = m_oBoard.getPositionAgent("b2");
 		IPositionAgent oDestinationPositionOfPawnWhite = m_oBoard.getPositionAgent("b4");
 		
-		IRuleAgent oRulepawnWhite= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawnWhite = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawnWhite.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawnWhite.getRuleData().setDirection(Direction.EDGE);
 		oRulepawnWhite.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -332,7 +332,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfPawnBlack = m_oBoard.getPositionAgent("b7");
 		IPositionAgent oDestinationPositionOfPawnBlack = m_oBoard.getPositionAgent("b5");
 		
-		IRuleAgent oRulepawnBlack= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawnBlack = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawnBlack.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawnBlack.getRuleData().setDirection(Direction.EDGE);
 		oRulepawnBlack.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -350,7 +350,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("i8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("l8");
 		
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -368,7 +368,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
 		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("k5");
 		
-		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleQueen = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
 		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -434,7 +434,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfPawnWhite = m_oBoard.getPositionAgent("b2");
 		IPositionAgent oDestinationPositionOfPawnWhite = m_oBoard.getPositionAgent("b4");
 		
-		IRuleAgent oRulepawnWhite= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawnWhite = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawnWhite.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawnWhite.getRuleData().setDirection(Direction.EDGE);
 		oRulepawnWhite.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -452,7 +452,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfPawnBlack = m_oBoard.getPositionAgent("b7");
 		IPositionAgent oDestinationPositionOfPawnBlack = m_oBoard.getPositionAgent("b4");
 		
-		IRuleAgent oRulepawnBlack= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRulepawnBlack = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRulepawnBlack.getRuleData().setRuleType(RuleType.MOVE);
 		oRulepawnBlack.getRuleData().setDirection(Direction.EDGE);
 		oRulepawnBlack.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -470,7 +470,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("i8");
 		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("l8");
 		
-		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleKing = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleKing.getRuleData().setDirection(Direction.EDGE);
 		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
@@ -488,7 +488,7 @@ class ThreePlayersHexBoardRuleProcessorTest {
 		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
 		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("j7");
 		
-		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		IRuleAgent oRuleQueen = (IRuleAgent)m_oBoardFactory.createRule();		
 		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
 		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
 		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
