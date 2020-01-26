@@ -411,6 +411,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 					// Piece is not linked to any piece indicates the piece has been captured.
 					continue;
 				}
+
 				// Fetching the possible moves the piece can make.
 				Map<String, IMoveCandidate> mpCandidateMovePositions = new HashMap<String, IMoveCandidate>();
 				tryEvaluateAllRules(oBoard, oOpponentPiece, mpCandidateMovePositions);
@@ -418,7 +419,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 					if (itCandidateMove.getValue().getCandidatePosition().equals(oPiece.getPosition())) {
 						// The current opponent's piece can capture the provided piece.
 						return oOpponentPiece;
-					}						
+					}
 				}
 			}
 		}

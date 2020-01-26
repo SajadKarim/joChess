@@ -101,11 +101,26 @@ public final class Game implements IGame, ITimerListener {
 
 		stopAndUpdateTimeForCurrentActivePlayer(m_oGameState.getActivePlayer());
 
+		IPlayerAgent oPlayerWhoTimeRanOut = m_oGameState.getActivePlayer();
+		
 		deselectedActivePosition();
 
 		m_oGameState.switchPlayTurn();
 
-		notifyListenersOnTimerUpdate_TimerElapsed(m_oGameState.getActivePlayer());		
+		m_oGameState.removePlayer(oPlayerWhoTimeRanOut);
+
+		if (m_oGameState.getCurrentPlayersCount() ==  1) {
+
+			String stTextToDisplay= String.format("Player '%s' is out of time. Player '%s' is the winner!", oPlayerWhoTimeRanOut.getName(), m_oGameState.getActivePlayer().getName());
+			notifyListenersDisplayConfirmDialog(stTextToDisplay, "Game End");
+
+			notifyListenersEndCurrentGame();
+			return;
+		}
+		
+		startAndUpdateTimeForNewActivePlayer(m_oGameState.getActivePlayer());
+
+		//notifyListenersOnTimerUpdate_TimerElapsed(m_oGameState.getActivePlayer());		
 	}
 	
 	/**
@@ -306,7 +321,7 @@ public final class Game implements IGame, ITimerListener {
 	}
 	
 	public void notifyListenersOnTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
-		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about second elapse.", "notifyListenersOnTimerUpdate_SecondsElapsed", "Game");
+		//m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about second elapse.", "notifyListenersOnTimerUpdate_SecondsElapsed", "Game");
 
         for (final IGameListener oListener : m_lstListener) {
             oListener.onTimerUpdate_SecondsElapsed(nRemainingSeconds);

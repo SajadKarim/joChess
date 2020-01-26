@@ -39,12 +39,15 @@ public final class CannonRulesProcessor {
 		Object oData = oSourcePiecePriorMove.getCustomData();
 		if (oData == null) {
 			IPieceAgent oSourcePieceAfterMove = (IPieceAgent) oSourcePiecePriorMove.clone();
-			oSourcePieceAfterMove.setPosition(oMoveCandidate.getSourcePosition());
-
 			oSourcePieceAfterMove.setCustomData(1);
 			oSourcePieceAfterMove.updateImage(getImageFilePathForConsumedCannon(oSourcePiecePriorMove.getName()));
 			
+			oSourcePieceAfterMove.setPosition(oMoveCandidate.getSourcePosition());
 			oMoveCandidate.getSourcePosition().setPiece(oSourcePieceAfterMove);
+
+			if (oDestinationPiecePriorMove != null) {
+				oDestinationPiecePriorMove.setPosition(null);
+			}
 			oMoveCandidate.getCandidatePosition().setPiece(null);
 			
 			oActivity.addPriorMoveEntry(oMoveCandidate.getSourcePosition(), oSourcePiecePriorMove);
@@ -56,11 +59,14 @@ public final class CannonRulesProcessor {
 			int nRemainingBombs = (int)oData;
 			if (nRemainingBombs == 1) {
 				IPieceAgent oSourcePieceAfterMove = (IPieceAgent)oBoard.getUnlinkedPieceAgent(getPawnPieceName(oSourcePiecePriorMove.getName())).clone(); 
-				
-				oSourcePieceAfterMove.setPosition(oMoveCandidate.getSourcePosition());
 				oSourcePieceAfterMove.setPlayer(oPlayer);
 				
+				oSourcePieceAfterMove.setPosition(oMoveCandidate.getSourcePosition());
 				oMoveCandidate.getSourcePosition().setPiece(oSourcePieceAfterMove);
+
+				if (oDestinationPiecePriorMove != null) {
+					oDestinationPiecePriorMove.setPosition(null);
+				}
 				oMoveCandidate.getCandidatePosition().setPiece(null);
 				
 				oActivity.addPriorMoveEntry(oMoveCandidate.getSourcePosition(), oSourcePiecePriorMove);
@@ -72,6 +78,8 @@ public final class CannonRulesProcessor {
 			}
 		}
 		
+		oSourcePiecePriorMove.setPosition(null);
+
 		return oActivity;
 	}
 	
