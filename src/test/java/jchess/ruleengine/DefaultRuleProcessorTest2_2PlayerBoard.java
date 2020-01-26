@@ -798,7 +798,10 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 			assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 		}
 	}
-	
+	/**
+	 * Check if the King is in Check position by
+	 * default board without any move.
+	 */
 	@Test
 	void testCheckIfPlayerEndengered_defaultBoard() {
 		
@@ -811,7 +814,12 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		
 		assertEquals(oExpected,oActual);
 	}
-	
+	/**
+	 * Check if the King is in Check position by
+	 * Delete every piece of Player 2 except for King
+	 * Move Player 2's King near Rival Pawn
+	 * Use Player 1's Pawn to check
+	 */
 	@Test
 	void testCheckIfPlayerEndengered_RivalPawn_King_checkPosition()
 	{
@@ -862,7 +870,13 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpected,oActual);
 		
 	}
-	
+	/**
+	 * Check if the King is in Check position by
+	 * Remove every piece of Player 2 except for King
+	 * Remove Player 1's Pawn at d2
+	 * Move Player 2's King near Rival Queen
+	 * Use Player 1's Pawn to check
+	 */
 	@Test
 	void testCheckIfPlayerEndengered_RivalQueen_King_checkPosition()
 	{
@@ -888,7 +902,7 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		m_oBoard.getPositionAgent("g7").setPiece(null);
 		m_oBoard.getPositionAgent("h7").setPiece(null);
 		
-		//Setting Player 2's pawn at d7 to null
+		//Setting Player 2's pawn at d2 to null
 		m_oBoard.getPositionAgent("d2").setPiece(null);
 		
 		// Setting Player 2 king from e8 to d7
@@ -916,7 +930,11 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpected,oActual);
 		
 	}
-	
+	/**
+	 * Check if the King is in Check position by
+	 * Remove every piece of Player 2 except for King
+	 * Move Player 2's King to a safe position
+	 */
 	@Test
 	void testCheckIfPlayerEndengered_King_notInCheckPosition()
 	{
