@@ -160,6 +160,21 @@ class ThreePlayersHexBoardRuleProcessorTest {
 	void testCheckStalemate() {
 		
 		// Other than pawn at b7 and king at i8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("j8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("k8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("l8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("a7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("i7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("j7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("k7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("l7").getPiece().setPosition(null);
+
 		m_oBoard.getPositionAgent("a8").setPiece(null);
 		m_oBoard.getPositionAgent("b8").setPiece(null);
 		m_oBoard.getPositionAgent("c8").setPiece(null);
@@ -265,6 +280,21 @@ class ThreePlayersHexBoardRuleProcessorTest {
 	void testCheckStalemateWhenKingCanMove() {
 		
 		// Other than pawn at b7 and king at i8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("j8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("k8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("l8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("a7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("i7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("j7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("k7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("l7").getPiece().setPosition(null);
+
 		m_oBoard.getPositionAgent("a8").setPiece(null);
 		m_oBoard.getPositionAgent("b8").setPiece(null);
 		m_oBoard.getPositionAgent("c8").setPiece(null);
@@ -370,6 +400,21 @@ class ThreePlayersHexBoardRuleProcessorTest {
 	void testCheckStalemateWhenKingCantMove() {
 		
 		// Other than pawn at b7 and king at i8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("j8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("k8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("l8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("a7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("i7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("j7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("k7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("l7").getPiece().setPosition(null);
+
 		m_oBoard.getPositionAgent("a8").setPiece(null);
 		m_oBoard.getPositionAgent("b8").setPiece(null);
 		m_oBoard.getPositionAgent("c8").setPiece(null);
