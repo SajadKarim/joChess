@@ -171,5 +171,8 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		return oActivity;
 	}
-	
+
+	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
+		return m_oRuleProcessor.isPieceEndangered(oBoard, oPiece);
+	}
 }
