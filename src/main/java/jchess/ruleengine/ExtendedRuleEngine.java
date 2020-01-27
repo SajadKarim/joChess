@@ -34,9 +34,9 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	/**
 	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * return Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * return Map of String and IMoveCandidate
 	 */
 	@Override
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
@@ -48,8 +48,8 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	/**
 	 * This method executes the move candidate provided.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * return IBoardActivity
 	 */
 	@Override
@@ -58,8 +58,8 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 
 		IBoardActivity oActivity = super.tryExecuteRule(oBoard, oMoveCandidate);
 		
-		if( oActivity == null) {
-			switch( oMoveCandidate.getRule().getRuleType()) {
+		if (oActivity == null) {
+			switch (oMoveCandidate.getRule().getRuleType()) {
 				case CUSTOM: {
 					oActivity = tryExecuteCustomRules(oBoard, oMoveCandidate);
 				}
@@ -83,18 +83,22 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 
 		IBoardActivity oMove = null;
 		 
-		switch( oMoveCandidate.getRule().getCustomName()) {
-		case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
-			oMove = PawnRulesProcessor.tryExecutePawnPromotionRule(oBoard, m_oGUIHandler, oMoveCandidate);			
-			break;
-		case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]":
-			oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oBoard, oMoveCandidate);
-			break;
-		case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":
-			oMove = PawnRulesProcessor.tryExecutePawnEnPassantRule(oBoard, oMoveCandidate);
-			break;
-		default:
-			break;
+		switch (oMoveCandidate.getRule().getCustomName()) {
+			case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
+				oMove = PawnRulesProcessor.tryExecutePawnPromotionRule(oBoard, m_oGUIHandler, oMoveCandidate);			
+				break;
+			case "MOVE[PAWN_FIRST_MOVE_EXCEPTION]":
+				oMove = PawnRulesProcessor.tryExecutePawnFirstMoveException(oBoard, oMoveCandidate);
+				break;
+			case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":
+				oMove = PawnRulesProcessor.tryExecutePawnEnPassantRule(oBoard, oMoveCandidate);
+				break;
+			case "MOVE[KING_CASTLING]":
+				oMove = KingRulesProcessor.tryExecuteCastlingRule(oBoard, oMoveCandidate);
+				break;
+			
+			default:
+				break;
 		}
 		
 		return oMove;

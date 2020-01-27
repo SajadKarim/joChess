@@ -10,6 +10,12 @@ import org.javatuples.Pair;
 import jchess.common.IPlayerAgent;
 import jchess.gamelogic.PlayerAgent;
 
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public final class NewGameModel implements INewGameModel {
 	private SortedMap<String, Pair<String, Integer>> m_mpPlayersBoardMapping; 
 	
@@ -31,7 +37,7 @@ public final class NewGameModel implements INewGameModel {
 		for (Map.Entry<String, Pair<String, Integer>> entry : mpPlayersBoardMapping.entrySet()) {
 			for (int i = m_mpPlayer.size(); i < entry.getValue().getValue1(); i++) {
 				IPlayerAgent oPlayer = new PlayerAgent();
-				oPlayer.getPlayerData().setName("P"+(i+1));
+				oPlayer.getPlayerData().setName("P" + (i + 1));
 				m_mpPlayer.put(oPlayer.getName(), oPlayer);
 			}
 		}

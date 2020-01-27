@@ -1,11 +1,10 @@
 package jchess.common;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * IBoardData provides interface for the cache module.
- * It expose getters and setters and does not support
- * methods that are linked to logic of the game.
+ * It expose getters and setters and does not support methods that are linked to logic of the game.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019
@@ -25,11 +24,11 @@ public interface IBoardData extends IBoard {
 	public String getActivCellImagePath();
 	public String getMarkedCellImagePath();
 	
-	public void addMapping(String stPlayer, String stPiece, String stPosition);
+	public void addMapping(String stPlayer, IPlayerPieceMapping oMapping);
 	public void addPiece(IPiece oPiece);
 	public void addRule(IRule oRule);
 	public void addPlayer(IPlayer oPlayer);
 	public void addPosition(IPosition oPosition);
 	
-	public Map<String, String> getPlayerMapping(String stName);	
+	public List<IPlayerPieceMapping> getPlayerMapping(String stName);	
 }

@@ -44,9 +44,9 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method looks for the possibility whether the pawn is eligible to make a promotion move.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate
 	 */
 	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		//tryPawnPromotionRuleForEdge(oBoard, oPiece, mpCandidateMovePositions);
@@ -81,19 +81,19 @@ public final class PawnRulesProcessor {
 	 * This method looks for the possibility whether the pawn is eligible to make a promotion move. It looks of the opposite
 	 * player's piece on the positions linked to its vertexes.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate
 	 */
 	static void tryPawnPromotionRuleForVertex(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 
 		Map<String, IPositionAgent> mpPosition = oPosition.getAllPathAgents(oPlayer.getBoardMapping(), Direction.VERTEX, Family.SAME, File.IGNORE, Rank.FORWARD);
-		for( Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
+		for (Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
 			Map<String, IPositionAgent> mpNextPosition = it.getValue().getAllPathAgents(oPlayer.getBoardMapping(), Direction.EDGE, Family.DIFFERENT, File.SAME, Rank.FORWARD);
 
-			if( mpNextPosition.size() == 0) {
+			if (mpNextPosition.size() == 0) {
 				IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 	        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
 	        	oRule.getRuleData().setCustomName("MOVE_AND_CAPTURE[PAWN_PROMOTION]");
@@ -106,9 +106,9 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method executes pawn promotion rule.
 	 * 
-	 * @param IBoardAgent
-	 * @param IGUIHandle
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oGUIHandle IGUIHandle
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecutePawnPromotionRule(IBoardAgent oBoard, IGUIHandle oGUIHandle, IMoveCandidate oMoveCandidate) {
@@ -127,38 +127,33 @@ public final class PawnRulesProcessor {
 		IPresenter oPresenter = new PawnPromotionPresenter(oView, oData, null);		
 		oGUIHandle.showDialog(oPresenter);
 		
-		if( oData.getSelectedPiece() == null)
+		if (oData.getSelectedPiece() == null) {
 			return null;
-		
-		IPieceAgent oSourcePieceAfterMove = (IPieceAgent)oData.getSelectedPiece().clone();
-		oSourcePieceAfterMove.setPosition(oMoveCandidate.getCandidatePosition());
-		oSourcePieceAfterMove.setPlayer(oPlayer); 
-		
-		oMoveCandidate.getSourcePosition().setPiece(null);
-		oMoveCandidate.getCandidatePosition().setPiece(oSourcePieceAfterMove);
-		
-		oSourcePieceAfterMove.enqueuePositionHistory(oMoveCandidate.getSourcePosition());
-		
-		oActivity.addPriorMoveEntry(oMoveCandidate.getSourcePosition(), oSourcePiecePriorMove);
-		oActivity.addPriorMoveEntry(oMoveCandidate.getCandidatePosition(), oDestinationPiecePriorMove);
-		oActivity.addPostMoveEntry(oMoveCandidate.getSourcePosition(), null);
-		oActivity.addPostMoveEntry(oMoveCandidate.getCandidatePosition(), oSourcePieceAfterMove);
-		oActivity.setPlayer(oPlayer);
+		}
 
+		oMoveCandidate.getSourcePosition().getPiece().setPosition(null);
+		
+		IPieceAgent oPiece = (IPieceAgent)oData.getSelectedPiece().clone();
+		oPiece.setPlayer(oPlayer);
+		
+		oMoveCandidate.getSourcePosition().setPiece(oPiece);
+		setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
+		
 		return oActivity;
 	}	
 
 	/**
 	 * This method looks for the possibility whether the pawn is eligible to jump one position on its first move or not.
 	 * 
-	 * @param IRuleProcessor
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate> 
+	 * @param oRuleProcessor IRuleProcessor
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate 
 	 */
 	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {		
-		if( oPiece.getRuns() > 0)
+		if (oPiece.getRuns() > 0) {
 			return;
+		}
 		
 		IRule oRule = m_oBoardFactory.createRule();		
 		oRule.getRuleData().setRuleType(RuleType.CUSTOM);
@@ -171,7 +166,7 @@ public final class PawnRulesProcessor {
 		oRule.getRuleData().setName("PawnFirstMoveException");
 		oRule.getRuleData().setCustomName("MOVE_TRANSIENT[PAWN_FIRST_MOVE_EXCEPTION]");
 		
-		IRule oInnerRule= m_oBoardFactory.createRule();		
+		IRule oInnerRule = m_oBoardFactory.createRule();		
 		oInnerRule.getRuleData().setRuleType(RuleType.CUSTOM);
 		oInnerRule.getRuleData().setDirection(Direction.EDGE);
 		oInnerRule.getRuleData().setMaxRecurrenceCount(1);
@@ -187,39 +182,23 @@ public final class PawnRulesProcessor {
 		
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPiece.getPosition(), null));
-		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositions);
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData, mpCandidateMovePositions);
 }
 	
 	/**
 	 * This method let pawn to jump one piece on its first move.
 	 * 
-	 * @param IBoardAgent
-	 * @param IGUIHandle
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecutePawnFirstMoveException(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = null;
 		
-		if( oMoveCandidate.getCandidatePosition().getPiece() == null) {
+		if (oMoveCandidate.getCandidatePosition().getPiece() == null) {
 			oActivity = new BoardActivity(oMoveCandidate);
 			
-			IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-			IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-			IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-			IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-			
-			oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-			oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-			oCurrentPosition.setPiece(null);
-			
-			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-			
-			oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-			oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-			oActivity.addPostMoveEntry(oCurrentPosition, null );
-			oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-			oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+			setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 		}
 		
 		return oActivity;
@@ -228,36 +207,38 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method checks the eligibility of EnPassant rule.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate 
 	 */
 	public static void tryPawnEnPassantRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
 
 		Map<String, IPositionAgent> mpPosition = oPosition.getAllPathAgents(oPlayer.getBoardMapping(), Direction.EDGE, Family.DIFFERENT, File.IGNORE, Rank.SAME);
-		for( Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
+		for (Map.Entry<String, IPositionAgent> it : mpPosition.entrySet()) {
 			IPositionAgent oTargetPosition = it.getValue();
 			IPieceAgent oTargetPiece = oTargetPosition.getPiece();
 			
 			// Checks the target piece should not belong to the same player.
-			if( oTargetPiece != null && oTargetPiece.getPlayer() != oPiece.getPlayer()) { 
+			if (oTargetPiece != null && oTargetPiece.getPlayer() != oPiece.getPlayer()) { 
 				
 				// Fetching the player's last activity to see which piece the player moved in its last turn.
 				IBoardActivity oActivity = oBoard.getLastActivityByPlayer(oTargetPiece.getPlayer());
-				if( oActivity == null)
+				if (oActivity == null) {
 					continue;
+				}
 				
 				IMoveCandidate oMoveCandidate =  oActivity.getMoveCandidate();
-				if( oMoveCandidate == null) {
+				if (oMoveCandidate == null) {
 					// Abnormal state: Log error.
 					continue;
 				}
 				
 				// Checking if this was the same piece that was moved two positions ahead in the last move by the player.
-				if(!oMoveCandidate.getPieceToMove().equals(oTargetPiece))
+				if (!oMoveCandidate.getPieceToMove().equals(oTargetPiece)) {
 					continue;
+				}
 				
 				 /* 
 				  * Background: Pawn piece can jump to two places ahead on its first move only but by doing this it cannot escape the capture. 
@@ -265,7 +246,7 @@ public final class PawnRulesProcessor {
 				  * other players to capture, if possible, the Pawn on their very next move (only).
 				  * The following check verifies whether the piece moved two positions ahead in its first move or not.
 				  */
-				if( Math.abs( oMoveCandidate.getSourcePosition().getRank() - oMoveCandidate.getCandidatePosition().getRank()) == 2) {
+				if (Math.abs(oMoveCandidate.getSourcePosition().getRank() - oMoveCandidate.getCandidatePosition().getRank()) == 2) {
 					IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
 		        	oRule.getRuleData().setRuleType(RuleType.CUSTOM);
 		        	oRule.getRuleData().setCustomName("MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]");
@@ -279,32 +260,50 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method executes EnPassant rule.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecutePawnEnPassantRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 
-		IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-		IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-		IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-		IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-		
-		oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-		oPieceLinkedToNewPosition.setPosition(null);
-		oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-		oCurrentPosition.setPiece(null);
-		
-		oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-		
-		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-		oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-		oActivity.addPostMoveEntry(oCurrentPosition, null );
-		oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+		setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 		
 		return oActivity;
 	}
 
+	/**
+	 * This method populate IBoardActivity object.
+	 * 
+	 * @param oCurrentPosition IPositionAgent
+	 * @param oCandidatePosition IPositionAgent
+	 * @param oActivity IBoardActivity
+	 */
+	private static void setPositionsAndUpdateActivity(IPositionAgent oCurrentPosition, IPositionAgent oCandidatePosition, IBoardActivity oActivity) {
+		IPieceAgent oPieceLinkedToCurrentPosition = oCurrentPosition.getPiece();
+		IPieceAgent oPieceLinkedToCandidatePosition = oCandidatePosition.getPiece();
+		
+		if (oCandidatePosition != null) {
+			oCandidatePosition.setPiece(oPieceLinkedToCurrentPosition);
+		}
+		
+		if (oCurrentPosition != null) {
+			oCurrentPosition.setPiece(null);
+		}
+
+		if (oPieceLinkedToCurrentPosition != null) {
+			oPieceLinkedToCurrentPosition.setPosition(oCandidatePosition);
+			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+		}
+		
+		if (oPieceLinkedToCandidatePosition != null) {
+			oPieceLinkedToCandidatePosition.setPosition(null);
+		}
+		
+		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+		oActivity.addPriorMoveEntry(oCandidatePosition, oPieceLinkedToCandidatePosition);
+		oActivity.addPostMoveEntry(oCurrentPosition, null);
+		oActivity.addPostMoveEntry(oCandidatePosition, oPieceLinkedToCurrentPosition);
+		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+	}
 }

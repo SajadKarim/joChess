@@ -70,6 +70,10 @@ public final class PawnPromotionDialogView extends JDialog implements IPawnPromo
         Iterator<IPieceAgent> it = lstPieces.iterator(); 
         while( it.hasNext()) {
         	IPieceAgent oPiece = it.next();
+        	
+        	if( oPiece.getName().contains("Cannon") || oPiece.getName().contains("King"))
+        		continue;
+        	
         	JButton btn = new JButton(oPiece.getName(), new ImageIcon(oPiece.getImage()));
         	btn.addActionListener(this);
 

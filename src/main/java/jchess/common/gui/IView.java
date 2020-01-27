@@ -3,8 +3,7 @@ package jchess.common.gui;
 import java.awt.Component;
 
 /**
- * This interfaces exposes some generic and important methods that all the views
- * should implement.
+ * This interfaces exposes some generic and important methods that all the views should implement.
  * 
  * @author	Sajad Karim
  * @since	12 Dec 2019

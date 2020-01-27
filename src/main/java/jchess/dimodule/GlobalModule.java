@@ -9,7 +9,7 @@ import com.google.inject.Singleton;
 import jchess.IMain;
 import jchess.Main;
 import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
+import jchess.common.ICacheManager;
 import jchess.gui.GUIManager;
 import jchess.gui.IGUIManager;
 import jchess.gui.presenter.mainwindow.IMainPresenter;

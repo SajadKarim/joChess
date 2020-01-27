@@ -5,8 +5,8 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-import jchess.cache.ICacheManager;
 import jchess.common.IBoard;
+import jchess.common.ICacheManager;
 import jchess.gamelogic.Game;
 import jchess.gamelogic.GameState;
 import jchess.gamelogic.IGame;
@@ -43,11 +43,31 @@ import jchess.ruleengine.IRuleProcessor;
  */
 
 public final class GameWndModule extends AbstractModule {
+	/**
+	 * Reference to GlobalModule instance.
+	 */
 	private Injector m_oGlobalInjector = null;
+	/**
+	 * File name of Chess-board.
+	 */
 	private String m_stBoardFileName;
+	/**
+	 * Name of Chess-board.
+	 */
 	private String m_stBoardName;
+	/**
+	 * Game id.
+	 */
 	private String m_stGameId;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param oGlobalInjector
+	 * @param stGameId
+	 * @param stBoardName
+	 * @param stBoardFileName
+	 */
 	public GameWndModule(Injector oGlobalInjector, String stGameId, String stBoardName, String stBoardFileName) {
 		m_oGlobalInjector = oGlobalInjector;
 		m_stBoardFileName = stBoardFileName;
@@ -108,10 +128,12 @@ public final class GameWndModule extends AbstractModule {
 		ICacheManager oCacheManager = m_oGlobalInjector.getInstance(ICacheManager.class);
 		IBoard oBoard = oCacheManager.getBoard(m_stGameId);
 
+		// TODO: #REFACTOR There is no need to take RuleProcessor's object form outside of the rule engine module.
+		// either make RuleEngine class static and take RuleProcess's name as input.
 		try {			
 			oRuleProcessor = (IRuleProcessor)Class.forName("jchess.ruleengine." + oBoard.getRuleProcessorName()).getConstructor(IAppLogger.class).newInstance(oAppLogger);
 			oRuleEngine = (IRuleEngine)Class.forName("jchess.ruleengine." + oBoard.getRuleEngineName()).getConstructor(IRuleProcessor.class, IGUIHandle.class, IAppLogger.class).newInstance(new Object[] {oRuleProcessor, oGUIManager.getGUIHandle(), oAppLogger});
-		} catch(java.lang.Exception e) {
+		} catch (Exception e) {
 			oAppLogger.writeLog(LogLevel.ERROR, "An unhandled exception has occured. Exception=" + e.toString(), "provideRuleEngine", "GameWndModule");
 		}
 		return oRuleEngine;

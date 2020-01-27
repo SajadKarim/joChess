@@ -1,10 +1,8 @@
-package jchess.cache;
+package jchess.common;
 
 import java.util.SortedMap;
 
 import org.javatuples.Pair;
-
-import jchess.common.IBoardAgent;
 
 /**
  * This interface allows other modules to interact with storage (DB or File).

@@ -1,5 +1,8 @@
 package jchess.gamelogic;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
@@ -17,12 +20,14 @@ public final class MoveCandidate implements IMoveCandidate {
 	private IPositionAgent m_oSourcePosition;
 	private IPositionAgent m_oCandidatePosition;
 	private IRuleAgent m_oRule;
+	private List<IMoveCandidate> m_lstSecondaryMoves;
 
 	public MoveCandidate(IRuleAgent oRule, IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPositionAgent oCandidatePosition) {
 		m_oRule = oRule;
 		m_oPieceToMove = oPieceToMove;
 		m_oSourcePosition = oSourcePosition;
 		m_oCandidatePosition = oCandidatePosition;
+		m_lstSecondaryMoves = new LinkedList<IMoveCandidate>();
 	}
 
 	public IRuleAgent getRule() {
@@ -42,10 +47,25 @@ public final class MoveCandidate implements IMoveCandidate {
 	}	
 	
 	public String toLog() {
-		return String.format("Piece=%s, SourcePosition=%s, DestinationPosition=%s, RuleName=%s"
-				, m_oPieceToMove.getName()
-				, m_oSourcePosition.getName()
-				, m_oCandidatePosition.getName()
-				, m_oRule.getName());
+		return String.format("Piece=[%s], SourcePosition=[%s], DestinationPosition=[%s], RuleName=[%s]", 
+				m_oPieceToMove.getName(), 
+				m_oSourcePosition.getName(), 
+				m_oCandidatePosition.getName(), 
+				m_oRule.getName());
+	}
+
+	public IMoveCandidate getSecondaryMove(int index) {
+		IMoveCandidate secondaryCandidate = null;
+		try {
+			secondaryCandidate = m_lstSecondaryMoves.get(index);
+			
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		return secondaryCandidate;
+	}
+
+	public void addSecondaryMove(IMoveCandidate secondaryMove) {
+		this.m_lstSecondaryMoves.add(secondaryMove);
 	}
 }

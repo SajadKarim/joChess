@@ -4,8 +4,7 @@ import java.awt.Image;
 import java.util.Map;
 
 /**
- * IPlayerAgent provides interface for the module where the
- * all the decisions (game) are taken. It ensures that user
+ * IPlayerAgent provides interface for the module where the all the decisions (game) are taken. It ensures that user
  * does not make any changes to underlying data object.
  * 
  * @author	Sajad Karim
@@ -19,7 +18,10 @@ public interface IPlayerAgent extends IPlayer {
 	public String  getLastName();
 	public void setImage(Image oImage);
 	public Image getImage();
-	public void addPiece(IPieceAgent oPiece);
+	public void addPiece(String stPieceCustomName, IPieceAgent oPiece);
 	public IPieceAgent getPiece(String stName);
 	public Map<String, IPieceAgent> getAllPieces();
+	public IPieceAgent getKingPiece();
+	public int getRemainingTimeInSec();
+	public void setRemainingTimeInSec(int nRemainingTimeInSec);
 }

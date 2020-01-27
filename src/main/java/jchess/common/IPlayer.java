@@ -2,8 +2,7 @@ package jchess.common;
 
 /**
  * IPlayer provides abstraction to IPlayerData and IPlayerAgent.
- * It fulfills functionality of Abstract Factory Pattern, and
- * it is mainly built for Cache module to make both the
+ * It fulfills functionality of Abstract Factory Pattern, and it is mainly built for Cache module to make both the
  * type compatible with its implementation (data population logic). 
  * 
  * @author	Sajad Karim

@@ -7,6 +7,7 @@ import java.util.Queue;
 import com.google.inject.Inject;
 
 import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.gui.model.gamewindow.IGameModel;
@@ -82,8 +83,9 @@ public final class GameState implements IGameState {
 	}
 
 	public IMoveCandidate getMoveCandidate(IPositionAgent oPosition) {
-		if (m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null)
+		if (m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName()) != null) {
 			return m_lstPossibleMovePositionsForSelectedPiece.get(oPosition.getName());
+		}
 
 		return null;
 	}
@@ -100,5 +102,22 @@ public final class GameState implements IGameState {
 		while (!m_qPlayersInQueue.peek().equals(oPlayer)) {
 			switchPlayTurn();
 		}
+	}
+	
+	public void removePlayer(IPlayerAgent oPlayer) {
+		m_qPlayersInQueue.remove(oPlayer);
+		
+		for (Map.Entry<String, IPieceAgent> itPiece : oPlayer.getAllPieces().entrySet()) {
+			IPieceAgent oPiece = itPiece.getValue();
+			
+			if (oPiece.getPosition() != null) {
+				oPiece.getPosition().setPiece(null);
+				oPiece.setPosition(null);
+			}
+		}
+	}
+	
+	public int getCurrentPlayersCount() {
+		return m_qPlayersInQueue.size();
 	}
 }

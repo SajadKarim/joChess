@@ -52,9 +52,9 @@ public final class MoveHistoryView extends AbstractTableModel implements IMoveHi
     }
 
     public void removeMove(String stMoveString) {
-    	String stValueToCompare = (String)tableModel.getValueAt(tableModel.getRowCount()- 1, 0);
+    	String stValueToCompare = (String)tableModel.getValueAt(tableModel.getRowCount() - 1, 0);
     	if (stValueToCompare.equals(stMoveString)) {
-    		tableModel.removeRow(tableModel.getRowCount()- 1);
+    		tableModel.removeRow(tableModel.getRowCount() - 1);
     	}
     }
 

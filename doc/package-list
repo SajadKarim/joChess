@@ -11,11 +11,12 @@ jchess.gui.model.newgamewindow
 jchess.gui.presenter.gamewindow
 jchess.gui.presenter.mainwindow
 jchess.gui.presenter.newgamewindow
+jchess.gui.view.aboutwindow
 jchess.gui.view.gamewindow
 jchess.gui.view.mainwindow
 jchess.gui.view.newgamewindow
+jchess.gui.view.themewindow
 jchess.ruleengine
 jchess.ruleengine.gui
-jchess.server
 jchess.service
 jchess.util

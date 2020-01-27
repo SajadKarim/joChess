@@ -34,9 +34,9 @@ public class ThreePlayersHexBoardRuleEngine extends ExtendedRuleEngine {
 	/**
 	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * return Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * return Map of String and IMoveCandidate
 	 */
 	@Override
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
@@ -48,8 +48,8 @@ public class ThreePlayersHexBoardRuleEngine extends ExtendedRuleEngine {
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * return IBoardActivity
 	 */
 	@Override
@@ -58,8 +58,8 @@ public class ThreePlayersHexBoardRuleEngine extends ExtendedRuleEngine {
 
 		IBoardActivity oActivity = super.tryExecuteRule(oBoard, oMoveCandidate);
 		
-		if( oActivity == null) {
-			switch( oMoveCandidate.getRule().getRuleType()) {
+		if (oActivity == null) {
+			switch (oMoveCandidate.getRule().getRuleType()) {
 				case CUSTOM: {
 					oActivity = tryExecuteCustomRules(oBoard, oMoveCandidate);
 				}
@@ -83,12 +83,12 @@ public class ThreePlayersHexBoardRuleEngine extends ExtendedRuleEngine {
 
 		IBoardActivity oMove = null;
 		 
-		switch( oMoveCandidate.getRule().getCustomName()) {
-		case "BOMB[CANNON]":
-			oMove = CannonRulesProcessor.tryExecuteBombAndPromotionRule(oBoard, oMoveCandidate);
-			break;
-		default:
-			break;
+		switch (oMoveCandidate.getRule().getCustomName()) {
+			case "BOMB[CANNON]":
+				oMove = CannonRulesProcessor.tryExecuteBombAndPromotionRule(oBoard, oMoveCandidate);
+				break;
+			default:
+				break;
 		}
 		
 		return oMove;

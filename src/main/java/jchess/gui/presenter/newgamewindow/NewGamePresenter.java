@@ -10,13 +10,19 @@ import org.jdesktop.application.View;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
-import jchess.cache.ICacheManager;
+import jchess.common.ICacheManager;
 import jchess.common.gui.DialogResult;
 import jchess.gui.model.newgamewindow.INewGameModel;
 import jchess.gui.view.newgamewindow.INewGameListener;
 import jchess.gui.view.newgamewindow.INewGameView;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
+
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
 
 public final class NewGamePresenter extends AbstractModule implements INewGamePresenter {
     private final INewGameView m_oView;

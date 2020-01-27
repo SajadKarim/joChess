@@ -6,7 +6,12 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 
-import jchess.common.*;
+import jchess.common.IBoardActivity;
+import jchess.common.IBoardAgent;
+import jchess.common.IMoveCandidate;
+import jchess.common.IPieceAgent;
+import jchess.common.IPlayerAgent;
+import jchess.common.IPositionAgent;
 import jchess.gamelogic.BoardActivity;
 import jchess.gui.IGUIHandle;
 import jchess.util.IAppLogger;
@@ -21,7 +26,9 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
-public class DefaultRuleEngine implements IRuleEngine{
+// TODO: #REFACTOR move rule execution logic to rule processor class.
+
+public class DefaultRuleEngine implements IRuleEngine {
 	protected IRuleProcessor m_oRuleProcessor;
 	protected IGUIHandle m_oGUIHandler;
 	protected IAppLogger m_oLogger;
@@ -29,9 +36,9 @@ public class DefaultRuleEngine implements IRuleEngine{
 	/**
 	 * Constructor for DefaultRuleEngine.
 	 * 
-	 * @param IRuleProcessor
-	 * @param IGUIHandler
-	 * @param IAppLogger
+	 * @param oRuleProcessor IRuleProcessor
+	 * @param oGUIHandler IGUIHandler
+	 * @param oLogger IAppLogger
 	 */
 	@Inject
 	public DefaultRuleEngine(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
@@ -41,13 +48,13 @@ public class DefaultRuleEngine implements IRuleEngine{
 		
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleEngine.", "DefaultRuleEngine", "DefaultRuleEngine");
 	}
-		
+
 	/**
 	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * return Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * return Map of String and IMoveCandidate
 	 */
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating move candidates for selected position [%s].", oPiece.toLog()), "tryEvaluateAllRules", "DefaultRuleEngine");
@@ -61,12 +68,27 @@ public class DefaultRuleEngine implements IRuleEngine{
 		
 		return mpCandidateMovePositions;
     }
+	
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		return m_oRuleProcessor.tryCheckIfPlayerEndengered(oBoard, oPlayer);
+	
+	}
+	
+	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		//long t1 = System.nanoTime();
+		Boolean bResult = m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
+		//long t2 = System.nanoTime();
+		
+		//long timeElapsed  = t2 - t1;
+		//System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
+		return bResult;
+	}
 
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IPieceAgent
 	 * return IBoardActivity
 	 */
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
@@ -74,74 +96,27 @@ public class DefaultRuleEngine implements IRuleEngine{
 
 		IBoardActivity oActivity = null;
 		
-		switch( oMoveCandidate.getRule().getRuleType()) {
-			case MOVE:{
-				if( oMoveCandidate.getCandidatePosition().getPiece() != null)
+		switch (oMoveCandidate.getRule().getRuleType()) {
+			case MOVE: {
+				if (oMoveCandidate.getCandidatePosition().getPiece() != null) {
 					break;
+				}
 
-				oActivity = new BoardActivity(oMoveCandidate);
-				
-				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-				
-				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-				oCurrentPosition.setPiece(null);
-				
-				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-				
-				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-				oActivity.addPostMoveEntry(oCurrentPosition, null );
-				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+				oActivity = new BoardActivity(oMoveCandidate);				
+				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 				break;
-			case MOVE_AND_CAPTURE:{
+			case MOVE_AND_CAPTURE: {
 				oActivity = new BoardActivity(oMoveCandidate);
-
-				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-				
-				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-				oCurrentPosition.setPiece(null);
-				
-				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-				
-				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-				oActivity.addPostMoveEntry(oCurrentPosition, null );
-				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
+			}
+			break;
+			case MOVE_IFF_CAPTURE_POSSIBLE: {
+				oActivity = new BoardActivity(oMoveCandidate);
+				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 				break;
-			case MOVE_IFF_CAPTURE_POSSIBLE:{
-				oActivity = new BoardActivity(oMoveCandidate);
-
-				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-				
-				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-				oCurrentPosition.setPiece(null);
-				
-				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-				
-				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition );
-				oActivity.addPostMoveEntry(oCurrentPosition, null );
-				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
-			}
-				break;
-			case MOVE_TRANSIENT:{
+			case MOVE_TRANSIENT: {
 			}
 				break;
 			case CUSTOM:
@@ -149,9 +124,42 @@ public class DefaultRuleEngine implements IRuleEngine{
 				break;
 		}
 		
-		if( oActivity != null)
+		if (oActivity != null) {
 			m_oLogger.writeLog(LogLevel.INFO, String.format("Returning.. [%s].", oActivity.toLog()), "tryExecuteRule", "DefaultRuleEngine");
-
+		}
+		
 		return oActivity;
+	}
+
+	protected void setPositionsAndUpdateActivity(IPositionAgent oCurrentPosition, IPositionAgent oCandidatePosition, IBoardActivity oActivity) {
+		IPieceAgent oPieceLinkedToCurrentPosition = oCurrentPosition.getPiece();
+		IPieceAgent oPieceLinkedToCandidatePosition = oCandidatePosition.getPiece();
+		
+		if (oCandidatePosition != null) {
+			oCandidatePosition.setPiece(oPieceLinkedToCurrentPosition);
+		}
+		
+		if (oCurrentPosition != null) {
+			oCurrentPosition.setPiece(null);
+		}
+
+		if (oPieceLinkedToCurrentPosition != null) {
+			oPieceLinkedToCurrentPosition.setPosition(oCandidatePosition);
+			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+		}
+		
+		if (oPieceLinkedToCandidatePosition != null) {
+			oPieceLinkedToCandidatePosition.setPosition(null);
+		}
+		
+		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+		oActivity.addPriorMoveEntry(oCandidatePosition, oPieceLinkedToCandidatePosition);
+		oActivity.addPostMoveEntry(oCurrentPosition, null);
+		oActivity.addPostMoveEntry(oCandidatePosition, oPieceLinkedToCurrentPosition);
+		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+	}
+	
+	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
+		return m_oRuleProcessor.isPieceEndangered(oBoard, oPiece);
 	}
 }

@@ -4,8 +4,7 @@ import java.util.List;
 
 /**
  * IPieceData provides interface for the cache module.
- * It expose getters and setters and does not support
- * methods that are linked to logic of the game.
+ * It expose getters and setters and does not support methods that are linked to logic of the game.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019

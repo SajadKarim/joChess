@@ -46,7 +46,7 @@
     <!-- Excludes all 'module-info.java' files              -->
     <!-- See https://checkstyle.org/config_filefilters.html -->
     <module name="BeforeExecutionExclusionFileFilter">
-        <property name="fileNamePattern" value="(JChessView|JChessTabbedPane|ThemeChooseWindow|JChessAboutBox|NewLocalGameView|PlayerDetailsEntryView).java"/>
+        <property name="fileNamePattern" value="(JChessView|JChessTabbedPane|ThemeChooseWindow|JChessAboutBox|NewLocalGameView|PlayerDetailsEntryView|PawnPromotionDialogView|BoardXMLDeserializer).java"/>
     </module>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
@@ -108,7 +108,9 @@
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
-
+		<module name="MethodName">
+		   <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
+		</module>
 		<module name="LocalVariableName">
         	<property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
        		<message key="name.invalidPattern"  value="Local name ''{0}'' must match pattern ''{1}''."/>
@@ -122,6 +124,9 @@
             <message key="name.invalidPattern" value="Parameter name ''{0}'' must match pattern ''{1}''."/>
         </module>
         
+        <module name="ConstantName">
+		  <property name="format" value="^[A-Z](_[A-Z0-9]+)*$"/>
+		</module>
 
         <!-- Checks for imports                              -->
         <!-- See https://checkstyle.org/config_import.html -->
@@ -147,7 +152,9 @@
         <module name="OperatorWrap"/>
         <module name="ParenPad"/>
         <module name="TypecastParenPad"/>
-        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAfter">
+        	<property name="tokens" value="COMMA, SEMI"/>
+       </module>
         <module name="WhitespaceAround"/>
 
         <!-- Modifier Checks                                    -->
@@ -157,7 +164,9 @@
 
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See https://checkstyle.org/config_blocks.html -->
-        <module name="AvoidNestedBlocks"/>
+        <module name="AvoidNestedBlocks">
+        	<property name="allowInSwitchCase " value="true"/>
+        </module>
         <module name="EmptyBlock"/>
         <module name="LeftCurly"/>
         <module name="NeedBraces"/>

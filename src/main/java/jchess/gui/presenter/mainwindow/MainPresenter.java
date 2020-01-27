@@ -16,6 +16,12 @@ import jchess.gui.view.mainwindow.IJChessView;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 @Singleton
 public final class MainPresenter implements IMainPresenter {
 	private IJChessView m_oJChessView;
@@ -41,6 +47,10 @@ public final class MainPresenter implements IMainPresenter {
      	m_oLogger.writeLog(LogLevel.INFO, "Adding a new game.", "addTab", "MainPresenter");
 
 		m_oJChessView.addTab(oComponent, stName);
+	}
+	
+	public void closetab() {
+		m_oJChessView.removeCurrentTab();
 	}
 
 	@Override

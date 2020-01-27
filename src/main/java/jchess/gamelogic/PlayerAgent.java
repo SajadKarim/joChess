@@ -10,6 +10,7 @@ import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPlayerData;
 
+
 /**
  * This class is responsible to manage underlying "Player" (only) related data.
  * It keeps the state of the Player and facilitates game-logic with numerous operations
@@ -25,10 +26,12 @@ public final class PlayerAgent implements IPlayerAgent {
 	private String m_stLastName;
 	private Image m_oImage;
 	private Map<String, IPieceAgent> m_mpPieces;
+	private int m_nRemainingGameTimeInSec;
 	
 	public PlayerAgent() {
 		m_oPlayerData = new PlayerData();
 		m_mpPieces = new HashMap<String, IPieceAgent>();
+		m_nRemainingGameTimeInSec = 2 * 60;
 	}
 	
 	public String getName() {
@@ -72,8 +75,8 @@ public final class PlayerAgent implements IPlayerAgent {
 		return m_oImage;
 	}
 	
-	public void addPiece(IPieceAgent oPiece) {
-		m_mpPieces.put(oPiece.getName(), oPiece);
+	public void addPiece(String stPieceCustomName, IPieceAgent oPiece) {
+		m_mpPieces.put(stPieceCustomName, oPiece);
 	}
 
 	public IPieceAgent getPiece(String stName) {
@@ -82,5 +85,28 @@ public final class PlayerAgent implements IPlayerAgent {
 
 	public Map<String, IPieceAgent> getAllPieces() {
 		return m_mpPieces;
+	}
+	
+	public IPieceAgent getKingPiece() {
+		String[] KingArray = new String[] {"Black", "White", "Red"};
+		String stKingName = "";
+		IPieceAgent oKingPiece = null;
+		for (String stKingColour : KingArray) {
+			stKingName = "King" + stKingColour;
+			IPieceAgent tempPiece = getPiece(stKingName);
+			if (tempPiece != null) {
+				oKingPiece = tempPiece;
+				return oKingPiece;
+			}
+		}
+		return oKingPiece;
+	}
+
+	public int getRemainingTimeInSec() {
+		return m_nRemainingGameTimeInSec;
+	}
+
+	public void setRemainingTimeInSec(int nRemainingTimeInSec) {
+		m_nRemainingGameTimeInSec = nRemainingTimeInSec;	
 	}
 }

@@ -6,7 +6,9 @@ package jchess.util;
  * @since	7 Dec 2019
  */
 
-public interface ITimer extends Runnable {
-    public void start(int nTimerLengthInSeconds, int nTimerRecurrenceCount, int nPauseTimerBeforeNextRecurrence, Boolean bNotifyEverySecond, Boolean bNotifyWhenTimerEnds);
+public interface ITimer {
+    public void start(int nTimerRemainingSeconds);
     public void addListener(final ITimerListener listener);
+	public void stop();
+    public int getTimerRemainingSeconds();
 }

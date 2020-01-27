@@ -17,9 +17,17 @@ import jchess.gui.view.newgamewindow.NewLocalGameView;
  * @since	7 Dec 2019
  */
 
-public class NewGameWndModule extends AbstractModule {
+public final class NewGameWndModule extends AbstractModule {
+	/**
+	 * Reference to GlobalModule instance.
+	 */
 	private Injector m_oGlobalInjector = null;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param oGlobalInjector
+	 */
 	public NewGameWndModule(Injector oGlobalInjector) {
 		m_oGlobalInjector = oGlobalInjector;
 	}

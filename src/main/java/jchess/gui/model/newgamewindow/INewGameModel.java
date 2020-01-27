@@ -9,6 +9,12 @@ import org.javatuples.Pair;
 import jchess.common.IPlayerAgent;
 import jchess.common.gui.IModel;
 
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public interface INewGameModel extends IModel {
 	public Map<String, IPlayerAgent> getPlayers();
 	public void setPlayerBoardMapping(SortedMap<String, Pair<String, Integer>> mpPlayersBoardMapping);

@@ -15,22 +15,21 @@ import jchess.common.IPieceAgent;
  */
 
 public final class PawnPromotionModel implements IPawnPromotionModel {
-	IPieceAgent m_oSelectedPiece;
-	IPieceAgent m_oPieceToPromote;
+	private IPieceAgent m_oSelectedPiece;
+	private IPieceAgent m_oPieceToPromote;
 	private Map<String, IPieceAgent> m_mpPieces;
 	
-	public PawnPromotionModel(Map<String, IPieceAgent > mpPieces, IPieceAgent oPieceToPromote) {
+	public PawnPromotionModel(Map<String, IPieceAgent> mpPieces, IPieceAgent oPieceToPromote) {
 		m_mpPieces = mpPieces;
 		m_oSelectedPiece = null;
 		m_oPieceToPromote = oPieceToPromote;
 	}
 	
-	public List<IPieceAgent> getViewData(){
+	public List<IPieceAgent> getViewData() {
 		List<IPieceAgent> lstPieces = new ArrayList<IPieceAgent>();
 		
 		for (Map.Entry<String, IPieceAgent> entry : m_mpPieces.entrySet()) { 
-			if( entry.getValue().getFamily().equals(m_oPieceToPromote.getFamily())
-				&& !(entry.getValue().getName().equals(m_oPieceToPromote.getName()))) {
+			if (entry.getValue().getFamily().equals(m_oPieceToPromote.getFamily()) && !(entry.getValue().getName().equals(m_oPieceToPromote.getName()))) {
 				lstPieces.add(entry.getValue());
 			}
 		}
@@ -40,7 +39,7 @@ public final class PawnPromotionModel implements IPawnPromotionModel {
 	
 	public void updateSelectedPiece(String stName) {
 		for (Map.Entry<String, IPieceAgent> entry : m_mpPieces.entrySet()) { 
-			if( entry.getValue().getName().equals(stName)) {
+			if (entry.getValue().getName().equals(stName)) {
 				m_oSelectedPiece = entry.getValue();
 				break;
 			}
