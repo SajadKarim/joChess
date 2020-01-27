@@ -39,15 +39,15 @@ import jchess.util.LogLevel;
  */
 public final class Main extends SingleFrameApplication implements IMain {
 	/**
-	 * Class responsible to handle logging related functionality.
+	 * Instance of class that is responsible to handle logging related functionality.
 	 */
 	private static IAppLogger m_oLogger; 
 	/**
-	 * Manager class to handle all the GUI related operations.
+	 * Instance of class class that is responsible to handle all the GUI related operations.
 	 */
  	private static IGUIManager m_oGUIManager;
  	/**
- 	 * Reference to global module that keeps references to the classes the should be instantiated once in the Application.
+ 	 * Instance of class that keeps references to the classes the should be instantiated once in the Application.
  	 */
  	private static Injector m_oGlobalModuleInjector;
 
@@ -62,14 +62,23 @@ public final class Main extends SingleFrameApplication implements IMain {
     	m_oGUIManager.showMainWindow();
     }
     
+    /**
+     * To show the provided UI control.
+     */
     public void showView(View oView) {
     	this.show(oView);
     }
     
+    /**
+     * To show the provided UI dialog control.
+     */
     public void showDialog(JDialog oDialog) {
     	this.show(oDialog);
     }
     
+    /**
+     * To return main-frame instance of the application.
+     */
     public JFrame getAppMainFrame() {
     	return Application.getInstance(Main.class).getMainFrame();
     }
@@ -77,7 +86,7 @@ public final class Main extends SingleFrameApplication implements IMain {
     /**
      * Main method launching the application.
      * 
-     * @param String[]
+     * @param args Program input arguments.
      */
     public static void main(String[] args) {
     	// Initializing DI for objects that should instantiate once.

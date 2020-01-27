@@ -23,6 +23,7 @@ import java.util.Map;
  * This class is responsible to perform operations against any activity on Board.
  * It is basically a manager class which with the help of other classes manages
  * state of the board and make other necessary operations related to Board.
+ * 
  * E.g 
  * It is responsible to find possible moves and make movements.
  * It is also keeps track of the timer.
@@ -41,7 +42,6 @@ public final class Game implements IGame, ITimerListener {
 	private IAppLogger m_oLogger;
 	
 	public Boolean m_bCheckDialogShown;
-
 	
 	/**
 	 * Constructor for Game.

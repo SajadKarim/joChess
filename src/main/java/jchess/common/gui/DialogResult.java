@@ -1,7 +1,7 @@
 package jchess.common.gui;
 
 /**
- * Operation made to close a Dialog.
+ * Operations that can be made to a Dialog.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019

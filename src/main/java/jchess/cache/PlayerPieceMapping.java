@@ -3,6 +3,7 @@ package jchess.cache;
 import jchess.common.IPlayerPieceMapping;
 
 /**
+ * This is a data class that keeps information about which pieces are set to players and on what positions they have to be placed.
  * 
  * @author 	Sajad Karim
  * @since	22 Jan 2020

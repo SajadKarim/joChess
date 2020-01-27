@@ -26,9 +26,44 @@ import jchess.common.IPlayerAgent;
  */
 
 public interface IRuleEngine {
+	/**
+	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
+	 * 
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * return Map of String and IMoveCandidate
+	 */
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece);
+	/**
+	 * This method executes the rule provided with IMoveCandidate object.
+	 * 
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IPieceAgent
+	 * return IBoardActivity
+	 */
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate);
+	/**
+	 * This method checks whether the provided player is in danger or not.
+	 * 
+	 * @param oBoard
+	 * @param oPlayer
+	 * @return
+	 */
 	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer);
+	/**
+	 * This method check for Stalemate.
+	 * 
+	 * @param oBoard
+	 * @param oPlayer
+	 * @return
+	 */
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer);
+	/**
+	 * This method checks whether the provided piece is in danger or not.
+	 * 
+	 * @param oBoard
+	 * @param oPiece
+	 * @return
+	 */
 	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece);
 }

@@ -10,8 +10,8 @@ import org.jdesktop.application.View;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
-import jchess.cache.ICacheManager;
 import jchess.common.IBoardActivity;
+import jchess.common.ICacheManager;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.gui.DialogResult;

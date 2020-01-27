@@ -12,7 +12,7 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
 import jchess.IMain;
-import jchess.cache.ICacheManager;
+import jchess.common.ICacheManager;
 import jchess.common.gui.IPresenter;
 import jchess.dimodule.IDIManager;
 import jchess.gui.model.newgamewindow.INewGameModel;
@@ -74,7 +74,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
      		m_oMainPresenter.init();
      		m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
      	} catch (Exception ex) {
-	    	m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "xxxxx", "JChessView");
+	    	m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "showMainWindow", "GUIManager");
 		}
 	}
 	
@@ -139,7 +139,9 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 		    @Override
 		    public void run() {
 		        try {
-		        	oOpPane.setMessage(String.format("Game starts in ...", 3));
+		        	// TODO: Replace the following with splash screen.
+		        	// This is not right, but doing to by giving explicit pauses to give player some room to start.
+		        	oOpPane.setMessage(String.format("Loading...", 3));
 		        	Thread.sleep(2000);
 		        	oOpPane.setMessage(String.format("Game starts in %d secs...", 3));
 		            Thread.sleep(1000);

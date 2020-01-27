@@ -3,7 +3,7 @@ package jchess.common;
 import java.util.Map;
 
 /**
- * This is a data class that stores board activity that is geneated against a move.
+ * This interface ensures the required activity is generated and stored against a move.
  * 
  * @author	Sajad Karim
  * @since	29th Dec 2019

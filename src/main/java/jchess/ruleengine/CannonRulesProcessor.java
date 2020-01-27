@@ -19,9 +19,10 @@ public final class CannonRulesProcessor {
 	
 	/**
 	 * This method executes cannon rule.
+	 * It first looks form ammunition and when it is empty, it transforms piece to Pawn piece.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecuteBombAndPromotionRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
@@ -84,7 +85,7 @@ public final class CannonRulesProcessor {
 	}
 	
 	// This method takes the piece name and returns the respective image for the cannon when it is consumed.
-	public static String getImageFilePathForConsumedCannon(String stName) {
+	private static String getImageFilePathForConsumedCannon(String stName) {
 		switch (stName) {
 			case "CannonWhiteR":
 				return "CannonR-W-Consumed.png";
@@ -104,7 +105,7 @@ public final class CannonRulesProcessor {
 	}
 
 	// This method takes the piece name and returns the respective pawn piece name.
-	public static String getPawnPieceName(String stName) {
+	private static String getPawnPieceName(String stName) {
 		switch (stName) {
 			case "CannonWhiteR":
 			case "CannonWhiteL":

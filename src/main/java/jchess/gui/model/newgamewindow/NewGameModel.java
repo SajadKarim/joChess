@@ -10,6 +10,12 @@ import org.javatuples.Pair;
 import jchess.common.IPlayerAgent;
 import jchess.gamelogic.PlayerAgent;
 
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public final class NewGameModel implements INewGameModel {
 	private SortedMap<String, Pair<String, Integer>> m_mpPlayersBoardMapping; 
 	

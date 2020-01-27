@@ -7,8 +7,14 @@ import jchess.common.IPlayer;
 import jchess.common.IPosition;
 import jchess.common.IRule;
 
-public final class BoardAgentFactory implements IBoardFactory {
+/**
+ * Factory class for BoardData.
+ * 
+ * @author  Sajad Karim
+ * @since	26 Dec 2019
+ */
 
+public final class BoardAgentFactory implements IBoardFactory {
 	public IPosition createPosition() {
 		return new PositionAgent();
 	}	

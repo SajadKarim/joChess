@@ -9,16 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
 import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IBoardFactory;
+import jchess.common.ICacheManager;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRule;
 import jchess.common.IRuleAgent;
-import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
