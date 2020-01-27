@@ -83,7 +83,12 @@ public final class CannonRulesProcessor {
 		return oActivity;
 	}
 	
-	// This method takes the piece name and returns the respective image for the cannon when it is consumed.
+	/**
+	 * This method takes the piece name and returns the respective image for the cannon when it is consumed.
+	 * 
+	 * @param stName String the name of the cannon
+	 * @return String the name of the picture of the consumed cannon
+	 */
 	public static String getImageFilePathForConsumedCannon(String stName) {
 		switch (stName) {
 			case "CannonWhiteR":
@@ -103,7 +108,12 @@ public final class CannonRulesProcessor {
 		}
 	}
 
-	// This method takes the piece name and returns the respective pawn piece name.
+	/**
+	 * This method takes the piece name and returns the respective pawn piece name.
+	 * 
+	 * @param stName String the name of the cannon
+	 * @return String the name of the picture of the pawn image
+	 */
 	public static String getPawnPieceName(String stName) {
 		switch (stName) {
 			case "CannonWhiteR":
