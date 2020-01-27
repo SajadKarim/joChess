@@ -19,7 +19,10 @@ public interface IPlayerAgent extends IPlayer {
 	public String  getLastName();
 	public void setImage(Image oImage);
 	public Image getImage();
-	public void addPiece(IPieceAgent oPiece);
+	public void addPiece(String stPieceCustomName, IPieceAgent oPiece);
 	public IPieceAgent getPiece(String stName);
 	public Map<String, IPieceAgent> getAllPieces();
+	public IPieceAgent getKingPiece();
+	public int getRemainingTimeInSec();
+	public void setRemainingTimeInSec(int nRemainingTimeInSec);
 }

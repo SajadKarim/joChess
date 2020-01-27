@@ -130,22 +130,15 @@ public final class PawnRulesProcessor {
 		if (oData.getSelectedPiece() == null) {
 			return null;
 		}
-		
-		IPieceAgent oSourcePieceAfterMove = (IPieceAgent)oData.getSelectedPiece().clone();
-		oSourcePieceAfterMove.setPosition(oMoveCandidate.getCandidatePosition());
-		oSourcePieceAfterMove.setPlayer(oPlayer); 
-		
-		oMoveCandidate.getSourcePosition().setPiece(null);
-		oMoveCandidate.getCandidatePosition().setPiece(oSourcePieceAfterMove);
-		
-		oSourcePieceAfterMove.enqueuePositionHistory(oMoveCandidate.getSourcePosition());
-		
-		oActivity.addPriorMoveEntry(oMoveCandidate.getSourcePosition(), oSourcePiecePriorMove);
-		oActivity.addPriorMoveEntry(oMoveCandidate.getCandidatePosition(), oDestinationPiecePriorMove);
-		oActivity.addPostMoveEntry(oMoveCandidate.getSourcePosition(), null);
-		oActivity.addPostMoveEntry(oMoveCandidate.getCandidatePosition(), oSourcePieceAfterMove);
-		oActivity.setPlayer(oPlayer);
 
+		oMoveCandidate.getSourcePosition().getPiece().setPosition(null);
+		
+		IPieceAgent oPiece = (IPieceAgent)oData.getSelectedPiece().clone();
+		oPiece.setPlayer(oPlayer);
+		
+		oMoveCandidate.getSourcePosition().setPiece(oPiece);
+		setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
+		
 		return oActivity;
 	}	
 
@@ -189,7 +182,7 @@ public final class PawnRulesProcessor {
 		
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPiece.getPosition(), null));
-		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositions);
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData, mpCandidateMovePositions);
 }
 	
 	/**
@@ -206,22 +199,7 @@ public final class PawnRulesProcessor {
 		if (oMoveCandidate.getCandidatePosition().getPiece() == null) {
 			oActivity = new BoardActivity(oMoveCandidate);
 			
-			IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-			IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-			IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-			IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-			
-			oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-			oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-			oCurrentPosition.setPiece(null);
-			
-			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-			
-			oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-			oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
-			oActivity.addPostMoveEntry(oCurrentPosition, null);
-			oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-			oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+			setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 		}
 		
 		return oActivity;
@@ -290,25 +268,36 @@ public final class PawnRulesProcessor {
 	public static IBoardActivity tryExecutePawnEnPassantRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		IBoardActivity oActivity = new BoardActivity(oMoveCandidate);
 
-		IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-		IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-		IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-		IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-		
-		oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-		oPieceLinkedToNewPosition.setPosition(null);
-		oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-		oCurrentPosition.setPiece(null);
-		
-		oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-		
-		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-		oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
-		oActivity.addPostMoveEntry(oCurrentPosition, null);
-		oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+		setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 		
 		return oActivity;
 	}
 
+	private static void setPositionsAndUpdateActivity(IPositionAgent oCurrentPosition, IPositionAgent oCandidatePosition, IBoardActivity oActivity) {
+		IPieceAgent oPieceLinkedToCurrentPosition = oCurrentPosition.getPiece();
+		IPieceAgent oPieceLinkedToCandidatePosition = oCandidatePosition.getPiece();
+		
+		if (oCandidatePosition != null) {
+			oCandidatePosition.setPiece(oPieceLinkedToCurrentPosition);
+		}
+		
+		if (oCurrentPosition != null) {
+			oCurrentPosition.setPiece(null);
+		}
+
+		if (oPieceLinkedToCurrentPosition != null) {
+			oPieceLinkedToCurrentPosition.setPosition(oCandidatePosition);
+			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+		}
+		
+		if (oPieceLinkedToCandidatePosition != null) {
+			oPieceLinkedToCandidatePosition.setPosition(null);
+		}
+		
+		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+		oActivity.addPriorMoveEntry(oCandidatePosition, oPieceLinkedToCandidatePosition);
+		oActivity.addPostMoveEntry(oCurrentPosition, null);
+		oActivity.addPostMoveEntry(oCandidatePosition, oPieceLinkedToCurrentPosition);
+		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+	}
 }

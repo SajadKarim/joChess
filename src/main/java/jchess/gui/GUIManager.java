@@ -3,7 +3,9 @@ package jchess.gui;
 import java.awt.Component;
 import java.awt.Point;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -71,7 +73,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
      	try {
      		m_oMainPresenter.init();
      		m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
-     	} catch(Exception ex) {
+     	} catch (Exception ex) {
 	    	m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "xxxxx", "JChessView");
 		}
 	}
@@ -113,12 +115,54 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 		
 		m_nGameCounter++;
 	}
+	
+	public void closeGameWindow() {
+		m_oMainPresenter.closetab();
+	}
+	
+	public void popUpConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle) {
+		JOptionPane.showConfirmDialog(null, stConfirmDialogMessage, stConfirmDialogTitle, JOptionPane.DEFAULT_OPTION);
+	}
+	
+	/**
+	 * Following method shows a dialog box and informs players about the commencement of the game.
+	 * TODO: This is not an appropriate way and not the right place to do such stuff. I shall move it later to 
+	 * some appropriate class.
+	 */
+	public void showGameStartPopup() {
+		JOptionPane oOpPane = new JOptionPane();
+		oOpPane.setMessageType(JOptionPane.PLAIN_MESSAGE);
+		JDialog oJDialog = oOpPane.createDialog(null, "N-Players Chess Game");
+		
+		// Set a 2 second timer
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		        try {
+		        	oOpPane.setMessage(String.format("Game starts in ...", 3));
+		        	Thread.sleep(2000);
+		        	oOpPane.setMessage(String.format("Game starts in %d secs...", 3));
+		            Thread.sleep(1000);
+		            oOpPane.setMessage(String.format("Game starts in %d secs...", 2));
+		            Thread.sleep(1000);
+		            oOpPane.setMessage(String.format("Game starts in %d secs...", 1));
+		            Thread.sleep(1000);
+		        } catch (Exception e) {
+		        }
+		        oJDialog.dispose();
+		    }
 
+		}).start();
+
+		oJDialog.setVisible(true);
+	}
+	
+	
 	@Override
 	public void onNewGameLaunchRequest(INewGameModel oData) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Request to launch a fresh game.", "onNewGameLaunchRequest", "GUIManager");
 
-    	showGameWindow (oData);
+    	showGameWindow(oData);
 	}
 	
 	/**

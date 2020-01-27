@@ -31,8 +31,7 @@ import java.io.FileOutputStream;
  * where are lockated available for player opptions, current games and where
  * can he start a new game (load it or save it)
  */
-public class GUI
-{
+public class GUI {
     static final public Properties configFile = GUI.getConfigFile();
 
     /*Method load image by a given name with extension
@@ -40,10 +39,8 @@ public class GUI
      * @returns  : image or null if cannot load
      * */
 
-    public static Image loadImage(String name)
-    {
-        if (configFile == null)
-        {
+    public static Image loadImage(String name) {
+        if (configFile == null) {
             return null;
         }
         Image img = null;
@@ -53,28 +50,23 @@ public class GUI
         {
             String imageLink = GUI.getJarPath() + "/theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             img = tk.getImage(new File(imageLink).toURI().toURL());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("some error loading image");
             e.printStackTrace();
         }
         return img;
-    }/*--endOf-loadImage--*/
+    } /*--endOf-loadImage--*/
 
 
-    public static boolean themeIsValid(String name)
-    {
+    public static boolean themeIsValid(String name) {
         return true;
     }
 
-    public static String getJarPath()
-    {
+    public static String getJarPath() {
         String path = GUI.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar", "");
         int lastSlash = path.lastIndexOf(File.separator); 
-        if(path.length()-1 == lastSlash)
-        {
+        if (path.length() - 1 == lastSlash) {
             path = path.substring(0, lastSlash);
         }
         path = path.replace("%20", " ");
@@ -82,7 +74,7 @@ public class GUI
     }
 
     public static Properties getConfigFile() {
-        Properties configFile= new Properties();
+        Properties configFile = new Properties();
         File fsConfigFile = new File(GUI.getJarPath() + File.separator + "config.txt");
 
         try {
@@ -91,8 +83,7 @@ public class GUI
         	}
 
         	configFile.load(new FileInputStream(fsConfigFile.getPath()));
-        }
-        catch (java.io.IOException exc) {
+        } catch (java.io.IOException exc) {
         }
 
         return configFile;

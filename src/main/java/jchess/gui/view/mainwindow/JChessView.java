@@ -463,4 +463,12 @@ public final class JChessView extends FrameView implements IJChessView, ActionLi
 		this.gamesPane.addTab(stName, oComponent);
 		this.gamesPane.setSelectedComponent(oComponent);
 	}
+	
+	/**
+	 * Remove the current working Tab
+	 */
+	public void removeCurrentTab()
+	{
+		this.gamesPane.removeTabAt(this.gamesPane.getSelectedIndex());
+	}
 }

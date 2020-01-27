@@ -297,8 +297,6 @@ public final class PositionAgent implements IPositionAgent {
 	}
 	
 	public String toLog() {
-		return String.format("Id=%s, Piece=%s"
-				, getName()
-				, m_oPiece == null ? "<no piece attached>" : m_oPiece.getName());
+		return String.format("Id=%s, Piece=%s", getName(), m_oPiece == null ? "<no piece attached>" : m_oPiece.getName());
 	}
 }

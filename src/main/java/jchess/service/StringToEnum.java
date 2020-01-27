@@ -27,8 +27,8 @@ class StringToEnum {
 		}
 	}
 	
-	static public RuleType convertStringToRuleType( String stRuleType) {
-		switch(stRuleType.toUpperCase()) {
+	static public RuleType convertStringToRuleType(String stRuleType) {
+		switch (stRuleType.toUpperCase()) {
 			case "MOVE":
 				return RuleType.MOVE;
 			case "MOVE_AND_CAPTURE":
@@ -44,8 +44,8 @@ class StringToEnum {
 		}
 	}
 
-	static public Manoeuvre convertStringToManoeuvre( String stManoeuvre) {
-		switch(stManoeuvre.toUpperCase()) {
+	static public Manoeuvre convertStringToManoeuvre(String stManoeuvre) {
+		switch (stManoeuvre.toUpperCase()) {
 			case "BLINKER":
 				return Manoeuvre.BLINKER;
 			case "BLINKER_WITH_FILE_AND_RANK":
@@ -57,8 +57,8 @@ class StringToEnum {
 		}
 	}
 
-	static public File convertStringToFile( String stFile) {
-		switch(stFile.toUpperCase()) {
+	static public File convertStringToFile(String stFile) {
+		switch (stFile.toUpperCase()) {
 			case "BACKWARD":
 				return File.BACKWARD;
 			case "FORWARD":
@@ -72,8 +72,8 @@ class StringToEnum {
 		}
 	}
 
-	static public Rank convertStringToRank( String stRank) {
-		switch(stRank.toUpperCase()) {
+	static public Rank convertStringToRank(String stRank) {
+		switch (stRank.toUpperCase()) {
 			case "BACKWARD":
 				return Rank.BACKWARD;
 			case "FORWARD":
@@ -87,8 +87,8 @@ class StringToEnum {
 		}
 	}
 
-	static public Family convertStringToFamily( String stFamily) {
-		switch(stFamily.toUpperCase()) {
+	static public Family convertStringToFamily(String stFamily) {
+		switch (stFamily.toUpperCase()) {
 			case "DIFFERENT":
 				return Family.DIFFERENT;
 			case "PROVIDED":

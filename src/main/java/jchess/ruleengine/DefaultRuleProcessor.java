@@ -1,6 +1,7 @@
 package jchess.ruleengine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
 import jchess.common.IBoardAgent;
+import jchess.common.IBoardFactory;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPathAgent;
 import jchess.common.IPieceAgent;
@@ -16,6 +18,7 @@ import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.common.IRuleAgent;
+import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
@@ -384,4 +387,123 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 				break;
 		}
 	}
+	
+	private IPieceAgent isPositionUnderAttack(IBoardAgent oBoard, String stPositionName, IPlayerAgent oPlayerLinkedToPosition) {
+		IBoardFactory oBoardFactory = new BoardAgentFactory();
+		IPieceAgent oPiece = (IPieceAgent) oBoardFactory.createPiece();
+		oPiece.setPlayer(oPlayerLinkedToPosition);
+		oPiece.setPosition(oBoard.getPositionAgent(stPositionName));
+		
+		return isPieceEndangered(oBoard, oPiece);
+	}
+	
+	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
+		// Iterating opponent players piece to check if they can capture the provided piece or not.	
+		for (Map.Entry<String, IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
+			if (itPlayer.getValue().equals(oPiece.getPlayer())) {
+				// Ignore piece from same player.
+				continue;
+			}
+			// Iterating the pieces of the current player.
+			for (Map.Entry<String, IPieceAgent> itPiece : itPlayer.getValue().getAllPieces().entrySet()) {
+				IPieceAgent oOpponentPiece = itPiece.getValue();
+				if (oOpponentPiece.getPosition() == null) {
+					// Piece is not linked to any piece indicates the piece has been captured.
+					continue;
+				}
+
+				// Fetching the possible moves the piece can make.
+				Map<String, IMoveCandidate> mpCandidateMovePositions = new HashMap<String, IMoveCandidate>();
+				tryEvaluateAllRules(oBoard, oOpponentPiece, mpCandidateMovePositions);
+				for (Map.Entry<String, IMoveCandidate> itCandidateMove : mpCandidateMovePositions.entrySet()) {				
+					if (itCandidateMove.getValue().getCandidatePosition().equals(oPiece.getPosition())) {
+						// The current opponent's piece can capture the provided piece.
+						return oOpponentPiece;
+					}
+				}
+			}
+		}
+		
+		return null;
+	}	
+
+	
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		IPieceAgent oOpponentPiece = isPieceEndangered(oBoard, oPlayer.getKingPiece());
+		if (oOpponentPiece != null) {
+			return oOpponentPiece.getPlayer();
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Checking for Stalemate Rule
+	 * 
+	 * Stalemate is a situation in the game of chess where the player whose turn 
+	 * it is to move is not in check but has no legal move. 
+	 * The rules of chess provide that when stalemate occurs, the game ends as a draw.
+	 */
+	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		IPieceAgent oKingPiece = oPlayer.getKingPiece();
+
+		// Checking if any piece other than King can make any move.
+		for (Map.Entry<String, IPieceAgent> itPiece : oPlayer.getAllPieces().entrySet()) {
+			IPieceAgent oPiece = itPiece.getValue();
+			
+			if (oPiece.getPosition() == null) {
+				continue;
+			}
+			
+			if (oPiece.equals(oKingPiece)) {
+				continue;
+			}
+			
+			Map<String, IMoveCandidate> mpCandidateMovePosition = new HashMap<String, IMoveCandidate>();
+			tryEvaluateAllRules(oBoard, oPiece, mpCandidateMovePosition);
+			
+			if (!mpCandidateMovePosition.isEmpty()) {
+				return false;
+			}
+		}
+		
+		// Fetching all the possible moves King can make.
+		Map<String, IMoveCandidate> mpCandidateMovePositionForKing = new HashMap<String, IMoveCandidate>();
+		tryEvaluateAllRules(oBoard, oKingPiece, mpCandidateMovePositionForKing);
+		
+		// Iterating through the opponent's pieces and see if there is any candidate move that King can make
+		// without endangering itself.
+		for (Map.Entry<String, IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
+			if (itPlayer.getValue().equals(oPlayer)) {
+				// Ignore piece from same player.
+				continue;
+			}
+			// Iterating the pieces of the current player.
+			for (Map.Entry<String, IPieceAgent> itPiece : itPlayer.getValue().getAllPieces().entrySet()) {
+				IPieceAgent oOpponentPiece = itPiece.getValue();
+				if (oOpponentPiece.getPosition() == null) {
+					// Piece is not linked to any piece indicates the piece has been captured.
+					continue;
+				}
+				// Fetching the possible moves the piece can make.
+				Map<String, IMoveCandidate> mpCandidateMovePositionsForOpponentPlayerPiece = new HashMap<String, IMoveCandidate>();
+				tryEvaluateAllRules(oBoard, oOpponentPiece, mpCandidateMovePositionsForOpponentPlayerPiece);
+				for (Map.Entry<String, IMoveCandidate> itCandidateMove : mpCandidateMovePositionsForOpponentPlayerPiece.entrySet()) {				
+					if (mpCandidateMovePositionForKing.containsKey(itCandidateMove.getKey())) {
+						mpCandidateMovePositionForKing.remove(itCandidateMove.getKey());
+						
+						if (mpCandidateMovePositionForKing.size() == 0) {
+							return true;
+						}		
+					}
+				}
+			}
+		}
+
+		if (mpCandidateMovePositionForKing.size() > 0) {
+			return false;
+		}
+			
+		return true;
+	}	
 }

@@ -29,6 +29,7 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 import jchess.gamelogic.BoardAgentFactory;
+import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
@@ -43,6 +44,7 @@ import jchess.util.IAppLogger;
 class DefaultRuleProcessorTest2_2PlayerBoard {
 	static IBoardAgent m_oBoard;
 	static DefaultRuleProcessor m_oRuleProcessor;
+	static IRuleEngine m_oRuleEngine;
 	private static final IBoardFactory m_oBoardFactory = new BoardAgentFactory();
 	
 	@BeforeAll
@@ -57,7 +59,8 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 	void setUp() throws Exception {
 		IAppLogger oLogger = new AppLogger();
 		ICacheManager oCacheManager = new CacheManager(oLogger);
-		
+
+    m_oRuleEngine = new DefaultRuleEngine(new DefaultRuleProcessor(oLogger), new GUIManagerTest(oLogger), oLogger);
 		oCacheManager.loadBoardFromFile("DefaultRuleProcessorTest", "2PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleProcessorTest");
 
@@ -795,8 +798,501 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 			assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 		}
 	}
+	/**
+	 * Check if the King is in Check position by
+	 * default board without any move.
+	 */
+	@Test
+	void testCheckIfPlayerEndengered_defaultBoard() {
+		
+		//Check Player Endergered when the game start
+		
+		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P1");
+		
+		IPlayerAgent oExpected = null;
+		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
+		
+		assertEquals(oExpected,oActual);
+	}
+	/**
+	 * Check if the King is in Check position by
+	 * Delete every piece of Player 2 except for King
+	 * Move Player 2's King near Rival Pawn
+	 * Use Player 1's Pawn to check
+	 */
+	@Test
+	void testCheckIfPlayerEndengered_RivalPawn_King_checkPosition()
+	{
+		//Get the Player 2
+		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P2");
+		//Get the Player 1
+		IPlayerAgent oRivalPlayerAgent = m_oBoard.getPlayerAgent("P1");
+		
+		// Other than king at e8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").setPiece(null);
+		m_oBoard.getPositionAgent("b8").setPiece(null);
+		m_oBoard.getPositionAgent("c8").setPiece(null);
+		m_oBoard.getPositionAgent("d8").setPiece(null);
+		m_oBoard.getPositionAgent("f8").setPiece(null);
+		m_oBoard.getPositionAgent("g8").setPiece(null);
+		m_oBoard.getPositionAgent("h8").setPiece(null);
+		m_oBoard.getPositionAgent("a7").setPiece(null);
+		m_oBoard.getPositionAgent("b7").setPiece(null);
+		m_oBoard.getPositionAgent("c7").setPiece(null);
+		m_oBoard.getPositionAgent("d7").setPiece(null);
+		m_oBoard.getPositionAgent("e7").setPiece(null);
+		m_oBoard.getPositionAgent("f7").setPiece(null);
+		m_oBoard.getPositionAgent("g7").setPiece(null);
+		m_oBoard.getPositionAgent("h7").setPiece(null);
+		
+		// Setting Player 2 king from e8 to e3
+		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
+		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("e3");
 
+		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleKing.getRuleData().setDirection(Direction.EDGE);
+		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleKing.getRuleData().setFile(File.SAME);
+		oRuleKing.getRuleData().setRank(Rank.FORWARD);
+		oRuleKing.getRuleData().setFamily(Family.IGNORE);
+		oRuleKing.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleKing.getRuleData().setName("MOVE");
+		oRuleKing.getRuleData().setCustomName("");
+
+		IMoveCandidate oMoveCandidateKing = new MoveCandidate(oRuleKing, oSourcePositionOfKing.getPiece(), oSourcePositionOfKing, oDestinationPositionOfKing);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateKing);
+		
+		IPlayerAgent oExpected = oRivalPlayerAgent;
+		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
+		System.out.println(oActual);
+		
+		assertEquals(oExpected,oActual);
+		
+	}
+	/**
+	 * Check if the King is in Check position by
+	 * Remove every piece of Player 2 except for King
+	 * Remove Player 1's Pawn at d2
+	 * Move Player 2's King near Rival Queen
+	 * Use Player 1's Pawn to check
+	 */
+	@Test
+	void testCheckIfPlayerEndengered_RivalQueen_King_checkPosition()
+	{
+		//Get the Player 2
+		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P2");
+		//Get the Player 1
+		IPlayerAgent oRivalPlayerAgent = m_oBoard.getPlayerAgent("P1");
+		
+		// Other than king at e8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").setPiece(null);
+		m_oBoard.getPositionAgent("b8").setPiece(null);
+		m_oBoard.getPositionAgent("c8").setPiece(null);
+		m_oBoard.getPositionAgent("d8").setPiece(null);
+		m_oBoard.getPositionAgent("f8").setPiece(null);
+		m_oBoard.getPositionAgent("g8").setPiece(null);
+		m_oBoard.getPositionAgent("h8").setPiece(null);
+		m_oBoard.getPositionAgent("a7").setPiece(null);
+		m_oBoard.getPositionAgent("b7").setPiece(null);
+		m_oBoard.getPositionAgent("c7").setPiece(null);
+		m_oBoard.getPositionAgent("d7").setPiece(null);
+		m_oBoard.getPositionAgent("e7").setPiece(null);
+		m_oBoard.getPositionAgent("f7").setPiece(null);
+		m_oBoard.getPositionAgent("g7").setPiece(null);
+		m_oBoard.getPositionAgent("h7").setPiece(null);
+		
+		//Setting Player 2's pawn at d2 to null
+		m_oBoard.getPositionAgent("d2").setPiece(null);
+		
+		// Setting Player 2 king from e8 to d7
+		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
+		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("d2");
+
+		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleKing.getRuleData().setDirection(Direction.EDGE);
+		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleKing.getRuleData().setFile(File.SAME);
+		oRuleKing.getRuleData().setRank(Rank.FORWARD);
+		oRuleKing.getRuleData().setFamily(Family.IGNORE);
+		oRuleKing.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleKing.getRuleData().setName("MOVE");
+		oRuleKing.getRuleData().setCustomName("");
+
+		IMoveCandidate oMoveCandidateKing = new MoveCandidate(oRuleKing, oSourcePositionOfKing.getPiece(), oSourcePositionOfKing, oDestinationPositionOfKing);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateKing);
+		
+		IPlayerAgent oExpected = oRivalPlayerAgent;
+		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
+		System.out.println(oActual);
+		
+		assertEquals(oExpected,oActual);
+		
+	}
+	/**
+	 * Check if the King is in Check position by
+	 * Remove every piece of Player 2 except for King
+	 * Move Player 2's King to a safe position
+	 */
+	@Test
+	void testCheckIfPlayerEndengered_King_notInCheckPosition()
+	{
+		//Get the Player 2
+		IPlayerAgent oPlayerAgent = m_oBoard.getPlayerAgent("P2");
+		//Get the Player 1
+		IPlayerAgent oRivalPlayerAgent = m_oBoard.getPlayerAgent("P1");
+		
+		// Other than king at e8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").setPiece(null);
+		m_oBoard.getPositionAgent("b8").setPiece(null);
+		m_oBoard.getPositionAgent("c8").setPiece(null);
+		m_oBoard.getPositionAgent("d8").setPiece(null);
+		m_oBoard.getPositionAgent("f8").setPiece(null);
+		m_oBoard.getPositionAgent("g8").setPiece(null);
+		m_oBoard.getPositionAgent("h8").setPiece(null);
+		m_oBoard.getPositionAgent("a7").setPiece(null);
+		m_oBoard.getPositionAgent("b7").setPiece(null);
+		m_oBoard.getPositionAgent("c7").setPiece(null);
+		m_oBoard.getPositionAgent("d7").setPiece(null);
+		m_oBoard.getPositionAgent("e7").setPiece(null);
+		m_oBoard.getPositionAgent("f7").setPiece(null);
+		m_oBoard.getPositionAgent("g7").setPiece(null);
+		m_oBoard.getPositionAgent("h7").setPiece(null);
+			
+		// Setting Player 2 king from e8 to d7
+		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
+		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("e4");
+
+		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleKing.getRuleData().setDirection(Direction.EDGE);
+		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleKing.getRuleData().setFile(File.SAME);
+		oRuleKing.getRuleData().setRank(Rank.FORWARD);
+		oRuleKing.getRuleData().setFamily(Family.IGNORE);
+		oRuleKing.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleKing.getRuleData().setName("MOVE");
+		oRuleKing.getRuleData().setCustomName("");
+
+		IMoveCandidate oMoveCandidateKing = new MoveCandidate(oRuleKing, oSourcePositionOfKing.getPiece(), oSourcePositionOfKing, oDestinationPositionOfKing);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateKing);
+		
+		IPlayerAgent oExpected = null;
+		IPlayerAgent oActual = m_oRuleProcessor.tryCheckIfPlayerEndengered(m_oBoard, oPlayerAgent);
+		System.out.println(oActual);
+		
+		assertEquals(oExpected,oActual);
+		
+	}
+	
+	
 	@Test
 	void testCheckForPositionMoveCandidacyAndContinuity() {
+	}
+	
+	@Test
+	/*
+	 * Checking Stalemate by 
+	 * deleteing all pieces of Player 2 except 1 pawn but keeping it trapped.
+	 * Moving the King of Player 2 to such a positon that its not a check but cannot move.
+	 * here we are using the Queen of Player 1 to achieve that situation.
+	 */
+	void testCheckStalemate() {
+		
+		// Other than pawn at e7 and king at e8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("f8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("g8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("h8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("a7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("f7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("g7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("h7").getPiece().setPosition(null);
+
+		m_oBoard.getPositionAgent("a8").setPiece(null);
+		m_oBoard.getPositionAgent("b8").setPiece(null);
+		m_oBoard.getPositionAgent("c8").setPiece(null);
+		m_oBoard.getPositionAgent("d8").setPiece(null);
+		m_oBoard.getPositionAgent("f8").setPiece(null);
+		m_oBoard.getPositionAgent("g8").setPiece(null);
+		m_oBoard.getPositionAgent("h8").setPiece(null);
+		m_oBoard.getPositionAgent("a7").setPiece(null);
+		m_oBoard.getPositionAgent("b7").setPiece(null);
+		m_oBoard.getPositionAgent("c7").setPiece(null);
+		m_oBoard.getPositionAgent("d7").setPiece(null);
+		m_oBoard.getPositionAgent("f7").setPiece(null);
+		m_oBoard.getPositionAgent("g7").setPiece(null);
+		m_oBoard.getPositionAgent("h7").setPiece(null);
+				
+		// Setting Player 1 Pawn from e2 to e6
+		IPositionAgent oSourcePositionOfPawn = m_oBoard.getPositionAgent("e2");
+		IPositionAgent oDestinationPositionOfPawn = m_oBoard.getPositionAgent("e6");
+		
+		IRuleAgent oRulepawn= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRulepawn.getRuleData().setRuleType(RuleType.MOVE);
+		oRulepawn.getRuleData().setDirection(Direction.EDGE);
+		oRulepawn.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRulepawn.getRuleData().setFile(File.SAME);
+		oRulepawn.getRuleData().setRank(Rank.FORWARD);
+		oRulepawn.getRuleData().setFamily(Family.IGNORE);
+		oRulepawn.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRulepawn.getRuleData().setName("MOVE");
+		oRulepawn.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidatePawn = new MoveCandidate(oRulepawn, oSourcePositionOfPawn.getPiece(), oSourcePositionOfPawn, oDestinationPositionOfPawn);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidatePawn);
+		
+		// Setting Player 2 king from e8 to h8
+		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
+		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("h8");
+		
+		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleKing.getRuleData().setDirection(Direction.EDGE);
+		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleKing.getRuleData().setFile(File.SAME);
+		oRuleKing.getRuleData().setRank(Rank.FORWARD);
+		oRuleKing.getRuleData().setFamily(Family.IGNORE);
+		oRuleKing.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleKing.getRuleData().setName("MOVE");
+		oRuleKing.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidateKing = new MoveCandidate(oRuleKing, oSourcePositionOfKing.getPiece(), oSourcePositionOfKing, oDestinationPositionOfKing);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateKing);
+		
+		// Setting Player 1 queen from d1 to g6
+		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
+		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("g6");
+		
+		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
+		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleQueen.getRuleData().setFile(File.SAME);
+		oRuleQueen.getRuleData().setRank(Rank.FORWARD);
+		oRuleQueen.getRuleData().setFamily(Family.IGNORE);
+		oRuleQueen.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleQueen.getRuleData().setName("MOVE");
+		oRuleQueen.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidateQueen = new MoveCandidate(oRuleQueen, oSourcePositionOfQueen.getPiece(), oSourcePositionOfQueen, oDestinationPositionOfQueen);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateQueen);
+		
+		Boolean bExpected = true;
+		Boolean bActual = m_oRuleProcessor.checkStalemate(m_oBoard, oDestinationPositionOfKing.getPiece().getPlayer());
+
+		assertEquals(bExpected, bActual);
+		
+	}
+	
+	@Test
+	/*
+	 * Checking Stalemate by 
+	 * deleteing all pieces of Player 2 except 1 pawn but keeping it trapped.
+	 * Moving the King of Player 2 to such a positon that it can make more than 1 movements.
+	 * here we are using the Queen of Player 1 to achieve that situation.
+	 * In this case its not a stalemate as the king can move.
+	 */
+	void testCheckStalemateWhenKingCanMove() {
+		
+		// Other than pawn at e7 and king at e8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("f8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("g8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("h8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("a7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("f7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("g7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("h7").getPiece().setPosition(null);
+
+		m_oBoard.getPositionAgent("a8").setPiece(null);
+		m_oBoard.getPositionAgent("b8").setPiece(null);
+		m_oBoard.getPositionAgent("c8").setPiece(null);
+		m_oBoard.getPositionAgent("d8").setPiece(null);
+		m_oBoard.getPositionAgent("f8").setPiece(null);
+		m_oBoard.getPositionAgent("g8").setPiece(null);
+		m_oBoard.getPositionAgent("h8").setPiece(null);
+		m_oBoard.getPositionAgent("a7").setPiece(null);
+		m_oBoard.getPositionAgent("b7").setPiece(null);
+		m_oBoard.getPositionAgent("c7").setPiece(null);
+		m_oBoard.getPositionAgent("d7").setPiece(null);
+		m_oBoard.getPositionAgent("f7").setPiece(null);
+		m_oBoard.getPositionAgent("g7").setPiece(null);
+		m_oBoard.getPositionAgent("h7").setPiece(null);
+				
+		// Setting Player 1 Pawn from e2 to e6
+		IPositionAgent oSourcePositionOfPawn = m_oBoard.getPositionAgent("e2");
+		IPositionAgent oDestinationPositionOfPawn = m_oBoard.getPositionAgent("e6");
+		
+		IRuleAgent oRulepawn= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRulepawn.getRuleData().setRuleType(RuleType.MOVE);
+		oRulepawn.getRuleData().setDirection(Direction.EDGE);
+		oRulepawn.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRulepawn.getRuleData().setFile(File.SAME);
+		oRulepawn.getRuleData().setRank(Rank.FORWARD);
+		oRulepawn.getRuleData().setFamily(Family.IGNORE);
+		oRulepawn.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRulepawn.getRuleData().setName("MOVE");
+		oRulepawn.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidatePawn = new MoveCandidate(oRulepawn, oSourcePositionOfPawn.getPiece(), oSourcePositionOfPawn, oDestinationPositionOfPawn);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidatePawn);
+		
+		// Setting Player 2 king from e8 to h8
+		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
+		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("h8");
+		
+		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleKing.getRuleData().setDirection(Direction.EDGE);
+		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleKing.getRuleData().setFile(File.SAME);
+		oRuleKing.getRuleData().setRank(Rank.FORWARD);
+		oRuleKing.getRuleData().setFamily(Family.IGNORE);
+		oRuleKing.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleKing.getRuleData().setName("MOVE");
+		oRuleKing.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidateKing = new MoveCandidate(oRuleKing, oSourcePositionOfKing.getPiece(), oSourcePositionOfKing, oDestinationPositionOfKing);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateKing);
+		
+		// Setting Player 1 queen from d1 to g6
+		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
+		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("g5");
+		
+		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
+		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleQueen.getRuleData().setFile(File.SAME);
+		oRuleQueen.getRuleData().setRank(Rank.FORWARD);
+		oRuleQueen.getRuleData().setFamily(Family.IGNORE);
+		oRuleQueen.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleQueen.getRuleData().setName("MOVE");
+		oRuleQueen.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidateQueen = new MoveCandidate(oRuleQueen, oSourcePositionOfQueen.getPiece(), oSourcePositionOfQueen, oDestinationPositionOfQueen);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateQueen);
+		
+		Boolean bExpected = false;
+		Boolean bActual = m_oRuleProcessor.checkStalemate(m_oBoard, oDestinationPositionOfKing.getPiece().getPlayer());
+
+		assertEquals(bExpected, bActual);
+		
+	}
+	
+	@Test
+	/*
+	 * Checking Stalemate by 
+	 * deleteing all pieces of Player 2 except 1 pawn, here pawn has movement and is not trapped.
+	 * Moving the King of Player 2 to such a positon that it cannot make a movement.
+	 * here we are using the Queen of Player 1 to achieve that situation.
+	 * In this case its not a stalemate as the pawn can move.
+	 */
+	void testCheckStalemateWhenKingCantMove() {
+		
+		// Other than pawn at e7 and king at e8, Setting pieces of Player 2 as null.
+		m_oBoard.getPositionAgent("a8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("f8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("g8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("h8").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("a7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("b7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("c7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("d7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("f7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("g7").getPiece().setPosition(null);
+		m_oBoard.getPositionAgent("h7").getPiece().setPosition(null);
+
+		m_oBoard.getPositionAgent("a8").setPiece(null);
+		m_oBoard.getPositionAgent("b8").setPiece(null);
+		m_oBoard.getPositionAgent("c8").setPiece(null);
+		m_oBoard.getPositionAgent("d8").setPiece(null);
+		m_oBoard.getPositionAgent("f8").setPiece(null);
+		m_oBoard.getPositionAgent("g8").setPiece(null);
+		m_oBoard.getPositionAgent("h8").setPiece(null);
+		m_oBoard.getPositionAgent("a7").setPiece(null);
+		m_oBoard.getPositionAgent("b7").setPiece(null);
+		m_oBoard.getPositionAgent("c7").setPiece(null);
+		m_oBoard.getPositionAgent("d7").setPiece(null);
+		m_oBoard.getPositionAgent("f7").setPiece(null);
+		m_oBoard.getPositionAgent("g7").setPiece(null);
+		m_oBoard.getPositionAgent("h7").setPiece(null);
+				
+		// Setting Player 1 Pawn from e2 to e6
+		IPositionAgent oSourcePositionOfPawn = m_oBoard.getPositionAgent("e2");
+		IPositionAgent oDestinationPositionOfPawn = m_oBoard.getPositionAgent("e5");
+		
+		IRuleAgent oRulepawn= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRulepawn.getRuleData().setRuleType(RuleType.MOVE);
+		oRulepawn.getRuleData().setDirection(Direction.EDGE);
+		oRulepawn.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRulepawn.getRuleData().setFile(File.SAME);
+		oRulepawn.getRuleData().setRank(Rank.FORWARD);
+		oRulepawn.getRuleData().setFamily(Family.IGNORE);
+		oRulepawn.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRulepawn.getRuleData().setName("MOVE");
+		oRulepawn.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidatePawn = new MoveCandidate(oRulepawn, oSourcePositionOfPawn.getPiece(), oSourcePositionOfPawn, oDestinationPositionOfPawn);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidatePawn);
+		
+		// Setting Player 2 king from e8 to h8
+		IPositionAgent oSourcePositionOfKing = m_oBoard.getPositionAgent("e8");
+		IPositionAgent oDestinationPositionOfKing = m_oBoard.getPositionAgent("h8");
+		
+		IRuleAgent oRuleKing= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleKing.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleKing.getRuleData().setDirection(Direction.EDGE);
+		oRuleKing.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleKing.getRuleData().setFile(File.SAME);
+		oRuleKing.getRuleData().setRank(Rank.FORWARD);
+		oRuleKing.getRuleData().setFamily(Family.IGNORE);
+		oRuleKing.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleKing.getRuleData().setName("MOVE");
+		oRuleKing.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidateKing = new MoveCandidate(oRuleKing, oSourcePositionOfKing.getPiece(), oSourcePositionOfKing, oDestinationPositionOfKing);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateKing);
+		
+		// Setting Player 1 queen from d1 to g6
+		IPositionAgent oSourcePositionOfQueen = m_oBoard.getPositionAgent("d1");
+		IPositionAgent oDestinationPositionOfQueen = m_oBoard.getPositionAgent("g6");
+		
+		IRuleAgent oRuleQueen= (IRuleAgent)m_oBoardFactory.createRule();		
+		oRuleQueen.getRuleData().setRuleType(RuleType.MOVE);
+		oRuleQueen.getRuleData().setDirection(Direction.VERTEX);
+		oRuleQueen.getRuleData().setMaxRecurrenceCount(Integer.MAX_VALUE);
+		oRuleQueen.getRuleData().setFile(File.SAME);
+		oRuleQueen.getRuleData().setRank(Rank.FORWARD);
+		oRuleQueen.getRuleData().setFamily(Family.IGNORE);
+		oRuleQueen.getRuleData().setManoeuvreStrategy(Manoeuvre.FILE_AND_RANK);
+		oRuleQueen.getRuleData().setName("MOVE");
+		oRuleQueen.getRuleData().setCustomName("");
+		
+		IMoveCandidate oMoveCandidateQueen = new MoveCandidate(oRuleQueen, oSourcePositionOfQueen.getPiece(), oSourcePositionOfQueen, oDestinationPositionOfQueen);
+		m_oRuleEngine.tryExecuteRule(m_oBoard, oMoveCandidateQueen);
+		
+		Boolean bExpected = false;
+		Boolean bActual = m_oRuleProcessor.checkStalemate(m_oBoard, oDestinationPositionOfKing.getPiece().getPlayer());
+
+		assertEquals(bExpected, bActual);
+		
 	}
 }

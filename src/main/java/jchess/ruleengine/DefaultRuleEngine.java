@@ -10,6 +10,7 @@ import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
+import jchess.common.IPlayerAgent;
 import jchess.common.IPositionAgent;
 import jchess.gamelogic.BoardActivity;
 import jchess.gui.IGUIHandle;
@@ -65,7 +66,24 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		return mpCandidateMovePositions;
     }
-
+	
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		return m_oRuleProcessor.tryCheckIfPlayerEndengered(oBoard, oPlayer);
+	
+	}
+	
+	
+	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
+		long t1 = System.nanoTime();
+		Boolean b = m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
+		long t2 = System.nanoTime();
+		
+		long timeElapsed  = t2 - t1;
+		System.out.println("Execution time in milliseconds : " 
+				+ 
+				timeElapsed / 1000000);
+		return b;
+	}
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 
@@ -86,67 +104,22 @@ public class DefaultRuleEngine implements IRuleEngine {
 
 				oActivity = new BoardActivity(oMoveCandidate);
 				
-				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-				
-				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-				oCurrentPosition.setPiece(null);
-				
-				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-				
-				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
-				oActivity.addPostMoveEntry(oCurrentPosition, null);
-				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
-			break;
+				break;
 			case MOVE_AND_CAPTURE: {
 				oActivity = new BoardActivity(oMoveCandidate);
 
-				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-				
-				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-				oCurrentPosition.setPiece(null);
-				
-				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-				
-				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
-				oActivity.addPostMoveEntry(oCurrentPosition, null);
-				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 			break;
 			case MOVE_IFF_CAPTURE_POSSIBLE: {
 				oActivity = new BoardActivity(oMoveCandidate);
 
-				IPieceAgent oPieceLinkedToCurrentPosition = oMoveCandidate.getSourcePosition().getPiece();
-				IPieceAgent oPieceLinkedToNewPosition = oMoveCandidate.getCandidatePosition().getPiece();
-				IPositionAgent oCurrentPosition = oMoveCandidate.getSourcePosition();
-				IPositionAgent oNewPosition = oMoveCandidate.getCandidatePosition();
-				
-				oPieceLinkedToCurrentPosition.setPosition(oNewPosition);
-				oNewPosition.setPiece(oPieceLinkedToCurrentPosition);
-				oCurrentPosition.setPiece(null);
-				
-				oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
-				
-				oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
-				oActivity.addPriorMoveEntry(oNewPosition, oPieceLinkedToNewPosition);
-				oActivity.addPostMoveEntry(oCurrentPosition, null);
-				oActivity.addPostMoveEntry(oNewPosition, oPieceLinkedToCurrentPosition);
-				oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 				break;
-			case MOVE_TRANSIENT:{
+			case MOVE_TRANSIENT: {
 			}
 			break;
 			case CUSTOM:
@@ -159,5 +132,37 @@ public class DefaultRuleEngine implements IRuleEngine {
 		}
 		
 		return oActivity;
+	}
+
+	protected void setPositionsAndUpdateActivity(IPositionAgent oCurrentPosition, IPositionAgent oCandidatePosition, IBoardActivity oActivity) {
+		IPieceAgent oPieceLinkedToCurrentPosition = oCurrentPosition.getPiece();
+		IPieceAgent oPieceLinkedToCandidatePosition = oCandidatePosition.getPiece();
+		
+		if (oCandidatePosition != null) {
+			oCandidatePosition.setPiece(oPieceLinkedToCurrentPosition);
+		}
+		
+		if (oCurrentPosition != null) {
+			oCurrentPosition.setPiece(null);
+		}
+
+		if (oPieceLinkedToCurrentPosition != null) {
+			oPieceLinkedToCurrentPosition.setPosition(oCandidatePosition);
+			oPieceLinkedToCurrentPosition.enqueuePositionHistory(oCurrentPosition);
+		}
+		
+		if (oPieceLinkedToCandidatePosition != null) {
+			oPieceLinkedToCandidatePosition.setPosition(null);
+		}
+		
+		oActivity.addPriorMoveEntry(oCurrentPosition, oPieceLinkedToCurrentPosition);
+		oActivity.addPriorMoveEntry(oCandidatePosition, oPieceLinkedToCandidatePosition);
+		oActivity.addPostMoveEntry(oCurrentPosition, null);
+		oActivity.addPostMoveEntry(oCandidatePosition, oPieceLinkedToCurrentPosition);
+		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
+	}
+	
+	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
+		return m_oRuleProcessor.isPieceEndangered(oBoard, oPiece);
 	}
 }

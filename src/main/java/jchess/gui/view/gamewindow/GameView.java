@@ -115,7 +115,7 @@ public final class GameView extends JPanel implements IGameView, MouseListener, 
     }
 
     public IPositionAgent getPosition(int x, int y) {
-     	m_oLogger.writeLog(LogLevel.DETAILED, String.format("Extracting Position for x=%d, y=%d",x ,y), "getPosition", "GameView");
+     	m_oLogger.writeLog(LogLevel.DETAILED, String.format("Extracting Position for x=%d, y=%d", x, y), "getPosition", "GameView");
 
     	for (Map.Entry<String, IPositionAgent> entry : m_oData.getBoard().getAllPositionAgents().entrySet()) {
 			IPositionAgent oPosition = entry.getValue();

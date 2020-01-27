@@ -11,6 +11,7 @@ import jchess.common.IPositionAgent;
 import jchess.common.IRule;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
+//import jchess.ruleengine.KingRulesProcessor;
 
 /**
  * This class extends DefaultRuleEngine class and provides extended functionalities, in addition to those provided by
@@ -112,4 +113,5 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 				break;
 		}
 	}
+
 }

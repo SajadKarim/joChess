@@ -19,7 +19,7 @@ public final class PawnPromotionModel implements IPawnPromotionModel {
 	private IPieceAgent m_oPieceToPromote;
 	private Map<String, IPieceAgent> m_mpPieces;
 	
-	public PawnPromotionModel(Map<String, IPieceAgent > mpPieces, IPieceAgent oPieceToPromote) {
+	public PawnPromotionModel(Map<String, IPieceAgent> mpPieces, IPieceAgent oPieceToPromote) {
 		m_mpPieces = mpPieces;
 		m_oSelectedPiece = null;
 		m_oPieceToPromote = oPieceToPromote;

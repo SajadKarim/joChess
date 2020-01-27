@@ -64,7 +64,7 @@ public class ThreePlayersHexBoardRuleProcessor extends ExtendedRuleProcessor {
 		switch (oRule.getRuleType()) {
 			case CUSTOM: {
 				switch (oRule.getCustomName()) {
-					case "BOMB[CANNON]":{
+					case "BOMB[CANNON]": {
 						if (oCandidacyPosition.getPiece() == null) {
 							bIsValidMode.set(true);
 							bCanContinue.set(false);
