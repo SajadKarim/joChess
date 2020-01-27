@@ -387,7 +387,14 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 				break;
 		}
 	}
-	
+	/**
+	 * This method Check if the Position is under attack
+	 * 
+	 * @param oBoard IBoardAgent instance for the active Board 
+	 * @param stPositionName String the position that need to be Check
+	 * @param oPlayerLinkedToPosition IPlayerAgent the Player that linked to the position
+	 * @return IPieceAgent instance for the opponent Piece that can capture the input position
+	 */
 	private IPieceAgent isPositionUnderAttack(IBoardAgent oBoard, String stPositionName, IPlayerAgent oPlayerLinkedToPosition) {
 		IBoardFactory oBoardFactory = new BoardAgentFactory();
 		IPieceAgent oPiece = (IPieceAgent) oBoardFactory.createPiece();
@@ -396,7 +403,13 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		
 		return isPieceEndangered(oBoard, oPiece);
 	}
-	
+	/**
+	 * This method Check if the Piece is in endangered position or not
+	 * 
+	 * @param oBoard IBoardAgent instance for the active Board
+	 * @param oPiece IPieceAgent instance for the Piece that we want to Check
+	 * @return IPieceAgent instance for the opponent Piece that can capture the input Piece
+	 */
 	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
 		// Iterating opponent players piece to check if they can capture the provided piece or not.	
 		for (Map.Entry<String,IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
@@ -444,6 +457,9 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * Stalemate is a situation in the game of chess where the player whose turn 
 	 * it is to move is not in check but has no legal move. 
 	 * The rules of chess provide that when stalemate occurs, the game ends as a draw.
+	 * @param oBoard IBoardAgent instance for the active Board
+	 * @param oPlayer IPlayerAgent instance for the current Player
+	 * @return Boolean if the Player is in Stalemate
 	 */
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
 		IPieceAgent oKingPiece = oPlayer.getKingPiece();

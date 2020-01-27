@@ -127,6 +127,8 @@ public final class Game implements IGame, ITimerListener {
 	
 	/**
 	 * This method is called when user makes a click on the Board.
+	 * 
+	 * @param oPosition IPositionAgent the clicked position
 	 */
 	public void onBoardActivity(IPositionAgent oPosition) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Activity on board has been observed.", "onBoardActivity", "Game");
@@ -321,14 +323,23 @@ public final class Game implements IGame, ITimerListener {
             oListener.endCurrentGame();
         }	
 	}
-	
+	/**
+	 * This method notify the Listener to display a ConfirmDialog
+	 * 
+	 * @param stConfirmDialogMessage String the dialog message
+	 * @param stConfirmDialogTitle String the dialog title
+	 */
 	public void notifyListenersDisplayConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle)
 	{
 		for (final IGameListener oListener : m_lstListener) {
             oListener.displayConfirmDialog(stConfirmDialogMessage, stConfirmDialogTitle);
         }
 	}
-	
+	/**
+	 * This method notify the Listener about the update time 
+	 * 
+	 * @param nRemainingSeconds int the remaining seconds
+	 */
 	public void notifyListenersOnTimerUpdate_SecondsElapsed(int nRemainingSeconds) {
 		//m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about second elapse.", "notifyListenersOnTimerUpdate_SecondsElapsed", "Game");
 
@@ -336,7 +347,11 @@ public final class Game implements IGame, ITimerListener {
             oListener.onTimerUpdate_SecondsElapsed(nRemainingSeconds);
         }	
 	}
-	
+	/**
+	 * This method notify the Listener about the timer has elapsed for the Player
+	 * 
+	 * @param oPlayer IPlayerAgent the current player
+	 */
 	public void notifyListenersOnTimerUpdate_TimerElapsed(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about timer elapse.", "notifyListenersOnTimerUpdate_TimerElapsed", "Game");
 
@@ -344,7 +359,11 @@ public final class Game implements IGame, ITimerListener {
             oListener.onTimerUpdate_TimerElapsed(oPlayer);
         }	
 	}
-	
+	/**
+	 * This method notify the Listener on changed current 
+	 * 
+	 * @param oPlayer
+	 */
 	public void notifyListenersOnCurrentPlayerChanged(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about player change.", "notifyListenersOnCurrentPlayerChanged", "Game");
 
@@ -352,7 +371,13 @@ public final class Game implements IGame, ITimerListener {
             oListener.onCurrentPlayerChanged(oPlayer);
         }	
 	}
-
+	
+	/**
+	 * This method notify the Listener on the move made by the player
+	 * 
+	 * @param oPlayer IPlayerAgent the current Player
+	 * @param oMove IBoardActivity the move of the Player
+	 */
 	public void notifyListenersOnMoveMadeByPlayer(IPlayerAgent oPlayer, IBoardActivity oMove) {		
 		m_oLogger.writeLog(LogLevel.DETAILED, "Notifying about move made by player.", "notifyListenersOnMoveMadeByPlayer", "Game");
 
@@ -360,7 +385,11 @@ public final class Game implements IGame, ITimerListener {
             oListener.onMoveMadeByPlayer(oPlayer, oMove);
         }	
 	}
-
+	/**
+	 * This method set the player as active
+	 * 
+	 * @param oPlayer IPlayerAgent the that gonna be set active
+	 */
 	public void setPlayerAsActivePlayer(IPlayerAgent oPlayer) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Setting player as active one.", "setPlayerAsActivePlayer", "Game");
 
@@ -389,12 +418,20 @@ public final class Game implements IGame, ITimerListener {
 		m_oGameState.switchPlayTurn();
 		startAndUpdateTimeForNewActivePlayer(m_oGameState.getActivePlayer());
 	}
-	
+	/**
+	 * This method stop the time and update the time for the current Player
+	 * 
+	 * @param oCurrentActivePlayer IPlayerAgent the active player
+	 */
 	private void stopAndUpdateTimeForCurrentActivePlayer(IPlayerAgent oCurrentActivePlayer) {
 		m_oTimer.stop();
 		oCurrentActivePlayer.setRemainingTimeInSec(m_oTimer.getTimerRemainingSeconds());
 	}
-	
+	/**
+	 * This method start and update the time for the new active Player
+	 * 
+	 * @param oNewActivePlayer IPlayerAgent 
+	 */
 	private void startAndUpdateTimeForNewActivePlayer(IPlayerAgent oNewActivePlayer) {
 		m_oTimer.start(oNewActivePlayer.getRemainingTimeInSec());
 		notifyListenersOnCurrentPlayerChanged(oNewActivePlayer);
