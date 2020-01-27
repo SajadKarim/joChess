@@ -41,10 +41,10 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	 */
 	@Override
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
-		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "ExtendedRuleProcessor");
+		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate: " + oPiece.getName(), "tryEvaluateAllRules", "ExtendedRuleProcessor");
 
 		super.tryEvaluateAllRules(oBoard, oPiece, mpCandidatePositions);
-
+		//System.out.println("Evaluating selected move candidate: " + oPiece.getName());
 		switch (oPiece.getName()) {
 			case "PawnWhite":
 			case "PawnBlack":
@@ -56,6 +56,13 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 				PawnRulesProcessor.tryPawnEnPassantRule(oBoard, oPiece, mpCandidatePositions);
 			}
 				break;
+			case "KingWhite": 
+			case "KingBlack":
+			case "KingRed": {
+				KingRulesProcessor.tryKingCastlingRules(this, oBoard, oPiece, mpCandidatePositions);
+			}
+				break;
+
 			default:
 				break;
 		}

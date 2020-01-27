@@ -46,8 +46,9 @@ public class GUI {
         Image img = null;
         URL url = null;
         Toolkit tk = Toolkit.getDefaultToolkit();
-        try {
-            String imageLink = GUI.getJarPath() + "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
+        try
+        {
+            String imageLink = GUI.getJarPath() + "/theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             img = tk.getImage(new File(imageLink).toURI().toURL());
         } catch (Exception e) {
             System.out.println("some error loading image");

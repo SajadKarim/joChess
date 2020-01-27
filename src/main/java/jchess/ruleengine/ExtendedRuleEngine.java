@@ -93,6 +93,10 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 			case "MOVE_IFF_CAPTURE_POSSIBLE[PAWN_ENPASSANT]":
 				oMove = PawnRulesProcessor.tryExecutePawnEnPassantRule(oBoard, oMoveCandidate);
 				break;
+			case "MOVE[KING_CASTLING]":
+				oMove = KingRulesProcessor.tryExecuteCastlingRule(oBoard, oMoveCandidate);
+				break;
+			
 			default:
 				break;
 		}

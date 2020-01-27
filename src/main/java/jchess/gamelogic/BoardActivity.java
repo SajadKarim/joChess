@@ -116,6 +116,18 @@ public final class BoardActivity implements IBoardActivity {
 						+ ", to:" 
 						+ m_oMoveCandidate.getCandidatePosition().getName();
 					break;
+				case "MOVE[KING_CASTLING]":
+					m_stToString 
+						= m_oPlayer.getName() 
+						+ " - from:" 
+						+ m_oMoveCandidate.getSourcePosition().getName() 
+						+ ", to:" 
+						+ m_oMoveCandidate.getCandidatePosition().getName()
+						+ " | - from:" 
+						+ m_oMoveCandidate.getSecondaryMove(0).getSourcePosition().getName() 
+						+ ", to:" 
+						+ m_oMoveCandidate.getSecondaryMove(0).getCandidatePosition().getName();
+					break;
 				default:
 					break;
 				}
