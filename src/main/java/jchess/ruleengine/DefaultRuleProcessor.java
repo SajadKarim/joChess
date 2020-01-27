@@ -399,13 +399,13 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	
 	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
 		// Iterating opponent players piece to check if they can capture the provided piece or not.	
-		for (Map.Entry<String,IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
+		for (Map.Entry<String, IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
 			if (itPlayer.getValue().equals(oPiece.getPlayer())) {
 				// Ignore piece from same player.
 				continue;
 			}
 			// Iterating the pieces of the current player.
-			for (Map.Entry<String,IPieceAgent> itPiece : itPlayer.getValue().getAllPieces().entrySet()) {
+			for (Map.Entry<String, IPieceAgent> itPiece : itPlayer.getValue().getAllPieces().entrySet()) {
 				IPieceAgent oOpponentPiece = itPiece.getValue();
 				if (oOpponentPiece.getPosition() == null) {
 					// Piece is not linked to any piece indicates the piece has been captured.
@@ -428,8 +428,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	}	
 
 	
-	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer)
-	{
+	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer) {
 		IPieceAgent oOpponentPiece = isPieceEndangered(oBoard, oPlayer.getKingPiece());
 		if (oOpponentPiece != null) {
 			return oOpponentPiece.getPlayer();
@@ -449,7 +448,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		IPieceAgent oKingPiece = oPlayer.getKingPiece();
 
 		// Checking if any piece other than King can make any move.
-		for (Map.Entry<String,IPieceAgent> itPiece : oPlayer.getAllPieces().entrySet()) {
+		for (Map.Entry<String, IPieceAgent> itPiece : oPlayer.getAllPieces().entrySet()) {
 			IPieceAgent oPiece = itPiece.getValue();
 			
 			if (oPiece.getPosition() == null) {
@@ -474,13 +473,13 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		
 		// Iterating through the opponent's pieces and see if there is any candidate move that King can make
 		// without endangering itself.
-		for (Map.Entry<String,IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
+		for (Map.Entry<String, IPlayerAgent> itPlayer : oBoard.getAllPlayerAgents().entrySet()) {
 			if (itPlayer.getValue().equals(oPlayer)) {
 				// Ignore piece from same player.
 				continue;
 			}
 			// Iterating the pieces of the current player.
-			for (Map.Entry<String,IPieceAgent> itPiece : itPlayer.getValue().getAllPieces().entrySet()) {
+			for (Map.Entry<String, IPieceAgent> itPiece : itPlayer.getValue().getAllPieces().entrySet()) {
 				IPieceAgent oOpponentPiece = itPiece.getValue();
 				if (oOpponentPiece.getPosition() == null) {
 					// Piece is not linked to any piece indicates the piece has been captured.
@@ -493,16 +492,18 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 					if (mpCandidateMovePositionForKing.containsKey(itCandidateMove.getKey())) {
 						mpCandidateMovePositionForKing.remove(itCandidateMove.getKey());
 						
-						if( mpCandidateMovePositionForKing.size() == 0)
+						if (mpCandidateMovePositionForKing.size() == 0) {
 							return true;
+						}		
 					}
 				}
 			}
 		}
 
-		if( mpCandidateMovePositionForKing.size() > 0)
+		if (mpCandidateMovePositionForKing.size() > 0) {
 			return false;
-
+		}
+			
 		return true;
 	}	
 }

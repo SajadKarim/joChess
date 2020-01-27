@@ -76,7 +76,7 @@ public final class CacheManager implements ICacheManager {
 	    	if (m_mpPlayerAllowedInBoard == null) {
 	    		return false;
 	    	}
-    	} catch(java.lang.Exception ex) {
+    	} catch (java.lang.Exception ex) {
     		m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "init", "CacheManager");
     	}
 

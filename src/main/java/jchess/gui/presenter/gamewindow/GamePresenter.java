@@ -165,13 +165,11 @@ public final class GamePresenter extends AbstractModule implements IGamePresente
 		}
 	}
 	
-	public void endCurrentGame()
-	{
+	public void endCurrentGame() {
 		m_oGUIHandle.closeGameWindow();
 	}
 	
-	public void displayConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle)
-	{
+	public void displayConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle) {
 		m_oGUIHandle.popUpConfirmDialog(stConfirmDialogMessage, stConfirmDialogTitle);
 	}
 }

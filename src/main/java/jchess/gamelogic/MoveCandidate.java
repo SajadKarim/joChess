@@ -42,10 +42,6 @@ public final class MoveCandidate implements IMoveCandidate {
 	}	
 	
 	public String toLog() {
-		return String.format("Piece=%s, SourcePosition=%s, DestinationPosition=%s, RuleName=%s"
-				, m_oPieceToMove.getName()
-				, m_oSourcePosition.getName()
-				, m_oCandidatePosition.getName()
-				, m_oRule.getName());
+		return String.format("Piece=%s, SourcePosition=%s, DestinationPosition=%s, RuleName=%s", m_oPieceToMove.getName(), m_oSourcePosition.getName(), m_oCandidatePosition.getName(), m_oRule.getName());
 	}
 }

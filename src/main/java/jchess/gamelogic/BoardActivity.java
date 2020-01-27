@@ -91,7 +91,7 @@ public final class BoardActivity implements IBoardActivity {
 			case MOVE_TRANSIENT:
 				break;
 			case CUSTOM: {	
-				switch(m_oMoveCandidate.getRule().getCustomName()) {
+				switch (m_oMoveCandidate.getRule().getCustomName()) {
 				case "MOVE_AND_CAPTURE[PAWN_PROMOTION]": 
 					m_stToString 
 						= m_oPlayer.getName() 
@@ -130,8 +130,6 @@ public final class BoardActivity implements IBoardActivity {
 	
 	// TODO: Include other details in the following log information.
 	public String toLog() {
-		return String.format("MoveCandidate=%s, Player=%s"
-				, m_oMoveCandidate.toLog()
-				, m_oPlayer == null ? "NULL" : m_oPlayer.getName());
+		return String.format("MoveCandidate=%s, Player=%s", m_oMoveCandidate.toLog(), m_oPlayer == null ? "NULL" : m_oPlayer.getName());
 	}
 }

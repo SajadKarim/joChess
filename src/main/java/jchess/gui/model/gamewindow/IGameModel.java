@@ -21,7 +21,7 @@ public interface IGameModel extends IModel  {
 	public void setClockText(String stClockText);
 	public IPlayer getPlayer();
 	public void setPlayer(IPlayerAgent oPlayer);
-	public Map<String, IPlayerAgent > getAllPlayerAgents();
+	public Map<String, IPlayerAgent> getAllPlayerAgents();
 	public String getRuleEngineName();
 
 	public void addBoardActivity(IBoardActivity oActivity);

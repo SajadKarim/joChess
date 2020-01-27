@@ -9,7 +9,7 @@ import jchess.common.IBoardMapping;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
 import jchess.common.IPlayerData;
-import jchess.common.IPositionAgent;
+
 
 /**
  * This class is responsible to manage underlying "Player" (only) related data.
@@ -87,17 +87,14 @@ public final class PlayerAgent implements IPlayerAgent {
 		return m_mpPieces;
 	}
 	
-	public IPieceAgent getKingPiece()
-	{
-		String[] KingArray= new String[] {"Black", "White", "Red"};
+	public IPieceAgent getKingPiece() {
+		String[] KingArray = new String[] {"Black", "White", "Red"};
 		String stKingName = "";
 		IPieceAgent oKingPiece = null;
-		for(String stKingColour : KingArray)
-		{
+		for (String stKingColour : KingArray) {
 			stKingName = "King" + stKingColour;
 			IPieceAgent tempPiece = getPiece(stKingName);
-			if(tempPiece != null)
-			{
+			if (tempPiece != null) {
 				oKingPiece = tempPiece;
 				return oKingPiece;
 			}

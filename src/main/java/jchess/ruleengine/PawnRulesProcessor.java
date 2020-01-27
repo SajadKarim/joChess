@@ -182,7 +182,7 @@ public final class PawnRulesProcessor {
 		
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();
 		qData.add(new RuleProcessorData((IRuleAgent)oRule, oPiece.getPosition(), null));
-		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData , mpCandidateMovePositions);
+		oRuleProcessor.tryFindPossibleCandidateMovePositions(oPiece, oPiece.getPosition(), oPiece.getPlayer(), qData, mpCandidateMovePositions);
 }
 	
 	/**

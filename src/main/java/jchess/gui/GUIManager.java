@@ -73,7 +73,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
      	try {
      		m_oMainPresenter.init();
      		m_oApplication.showView(m_oMainPresenter.tryGetJDesktopView());
-     	} catch(Exception ex) {
+     	} catch (Exception ex) {
 	    	m_oLogger.writeLog(LogLevel.ERROR, ex.toString(), "xxxxx", "JChessView");
 		}
 	}
@@ -116,14 +116,12 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 		m_nGameCounter++;
 	}
 	
-	public void closeGameWindow()
-	{
+	public void closeGameWindow() {
 		m_oMainPresenter.closetab();
 	}
 	
-	public void popUpConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle)
-	{
-		JOptionPane.showConfirmDialog(null, stConfirmDialogMessage,stConfirmDialogTitle , JOptionPane.DEFAULT_OPTION);
+	public void popUpConfirmDialog(String stConfirmDialogMessage, String stConfirmDialogTitle) {
+		JOptionPane.showConfirmDialog(null, stConfirmDialogMessage, stConfirmDialogTitle, JOptionPane.DEFAULT_OPTION);
 	}
 	
 	/**
@@ -164,7 +162,7 @@ public class GUIManager implements IGUIManager, IGUIHandle {
 	public void onNewGameLaunchRequest(INewGameModel oData) {
     	m_oLogger.writeLog(LogLevel.DETAILED, "Request to launch a fresh game.", "onNewGameLaunchRequest", "GUIManager");
 
-    	showGameWindow (oData);
+    	showGameWindow(oData);
 	}
 	
 	/**
