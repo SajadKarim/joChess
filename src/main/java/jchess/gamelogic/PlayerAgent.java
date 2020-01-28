@@ -31,7 +31,7 @@ public final class PlayerAgent implements IPlayerAgent {
 	public PlayerAgent() {
 		m_oPlayerData = new PlayerData();
 		m_mpPieces = new HashMap<String, IPieceAgent>();
-		m_nRemainingGameTimeInSec = 2 * 60;
+		m_nRemainingGameTimeInSec = 30 * 60;	//TODO: #REFACTOR move this value in config file.
 	}
 	
 	public String getName() {
