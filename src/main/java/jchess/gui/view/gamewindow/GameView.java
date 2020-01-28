@@ -88,7 +88,7 @@ public final class GameView extends JPanel implements IGameView, MouseListener, 
         this.add(m_oClockView.getViewComponent());
         m_oClockView.init();
         
-        oDimension = new Dimension(180, 500);
+        oDimension = new Dimension(180, m_oData.getBoard().getBoardHeight() - 60 - 60);
         m_oMoveHistoryView.getScrollPane().setSize(oDimension);
         m_oMoveHistoryView.getScrollPane().setLocation(new Point(m_oData.getBoard().getBoardWidth() + 20, 120));
         this.add(m_oMoveHistoryView.getScrollPane());
