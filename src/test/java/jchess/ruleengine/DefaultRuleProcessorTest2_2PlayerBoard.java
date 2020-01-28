@@ -71,6 +71,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 	void tearDown() throws Exception {
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for file and rank and moves in upwards direction by *.
+	 */
 	@Test
 	void testTryEvaluateAllRules_FileAndRankStrategy() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -116,6 +119,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in all the diagonal directions by *.
+	 */
 	@Test
 	void testTryEvaluateAllRules_BlinkerStrategy() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -159,8 +165,11 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 			
 			assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 		}
-}
+	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in north direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_NORTH_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -243,6 +252,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in west direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_WEST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -284,6 +296,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in south-west direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_SOUTHWEST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -322,6 +337,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in south direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_SOUTH_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -360,6 +378,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in south-east direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_SOUTHEAST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -398,6 +419,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in east direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_EAST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -439,6 +463,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in north-east direction by *.
+	 */
 	@Test
 	void tryFindPossibleCandidateMovePositions_MOVE_NORTHEAST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -480,6 +507,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 	
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and moves in north direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_NORTH_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -521,6 +551,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and moves in north west direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_NORTHWEST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -562,6 +595,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and moves in west direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_WEST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -603,6 +639,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and moves in south west direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_SOUTHWEST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -641,6 +680,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and moves in south direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_SOUTH_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -679,6 +721,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and south-east in north direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_SOUTHEAST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -717,6 +762,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		assertEquals(oExpectedPositionInMap, oActualPositionInMap);
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'flie and rank' and moves in east direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_EAST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
@@ -758,6 +806,9 @@ class DefaultRuleProcessorTest2_2PlayerBoard {
 		}
 	}
 
+	/**
+	 * This method verifies manoeuvre strategy for 'blinker' and moves in north-east direction by *.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_MOVE_NORTHEAST_BY_INF() {
 		IRuleAgent oRule = (IRuleAgent)m_oBoardFactory.createRule();
