@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -85,44 +86,52 @@ public final class NewLocalGameView extends JPanel implements ActionListener, IN
         this.parent = parent;
     }
     
-    public void initComponenets() {    
-    	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing components.", "initComponents", "NewLocalGameView");
-
-    	this.gbl = new GridBagLayout();
-        this.gbc = new GridBagConstraints();
-    	this.cmboxBoardTypes = new JComboBox(m_oData.getAllBoardNames());
-        this.okButton = new JButton(Settings.lang("ok"));
-
-        
-        m_oPlayerDetailsEntryView = new PlayerDetailsEntryView();
-        m_oPlayerDetailsEntryView.setViewData(m_oData);
-
-        String stSelectedItem = (String)cmboxBoardTypes.getSelectedItem();
-    	m_oPlayerDetailsEntryView.setPlayersCount(m_oData.getPlayersAllowedInBoard(stSelectedItem));    	
-
-    	
-    	m_oPlayerDetailsEntryView.init();
-
-    	this.setLayout(gbl);
-        this.cmboxBoardTypes.addActionListener(this);
-        this.okButton.addActionListener(this);
-        
-        this.gbc.gridx = 0;
-        this.gbc.gridy = 0;
-        this.gbc.insets = new Insets(3, 3, 3, 3);
-        this.gbc.gridwidth = 0;
-        this.gbl.setConstraints(cmboxBoardTypes, gbc);
-        this.add(cmboxBoardTypes);
-        this.gbc.gridx = 0;
-        this.gbc.gridy = 1;
-        this.gbl.setConstraints(m_oPlayerDetailsEntryView.getViewComponent(), gbc);
-        this.add(m_oPlayerDetailsEntryView.getViewComponent());
-        this.gbc.gridx = 1;
-        this.gbc.gridy = 9;
-        this.gbc.gridwidth = 0;
-        this.gbl.setConstraints(okButton, gbc);
-        this.add(okButton);
-        
+    public void initComponenets() {  
+    	try
+    	{
+	    	m_oAppLogger.writeLog(LogLevel.DETAILED, "Initializing components.", "initComponents", "NewLocalGameView");
+	
+	    	
+	    	this.gbl = new GridBagLayout();
+	        this.gbc = new GridBagConstraints();
+	    	this.cmboxBoardTypes = new JComboBox(m_oData.getAllBoardNames());
+	        this.okButton = new JButton(Settings.lang("ok"));
+	
+	        
+	        m_oPlayerDetailsEntryView = new PlayerDetailsEntryView();
+	        m_oPlayerDetailsEntryView.setViewData(m_oData);
+	
+	        String stSelectedItem = (String)cmboxBoardTypes.getSelectedItem();
+	    	m_oPlayerDetailsEntryView.setPlayersCount(m_oData.getPlayersAllowedInBoard(stSelectedItem));    	
+	
+	    	
+	    	m_oPlayerDetailsEntryView.init();
+	
+	    	this.setLayout(gbl);
+	        this.cmboxBoardTypes.addActionListener(this);
+	        this.okButton.addActionListener(this);
+	        
+	        this.gbc.gridx = 0;
+	        this.gbc.gridy = 0;
+	        this.gbc.insets = new Insets(3, 3, 3, 3);
+	        this.gbc.gridwidth = 0;
+	        this.gbl.setConstraints(cmboxBoardTypes, gbc);
+	        this.add(cmboxBoardTypes);
+	        this.gbc.gridx = 0;
+	        this.gbc.gridy = 1;
+	        this.gbl.setConstraints(m_oPlayerDetailsEntryView.getViewComponent(), gbc);
+	        this.add(m_oPlayerDetailsEntryView.getViewComponent());
+	        this.gbc.gridx = 1;
+	        this.gbc.gridy = 9;
+	        this.gbc.gridwidth = 0;
+	        this.gbl.setConstraints(okButton, gbc);
+	        this.add(okButton);
+    	} catch(Exception ex) {
+    		JOptionPane.showMessageDialog(null, 
+    				"An internal error has been occured.\n "
+    				+ "Please check if \"Boards layouts\" and the related files exist, or contact sajad.karim@ovgu.de.", "N-Players Chess Game!", JOptionPane.ERROR_MESSAGE);
+    		throw ex;
+    	}        
     }
     
 	@Override
