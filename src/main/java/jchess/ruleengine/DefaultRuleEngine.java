@@ -52,9 +52,9 @@ public class DefaultRuleEngine implements IRuleEngine {
 	/**
 	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
 	 * 
-	 * @param oBoard IBoardAgent
-	 * @param oPiece IPieceAgent
-	 * return Map of String and IMoveCandidate
+	 * @param oBoard IBoardAgent the instance of active Board
+	 * @param oPiece IPieceAgent the instance of the input Piece
+	 * return Map<String, IMoveCandidate> possible move candidate
 	 */
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Evaluating move candidates for selected position [%s].", oPiece.toLog()), "tryEvaluateAllRules", "DefaultRuleEngine");
@@ -68,7 +68,13 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		return mpCandidateMovePositions;
     }
-	
+	/**
+	 * This method Check if the player King is Endangered 
+	 * 
+	 * @param oBoard IBoardAgent instance of the active Board
+	 * @param oPlayer IPlayerAgent instance of the Player that we want to check
+	 * @return IPlayerAgent return the rival Player that check the input Player
+	 */
 	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer) {
 		return m_oRuleProcessor.tryCheckIfPlayerEndengered(oBoard, oPlayer);
 	
@@ -87,9 +93,9 @@ public class DefaultRuleEngine implements IRuleEngine {
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 
-	 * @param oBoard IBoardAgent
-	 * @param oMoveCandidate IPieceAgent
-	 * return IBoardActivity
+	 * @param oBoard IBoardAgent the instance of active Board
+	 * @param oMoveCandidate IMoveCandidate the instance of the move candidate
+	 * return IBoardActivity the Board activity
 	 */
 	public IBoardActivity tryExecuteRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		m_oLogger.writeLog(LogLevel.INFO, String.format("Executing the rule for move candidate [%s].", oMoveCandidate.toLog()), "tryExecuteRule", "DefaultRuleEngine");
@@ -130,7 +136,13 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		return oActivity;
 	}
-
+	/**
+	 * This method set the a new Position for the Piece
+	 * 
+	 * @param oCurrentPosition IPositionAgent the current position that hold the Piece
+	 * @param oCandidatePosition IPositionAgent the next position that the Piece will move to 
+	 * @param oActivity IBoardActivity the current activity of the Board
+	 */
 	protected void setPositionsAndUpdateActivity(IPositionAgent oCurrentPosition, IPositionAgent oCandidatePosition, IBoardActivity oActivity) {
 		IPieceAgent oPieceLinkedToCurrentPosition = oCurrentPosition.getPiece();
 		IPieceAgent oPieceLinkedToCandidatePosition = oCandidatePosition.getPiece();
@@ -158,7 +170,13 @@ public class DefaultRuleEngine implements IRuleEngine {
 		oActivity.addPostMoveEntry(oCandidatePosition, oPieceLinkedToCurrentPosition);
 		oActivity.setPlayer(oPieceLinkedToCurrentPosition.getPlayer());
 	}
-	
+	/**
+	 * This method check if the Piece is in Endangered position
+	 * 
+	 * @param oBoard IBoardAgent instance of the active Board
+	 * @param oPiece IPieceAgent instance of the Piece that we want to check
+	 * @return IPieceAgent return the rival Piece that can attack the input Piece
+	 */
 	public IPieceAgent isPieceEndangered(IBoardAgent oBoard, IPieceAgent oPiece) {
 		return m_oRuleProcessor.isPieceEndangered(oBoard, oPiece);
 	}
