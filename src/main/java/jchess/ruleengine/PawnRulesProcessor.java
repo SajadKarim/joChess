@@ -44,9 +44,9 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method looks for the possibility whether the pawn is eligible to make a promotion move.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate
 	 */
 	public static void tryPawnPromotionRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		//tryPawnPromotionRuleForEdge(oBoard, oPiece, mpCandidateMovePositions);
@@ -81,9 +81,9 @@ public final class PawnRulesProcessor {
 	 * This method looks for the possibility whether the pawn is eligible to make a promotion move. It looks of the opposite
 	 * player's piece on the positions linked to its vertexes.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate
 	 */
 	static void tryPawnPromotionRuleForVertex(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
@@ -106,9 +106,9 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method executes pawn promotion rule.
 	 * 
-	 * @param IBoardAgent
-	 * @param IGUIHandle
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oGUIHandle IGUIHandle
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecutePawnPromotionRule(IBoardAgent oBoard, IGUIHandle oGUIHandle, IMoveCandidate oMoveCandidate) {
@@ -145,10 +145,10 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method looks for the possibility whether the pawn is eligible to jump one position on its first move or not.
 	 * 
-	 * @param IRuleProcessor
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate> 
+	 * @param oRuleProcessor IRuleProcessor
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate 
 	 */
 	static void tryPawnFirstMoveException(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {		
 		if (oPiece.getRuns() > 0) {
@@ -188,9 +188,8 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method let pawn to jump one piece on its first move.
 	 * 
-	 * @param IBoardAgent
-	 * @param IGUIHandle
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecutePawnFirstMoveException(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
@@ -208,9 +207,9 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method checks the eligibility of EnPassant rule.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidateMovePositions Map of String and IMoveCandidate 
 	 */
 	public static void tryPawnEnPassantRule(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		IPositionAgent oPosition = oPiece.getPosition();
@@ -261,8 +260,8 @@ public final class PawnRulesProcessor {
 	/**
 	 * This method executes EnPassant rule.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * @return IBoardActivity
 	 */
 	public static IBoardActivity tryExecutePawnEnPassantRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
@@ -273,6 +272,13 @@ public final class PawnRulesProcessor {
 		return oActivity;
 	}
 
+	/**
+	 * This method populate IBoardActivity object.
+	 * 
+	 * @param oCurrentPosition IPositionAgent
+	 * @param oCandidatePosition IPositionAgent
+	 * @param oActivity IBoardActivity
+	 */
 	private static void setPositionsAndUpdateActivity(IPositionAgent oCurrentPosition, IPositionAgent oCandidatePosition, IBoardActivity oActivity) {
 		IPieceAgent oPieceLinkedToCurrentPosition = oCurrentPosition.getPiece();
 		IPieceAgent oPieceLinkedToCandidatePosition = oCandidatePosition.getPiece();

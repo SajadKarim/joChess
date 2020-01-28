@@ -16,6 +16,12 @@ import jchess.gui.view.mainwindow.IJChessView;
 import jchess.util.IAppLogger;
 import jchess.util.LogLevel;
 
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 @Singleton
 public final class MainPresenter implements IMainPresenter {
 	private IJChessView m_oJChessView;

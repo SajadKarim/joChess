@@ -10,7 +10,7 @@ import jchess.common.IPositionData;
 import jchess.common.IShape;
 
 /**
- * This is a container class to store "Position" related details in cache.
+ * This is a data class to store "Position" related details in cache.
  * It actually maps XML or DB structure for "Position" to memory.
  * 
  * @author	Sajad Karim
@@ -18,16 +18,42 @@ import jchess.common.IShape;
  */
 
 public final class PositionData implements IPositionData {
+	/**
+	 * File of position.
+	 */
 	private int m_nFile;
+	/**
+	 * Rank of position.
+	 */
 	private int m_nRank;
+	/**
+	 * Category of position.
+	 */
 	private String m_stCategory;
+	/**
+	 * Shape of position.
+	 */
 	private IShape m_oShape;
+	/**
+	 * Paths linked to position.
+	 */
 	private Map<String, IPath> m_mpPath;
 	
+	/**
+	 * Default constructor.
+	 */
 	public PositionData() {		
 		m_mpPath = new HashMap<String, IPath>();
 	}
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param chFile File
+	 * @param nRank Rank
+	 * @param oShape Shape
+	 * @param stCategory Category
+	 */
 	PositionData(char chFile, int nRank, IShape oShape, String stCategory) {
 		m_nFile = (int)chFile;
 		m_nRank = nRank;
@@ -37,6 +63,11 @@ public final class PositionData implements IPositionData {
 		m_mpPath = new HashMap<String, IPath>();
 	}
 	
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param oPosition
+	 */
 	public PositionData(PositionData oPosition) {
 		m_nFile = oPosition.m_nFile;
 		m_nRank = oPosition.m_nRank;
@@ -53,30 +84,51 @@ public final class PositionData implements IPositionData {
 	}
 
 	// region: Immplements IPosition
+	/**
+	 * Getter for position file.
+	 */
 	public int getFile() {
 		return m_nFile;
 	}
 
+	/**
+	 * Getter for position rank.
+	 */
 	public int getRank() {
 		return m_nRank;
 	}
 
+	/**
+	 *  Getter for position name.
+	 */
 	public String getName() {
 		return "" + (char)m_nFile + "" + m_nRank;
 	}
 
+	/**
+	 * Getter for position category.
+	 */
 	public String getCategory() {
 		return m_stCategory;
 	}
 
+	/**
+	 * Getter for position shape.
+	 */
 	public IShape getShape() {
 		return m_oShape;
 	}
 	
+	/**
+	 * Return path against the name.
+	 */
 	public IPath getPath(String stName) {
 		return m_mpPath.get(stName);
 	}
 
+	/**
+	 * Return all the linked paths.
+	 */
 	public Map<String, IPath> getAllPaths() {
 		return m_mpPath;
 	}
@@ -84,18 +136,30 @@ public final class PositionData implements IPositionData {
 	// endregion
 
 	// region: Implements IPositionData
+	/**
+	 * Setter for position file.
+	 */
 	public void setFile(int nFile) {
 		m_nFile = nFile;
 	}
 	
+	/**
+	 * Setter for position rank.
+	 */
 	public void setRank(int nRank) {
 		m_nRank = nRank;
 	}
 
+	/**
+	 * Setter for position category.
+	 */
 	public void setCategory(String  stCategory) {
 		m_stCategory = stCategory;
 	}
 
+	/**
+	 * Setter for position shape.
+	 */
 	public void setShape(IShape oShape) {
 		m_oShape = oShape;
 	}
@@ -105,14 +169,23 @@ public final class PositionData implements IPositionData {
 	//	return new ArrayList<IPath>(m_mpPath.values());
 	//}
 
+	/**
+	 * Returns core position object.
+	 */
 	public PositionData getPosition() {
 		return this;
 	}
 
+	/**
+	 * Adds new neigbour path.
+	 */
 	public void addPath(IPathData oPath) {		
 		m_mpPath.put(oPath.getName(), oPath);
 	}
 	
+	/**
+	 * Establishes connection between paths.
+	 */
 	public void linkPaths(String stPathA, String stPathB) {
 		IPath oPathA = m_mpPath.get(stPathA);
 		if (oPathA == null) {
@@ -129,6 +202,9 @@ public final class PositionData implements IPositionData {
 	}
 	// endregion
 	
+	/**
+	 * Create a duplicate instance of position.
+	 */
 	public IPosition clone() {
 		return new PositionData(this);
 	}

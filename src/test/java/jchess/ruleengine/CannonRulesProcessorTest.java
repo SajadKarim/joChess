@@ -9,20 +9,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
 import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
-import jchess.common.IBoardFactory;
+import jchess.common.ICacheManager;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRule;
 import jchess.common.IRuleAgent;
-import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
+/**
+ * This class tests Cannon piece behaviour.
+ * 
+ * @author	Sajad Karim
+ * @since	26 Jan 2020
+ */
 class CannonRulesProcessorTest {
 	static IAppLogger m_oLogger;
 	static IBoardAgent m_oBoard;
@@ -50,6 +53,11 @@ class CannonRulesProcessorTest {
 	void tearDown() throws Exception {
 	}
 
+	/**
+	 * This methods verifies the moves that the Cannon piece at file 'a' and rank '2' can perform.
+	 * Since after using all the ammunition Cannon piece converts to Pawn piece so this method test the
+	 * candidate move for both the states.
+	 */
 	@Test
 	void testTryExecuteBombAndPromotionRule_CannonAtA2() {
 		IPieceAgent oPieceToMove = m_oBoard.getPositionAgent("a2").getPiece();
@@ -68,6 +76,11 @@ class CannonRulesProcessorTest {
 		assertEquals(oSourcePosition.getPiece().getName(), "PawnWhite");
 	}
 
+	/**
+	 * This methods verifies the moves that the Cannon piece at file 'h' and rank '2' can perform.
+	 * Since after using all the ammunition Cannon piece converts to Pawn piece so this method test the
+	 * candidate move for both the states.
+	 */
 	@Test
 	void testTryExecuteBombAndPromotionRule_CannonAtH2() {
 		IPieceAgent oPieceToMove = m_oBoard.getPositionAgent("h2").getPiece();

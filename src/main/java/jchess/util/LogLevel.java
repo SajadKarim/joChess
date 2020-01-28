@@ -1,4 +1,5 @@
 package jchess.util;
+
 /**
  * This datastructure is used for logging.
  * 

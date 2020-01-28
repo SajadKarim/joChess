@@ -1,7 +1,5 @@
 package jchess.common;
 
-import java.util.List;
-
 /**
  * IMoveCandidate
  * 
@@ -13,10 +11,8 @@ public interface IMoveCandidate {
 	public IRuleAgent getRule();
 	public IPieceAgent getPieceToMove();
 	public IPositionAgent getSourcePosition();
-	public IPositionAgent getCandidatePosition();
-	
+	public IPositionAgent getCandidatePosition();	
 	public IMoveCandidate getSecondaryMove(int i);
-	public void addSecondaryMove(IMoveCandidate secondaryMove);
-	
+	public void addSecondaryMove(IMoveCandidate secondaryMove);	
 	public String toLog();
 }

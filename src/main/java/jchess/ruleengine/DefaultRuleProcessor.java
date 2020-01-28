@@ -39,7 +39,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	/**
 	 * Constructor for DefaultRuleProcessor.
 	 * 
-	 * @param IAppLogger
+	 * @param oLogger IAppLogger
 	 */
 	public DefaultRuleProcessor(IAppLogger oLogger) {
 		m_oLogger = oLogger;
@@ -51,12 +51,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
 	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidatePositions Map of String and IMoveCandidate
 	 */
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
-		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate.", "tryEvaluateAllRules", "DefaultRuleProcessor");
+		m_oLogger.writeLog(LogLevel.DETAILED, "Evaluating selected move candidate. Piece=" + oPiece.toLog(), "tryEvaluateAllRules", "DefaultRuleProcessor");
 
 		IPositionAgent oPosition = oPiece.getPosition();
 		IPlayerAgent oPlayer = oPiece.getPlayer();
@@ -75,8 +75,7 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 		// so that while traversing a Rule if we encounter by another Rule, we would simply add it to this Queue and repeat the same process.
 		Queue<RuleProcessorData> qData = new LinkedList<RuleProcessorData>();		
     	for (IRuleAgent oRule : oPosition.getPiece().getRules()) {
-    		oRule.reset();
-    		
+    		oRule.reset();    		
     		qData.add(new RuleProcessorData(oRule, oPosition, null));
     	}
     	
@@ -88,11 +87,11 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
 	 * A Rule can manoeuvre in two ways therefore this method makes respective calls in this method.
 	 * 
-	 * @param IPieceAgent
-	 * @param IPositionAgent
-	 * @param IPlayerAgent
-	 * @param Queue<RuleProcessorData>
-	 * @param Map<String, IMoveCandidate>
+	 * @param oPieceToMove IPieceAgent
+	 * @param oSourcePosition IPositionAgent
+	 * @param oPlayer IPlayerAgent
+	 * @param qData Queue of RuleProcessorData
+	 * @param mpCandidatePositions Map of String and IMoveCandidate
 	 */
 	public void tryFindPossibleCandidateMovePositions(IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions) {
 		m_oLogger.writeLog(LogLevel.INFO, "Finding candidate move positions.", "tryFindPossibleCandidateMovePositions", "DefaultRuleProcessor");
@@ -133,12 +132,12 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * 
 	 * Fig 3: 2-Players chess board.
 	 * 
-	 * Consider Fig 3 (2 Player chess board) and cell “C3” is the active position, and the game engine has to find all the possible moves using
+	 * Consider Fig 3 (2 Player chess board) and cell 'C3' is the active position, and the game engine has to find all the possible moves using
 	 * Blinker manoeuvre strategy.
 	 * 
-	 * Cell “C3” is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, B4 and they are in direction West, SouthWest, South, 
-	 * SouthEast, East, NorthEast, North, NorthWest respectively. All this information is stored in elements “Directions” and “Connections”
-	 * under the element “Position” (Refer to positions section of XML for details).
+	 * Cell 'C3' is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, B4 and they are in direction West, SouthWest, South, 
+	 * SouthEast, East, NorthEast, North, NorthWest respectively. All this information is stored in elements 'Directions' and “Connections'
+	 * under the element “Position' (Refer to positions section of XML for details).
 	 * 
 	 * NW	N	NE
 	 * W	○	E
@@ -147,14 +146,14 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * Table 1: Illustration for directions surrounding by a typical position ‘○’.
 	 * 
 	 * Example Scenario #1: Traversing towards NE direction.
-	 * Assumption: Current position is ‘○’ and last position is the position linked to “SW”.
-	 * In the above given scenario and assumption, Blinker strategy starts its search from “SW” and looks in two directions in parallel, 
-	 * “W” and “S” directions, until both the search paths leads to the same position, or any of them reaches a dead end. 
+	 * Assumption: Current position is ‘○’ and last position is the position linked to “SW'.
+	 * In the above given scenario and assumption, Blinker strategy starts its search from “SW' and looks in two directions in parallel, 
+	 * “W' and “S' directions, until both the search paths leads to the same position, or any of them reaches a dead end. 
 	 * 
 	 * For instance, following are the search paths that above scenarios would produce:
 	 * Search path 1: SW	W	NW	N	NE
 	 * Search path 2: SW	S	WE	E	NE
-	 * As both the paths meets the same position at the end, the strategy ends its search and returns the position attached to “NE”. 
+	 * As both the paths meets the same position at the end, the strategy ends its search and returns the position attached to “NE'. 
 	 * It would have return NULL position if search paths would not have reached the same positions.
 	 * 
 	 *
@@ -248,19 +247,19 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * Fig 3: 2-Players chess board.
 	 * 
 	 * 
-	 * Consider Fig 3 (2 Player chess board) and cell “C3” is the active position, and the game engine has to find all the possible
+	 * Consider Fig 3 (2 Player chess board) and cell 'C3' is the active position, and the game engine has to find all the possible
 	 *  moves using File & Rank manoeuvre strategy.
-	 * Cell “C3” is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, and B4. All this information is stored in elements “Directions”
-	 *  and “Connections” under the element “Position” (Refer to positions section of XML for details).
+	 * Cell 'C3' is surrounded by 8 cells; the cells are B3, B2, C2, D2, D3, D4, C4, and B4. All this information is stored in elements 'Directions'
+	 *  and 'Connections' under the element 'Position' (Refer to positions section of XML for details).
 	 * 
-	 * Example Scenario #1: Move to position “D4”.
-	 * Assumption: Position “D4” is one File and one Rank ahead the current position, therefore, parameters File and Rank should have
-	 * value “FORWARD” assigned.
+	 * Example Scenario #1: Move to position 'D4'.
+	 * Assumption: Position 'D4' is one File and one Rank ahead the current position, therefore, parameters File and Rank should have
+	 * value 'FORWARD' assigned.
 	 * In the above given scenario, the strategy starts its search by traversing all the attached positions and comparing their File and Ranks.
-	 * The position “D4” is one File and one Rank above than the current position - and simply it would compare all the linked positions and
+	 * The position 'D4' is one File and one Rank above than the current position - and simply it would compare all the linked positions and
 	 * stops its search when it comes across the condition (where both File and Rank have greater values than the current position). 
 	 * 
-	 * Example Scenario #2: Move to position “E4”.
+	 * Example Scenario #2: Move to position 'E4'.
 	 * In the above given scenario, there are numerous paths that can be provided to reach the desired position. Some are;
 	 * C3	->	D4	->	E4
 	 * C3	->	D3	->	E3	->	E4
@@ -333,11 +332,11 @@ public class DefaultRuleProcessor implements IRuleProcessor {
 	 * This method checks whether the position meets the requirements defined in the rule to be a possible move candidate, and it
 	 * also finds out whether to seize the search process or not.
 	 * 
-	 * @param IPlayerAgent
-	 * @param IRule
-	 * @param IPositionAgent
-	 * @param AtomicReference<Boolean>
-	 * @param AtomicReference<Boolean>
+	 * @param oPlayer IPlayerAgent
+	 * @param oRule IRule
+	 * @param oCandidacyPosition IPositionAgent
+	 * @param bIsValidMode AtomicReference for Boolean
+	 * @param bCanContinue AtomicReference for Boolean
 	 */
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
 		m_oLogger.writeLog(LogLevel.DETAILED, "Verifying if position can be a candidate move and can continue as the next position.", "checkForPositionMoveCandidacyAndContinuity", "DefaultRuleProcessor");

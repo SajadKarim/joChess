@@ -17,13 +17,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardFactory;
+import jchess.common.ICacheManager;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPlayerAgent;
-import jchess.common.IPolygon;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 import jchess.common.enumerator.Direction;
@@ -33,7 +32,6 @@ import jchess.common.enumerator.Manoeuvre;
 import jchess.common.enumerator.Rank;
 import jchess.common.enumerator.RuleType;
 import jchess.gamelogic.BoardAgentFactory;
-import jchess.gamelogic.PieceAgent;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
@@ -60,6 +58,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		m_oRuleProcessor = new DefaultRuleProcessor(oLogger);
 	}
 
+	/**
+	 * This method prepares data for test case that verifies the positions that it should get as 
+	 * move candidates when it want to move towards upwards direction.
+	 */
 	static List<Pair<String, String[]>> getDataForUpwardPositions() {
 		List<Pair<String, String[]>> lstData = new LinkedList<Pair<String, String[]>>();
 		
@@ -183,6 +185,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		return lstData;
 	}
 
+	/**
+	 * This method prepares data for test case that verifies the positions that it should get as 
+	 * move candidates when it want to move towards downwards direction.
+	 */
 	static List<Pair<String, String[]>> getDataForDownwardPositions() {
 		List<Pair<String, String[]>> lstData = new LinkedList<Pair<String, String[]>>();
 		
@@ -263,6 +269,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		return lstData;
 	}
 
+	/**
+	 * This method prepares data for test case that verifies the positions that it should get as 
+	 * move candidates when it want to move towards right.
+	 */
 	static List<Pair<String, String[]>> getDataForRightPositions() {
 		List<Pair<String, String[]>> lstData = new LinkedList<Pair<String, String[]>>();
 		
@@ -343,6 +353,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		return lstData;
 	}
 
+	/**
+	 * This method prepares data for test case that verifies the positions that it should get as 
+	 * move candidates when it want to move towards upwards left.
+	 */
 	static List<Pair<String, String[]>> getDataForLeftPositions() {
 		List<Pair<String, String[]>> lstData = new LinkedList<Pair<String, String[]>>();
 		
@@ -413,6 +427,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 	void tearDown() throws Exception {
 	}
 
+	/**
+	 * This method verifies the positions that the engine should return as move candidate for 3 Player hex board
+	 * when player wants to move its pieces upwards.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_UpwardMovements() {
 		List<Pair<String, String[]>> lstData = getDataForUpwardPositions();
@@ -455,6 +473,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		}
 	}
 
+	/**
+	 * This method verifies the positions that the engine should return as move candidate for 3 Player hex board
+	 * when player wants to move its pieces downwards.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_DownwardMovements() {
 		List<Pair<String, String[]>> lstData = getDataForDownwardPositions();
@@ -497,6 +519,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		}
 	}
 
+	/**
+	 * This method verifies the positions that the engine should return as move candidate for 3 Player hex board
+	 * when player wants to move its pieces towards right.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_RightMovements() {
 		List<Pair<String, String[]>> lstData = getDataForRightPositions();
@@ -539,6 +565,10 @@ class DefaultRuleProcessorTest_3PlayersBoard {
 		}
 	}
 
+	/**
+	 * This method verifies the positions that the engine should return as move candidate for 3 Player hex board
+	 * when player wants to move its pieces towards left.
+	 */
 	@Test
 	void testTryFindCandidateMovesForFileAndRankStrategy_LeftMovements() {
 		List<Pair<String, String[]>> lstData = getDataForLeftPositions();

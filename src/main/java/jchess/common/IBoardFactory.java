@@ -1,7 +1,7 @@
 package jchess.common;
 
 /**
- * It fulfills functionality of Abstract Factory Pattern. 
+ * It fulfills functionality of Abstract Factory Pattern for BoardData and BoardAgent. 
  *
  * @author	Sajad Karim
  * @since	7 Dec 2019

@@ -106,6 +106,13 @@
         <module name="JavadocStyle"/>
         <module name="MissingJavadocMethod"/-->
 
+		<module name="Regexp">
+		  <property name="format" value="class\s(.+)\sextends\s((?!SingleFrameApplication|AbstractModule).+)"/>
+		  <property name="illegalPattern" value="true"/>
+		  <property name="message" value="&lt;&lt;CCD Rule: Favor Composition over Inheritance&gt;&gt;"/>
+		  <property name="ignoreComments" value="true"/>
+		</module>
+
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
 		<module name="MethodName">

@@ -11,8 +11,7 @@ import jchess.common.enumerator.RuleType;
 
 /**
  * IRule provides abstraction to IRuleData and IRuleAgent.
- * It fulfills functionality of Abstract Factory Pattern, and
- * it is mainly built for Cache module to make both the
+ * It fulfills functionality of Abstract Factory Pattern, and it is mainly built for Cache module to make both the
  * type compatible with its implementation (data population logic). 
  * 
  * @author	Sajad Karim

@@ -29,8 +29,37 @@ import jchess.common.IRule;
  */
 
 public interface IRuleProcessor {
+	/**
+	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
+	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
+	 * 
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidatePositions Map of String and IMoveCandidate
+	 */
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions);
+	/**
+	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
+	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
+	 * A Rule can manoeuvre in two ways therefore this method makes respective calls in this method.
+	 * 
+	 * @param oPieceToMove IPieceAgent
+	 * @param oSourcePosition IPositionAgent
+	 * @param oPlayer IPlayerAgent
+	 * @param qData Queue of RuleProcessorData
+	 * @param mpCandidatePositions Map of String and IMoveCandidate
+	 */
 	public void tryFindPossibleCandidateMovePositions(IPieceAgent oPieceToMove, IPositionAgent oSourcePosition, IPlayerAgent oPlayer, Queue<RuleProcessorData> qData, Map<String, IMoveCandidate> mpCandidatePositions);	
+	/**
+	 * This method checks whether the position meets the requirements defined in the rule to be a possible move candidate, and it
+	 * also finds out whether to seize the search process or not.
+	 * 
+	 * @param oPlayer IPlayerAgent
+	 * @param oRule IRule
+	 * @param oCandidacyPosition IPositionAgent
+	 * @param bIsValidMode AtomicReference for Boolean
+	 * @param bCanContinue AtomicReference for Boolean
+	 */
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue);
 	public IPlayerAgent tryCheckIfPlayerEndengered(IBoardAgent oBoard, IPlayerAgent oPlayer);
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer);

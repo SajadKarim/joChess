@@ -25,8 +25,8 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-/** Class representings game settings available for the current player
- */
+
+//TODO: #REFACTOR Need to move this functionality to any proper location. 
 public class Settings implements Serializable {
     private static ResourceBundle loc = null;
  

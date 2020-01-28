@@ -35,9 +35,9 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	 * This method finds out whether the provided position can be a candidate position to make a move, and it also (with the help of the rule)
 	 * deduces whether algorithm should proceed with the position to find out the next possible candidate moves.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * @param mpCandidatePositions Map of String and IMoveCandidate
 	 */
 	@Override
 	public void tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidatePositions) {
@@ -73,11 +73,11 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 	 * This method checks whether the position meets the requirements defined in the rule to be a possible move candidate, and it
 	 * also finds out whether to seize the search process or not.
 	 * 
-	 * @param IPlayerAgent
-	 * @param IRule
-	 * @param IPositionAgent
-	 * @param AtomicReference<Boolean>
-	 * @param AtomicReference<Boolean>
+	 * @param oPlayer IPlayerAgent
+	 * @param oRule IRule
+	 * @param oCandidacyPosition IPositionAgent
+	 * @param bIsValidMode AtomicReference for Boolean
+	 * @param bCanContinue AtomicReference for Boolean
 	 */
 	@Override
 	public void checkForPositionMoveCandidacyAndContinuity(IPlayerAgent oPlayer, IRule oRule, IPositionAgent oCandidacyPosition, AtomicReference<Boolean> bIsValidMode, AtomicReference<Boolean> bCanContinue) {
@@ -108,7 +108,7 @@ public class ExtendedRuleProcessor extends DefaultRuleProcessor {
 					}
 				}
 			}
-			break;
+				break;
 			default:
 				break;
 		}

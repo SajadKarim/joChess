@@ -12,9 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardFactory;
+import jchess.common.ICacheManager;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
@@ -29,6 +29,13 @@ import jchess.gamelogic.BoardAgentFactory;
 import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
+
+/**
+ * This class tests 3 Players Chess-board.
+ * 
+ * @author	Sajad Karim
+ * @since	10 Jan 2019
+ */
 
 class ThreePlayersHexBoardRuleProcessorTest {
 	static IBoardAgent m_oBoard;

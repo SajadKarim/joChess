@@ -23,7 +23,7 @@ import jchess.util.GUI;
 
 /**
  * This class is responsible to manage underlying "Board" (only) related data.
- * It keeps the state of the Board and facilitates game-logic with numerous operations
+ * It keeps the state of the Board and facilitates game-logic with numerous operations.
  * 
  * @author	Sajad Karim
  * @since	7 Dec 2019

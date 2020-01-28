@@ -37,9 +37,10 @@ public final class KingRulesProcessor {
 	/**
 	 * This method checks the eligibility of the long and short king castling moves and writes the possible move candidates into the passed map.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oRuleProcessor
+	 * @param oBoard
+	 * @param oPiece
+	 * @param mpCandidateMovePositions
 	 */
 	public static void tryKingCastlingRules(IRuleProcessor oRuleProcessor, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		if (oPiece.getPositionHistoryCount() > 0) {
@@ -77,9 +78,11 @@ public final class KingRulesProcessor {
 	/**
 	 * This method checks the eligibility of the king castling rule and writes the possible move candidates into the passed map.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * @param Map<String, IMoveCandidate>
+	 * @param oRuleProcessor
+	 * @param fDirection
+	 * @param oBoard
+	 * @param oPiece
+	 * @param mpCandidateMovePositions
 	 */
 	public static void tryCastlingRule(IRuleProcessor oRuleProcessor, File fDirection, IBoardAgent oBoard, IPieceAgent oPiece, Map<String, IMoveCandidate> mpCandidateMovePositions) {
 		
@@ -152,9 +155,9 @@ public final class KingRulesProcessor {
 	/**
 	 * This method executes the castling move.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
-	 * @return IBoardActivity
+	 * @param oBoard
+	 * @param oMoveCandidate
+	 * @return
 	 */
 	public static IBoardActivity tryExecuteCastlingRule(IBoardAgent oBoard, IMoveCandidate oMoveCandidate) {
 		// move the king

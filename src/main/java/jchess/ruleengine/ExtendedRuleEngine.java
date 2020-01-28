@@ -34,9 +34,9 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	/**
 	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
 	 * 
-	 * @param IBoardAgent
-	 * @param IPieceAgent
-	 * return Map<String, IMoveCandidate>
+	 * @param oBoard IBoardAgent
+	 * @param oPiece IPieceAgent
+	 * return Map of String and IMoveCandidate
 	 */
 	@Override
 	public Map<String, IMoveCandidate> tryEvaluateAllRules(IBoardAgent oBoard, IPieceAgent oPiece) {	
@@ -48,8 +48,8 @@ public class ExtendedRuleEngine extends DefaultRuleEngine {
 	/**
 	 * This method executes the move candidate provided.
 	 * 
-	 * @param IBoardAgent
-	 * @param IMoveCandidate
+	 * @param oBoard IBoardAgent
+	 * @param oMoveCandidate IMoveCandidate
 	 * return IBoardActivity
 	 */
 	@Override

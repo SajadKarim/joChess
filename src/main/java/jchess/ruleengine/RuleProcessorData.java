@@ -3,6 +3,12 @@ package jchess.ruleengine;
 import jchess.common.IPositionAgent;
 import jchess.common.IRuleAgent;
 
+/**
+ * 
+ * @author 	Sajad Karim
+ * @since	7 Dec 2019
+ */
+
 public final class RuleProcessorData {
 	private IRuleAgent m_oRule;
 	private IPositionAgent m_oLastPosition;

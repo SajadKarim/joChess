@@ -115,7 +115,9 @@ public final class PieceAgent implements IPieceAgent {
 	}
 
 	public String toLog() {
-		return String.format("Id=%s, Position=%s", getName(), m_oPosition == null ? "<no Position attached>" : m_oPosition.getName());
+		return String.format("Id=[%s], Position=[%s]", 
+				getName(), 
+				m_oPosition == null ? "<no Position attached>" : m_oPosition.getName());
 	}
 	
 	public void enqueuePositionHistory(IPositionAgent oPosition) {

@@ -12,23 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import jchess.cache.CacheManager;
-import jchess.cache.ICacheManager;
-import jchess.common.IBoardActivity;
 import jchess.common.IBoardAgent;
 import jchess.common.IBoardFactory;
+import jchess.common.ICacheManager;
 import jchess.common.IMoveCandidate;
 import jchess.common.IPieceAgent;
 import jchess.common.IPositionAgent;
-import jchess.common.IRuleAgent;
-import jchess.common.enumerator.Direction;
-import jchess.common.enumerator.Family;
 import jchess.common.enumerator.File;
-import jchess.common.enumerator.Manoeuvre;
-import jchess.common.enumerator.Rank;
-import jchess.common.enumerator.RuleType;
-import jchess.gamelogic.BoardActivity;
 import jchess.gamelogic.BoardAgentFactory;
-import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 

@@ -53,20 +53,9 @@ public final class Quadrilateral implements IPolygon {
 	}
 	
 	public String toString() {
-		return 	"x1=\"" + m_x1 + "\" " 
-				+
-				"y1=\"" + m_y1 + "\" "
-				+
-				"x2=\"" + m_x2 + "\" "
-				+
-				"y2=\"" + m_y2 + "\" "
-				+
-				"x3=\"" + m_x3 + "\" "
-				+
-				"y3=\"" + m_y3 + "\" "
-				+
-				"x4=\"" + m_x4 + "\" "
-				+
-				"y4=\"" + m_y4 + "\" ";
+		return 	"x1=\"" + m_x1 + "\" " + "y1=\"" + m_y1 + "\" " +
+				"x2=\"" + m_x2 + "\" " + "y2=\"" + m_y2 + "\" " +
+				"x3=\"" + m_x3 + "\" " + "y3=\"" + m_y3 + "\" " +
+				"x4=\"" + m_x4 + "\" " + "y4=\"" + m_y4 + "\" ";
 	}
 }

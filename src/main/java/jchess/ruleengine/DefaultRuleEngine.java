@@ -26,6 +26,8 @@ import jchess.util.LogLevel;
  * @since	7 Dec 2019
  */
 
+// TODO: #REFACTOR move rule execution logic to rule processor class.
+
 public class DefaultRuleEngine implements IRuleEngine {
 	protected IRuleProcessor m_oRuleProcessor;
 	protected IGUIHandle m_oGUIHandler;
@@ -34,9 +36,9 @@ public class DefaultRuleEngine implements IRuleEngine {
 	/**
 	 * Constructor for DefaultRuleEngine.
 	 * 
-	 * @param IRuleProcessor
-	 * @param IGUIHandler
-	 * @param IAppLogger
+	 * @param oRuleProcessor IRuleProcessor
+	 * @param oGUIHandler IGUIHandler
+	 * @param oLogger IAppLogger
 	 */
 	@Inject
 	public DefaultRuleEngine(IRuleProcessor oRuleProcessor, IGUIHandle oGUIHandler, IAppLogger oLogger) {
@@ -46,7 +48,7 @@ public class DefaultRuleEngine implements IRuleEngine {
 		
 		m_oLogger.writeLog(LogLevel.INFO, "Instantiating DefaultRuleEngine.", "DefaultRuleEngine", "DefaultRuleEngine");
 	}
-		
+
 	/**
 	 * This method evaluates the rules defined for the piece and finds all the possible positions the piece can make.
 	 * 
@@ -78,18 +80,16 @@ public class DefaultRuleEngine implements IRuleEngine {
 	
 	}
 	
-	
 	public Boolean checkStalemate(IBoardAgent oBoard, IPlayerAgent oPlayer) {
-		long t1 = System.nanoTime();
-		Boolean b = m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
-		long t2 = System.nanoTime();
+		//long t1 = System.nanoTime();
+		Boolean bResult = m_oRuleProcessor.checkStalemate(oBoard, oPlayer);
+		//long t2 = System.nanoTime();
 		
-		long timeElapsed  = t2 - t1;
-		System.out.println("Execution time in milliseconds : " 
-				+ 
-				timeElapsed / 1000000);
-		return b;
+		//long timeElapsed  = t2 - t1;
+		//System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
+		return bResult;
 	}
+
 	/**
 	 * This method executes the rule provided with the move candidate.
 	 * 
@@ -108,26 +108,23 @@ public class DefaultRuleEngine implements IRuleEngine {
 					break;
 				}
 
-				oActivity = new BoardActivity(oMoveCandidate);
-				
+				oActivity = new BoardActivity(oMoveCandidate);				
 				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 				break;
 			case MOVE_AND_CAPTURE: {
 				oActivity = new BoardActivity(oMoveCandidate);
-
 				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 			break;
 			case MOVE_IFF_CAPTURE_POSSIBLE: {
 				oActivity = new BoardActivity(oMoveCandidate);
-
 				setPositionsAndUpdateActivity(oMoveCandidate.getSourcePosition(), oMoveCandidate.getCandidatePosition(), oActivity);
 			}
 				break;
 			case MOVE_TRANSIENT: {
 			}
-			break;
+				break;
 			case CUSTOM:
 			default:
 				break;
