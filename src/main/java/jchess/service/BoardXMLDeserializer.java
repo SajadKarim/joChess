@@ -158,7 +158,7 @@ final class BoardXMLDeserializer {
 			
 			return oBoard;
 		} catch(java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "getBoardWithPlayerDetailsOnly" ,"BoardXMLDeserializer");
 		}
 		
 		return null;
@@ -186,7 +186,7 @@ final class BoardXMLDeserializer {
 			
 			return oBoard;
 		} catch (java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "getBoardWithPrimaryDetailsOnly" ,"BoardXMLDeserializer");
 		}
 		return null;
 	}	
@@ -261,7 +261,7 @@ final class BoardXMLDeserializer {
 				oBoard.getBoardData().addPosition(oPosition);
 			}
 		} catch (java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "loadPositionsBasicDetails" ,"BoardXMLDeserializer");
 		}
 	}
 
@@ -307,7 +307,7 @@ final class BoardXMLDeserializer {
 				}
 			}
 		} catch (java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "loadPositionsConnectionDetails" ,"BoardXMLDeserializer");
 		}
 
 	}
@@ -394,7 +394,7 @@ final class BoardXMLDeserializer {
 				ndRule = ndRule.getNextSibling();
 			}
 		} catch (java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "populateRule" ,"BoardXMLDeserializer");
 		}
 	}
 	
@@ -428,7 +428,7 @@ final class BoardXMLDeserializer {
 				oBoard.getBoardData().addPiece( oPiece);
 			}
 		} catch (java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "loadPieces" ,"BoardXMLDeserializer");
 		}
 
 	}
@@ -471,14 +471,14 @@ final class BoardXMLDeserializer {
 						oPlayer.getPlayerData().addBoardMapping(nFrom, nTo);
 					}   
 				} catch(java.lang.Exception e) {
-					oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+					oLogger.writeLog(LogLevel.ERROR, e.toString(), "loadPlayers" ,"BoardXMLDeserializer");
 				}
 
 				oBoard.getBoardData().addPlayer( oPlayer);
 			}
 		}
 		catch(java.lang.Exception e) {
-			oLogger.writeLog(LogLevel.ERROR, e.toString(), "" ,"BoardXMLDeserializer");
+			oLogger.writeLog(LogLevel.ERROR, e.toString(), "loadPlayers" ,"BoardXMLDeserializer");
 		}
 	}
 	
