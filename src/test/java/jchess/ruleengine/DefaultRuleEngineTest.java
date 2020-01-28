@@ -28,6 +28,13 @@ import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
+/**
+ * This class tests the underlying logic of the board that is common to all the board and that complies with XML.
+ * 
+ * @author	Sajad Karim
+ * @since	14 Dec 2019
+ */
+
 class DefaultRuleEngineTest {
 	static IBoardAgent m_oBoard;
 	static IRuleEngine m_oRuleEngine;
@@ -46,9 +53,6 @@ class DefaultRuleEngineTest {
 		IAppLogger oLogger = new AppLogger();
 		ICacheManager oCacheManager = new CacheManager(oLogger);
 
-    	String path = DefaultRuleEngineTest.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-
-
 		oCacheManager.loadBoardFromFile("DefaultRuleEngineTest", "2PlayerBoard.xml");
 		m_oBoard = oCacheManager.getBoard("DefaultRuleEngineTest");
 
@@ -59,6 +63,10 @@ class DefaultRuleEngineTest {
 	void tearDown() throws Exception {
 	}
 
+	/**
+	 * This method verifies the capturing and movement functionality of a piece when it moves upwards by 1 (to 'd3').
+	 * This method tests that it should be moved to at the position ('d3').
+	 */
 	@Test
 	void testTryExecuteRule_MOVE_CAPTURE_BY_1() { 
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
@@ -92,6 +100,10 @@ class DefaultRuleEngineTest {
 		assertEquals(oExpectedPiece, oActualPiece);
 	}
 
+	/**
+	 * This method verifies the capturing functionality of of when it moves upwards by * (to 'd7' - actually d7 has opponents piece so algo should stop).
+	 * This method tests that it should capture the piece as there is a piece at the position ('d7').
+	 */
 	@Test
 	void testTryExecuteRule_MOVE_CAPTURE_BY_INF() { 
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");

@@ -30,6 +30,13 @@ import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
+/**
+ * This class tests 3 Players Chess-board.
+ * 
+ * @author	Sajad Karim
+ * @since	10 Jan 2019
+ */
+
 class ThreePlayersHexBoardRuleProcessorTest {
 	static IBoardAgent m_oBoard;
 	static DefaultRuleProcessor m_oRuleProcessor;

@@ -32,6 +32,13 @@ import jchess.gamelogic.MoveCandidate;
 import jchess.util.AppLogger;
 import jchess.util.IAppLogger;
 
+/**
+ * This class tests custom rules that any Pawn piece can perform.
+ * 
+ * @author	Sajad Karim
+ * @since	14 Dec 2019
+ */
+
 class PawnRulesProcessorTest_3PlayerBoard {
 	static IAppLogger m_oLogger;
 	static IBoardAgent m_oBoard;
@@ -60,6 +67,9 @@ class PawnRulesProcessorTest_3PlayerBoard {
 	void tearDown() throws Exception {
 	}
 
+	/*
+	 * This method verifies the case where Pawn should not be promoted when there is not piece to capture.
+	 */
 	@Test
 	void testTryPawnPromotionRuleForVertex_FailureCase() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
@@ -74,6 +84,10 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		assertEquals(nExpectedValuesInMap, nActualValuesInMap);
 	}
 
+	/*
+	 * This method verifies the case where Pawn should not be promoted when there is an opponents' piece to capture
+	 * and there is by capturing it Pawn reaches the end of the board.
+	 */
 	@Test
 	void testTryPawnPromotionRuleForVertex_SuccessCase() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("c7");
@@ -107,6 +121,9 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		// we shall be able to perform this test.
 	}
 
+	/*
+	 * This method verifies the movements a Pawn at file 'd' and rank '2' can perform.
+	 */
 	@Test
 	void testTryPawnFirstMoveException() {
 		IPositionAgent oCurrentPosition = m_oBoard.getPositionAgent("d2");
@@ -129,6 +146,9 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		}
 	}
 
+	/*
+	 * This method verifies the execution of rule of a Pawn at file 'd' and rank '2'.
+	 */
 	@Test
 	void testTryExecutePawnFirstMoveException() {
 		IPositionAgent oSourcePosition = m_oBoard.getPositionAgent("d2");
@@ -162,6 +182,9 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		assertEquals(oExpectedPiece, oActualPiece);
 	}
 	
+	/*
+	 * This method verifies the functionality of EnPassant rule.
+	 */
 	@Test
 	void testtryPawnEnPassantRule() {
 		// Player 1 move Pawn from b2 to b4
@@ -194,6 +217,9 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		}
 	}
 	
+	/*
+	 * This method verifies the functionality of execution of EnPassant rule.
+	 */
 	private void makeMoveToTesttryPawnEnPassantRule(IRuleAgent oRule, IPieceAgent oPieceToMove, IPositionAgent oCurrentPosition, IPositionAgent oNewPosition) {
 		IMoveCandidate oMoveCandidate = new MoveCandidate(oRule, oPieceToMove, oCurrentPosition, oNewPosition);
 
@@ -211,6 +237,9 @@ class PawnRulesProcessorTest_3PlayerBoard {
 		m_oBoard.addActivity(oActivity);		
 	}
 
+	/*
+	 * This method verifies the execution of EnPassant rule.
+	 */
 	@Test
 	void testtryExecutePawnEnPassantRule() {
 		// Player 1 move Pawn from b2 to b4
