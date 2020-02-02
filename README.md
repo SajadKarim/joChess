@@ -9,4 +9,4 @@ https://sourceforge.net/projects/javaopenchess/files/1.0.1/joChess-1.0.1-sources
 
 For more details: https://docs.google.com/document/d/1KiicUFyHlNJx7MD8-wBBwc9jcpXSSnzioZWuMbWXLnU/edit?usp=sharing
 
-Presentation: https://docs.google.com/presentation/d/1YQ-cHpY5_YjQJhsL8xOPtPOHjgVe_ypxJBUP6haQv3Q/edit#slide=id.p
+Presentation: https://docs.google.com/presentation/d/1YQ-cHpY5_YjQJhsL8xOPtPOHjgVe_ypxJBUP6haQv3Q/edit?usp=sharing
